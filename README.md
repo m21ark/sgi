@@ -3,8 +3,8 @@
 ## Group T0xG0y
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201901010 | ...                |
-| Jane Doe         | 201901011 | ...                |
+| Marco André         | 202004891 | up202004891@edu.fe.up.pt                |
+| Ricardo Matos         | 202007962 | up202007962@edu.fe.up.pt                |
 
 ----
 
