@@ -1,6 +1,6 @@
 # SGI 2023/2024
 
-## Group T0xG0y
+## Group T04G08
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
 | Marco André         | 202004891 | up202004891@edu.fe.up.pt                |
