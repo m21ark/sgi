@@ -69,6 +69,20 @@ class MyContents {
     shininess: 30,
   });
 
+  carpetMaterial = new THREE.MeshPhongMaterial({
+    color: "#aa00ff",
+    specular: "#cc00ff",
+    emissive: "#000000",
+    shininess: 30,
+  });
+
+  tvMaterial = new THREE.MeshPhongMaterial({
+    color: "#222222",
+    specular: "#353535",
+    emissive: "#000000",
+    shininess: 30,
+  });
+
   // ============== Objects ====================
 
   table = new THREE.BoxGeometry(6, 0.2, 10);
@@ -76,6 +90,8 @@ class MyContents {
   wall = new THREE.BoxGeometry(15, 5, 0.1);
   table_leg = new THREE.CylinderGeometry(0.12, 0.12, 2);
   dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
+
+  carpet = new THREE.PlaneGeometry(12, 8, 32);
 
   cake = new THREE.CylinderGeometry(
     4,
@@ -90,6 +106,8 @@ class MyContents {
 
   candle = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 32);
   fire = new THREE.ConeGeometry(0.1, 0.3, 32);
+
+  tv = new THREE.PlaneGeometry(8, 3.5, 32);
 
   // ============== Meshes ====================
 
@@ -115,6 +133,12 @@ class MyContents {
   // candle
   candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
   fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
+
+  // carpet
+  carpetMesh = new THREE.Mesh(this.carpet, this.carpetMaterial);
+
+  // tv
+  tvMesh = new THREE.Mesh(this.tv, this.tvMaterial);
 
   init() {
     this.axis = new MyAxis(this);
@@ -170,6 +194,12 @@ class MyContents {
     this.fireMesh.position.x = 0;
     this.fireMesh.scale.set(0.5, 0.8, 0.5);
 
+    this.carpetMesh.position.y = 0.02;
+    this.carpetMesh.rotation.x = -Math.PI / 2;
+
+    this.tvMesh.position.y = 2.6;
+    this.tvMesh.position.z = -7.44;
+
     // ============== Display ====================
 
     this.app.scene.add(this.tableMesh);
@@ -188,6 +218,9 @@ class MyContents {
     this.app.scene.add(this.cakeMesh);
     this.app.scene.add(this.candleMesh);
     this.app.scene.add(this.fireMesh);
+
+    this.app.scene.add(this.carpetMesh);
+    this.app.scene.add(this.tvMesh);
 
     // ================== Lights ====================
 
