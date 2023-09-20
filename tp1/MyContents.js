@@ -5,10 +5,6 @@ import { MyAxis } from "./MyAxis.js";
  *  This class contains the contents of out application
  */
 class MyContents {
-  /**
-       constructs the object
-       @param {MyApp} app The application object
-    */
   constructor(app) {
     this.app = app;
     this.axis = null;
@@ -19,51 +15,61 @@ class MyContents {
     this.boxEnabled = true;
     this.lastBoxEnabled = null;
     this.boxDisplacement = new THREE.Vector3(0, 2, 0);
-
-    // plane related attributes
-    this.diffusePlaneColor = "#00ffff";
-    this.specularPlaneColor = "#777777";
-    this.planeShininess = 30;
-    this.planeMaterial = new THREE.MeshPhongMaterial({
-      color: this.diffusePlaneColor,
-      specular: this.diffusePlaneColor,
-      emissive: "#000000",
-      shininess: this.planeShininess,
-    });
   }
 
-  /**
-   * builds the box mesh with material assigned
-   */
-  buildBox() {
-    let boxMaterial = new THREE.MeshPhongMaterial({
-      color: "#ffff77",
-      specular: "#A00A00",
-      emissive: "#000000",
-      shininess: 90,
-    });
+  // ============== Materials ====================
 
-    // Create a Cube Mesh with basic material
-    let box = new THREE.BoxGeometry(
-      this.boxMeshSize,
-      this.boxMeshSize,
-      this.boxMeshSize
-    );
-    this.boxMesh = new THREE.Mesh(box, boxMaterial);
-    this.boxMesh.rotation.x = -Math.PI / 2;
-    this.boxMesh.position.y = this.boxDisplacement.y;
-  }
+  floorMaterial = new THREE.MeshPhongMaterial({
+    color: "#00ffff",
+    specular: "#777777",
+    emissive: "#000000",
+    shininess: 30,
+  });
 
-  /**
-   * initializes the contents
-   */
+  wallMaterial = new THREE.MeshPhongMaterial({
+    color: "#ff0000",
+    specular: "#ff0000",
+    emissive: "#000000",
+    shininess: 30,
+  });
+
+  tableWoodMaterial = new THREE.MeshPhongMaterial({
+    color: "#8B4513",
+    specular: "#8B4513",
+    emissive: "#000000",
+    shininess: 30,
+  });
+
+  // ============== Objects ====================
+
+  table = new THREE.BoxGeometry(5.8, 0.2, 10);
+  floor = new THREE.BoxGeometry(15, 0.1, 15);
+  wall = new THREE.BoxGeometry(15, 5, 0.1);
+
+  // ============== Meshes ====================
+
+  tableMesh = new THREE.Mesh(this.table, this.tableWoodMaterial);
+  floorMesh = new THREE.Mesh(this.floor, this.floorMaterial);
+  wallMesh = new THREE.Mesh(this.wall, this.wallMaterial);
+
   init() {
-    // create once
-    if (this.axis === null) {
-      // create and attach the axis to the scene
-      this.axis = new MyAxis(this);
-      this.app.scene.add(this.axis);
-    }
+    this.axis = new MyAxis(this);
+    this.app.scene.add(this.axis);
+
+    // ============== Positions ====================
+
+    this.tableMesh.position.y = 1.5;
+    this.floorMesh.position.y = -0.05;
+    this.wallMesh.position.y = 2.5;
+    this.wallMesh.position.z = -7.5;
+
+    // ============== Display ====================
+
+    this.app.scene.add(this.tableMesh);
+    this.app.scene.add(this.floorMesh);
+    this.app.scene.add(this.wallMesh);
+
+    // ================== Lights ====================
 
     // add a point light on top of the model
     const pointLight = new THREE.PointLight(0xffffff, 500, 0);
@@ -78,85 +84,10 @@ class MyContents {
     // add an ambient light
     const ambientLight = new THREE.AmbientLight(0x555555);
     this.app.scene.add(ambientLight);
-
-    this.buildBox();
-
-    // Create a Plane Mesh with basic material
-
-    let plane = new THREE.PlaneGeometry(10, 10);
-    this.planeMesh = new THREE.Mesh(plane, this.planeMaterial);
-    this.planeMesh.rotation.x = -Math.PI / 2;
-    this.planeMesh.position.y = -0;
-    this.app.scene.add(this.planeMesh);
   }
 
-  /**
-   * updates the diffuse plane color and the material
-   * @param {THREE.Color} value
-   */
-  updateDiffusePlaneColor(value) {
-    this.diffusePlaneColor = value;
-    this.planeMaterial.color.set(this.diffusePlaneColor);
-  }
-  /**
-   * updates the specular plane color and the material
-   * @param {THREE.Color} value
-   */
-  updateSpecularPlaneColor(value) {
-    this.specularPlaneColor = value;
-    this.planeMaterial.specular.set(this.specularPlaneColor);
-  }
-  /**
-   * updates the plane shininess and the material
-   * @param {number} value
-   */
-  updatePlaneShininess(value) {
-    this.planeShininess = value;
-    this.planeMaterial.shininess = this.planeShininess;
-  }
-
-  /**
-   * rebuilds the box mesh if required
-   * this method is called from the gui interface
-   */
-  rebuildBox() {
-    // remove boxMesh if exists
-    if (this.boxMesh !== undefined && this.boxMesh !== null) {
-      this.app.scene.remove(this.boxMesh);
-    }
-    this.buildBox();
-    this.lastBoxEnabled = null;
-  }
-
-  /**
-   * updates the box mesh if required
-   * this method is called from the render method of the app
-   * updates are trigered by boxEnabled property changes
-   */
-  updateBoxIfRequired() {
-    if (this.boxEnabled !== this.lastBoxEnabled) {
-      this.lastBoxEnabled = this.boxEnabled;
-      if (this.boxEnabled) {
-        this.app.scene.add(this.boxMesh);
-      } else {
-        this.app.scene.remove(this.boxMesh);
-      }
-    }
-  }
-
-  /**
-   * updates the contents
-   * this method is called from the render method of the app
-   *
-   */
   update() {
-    // check if box mesh needs to be updated
-    this.updateBoxIfRequired();
-
-    // sets the box mesh position based on the displacement vector
-    this.boxMesh.position.x = this.boxDisplacement.x;
-    this.boxMesh.position.y = this.boxDisplacement.y;
-    this.boxMesh.position.z = this.boxDisplacement.z;
+    // ...
   }
 }
 
