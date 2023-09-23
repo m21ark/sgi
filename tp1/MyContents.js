@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { Cake } from "./objects/cake.js";
 import { Table } from "./objects/table.js";
+import { Chair } from "./objects/chair.js";
 
 /**
  *  This class contains the contents of out application
@@ -75,14 +76,19 @@ class MyContents {
 
   // ============== Objects ====================
 
-  table = new Table(6, 0.2, 10, this.tableWoodMaterial);
+  table = new Table(6, 0.2, 10, this.tableWoodMaterial, 2.0);
   floor = new THREE.BoxGeometry(15, 0.1, 15);
   wall = new THREE.BoxGeometry(15, 5, 0.1);
   dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
+  chairs = [new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, 2.8]),
+            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, 2.8]),
+            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, -2.8]),
+            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, -2.8]),
+  ]
 
   carpet = new THREE.PlaneGeometry(12, 8, 32);
 
-  cake = new Cake(4, 3.2, 16, 2, false, 
+  cake = new Cake(4, 3.2, 16, 2, false,
     Math.PI * 0.25,
     Math.PI * 1.54, this.chocolateMaterial);
 
@@ -154,6 +160,11 @@ class MyContents {
     this.app.scene.add(this.wallMesh2);
     this.app.scene.add(this.wallMesh3);
     // this.app.scene.add(this.wallMesh4); // desligar para ver a mesa
+
+
+    for (let chair in this.chairs) {
+      this.app.scene.add(this.chairs[chair]);
+    }
 
     this.app.scene.add(this.dishMesh);
     this.app.scene.add(this.cake);
