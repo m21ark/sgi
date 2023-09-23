@@ -80,10 +80,10 @@ class MyContents {
   floor = new THREE.BoxGeometry(15, 0.1, 15);
   wall = new THREE.BoxGeometry(15, 5, 0.1);
   dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
-  chairs = [new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, 2.8]),
-            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, 2.8]),
-            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, -2.8]),
-            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, -2.8]),
+  chairs = [new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, 2.8, 1]),
+            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, 2.8, -1]),
+            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, -2.8, 1]),
+            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, -2.8, -1]),
   ]
 
   carpet = new THREE.PlaneGeometry(12, 8, 32);
