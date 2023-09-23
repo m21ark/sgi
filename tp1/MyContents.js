@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { Cake } from "./objects/cake.js";
+import { Table } from "./objects/table.js";
 
 /**
  *  This class contains the contents of out application
@@ -74,10 +75,9 @@ class MyContents {
 
   // ============== Objects ====================
 
-  table = new THREE.BoxGeometry(6, 0.2, 10);
+  table = new Table(6, 0.2, 10, this.tableWoodMaterial);
   floor = new THREE.BoxGeometry(15, 0.1, 15);
   wall = new THREE.BoxGeometry(15, 5, 0.1);
-  table_leg = new THREE.CylinderGeometry(0.12, 0.12, 2);
   dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
 
   carpet = new THREE.PlaneGeometry(12, 8, 32);
@@ -91,14 +91,7 @@ class MyContents {
 
   // ============== Meshes ====================
 
-  tableMesh = new THREE.Mesh(this.table, this.tableWoodMaterial);
   floorMesh = new THREE.Mesh(this.floor, this.floorMaterial);
-
-  // table legs
-  table_legMesh1 = new THREE.Mesh(this.table_leg, this.tableWoodMaterial);
-  table_legMesh2 = new THREE.Mesh(this.table_leg, this.tableWoodMaterial);
-  table_legMesh3 = new THREE.Mesh(this.table_leg, this.tableWoodMaterial);
-  table_legMesh4 = new THREE.Mesh(this.table_leg, this.tableWoodMaterial);
 
   // walls
   wallMesh1 = new THREE.Mesh(this.wall, this.wallMaterial);
@@ -123,7 +116,6 @@ class MyContents {
 
     // ============== Positions ====================
 
-    this.tableMesh.position.y = 2;
     this.floorMesh.position.y = -0.05;
 
     this.wallMesh1.position.y = 2.5;
@@ -139,22 +131,6 @@ class MyContents {
     this.wallMesh4.position.y = 2.5;
     this.wallMesh4.position.x = 7.5;
     this.wallMesh4.rotation.y = Math.PI / 2;
-
-    this.table_legMesh1.position.y = 1;
-    this.table_legMesh1.position.x = -2.8;
-    this.table_legMesh1.position.z = -4.8;
-
-    this.table_legMesh2.position.y = 1;
-    this.table_legMesh2.position.x = 2.8;
-    this.table_legMesh2.position.z = -4.8;
-
-    this.table_legMesh3.position.y = 1;
-    this.table_legMesh3.position.x = -2.8;
-    this.table_legMesh3.position.z = 4.8;
-
-    this.table_legMesh4.position.y = 1;
-    this.table_legMesh4.position.x = 2.8;
-    this.table_legMesh4.position.z = 4.8;
 
     this.dishMesh.position.y = 2.2;
     this.dishMesh.position.x = 0;
@@ -172,17 +148,12 @@ class MyContents {
 
     // ============== Display ====================
 
-    this.app.scene.add(this.tableMesh);
+    this.app.scene.add(this.table);
     this.app.scene.add(this.floorMesh);
     this.app.scene.add(this.wallMesh1);
     this.app.scene.add(this.wallMesh2);
     this.app.scene.add(this.wallMesh3);
     // this.app.scene.add(this.wallMesh4); // desligar para ver a mesa
-
-    this.app.scene.add(this.table_legMesh1);
-    this.app.scene.add(this.table_legMesh2);
-    this.app.scene.add(this.table_legMesh3);
-    this.app.scene.add(this.table_legMesh4);
 
     this.app.scene.add(this.dishMesh);
     this.app.scene.add(this.cake);
