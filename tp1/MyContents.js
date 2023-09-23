@@ -56,19 +56,7 @@ class MyContents {
     side: THREE.DoubleSide, // Render both sides of the faces
   });
 
-  candleMaterial = new THREE.MeshPhongMaterial({
-    color: "#ffff00",
-    specular: "#ffff00",
-    emissive: "#000000",
-    shininess: 30,
-  });
 
-  fireMaterial = new THREE.MeshPhongMaterial({
-    color: "#ff5000",
-    specular: "#ffA000",
-    emissive: "#ff0000",
-    shininess: 30,
-  });
 
   carpetMaterial = new THREE.MeshPhongMaterial({
     color: "#aa00ff",
@@ -98,8 +86,6 @@ class MyContents {
     Math.PI * 0.25,
     Math.PI * 1.54, this.chocolateMaterial);
 
-  candle = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 32);
-  fire = new THREE.ConeGeometry(0.1, 0.3, 32);
 
   tv = new THREE.PlaneGeometry(8, 3.5, 32);
 
@@ -124,9 +110,6 @@ class MyContents {
   dishMesh = new THREE.Mesh(this.dish, this.silverMaterial);
 
 
-  // candle
-  candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
-  fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
 
   // carpet
   carpetMesh = new THREE.Mesh(this.carpet, this.carpetMaterial);
@@ -180,13 +163,6 @@ class MyContents {
     this.cake.position.x = 0;
     this.cake.scale.set(0.2, 0.3, 0.2);
 
-    this.candleMesh.position.y = 3.3;
-    this.candleMesh.position.x = 0;
-    this.candleMesh.scale.set(0.5, 0.8, 0.5);
-
-    this.fireMesh.position.y = 3.6;
-    this.fireMesh.position.x = 0;
-    this.fireMesh.scale.set(0.5, 0.8, 0.5);
 
     this.carpetMesh.position.y = 0.02;
     this.carpetMesh.rotation.x = -Math.PI / 2;
@@ -210,8 +186,6 @@ class MyContents {
 
     this.app.scene.add(this.dishMesh);
     this.app.scene.add(this.cake);
-    this.app.scene.add(this.candleMesh);
-    this.app.scene.add(this.fireMesh);
 
     this.app.scene.add(this.carpetMesh);
     this.app.scene.add(this.tvMesh);
