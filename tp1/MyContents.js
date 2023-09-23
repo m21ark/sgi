@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
+import { Cake } from "./objects/cake.js";
 
 /**
  *  This class contains the contents of out application
@@ -93,16 +94,9 @@ class MyContents {
 
   carpet = new THREE.PlaneGeometry(12, 8, 32);
 
-  cake = new THREE.CylinderGeometry(
-    4,
-    4,
-    3.2,
-    16,
-    2,
-    false,
+  cake = new Cake(4, 3.2, 16, 2, false, 
     Math.PI * 0.25,
-    Math.PI * 1.54
-  );
+    Math.PI * 1.54, this.chocolateMaterial);
 
   candle = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 32);
   fire = new THREE.ConeGeometry(0.1, 0.3, 32);
@@ -128,7 +122,7 @@ class MyContents {
 
   // dish with cake
   dishMesh = new THREE.Mesh(this.dish, this.silverMaterial);
-  cakeMesh = new THREE.Mesh(this.cake, this.chocolateMaterial);
+
 
   // candle
   candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
@@ -182,9 +176,9 @@ class MyContents {
     this.dishMesh.position.y = 2.2;
     this.dishMesh.position.x = 0;
 
-    this.cakeMesh.position.y = 2.6;
-    this.cakeMesh.position.x = 0;
-    this.cakeMesh.scale.set(0.2, 0.3, 0.2);
+    this.cake.position.y = 2.6;
+    this.cake.position.x = 0;
+    this.cake.scale.set(0.2, 0.3, 0.2);
 
     this.candleMesh.position.y = 3.3;
     this.candleMesh.position.x = 0;
@@ -215,7 +209,7 @@ class MyContents {
     this.app.scene.add(this.table_legMesh4);
 
     this.app.scene.add(this.dishMesh);
-    this.app.scene.add(this.cakeMesh);
+    this.app.scene.add(this.cake);
     this.app.scene.add(this.candleMesh);
     this.app.scene.add(this.fireMesh);
 
