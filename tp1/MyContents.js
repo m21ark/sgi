@@ -58,8 +58,6 @@ class MyContents {
     side: THREE.DoubleSide, // Render both sides of the faces
   });
 
-
-
   carpetMaterial = new THREE.MeshPhongMaterial({
     color: "#aa00ff",
     specular: "#cc00ff",
@@ -80,18 +78,25 @@ class MyContents {
   floor = new THREE.BoxGeometry(15, 0.1, 15);
   wall = new THREE.BoxGeometry(15, 5, 0.1);
   dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
-  chairs = [new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, 2.8, 1]),
-            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, 2.8, -1]),
-            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, -2.8, 1]),
-            new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, -2.8, -1]),
-  ]
+  chairs = [
+    new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, 2.8, 1]),
+    new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, 2.8, -1]),
+    new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, -2.8, 1]),
+    new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, -2.8, -1]),
+  ];
 
   carpet = new THREE.PlaneGeometry(12, 8, 32);
 
-  cake = new Cake(4, 3.2, 16, 2, false,
+  cake = new Cake(
+    4,
+    3.2,
+    16,
+    2,
+    false,
     Math.PI * 0.25,
-    Math.PI * 1.54, this.chocolateMaterial);
-
+    Math.PI * 1.54,
+    this.chocolateMaterial
+  );
 
   tv = new THREE.PlaneGeometry(8, 3.5, 32);
 
@@ -107,8 +112,6 @@ class MyContents {
 
   // dish with cake
   dishMesh = new THREE.Mesh(this.dish, this.silverMaterial);
-
-
 
   // carpet
   carpetMesh = new THREE.Mesh(this.carpet, this.carpetMaterial);
@@ -145,7 +148,6 @@ class MyContents {
     this.cake.position.x = 0;
     this.cake.scale.set(0.2, 0.3, 0.2);
 
-
     this.carpetMesh.position.y = 0.02;
     this.carpetMesh.rotation.x = -Math.PI / 2;
 
@@ -160,7 +162,6 @@ class MyContents {
     this.app.scene.add(this.wallMesh2);
     this.app.scene.add(this.wallMesh3);
     // this.app.scene.add(this.wallMesh4); // desligar para ver a mesa
-
 
     for (let chair in this.chairs) {
       this.app.scene.add(this.chairs[chair]);
