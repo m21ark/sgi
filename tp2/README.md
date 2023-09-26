@@ -1,4 +1,4 @@
-# SGI 2023/2024 - TP2
+# SGI 2023/2024 - TP1
 
 ## Group: T0xG0y
 
