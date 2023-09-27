@@ -29,18 +29,18 @@ class MyContents {
     shininess: 30,
   });
 
+  woodTexture = new THREE.TextureLoader().load("textures/wood.jpg");
+
   wallMaterial = new THREE.MeshPhongMaterial({
-    color: "#cc9900",
-    specular: "#ccbb00",
-    emissive: "#000000",
-    shininess: 30,
+    color: "#B4A89C",
   });
 
-  tableWoodMaterial = new THREE.MeshPhongMaterial({
-    color: "#8B4513",
-    specular: "#8B4513",
+  woodMaterial = new THREE.MeshPhongMaterial({
+    color: "#9B6533", // 8B4513
+    specular: "#222222",
     emissive: "#000000",
-    shininess: 30,
+    shininess: 15,
+    map: this.woodTexture,
   });
 
   silverMaterial = new THREE.MeshPhongMaterial({
@@ -59,10 +59,11 @@ class MyContents {
   });
 
   carpetMaterial = new THREE.MeshPhongMaterial({
-    color: "#aa00ff",
-    specular: "#cc00ff",
-    emissive: "#000000",
-    shininess: 30,
+    color: new THREE.Color(0.9, 0.85, 0.75), // Beige color (adjust RGB values)
+    specular: new THREE.Color(0.0, 0.0, 0.0), // Match the color for a subtle specular highlight
+    emissive: new THREE.Color(0, 0, 0), // No emissive color
+    shininess: 0, // Adjust shininess as needed
+    map: new THREE.TextureLoader().load("textures/carpet.jpg"), // Load your carpet texture
   });
 
   tvMaterial = new THREE.MeshPhongMaterial({
@@ -74,22 +75,22 @@ class MyContents {
 
   // ============== Objects ====================
 
-  table = new Table(6, 0.2, 10, this.tableWoodMaterial, 2.0);
+  table = new Table(6, 0.2, 10, this.woodMaterial, 2.0);
   floor = new THREE.BoxGeometry(15, 0.1, 15);
   wall = new THREE.BoxGeometry(15, 5, 0.1);
   dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
   chairs = [
-    new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, 2.8, 1]),
-    new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, 2.8, -1]),
-    new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [2.5, -2.8, 1]),
-    new Chair(2.5, 0.2, 2.5, this.tableWoodMaterial, [-2.5, -2.8, -1]),
+    new Chair(2.5, 0.2, 2.5, this.woodMaterial, [2.5, 2.8, 1]),
+    new Chair(2.5, 0.2, 2.5, this.woodMaterial, [-2.5, 2.8, -1]),
+    new Chair(2.5, 0.2, 2.5, this.woodMaterial, [2.5, -2.8, 1]),
+    new Chair(2.5, 0.2, 2.5, this.woodMaterial, [-2.5, -2.8, -1]),
   ];
 
   carpet = new THREE.PlaneGeometry(12, 8, 32);
 
   cake = new Cake(
     4,
-    3.2,
+    1.5,
     16,
     2,
     false,
@@ -122,6 +123,68 @@ class MyContents {
   init() {
     this.axis = new MyAxis(this);
     // this.app.scene.add(this.axis);
+
+    // portraits
+    const portraitWidth = 3; // Adjust the width of the portrait
+    const portraitHeight = 3; // Adjust the height of the portrait
+
+    const portraitGeometry1 = new THREE.PlaneGeometry(
+      portraitWidth,
+      portraitHeight
+    );
+    const portraitGeometry2 = new THREE.PlaneGeometry(
+      portraitWidth,
+      portraitHeight
+    );
+
+    const textureLoader = new THREE.TextureLoader();
+
+    // Load and create textures
+    const portraitTexture1 = textureLoader.load("textures/portrait.jpg");
+    const portraitTexture2 = portraitTexture1.clone();
+
+    // Create materials for the portraits
+    const portraitMaterial1 = new THREE.MeshBasicMaterial({
+      map: portraitTexture1,
+    });
+
+    const portraitMaterial2 = new THREE.MeshBasicMaterial({
+      map: portraitTexture2,
+    });
+
+    const portraitMesh1 = new THREE.Mesh(portraitGeometry1, portraitMaterial1);
+    const portraitMesh2 = new THREE.Mesh(portraitGeometry2, portraitMaterial2);
+
+    portraitMesh1.position.set(0, 0, -0.1); // Adjust the position as needed
+    portraitMesh2.position.set(0, 0, 0.05); // Adjust the position as needed
+
+    portraitMesh1.rotation.y = Math.PI;
+
+    this.wallMesh1.add(portraitMesh1);
+    //this.wallMesh1.add(portraitMesh2);
+
+    // ============== PICTURE FRAME =================
+    const frameWidth = portraitWidth + 0.1; // Adjust the frame width
+    const frameHeight = portraitHeight + 0.1; // Adjust the frame height
+    const frameDepth = 0.05; // Adjust the frame depth
+
+    const frameGeometry = new THREE.BoxGeometry(
+      frameWidth,
+      frameHeight,
+      frameDepth
+    );
+
+    const frameMaterial = new THREE.MeshPhongMaterial({
+      color: "#c0c0c0", // Metal-like color
+      specular: "#ffffff",
+      emissive: "#000000",
+      shininess: 30,
+    });
+
+    const frameMesh = new THREE.Mesh(frameGeometry, frameMaterial);
+
+    frameMesh.position.set(0, 0, -0.05); // Adjust the position as needed
+    portraitMesh1.add(frameMesh); // Add the frame as a child of the portrait
 
     // ============== Positions ====================
 
@@ -177,8 +240,13 @@ class MyContents {
 
     // add a point light on top of the model
     const pointLight = new THREE.PointLight(0xffffff, 250, 0);
-    pointLight.position.set(0, 10, 0);
+    pointLight.position.set(0, 6, 0);
     this.app.scene.add(pointLight);
+
+    // light under table
+    const pointLight2 = new THREE.PointLight(0xffffff, 50, 0);
+    pointLight2.position.set(0, 0.6, 0);
+    this.app.scene.add(pointLight2);
 
     // add a point light helper for the previous point light
     const sphereSize = 0.5;
@@ -188,6 +256,8 @@ class MyContents {
     // add an ambient light
     const ambientLight = new THREE.AmbientLight(0x555555);
     this.app.scene.add(ambientLight);
+
+    this.app.scene.scale.set(1, 1.5, 1);
   }
 
   update() {
