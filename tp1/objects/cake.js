@@ -22,6 +22,15 @@ export class Cake extends THREE.Object3D {
     shininess: 30,
   });
 
+  cakeMaterial = new THREE.MeshPhongMaterial({
+    color: "#5C4033",
+    specular: "#222222",
+    emissive: "#000000",
+    shininess: 30,
+    map: new THREE.TextureLoader().load("textures/cake.jpg"),
+    side: THREE.DoubleSide, // Render both sides of the faces
+  });
+
   constructor(
     radius,
     height,
@@ -29,8 +38,7 @@ export class Cake extends THREE.Object3D {
     heightSegments,
     openEnded,
     startAngle,
-    endAngle,
-    material
+    endAngle
   ) {
     super();
 
@@ -78,9 +86,9 @@ export class Cake extends THREE.Object3D {
     otherSide.rotateY(-(startAngle - endAngle));
 
     // Create a mesh using the resulting geometry and the specified material
-    this.cakeMesh = new THREE.Mesh(this.cakeGeometry, material);
-    this.oneSideMesh = new THREE.Mesh(oneSide, material);
-    this.otherSideMesh = new THREE.Mesh(otherSide, material);
+    this.cakeMesh = new THREE.Mesh(this.cakeGeometry, this.cakeMaterial);
+    this.oneSideMesh = new THREE.Mesh(oneSide, this.cakeMaterial);
+    this.otherSideMesh = new THREE.Mesh(otherSide, this.cakeMaterial);
 
     this.candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
     this.fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
@@ -92,7 +100,7 @@ export class Cake extends THREE.Object3D {
     dishMesh.scale.set(4, 2, 4);
     dishMesh.translateY(-0.6);
 
-    this.cakeMesh.translateY(-1);
+    this.cakeMesh.translateY(1);
 
     this.cakeMesh.add(dishMesh);
     this.cakeMesh.add(this.oneSideMesh);

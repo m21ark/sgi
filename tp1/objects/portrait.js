@@ -68,7 +68,8 @@ export class Portrait extends THREE.Object3D {
     const glassMesh = new THREE.Mesh(glassGeometry, glassMaterial);
     glassMesh.position.set(0, 0, 0.005);
 
-    portraitMesh.position.set(0, 0, -0.03);
+    portraitMesh.position.set(0, 0.6, -0.03);
+    portraitMesh.scale.set(1,1.4,1)
 
     // Add to the scene
     portraitMesh.add(whiteFrameMesh);
