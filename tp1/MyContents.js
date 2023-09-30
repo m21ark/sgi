@@ -113,6 +113,12 @@ export class MyContents {
 
     this.addLights();
     this.addCakeSpotlight();
+
+    // ============== Player ====================
+
+    this.addPlayer();
+    this.addListeners();
+    this.animate();
   }
 
   addCakeSpotlight() {
@@ -149,5 +155,74 @@ export class MyContents {
 
     const ambientLight = new THREE.AmbientLight(0x565656);
     this.app.scene.add(ambientLight);
+  }
+
+  // ============== Player Stuff ====================
+
+  keyboard = {};
+  player = null;
+
+  addPlayer() {
+    const playerGeometry = new THREE.BoxGeometry(1, 1, 1); // Customize size as needed
+    const playerMaterial = new THREE.MeshBasicMaterial({
+      color: 0x5fff70,
+      opacity: 0, // Make material transparent
+      transparent: true,
+    }); // Customize color as needed
+    this.player = new THREE.Mesh(playerGeometry, playerMaterial);
+
+    this.player.position.set(0, 5, 0);
+    this.app.scene.add(this.player);
+  }
+
+  addListeners() {
+    window.addEventListener("keydown", (event) => {
+      this.keyboard[event.key.toLowerCase()] = true;
+    });
+
+    window.addEventListener("keyup", (event) => {
+      this.keyboard[event.key] = false;
+    });
+  }
+
+  animate() {
+    const playerSpeed = 0.1;
+
+    let x = this.player.position["x"];
+    let y = this.player.position["y"];
+    let z = this.player.position["z"];
+
+    if (this.keyboard["w"]) x -= playerSpeed;
+    if (this.keyboard["s"]) x += playerSpeed;
+    if (this.keyboard["a"]) z += playerSpeed;
+    if (this.keyboard["d"]) z -= playerSpeed;
+    if (this.keyboard["k"]) {
+      this.app.toogleCamera();
+      this.keyboard["k"] = false;
+    }
+
+    // update player position
+    this.player.position.set(x, y, z);
+
+    if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
+
+    requestAnimationFrame(() => {
+      this.animate();
+    });
+  }
+
+  updatePlayerCamera() {
+    const playerPosition = this.player.position.clone();
+    const cameraPosition = this.app.activeCamera.position;
+
+    // Interpolate camera position towards the player's position
+    cameraPosition.lerp(
+      playerPosition.clone().add(new THREE.Vector3(4, 1, 0)),
+      0.1
+    );
+    // COM VETOR (0,0,0) CONSEGUIMOS UM RESULTADO MTO PERTO DO QUE QUERO!
+
+    // Make the camera look at the player's position
+    this.app.activeCamera.lookAt(playerPosition);
   }
 }

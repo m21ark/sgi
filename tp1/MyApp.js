@@ -3,10 +3,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyContents } from "./MyContents.js";
 import { MyGuiInterface } from "./MyGuiInterface.js";
 import Stats from "three/addons/libs/stats.module.js";
+import { MyFirstPersonControls } from "./MyFirstPersonControls.js";
 
-/**
- * This class contains the application object
- */
 class MyApp {
   /**
    * the constructor
@@ -27,7 +25,7 @@ class MyApp {
     this.controls = null;
     this.gui = null;
     this.axis = null;
-    this.contents == null;
+    this.contents = null;
   }
   /**
    * initializes the application
@@ -64,93 +62,14 @@ class MyApp {
    */
   initCameras() {
     const aspect = window.innerWidth / window.innerHeight;
+    const perspective = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+    perspective.position.set(18, 8, 0);
+    this.cameras["Perspective"] = perspective;
 
-    // Create a basic perspective camera
-    const perspective1 = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-    perspective1.position.set(18, 8, 0);
-    this.cameras["Perspective"] = perspective1;
-
-    const perspective2 = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-    perspective2.position.set(0, 2, 10);
-    this.cameras["Perspective2"] = perspective2;
-
-    // defines the frustum size for the orthographic cameras
-    const left = (-this.frustumSize / 2) * aspect;
-    const right = (this.frustumSize / 2) * aspect;
-    const top = this.frustumSize / 2;
-    const bottom = -this.frustumSize / 2;
-    const near = -this.frustumSize / 2;
-    const far = this.frustumSize;
-
-    // create a right view orthographic camera
-    const orthoRight = new THREE.OrthographicCamera(
-      left,
-      right,
-      top,
-      bottom,
-      near,
-      far
-    );
-    orthoRight.up = new THREE.Vector3(0, 1, 0);
-    orthoRight.position.set(this.frustumSize / 4, 0, 0);
-    orthoRight.lookAt(new THREE.Vector3(0, 0, 0));
-    this.cameras["Right"] = orthoRight;
-
-    // create a back view orthographic camera
-    const orthoBack = new THREE.OrthographicCamera(
-      left,
-      right,
-      top,
-      bottom,
-      near,
-      far
-    );
-    orthoBack.up = new THREE.Vector3(0, -1, 0);
-    orthoBack.position.set(0, -this.frustumSize / 4, 0);
-    orthoBack.lookAt(new THREE.Vector3(0, 0, 0));
-    this.cameras["Back"] = orthoBack;
-
-    // create a left view orthographic camera
-    const orthoLeft = new THREE.OrthographicCamera(
-      left,
-      right,
-      top,
-      bottom,
-      near,
-      far
-    );
-    orthoLeft.up = new THREE.Vector3(0, 1, 0);
-    orthoLeft.position.set(-this.frustumSize / 4, 0, 0);
-    orthoLeft.lookAt(new THREE.Vector3(0, 0, 0));
-    this.cameras["Left"] = orthoLeft;
-
-    // create a top view orthographic camera
-    const orthoTop = new THREE.OrthographicCamera(
-      left,
-      right,
-      top,
-      bottom,
-      near,
-      far
-    );
-    orthoTop.up = new THREE.Vector3(0, 0, 1);
-    orthoTop.position.set(0, this.frustumSize / 4, 0);
-    orthoTop.lookAt(new THREE.Vector3(0, 0, 0));
-    this.cameras["Top"] = orthoTop;
-
-    // create a front view orthographic camera
-    const orthoFront = new THREE.OrthographicCamera(
-      left,
-      right,
-      top,
-      bottom,
-      near,
-      far
-    );
-    orthoFront.up = new THREE.Vector3(0, 1, 0);
-    orthoFront.position.set(0, 0, this.frustumSize / 4);
-    orthoFront.lookAt(new THREE.Vector3(0, 0, 0));
-    this.cameras["Front"] = orthoFront;
+    const person1 = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+    person1.position.set(18, 8, 0);
+    person1.lookAt(new THREE.Vector3(0, 0, 0));
+    this.cameras["FirstPerson"] = person1;
   }
 
   /**
@@ -180,17 +99,21 @@ class MyApp {
       this.onResize();
 
       // are the controls yet?
-      if (this.controls === null) {
-        // Orbit controls allow the camera to orbit around a target.
+
+      if (this.activeCameraName === "FirstPerson") {
+        this.controls = new MyFirstPersonControls(
+          this.activeCamera,
+          this.renderer.domElement
+        );
+      } else {
         this.controls = new OrbitControls(
           this.activeCamera,
           this.renderer.domElement
         );
-        this.controls.enableZoom = true;
-        this.controls.update();
-      } else {
-        this.controls.object = this.activeCamera;
       }
+
+      this.controls.enableZoom = true;
+      this.controls.update();
     }
   }
 
@@ -217,6 +140,15 @@ class MyApp {
    */
   setGui(gui) {
     this.gui = gui;
+  }
+
+  toogleCamera() {
+    this.initCameras();
+    if (this.activeCameraName === "FirstPerson") {
+      this.setActiveCamera("Perspective");
+    } else {
+      this.setActiveCamera("FirstPerson");
+    }
   }
 
   /**
