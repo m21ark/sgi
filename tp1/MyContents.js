@@ -213,7 +213,7 @@ export class MyContents {
     // update player position
     this.player.position.set(x, y, z);
 
-   if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
+    if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
 
     requestAnimationFrame(() => {
       this.animate();
@@ -221,8 +221,6 @@ export class MyContents {
   }
 
   updatePlayerCamera() {
-    console.log(this.app.activeCamera.position);
-
     // update camera position
     this.app.activeCamera.position.set(
       this.player.position.x,
@@ -243,7 +241,5 @@ export class MyContents {
       this.player.position.y,
       this.player.position.z
     );
-
-    
   }
 }

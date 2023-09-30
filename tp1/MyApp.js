@@ -1,13 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { FlyControls } from "three/addons/controls/FlyControls.js";
 import { MyContents } from "./MyContents.js";
 import { MyGuiInterface } from "./MyGuiInterface.js";
 import Stats from "three/addons/libs/stats.module.js";
+import { MyFirstPersonControls } from "./MyFirstPersonControls.js";
 
-/**
- * This class contains the application object
- */
 class MyApp {
   /**
    * the constructor
@@ -104,18 +101,9 @@ class MyApp {
       // are the controls yet?
 
       if (this.activeCameraName === "FirstPerson") {
-        this.controls = new OrbitControls(
+        this.controls = new MyFirstPersonControls(
           this.activeCamera,
           this.renderer.domElement
-        );
-
-        console.log(
-          "First Person Camera Position:",
-          this.activeCamera.position
-        );
-        console.log(
-          "First Person Camera LookAt Target:",
-          this.activeCamera.getWorldDirection(new THREE.Vector3())
         );
       } else {
         this.controls = new OrbitControls(
