@@ -167,7 +167,7 @@ export class MyContents {
     const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x5fff70 }); // Customize color as needed
     this.player = new THREE.Mesh(playerGeometry, playerMaterial);
 
-    this.player.position.set(0, 1, 0);
+    this.player.position.set(0, 5, 0);
     this.app.scene.add(this.player);
   }
 
@@ -184,12 +184,36 @@ export class MyContents {
   animate() {
     const playerSpeed = 0.1;
 
-    if (this.keyboard["w"]) this.player.translateZ(-playerSpeed);
-    if (this.keyboard["s"]) this.player.translateZ(playerSpeed);
-    if (this.keyboard["a"]) this.player.translateX(-playerSpeed);
-    if (this.keyboard["d"]) this.player.translateX(playerSpeed);
+    let x = this.player.position["x"];
+    let y = this.player.position["y"];
+    let z = this.player.position["z"];
 
-    this.updatePlayerCamera();
+    if (this.keyboard["w"]) {
+      this.player.translateZ(-playerSpeed);
+      x -= playerSpeed;
+    }
+    if (this.keyboard["s"]) {
+      this.player.translateZ(playerSpeed);
+      x += playerSpeed;
+    }
+    if (this.keyboard["a"]) {
+      this.player.translateX(-playerSpeed);
+      z += playerSpeed;
+    }
+    if (this.keyboard["d"]) {
+      this.player.translateX(playerSpeed);
+      z -= playerSpeed;
+    }
+
+    if (this.keyboard["k"]) {
+      this.keyboard["k"] = false;
+      this.app.toogleCamera();
+    }
+
+    // update player position
+    this.player.position.set(x, y, z);
+
+   if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
 
     requestAnimationFrame(() => {
       this.animate();
@@ -197,6 +221,29 @@ export class MyContents {
   }
 
   updatePlayerCamera() {
-    this.app.cameras["Perspective"].position.copy(this.player.position);
+    console.log(this.app.activeCamera.position);
+
+    // update camera position
+    this.app.activeCamera.position.set(
+      this.player.position.x,
+      this.player.position.y + 1,
+      this.player.position.z
+    );
+
+    // update camera rotation
+    this.app.activeCamera.rotation.set(
+      this.player.rotation.x,
+      this.player.rotation.y,
+      this.player.rotation.z
+    );
+
+    // update camera target
+    this.app.activeCamera.lookAt(
+      this.player.position.x,
+      this.player.position.y,
+      this.player.position.z
+    );
+
+    
   }
 }
