@@ -163,7 +163,7 @@ export class MyContents {
   player = null;
 
   addPlayer() {
-    const playerGeometry = new THREE.BoxGeometry(1, 2, 1); // Customize size as needed
+    const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1); // Customize size as needed
     const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x5fff70 }); // Customize color as needed
     this.player = new THREE.Mesh(playerGeometry, playerMaterial);
 
@@ -188,27 +188,11 @@ export class MyContents {
     let y = this.player.position["y"];
     let z = this.player.position["z"];
 
-    if (this.keyboard["w"]) {
-      this.player.translateZ(-playerSpeed);
-      x -= playerSpeed;
-    }
-    if (this.keyboard["s"]) {
-      this.player.translateZ(playerSpeed);
-      x += playerSpeed;
-    }
-    if (this.keyboard["a"]) {
-      this.player.translateX(-playerSpeed);
-      z += playerSpeed;
-    }
-    if (this.keyboard["d"]) {
-      this.player.translateX(playerSpeed);
-      z -= playerSpeed;
-    }
-
-    if (this.keyboard["k"]) {
-      this.keyboard["k"] = false;
-      this.app.toogleCamera();
-    }
+    if (this.keyboard["w"]) x -= playerSpeed;
+    if (this.keyboard["s"]) x += playerSpeed;
+    if (this.keyboard["a"]) z += playerSpeed;
+    if (this.keyboard["d"]) z -= playerSpeed;
+    if (this.keyboard["k"]) this.app.toogleCamera();
 
     // update player position
     this.player.position.set(x, y, z);
@@ -221,25 +205,17 @@ export class MyContents {
   }
 
   updatePlayerCamera() {
-    // update camera position
-    this.app.activeCamera.position.set(
-      this.player.position.x,
-      this.player.position.y + 1,
-      this.player.position.z
-    );
+    const playerPosition = this.player.position.clone();
+    const cameraPosition = this.app.activeCamera.position;
 
-    // update camera rotation
-    this.app.activeCamera.rotation.set(
-      this.player.rotation.x,
-      this.player.rotation.y,
-      this.player.rotation.z
+    // Interpolate camera position towards the player's position
+    cameraPosition.lerp(
+      playerPosition.clone().add(new THREE.Vector3(3, 1, 0)),
+      0.1
     );
+    // COM VETOR (0,0,0) CONSEGUIMOS UM RESULTADO MTO PERTO DO QUE QUERO!
 
-    // update camera target
-    this.app.activeCamera.lookAt(
-      this.player.position.x,
-      this.player.position.y,
-      this.player.position.z
-    );
+    // Make the camera look at the player's position
+    this.app.activeCamera.lookAt(playerPosition);
   }
 }
