@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 export class Cake extends THREE.Object3D {
+
   candleMaterial = new THREE.MeshPhongMaterial({
     color: "#ffff00",
     specular: "#ffff00",
@@ -29,6 +30,7 @@ export class Cake extends THREE.Object3D {
     shininess: 30,
     map: new THREE.TextureLoader().load("textures/cake.jpg"),
     side: THREE.DoubleSide, // Render both sides of the faces
+    normalMap: new THREE.TextureLoader().load("textures/cakeN.jpg"),
   });
 
   constructor(

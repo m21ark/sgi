@@ -20,11 +20,15 @@ export class MyContents {
     const floorTexture = textureLoader.load("textures/floor.jpg");
     const chairTexture = textureLoader.load("textures/chair.jpg");
     const ceilTexture = textureLoader.load("textures/floor.jpg");
+    const wallTexture = textureLoader.load("textures/wall.jpg");
+
+    wallTexture.normalMap = textureLoader.load("textures/wallN.jpg");
 
     // ============== Materials ====================
 
     const wallMaterial = new THREE.MeshPhongMaterial({
       color: "#B4A89C",
+      map: wallTexture,
     });
 
     const floorMaterial = new THREE.MeshPhongMaterial({

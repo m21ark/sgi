@@ -8,6 +8,12 @@ export class Table extends THREE.Object3D {
     this.tableMaterial = tableMaterial;
     this.chairMaterial = chairMaterial;
 
+    const chairNormalTexture = new THREE.TextureLoader().load("textures/chairN.jpg");
+    this.chairMaterial.normalMap = chairNormalTexture;
+    const tableNormalTexture = new THREE.TextureLoader().load("textures/woodN.jpg");
+    this.tableMaterial.normalMap = tableNormalTexture;
+
+
     this.tableStruct = new TableStruct(6, 0.2, 10, this.tableMaterial, 2.0);
 
     this.chairs = [

@@ -6,6 +6,8 @@ export class Room extends THREE.Object3D {
 
     const textureLoader = new THREE.TextureLoader();
     const carpetTexture = textureLoader.load("textures/carpet.jpg");
+    const floorNormalTexture = textureLoader.load("textures/floorN.jpg");
+    floorMaterial.normalMap = floorNormalTexture;
 
     // ==================== Materials ====================
 
@@ -23,6 +25,11 @@ export class Room extends THREE.Object3D {
       shininess: 0,
       map: carpetTexture,
     });
+
+    // ==================== Normals ====================
+
+   
+
 
     // ==================== TV ====================
 
