@@ -169,12 +169,6 @@ export class MyContents {
 
     this.player.position.set(0, 1, 0);
     this.app.scene.add(this.player);
-
-    /*   const cameraOffset = new THREE.Vector3(0, 1, 0); // Adjust the offset as needed
-    this.app.cameras["Perspective"].position
-      .copy(this.player.position)
-      .add(cameraOffset);
-    this.player.add(camera); */
   }
 
   addListeners() {
@@ -195,16 +189,14 @@ export class MyContents {
     if (this.keyboard["a"]) this.player.translateX(-playerSpeed);
     if (this.keyboard["d"]) this.player.translateX(playerSpeed);
 
-    const cameraOffset = new THREE.Vector3(0, 1, 0);
+    this.updatePlayerCamera();
 
-    this.app.cameras["Perspective"].position
-      .copy(this.player.position)
-      .add(cameraOffset);
+    requestAnimationFrame(() => {
+      this.animate();
+    });
+  }
 
-    this.player.add(camera);
-
-    // renderer.render(scene, camera);
-
-    requestAnimationFrame(() => this.animate());
+  updatePlayerCamera() {
+    this.app.cameras["Perspective"].position.copy(this.player.position);
   }
 }
