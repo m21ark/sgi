@@ -12,7 +12,7 @@ export class Portrait extends THREE.Object3D {
       portraitHeight - 0.3
     );
 
-    const portraitMaterial = new THREE.MeshBasicMaterial({
+    const portraitMaterial = new THREE.MeshPhongMaterial({
       map: portraitTexture,
       color: 0xffffff, // Set the base color (white in this example)
       specular: 0x111111, // Set a moderate specular highlight color

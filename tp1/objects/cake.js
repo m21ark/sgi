@@ -15,6 +15,13 @@ export class Cake extends THREE.Object3D {
     shininess: 30,
   });
 
+  plateMaterial = new THREE.MeshPhongMaterial({
+    color: "#c0c0c0",
+    specular: "#ffffff",
+    emissive: "#000000",
+    shininess: 30,
+  });
+
   constructor(
     radius,
     height,
@@ -78,12 +85,20 @@ export class Cake extends THREE.Object3D {
     this.candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
     this.fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
 
+    // Dish
+    const dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
+    const dishMesh = new THREE.Mesh(dish, this.plateMaterial);
 
-    // Add the cake mesh to the Object3D
+    dishMesh.scale.set(4, 2, 4);
+    dishMesh.translateY(-0.6);
+
+    this.cakeMesh.translateY(-1);
+
+    this.cakeMesh.add(dishMesh);
+    this.cakeMesh.add(this.oneSideMesh);
+    this.cakeMesh.add(this.otherSideMesh);
+    this.cakeMesh.add(this.candleMesh);
+    this.cakeMesh.add(this.fireMesh);
     this.add(this.cakeMesh);
-    this.add(this.oneSideMesh);
-    this.add(this.otherSideMesh);
-    this.add(this.candleMesh);
-    this.add(this.fireMesh);
   }
 }
