@@ -40,7 +40,7 @@ class MyApp {
     document.body.appendChild(this.stats.dom);
 
     this.initCameras();
-    this.setActiveCamera("FirstPerson");
+    this.setActiveCamera("Perspective");
 
     // Create a renderer with Antialiasing
     this.renderer = new THREE.WebGLRenderer({ antialias: true });

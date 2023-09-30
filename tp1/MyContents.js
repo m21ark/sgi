@@ -163,8 +163,12 @@ export class MyContents {
   player = null;
 
   addPlayer() {
-    const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1); // Customize size as needed
-    const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x5fff70 }); // Customize color as needed
+    const playerGeometry = new THREE.BoxGeometry(1, 1, 1); // Customize size as needed
+    const playerMaterial = new THREE.MeshBasicMaterial({
+      color: 0x5fff70,
+      opacity: 0, // Make material transparent
+      transparent: true,
+    }); // Customize color as needed
     this.player = new THREE.Mesh(playerGeometry, playerMaterial);
 
     this.player.position.set(0, 5, 0);
@@ -192,7 +196,10 @@ export class MyContents {
     if (this.keyboard["s"]) x += playerSpeed;
     if (this.keyboard["a"]) z += playerSpeed;
     if (this.keyboard["d"]) z -= playerSpeed;
-    if (this.keyboard["k"]) this.app.toogleCamera();
+    if (this.keyboard["k"]) {
+      this.app.toogleCamera();
+      this.keyboard["k"] = false;
+    }
 
     // update player position
     this.player.position.set(x, y, z);
@@ -210,7 +217,7 @@ export class MyContents {
 
     // Interpolate camera position towards the player's position
     cameraPosition.lerp(
-      playerPosition.clone().add(new THREE.Vector3(3, 1, 0)),
+      playerPosition.clone().add(new THREE.Vector3(4, 1, 0)),
       0.1
     );
     // COM VETOR (0,0,0) CONSEGUIMOS UM RESULTADO MTO PERTO DO QUE QUERO!
