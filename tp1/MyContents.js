@@ -113,6 +113,12 @@ export class MyContents {
 
     this.addLights();
     this.addCakeSpotlight();
+
+    // ============== Player ====================
+
+    this.addPlayer();
+    this.addListeners();
+    this.animate();
   }
 
   addCakeSpotlight() {
@@ -149,5 +155,56 @@ export class MyContents {
 
     const ambientLight = new THREE.AmbientLight(0x565656);
     this.app.scene.add(ambientLight);
+  }
+
+  // ============== Player Stuff ====================
+
+  keyboard = {};
+  player = null;
+
+  addPlayer() {
+    const playerGeometry = new THREE.BoxGeometry(1, 2, 1); // Customize size as needed
+    const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x5fff70 }); // Customize color as needed
+    this.player = new THREE.Mesh(playerGeometry, playerMaterial);
+
+    this.player.position.set(0, 1, 0);
+    this.app.scene.add(this.player);
+
+    /*   const cameraOffset = new THREE.Vector3(0, 1, 0); // Adjust the offset as needed
+    this.app.cameras["Perspective"].position
+      .copy(this.player.position)
+      .add(cameraOffset);
+    this.player.add(camera); */
+  }
+
+  addListeners() {
+    window.addEventListener("keydown", (event) => {
+      this.keyboard[event.key.toLowerCase()] = true;
+    });
+
+    window.addEventListener("keyup", (event) => {
+      this.keyboard[event.key] = false;
+    });
+  }
+
+  animate() {
+    const playerSpeed = 0.1;
+
+    if (this.keyboard["w"]) this.player.translateZ(-playerSpeed);
+    if (this.keyboard["s"]) this.player.translateZ(playerSpeed);
+    if (this.keyboard["a"]) this.player.translateX(-playerSpeed);
+    if (this.keyboard["d"]) this.player.translateX(playerSpeed);
+
+    const cameraOffset = new THREE.Vector3(0, 1, 0);
+
+    this.app.cameras["Perspective"].position
+      .copy(this.player.position)
+      .add(cameraOffset);
+
+    this.player.add(camera);
+
+    // renderer.render(scene, camera);
+
+    requestAnimationFrame(() => this.animate());
   }
 }
