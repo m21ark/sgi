@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export class Room extends THREE.Object3D {
-  constructor(floorMaterial, wallMaterial) {
+  constructor(floorMaterial, wallMaterial, ceilMaterial) {
     super();
 
     const textureLoader = new THREE.TextureLoader();
@@ -41,7 +41,8 @@ export class Room extends THREE.Object3D {
 
     // ==================== Meshes ====================
 
-    const floorMesh = new THREE.Mesh(floor, floorMaterial);
+    this.floorMesh = new THREE.Mesh(floor, floorMaterial);
+    this.ceilMesh = new THREE.Mesh(floor, ceilMaterial);
 
     this.wallMesh1 = new THREE.Mesh(wall, wallMaterial);
     this.wallMesh2 = new THREE.Mesh(wall, wallMaterial);
@@ -50,19 +51,20 @@ export class Room extends THREE.Object3D {
 
     // ==================== Positions ====================
 
-    floorMesh.position.y = -0.05;
+    this.floorMesh.position.y = -0.05;
+    this.ceilMesh.position.y = 9.05;
 
-    this.wallMesh1.position.y = 3.5;
+    this.wallMesh1.position.y = 4.5;
     this.wallMesh1.position.z = 12.5;
 
-    this.wallMesh2.position.y = 3.5;
+    this.wallMesh2.position.y = 4.5;
     this.wallMesh2.position.z = -12.5;
 
-    this.wallMesh3.position.y = 3.5;
+    this.wallMesh3.position.y = 4.5;
     this.wallMesh3.position.x = -12.5;
     this.wallMesh3.rotation.y = Math.PI / 2;
 
-    this.wallMesh4.position.y = 3.5;
+    this.wallMesh4.position.y = 4.5;
     this.wallMesh4.position.x = 12.5;
     this.wallMesh4.rotation.y = Math.PI / 2;
 
@@ -74,12 +76,13 @@ export class Room extends THREE.Object3D {
 
     // ==================== Display ====================
 
-    this.add(floorMesh);
+    this.add(this.floorMesh);
+    this.add(this.ceilMesh);
 
     this.add(this.wallMesh1);
     this.add(this.wallMesh2);
     this.add(this.wallMesh3);
-    this.add(this.wallMesh4);
+    //this.add(this.wallMesh4);
 
     this.wallMesh2.add(tvMesh);
     this.add(carpetMesh);
@@ -87,5 +90,13 @@ export class Room extends THREE.Object3D {
 
   getWallMesh1() {
     return this.wallMesh1;
+  }
+
+  getCeilMesh() {
+    return this.ceilMesh;
+  }
+
+  getWallMesh3() {
+    return this.wallMesh3;
   }
 }

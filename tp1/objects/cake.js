@@ -93,6 +93,10 @@ export class Cake extends THREE.Object3D {
     this.candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
     this.fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
 
+    // CANDLE LIGHT
+    const candleLight = new THREE.PointLight(0xffa500, 5, 1); // Color, Intensity, Distance
+    this.candleMesh.add(candleLight);
+
     // Dish
     const dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
     const dishMesh = new THREE.Mesh(dish, this.plateMaterial);

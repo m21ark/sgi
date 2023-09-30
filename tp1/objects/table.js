@@ -17,7 +17,7 @@ export class Table extends THREE.Object3D {
       new Chair(2.5, 0.2, 2.5, this.chairMaterial, [-2.5, -2.8, -1]),
     ];
 
-    this.tableStruct.scale.set(1,1.4,1);
+    this.tableStruct.scale.set(1, 1.4, 1);
 
     this.tableStruct.add(this.chairs[0]);
     this.tableStruct.add(this.chairs[1]);
