@@ -166,7 +166,7 @@ export class MyContents {
     const playerGeometry = new THREE.BoxGeometry(1, 1, 1); // Customize size as needed
     const playerMaterial = new THREE.MeshBasicMaterial({
       color: 0x5fff70,
-      opacity: 0, 
+      opacity: 0,
       transparent: true,
     }); // Customize color as needed
     this.player = new THREE.Mesh(playerGeometry, playerMaterial);
@@ -187,6 +187,8 @@ export class MyContents {
 
   animate() {
     const playerSpeed = 0.15;
+    const rotationSpeed = 0.05;
+
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
 
     // Rotate the player's direction based on their current rotation
@@ -215,8 +217,8 @@ export class MyContents {
       );
       moveVector.add(rightDirection);
     }
-    if (this.keyboard["arrowup"]) moveVector.add(new THREE.Vector3(0, 1, 0));
-    if (this.keyboard["arrowdown"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
+    if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
+    if (this.keyboard["shift"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
 
     // Normalize the move vector and apply playerSpeed
     moveVector.normalize().multiplyScalar(playerSpeed);
@@ -224,11 +226,39 @@ export class MyContents {
     // Update player position
     this.player.position.add(moveVector);
 
-    if (this.keyboard["arrowleft"]) this.player.rotation.y += 0.05;
-    if (this.keyboard["arrowright"]) this.player.rotation.y -= 0.05;
+    // Vertical rotation
+    if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
+    if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
+    if (this.keyboard["arrowup"]) {
+      const maxPitch = Math.PI / 2 - 0.5;
+      const minPitch = -Math.PI / 2 - 0.5;
+
+      this.player.rotation.x = Math.max(
+        minPitch,
+        Math.min(maxPitch, this.player.rotation.x - rotationSpeed)
+      );
+    }
+    if (this.keyboard["arrowdown"]) {
+      const maxPitch = Math.PI / 2 - 0.5;
+      const minPitch = -Math.PI / 2 - 0.5;
+
+      this.player.rotation.x = Math.max(
+        minPitch,
+        Math.min(maxPitch, this.player.rotation.x + rotationSpeed)
+      );
+    }
+
     if (this.keyboard["k"]) {
       this.app.toogleCamera();
       this.keyboard["k"] = false;
+    }
+
+    if (this.keyboard["r"]) {
+      // reset rotation
+      this.player.rotation.x = 0;
+      this.player.rotation.y = 0;
+      this.player.rotation.z = 0;
+      this.keyboard["r"] = false;
     }
 
     if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
