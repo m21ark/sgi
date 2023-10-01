@@ -166,7 +166,7 @@ export class MyContents {
     const playerGeometry = new THREE.BoxGeometry(1, 1, 1); // Customize size as needed
     const playerMaterial = new THREE.MeshBasicMaterial({
       color: 0x5fff70,
-      opacity: 0, // Make material transparent
+      opacity: 0, 
       transparent: true,
     }); // Customize color as needed
     this.player = new THREE.Mesh(playerGeometry, playerMaterial);
@@ -181,28 +181,55 @@ export class MyContents {
     });
 
     window.addEventListener("keyup", (event) => {
-      this.keyboard[event.key] = false;
+      this.keyboard[event.key.toLowerCase()] = false;
     });
   }
 
   animate() {
-    const playerSpeed = 0.1;
+    const playerSpeed = 0.15;
+    const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
 
-    let x = this.player.position["x"];
-    let y = this.player.position["y"];
-    let z = this.player.position["z"];
+    // Rotate the player's direction based on their current rotation
+    playerDirection.applyAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      this.player.rotation.y
+    );
 
-    if (this.keyboard["w"]) x -= playerSpeed;
-    if (this.keyboard["s"]) x += playerSpeed;
-    if (this.keyboard["a"]) z += playerSpeed;
-    if (this.keyboard["d"]) z -= playerSpeed;
+    // Calculate the movement vector based on the player's direction
+    const moveVector = new THREE.Vector3();
+    if (this.keyboard["w"]) moveVector.sub(playerDirection);
+    if (this.keyboard["s"]) moveVector.add(playerDirection);
+    if (this.keyboard["a"]) {
+      const leftDirection = new THREE.Vector3(1, 0, 0);
+      leftDirection.applyAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        this.player.rotation.y
+      );
+      moveVector.add(leftDirection);
+    }
+    if (this.keyboard["d"]) {
+      const rightDirection = new THREE.Vector3(-1, 0, 0);
+      rightDirection.applyAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        this.player.rotation.y
+      );
+      moveVector.add(rightDirection);
+    }
+    if (this.keyboard["arrowup"]) moveVector.add(new THREE.Vector3(0, 1, 0));
+    if (this.keyboard["arrowdown"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
+
+    // Normalize the move vector and apply playerSpeed
+    moveVector.normalize().multiplyScalar(playerSpeed);
+
+    // Update player position
+    this.player.position.add(moveVector);
+
+    if (this.keyboard["arrowleft"]) this.player.rotation.y += 0.05;
+    if (this.keyboard["arrowright"]) this.player.rotation.y -= 0.05;
     if (this.keyboard["k"]) {
       this.app.toogleCamera();
       this.keyboard["k"] = false;
     }
-
-    // update player position
-    this.player.position.set(x, y, z);
 
     if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
 
@@ -215,12 +242,14 @@ export class MyContents {
     const playerPosition = this.player.position.clone();
     const cameraPosition = this.app.activeCamera.position;
 
-    // Interpolate camera position towards the player's position
-    cameraPosition.lerp(
-      playerPosition.clone().add(new THREE.Vector3(4, 1, 0)),
-      0.1
+    // Calculate a position relative to the player's rotation
+    const relativeCameraOffset = new THREE.Vector3(0, 1, -4); // Adjust the offset as needed
+    const cameraOffset = relativeCameraOffset.applyQuaternion(
+      this.player.quaternion
     );
-    // COM VETOR (0,0,0) CONSEGUIMOS UM RESULTADO MTO PERTO DO QUE QUERO!
+
+    // Set the camera's position to be relative to the player's position
+    cameraPosition.copy(playerPosition).add(cameraOffset);
 
     // Make the camera look at the player's position
     this.app.activeCamera.lookAt(playerPosition);
