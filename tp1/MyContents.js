@@ -3,6 +3,7 @@ import { Cake } from "./objects/cake.js";
 import { Table } from "./objects/table.js";
 import { Portrait } from "./objects/portrait.js";
 import { Room } from "./objects/room.js";
+import { WallWindow } from "./objects/wall_window.js";
 export class MyContents {
   constructor(app) {
     this.app = app;
@@ -70,19 +71,7 @@ export class MyContents {
     const portrait1 = new Portrait(3, 3, "textures/portrait1.jpg");
     const portrait2 = new Portrait(3, 3, "textures/portrait2.jpg");
 
-    this.windowPane = new THREE.PlaneGeometry(8, 6);
-
-    // ============== Meshes ====================
-
-    const windowPane = new THREE.Mesh(
-      this.windowPane,
-      new THREE.MeshPhongMaterial({
-        color: "#03ecfc",
-        specular: "#ffffff",
-        emissive: "#000000",
-        shininess: 30,
-      })
-    );
+    this.windowPane = new WallWindow();
 
     // ============== Positions ====================
 
@@ -95,7 +84,7 @@ export class MyContents {
     portrait2.position.set(3, 0, -0.1);
 
     // Window
-    windowPane.position.set(0, 0, 0.08);
+    this.windowPane.position.set(0, 0, 0.08);
 
     // ============== Display ====================
 
@@ -107,7 +96,7 @@ export class MyContents {
     this.room.getWallMesh1().add(portrait1);
     this.room.getWallMesh1().add(portrait2);
 
-    this.room.getWallMesh3().add(windowPane);
+    this.room.getWallMesh3().add(this.windowPane);
 
     // ============== Lights ====================
 
@@ -132,7 +121,7 @@ export class MyContents {
     spotLight.distance = 7;
 
     const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-    //this.app.scene.add(spotLightHelper);
+    this.app.scene.add(spotLightHelper);
     this.app.scene.add(spotLight);
   }
 
@@ -150,7 +139,7 @@ export class MyContents {
       pointLight.position.set(x, yLight, z);
 
       this.room.getCeilMesh().add(pointLight);
-      //this.room.add(pointLightHelper);
+      this.room.add(pointLightHelper);
     }
 
     const ambientLight = new THREE.AmbientLight(0x565656);
