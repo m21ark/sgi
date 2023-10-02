@@ -4,6 +4,7 @@ export class WallWindow extends THREE.Object3D {
   constructor() {
     super();
 
+
     // Create the window pane
     this.windowPane = new THREE.PlaneGeometry(8, 6);
     const windowPaneMesh = new THREE.Mesh(
@@ -22,13 +23,11 @@ export class WallWindow extends THREE.Object3D {
       specular: "#ffffff",
       emissive: "#000000",
       shininess: 30,
-    })
-  
+    });
 
     // Create the structure of the window
     const windowStructure = new THREE.BoxGeometry(8, 0.5, 0.25);
     const windowStructureH = new THREE.BoxGeometry(0.5, 6, 0.25);
-    
 
     // Create four blocks for the window structure
     const windowStructureMesh1 = new THREE.Mesh(
@@ -53,11 +52,8 @@ export class WallWindow extends THREE.Object3D {
 
     // Position and add the window structure meshes
     windowStructureMesh1.translateY(3);
-
     windowStructureMesh2.translateY(-3);
-
     windowStructureMesh3.translateX(3.75);
-
     windowStructureMesh4.translateX(-3.75);
 
     // Add the window pane and structure meshes to the object
