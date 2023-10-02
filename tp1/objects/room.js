@@ -11,11 +11,20 @@ export class Room extends THREE.Object3D {
 
     // ==================== Materials ====================
 
+    const videoElement = document.getElementById("tv-video");
+    
+    const videoTexture = new THREE.VideoTexture(videoElement);
+    videoTexture.minFilter = THREE.LinearFilter;
+    videoTexture.magFilter = THREE.LinearFilter;
+    videoTexture.format = THREE.RGBAFormat;
+
+
     const tvMaterial = new THREE.MeshPhongMaterial({
-      color: "#222222",
+      color: "#dddddd",
       specular: "#353535",
       emissive: "#000000",
       shininess: 30,
+      map: videoTexture,
     });
 
     const carpetMaterial = new THREE.MeshPhongMaterial({
@@ -34,6 +43,9 @@ export class Room extends THREE.Object3D {
     // ==================== TV ====================
 
     const tv = new THREE.BoxGeometry(10, 4, 0.1);
+
+
+  
     const tvMesh = new THREE.Mesh(tv, tvMaterial);
 
     // ==================== Carpet ====================
