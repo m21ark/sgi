@@ -10,7 +10,8 @@ export class MyContents {
   }
 
   update() {
-    // ...
+    
+  
   }
 
   init() {
@@ -70,6 +71,7 @@ export class MyContents {
 
     const portrait1 = new Portrait(3, 3, "textures/portrait1.jpg");
     const portrait2 = new Portrait(3, 3, "textures/portrait2.jpg");
+    const portrait3 = new Portrait(3, 3, "carocha");
 
     this.windowPane = new WallWindow();
 
@@ -82,6 +84,7 @@ export class MyContents {
     // Portraits
     portrait1.position.set(-3, 0, -0.1);
     portrait2.position.set(3, 0, -0.1);
+    portrait3.position.set(9, 0, -0.1);
 
     // Window
     this.windowPane.position.set(0, 0, 0.08);
@@ -95,6 +98,7 @@ export class MyContents {
     // Add Portraits
     this.room.getWallMesh1().add(portrait1);
     this.room.getWallMesh1().add(portrait2);
+    this.room.getWallMesh1().add(portrait3);
 
     this.room.getWallMesh3().add(this.windowPane);
 

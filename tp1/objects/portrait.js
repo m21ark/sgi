@@ -4,20 +4,82 @@ export class Portrait extends THREE.Object3D {
   constructor(portraitWidth, portraitHeight, photoDir) {
     super();
 
-    const textureLoader = new THREE.TextureLoader();
-    const portraitTexture = textureLoader.load(photoDir);
-
-    const portraitGeometry = new THREE.PlaneGeometry(
+    let portraitMaterial;
+    let portraitGeometry = new THREE.PlaneGeometry(
       portraitWidth - 0.3,
       portraitHeight - 0.3
     );
 
-    const portraitMaterial = new THREE.MeshPhongMaterial({
-      map: portraitTexture,
-      color: 0xffffff, // Set the base color (white in this example)
-      specular: 0x111111, // Set a moderate specular highlight color
-      shininess: 30, // Adjust as needed
-    });
+    if (photoDir !== "carocha") {
+      const textureLoader = new THREE.TextureLoader();
+      const portraitTexture = textureLoader.load(photoDir);
+
+      portraitMaterial = new THREE.MeshPhongMaterial({
+        map: portraitTexture,
+        color: 0xffffff, // Set the base color (white in this example)
+        specular: 0x111111, // Set a moderate specular highlight color
+        shininess: 30, // Adjust as needed
+      });
+    } else {
+      portraitMaterial = new THREE.MeshPhongMaterial({
+        color: 0xffffff, // Set the base color (white in this example)
+        specular: 0x111111, // Set a moderate specular highlight color
+        shininess: 30, // Adjust as needed
+      });
+      let points = [
+        new THREE.Vector3(0.0, 0, 0.0),
+        new THREE.Vector3(0.0, 0.6*(2/3), 0.0),
+        new THREE.Vector3(0.6, 0.6*(2/3), 0.0), 
+        new THREE.Vector3(0.6, 0.0, 0.0), 
+      ]
+
+      let points2 = [
+        new THREE.Vector3(0.0, 0, 0.0),
+        new THREE.Vector3(0.0, 0.4*(2/3), 0.0),
+        new THREE.Vector3(0.4*(2/3), 0.4, 0.0),
+        new THREE.Vector3(0.4, 0.4, 0.0),
+      ]
+
+
+
+      let curve = new THREE.CubicBezierCurve3(points[0], points[1], points[2], points[3]);
+      let samp = curve.getPoints(32);
+      this.curveGeometry = new THREE.BufferGeometry().setFromPoints(samp);
+      this.lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+
+      this.wheel1 = new THREE.Line(this.curveGeometry, this.lineMaterial);
+      this.wheel1.position.set(0.4, 0, -0.04);
+
+      this.wheel2 = new THREE.Line(this.curveGeometry, this.lineMaterial);
+      this.wheel2.position.set(-0.6, 0, -0.04);
+
+      this.add(this.wheel1);
+      this.add(this.wheel2);
+
+      let curve2 = new THREE.CubicBezierCurve3(points2[0], points2[1], points2[2], points2[3]);
+      let samp2 = curve2.getPoints(32);
+      this.curveGeometry2 = new THREE.BufferGeometry().setFromPoints(samp2);
+      this.lineMaterial2 = new THREE.LineBasicMaterial({ color: 0x000000 });
+
+      this.wheel3 = new THREE.Line(this.curveGeometry2, this.lineMaterial2);
+      this.wheel3.position.set(-0.6, 0, -0.04);
+
+      this.wheel4 = new THREE.Line(this.curveGeometry2, this.lineMaterial2);
+      this.wheel4.position.set(-0.2, 0.4, -0.04);
+
+      this.wheel5 = new THREE.Line(this.curveGeometry2, this.lineMaterial2);
+      this.wheel5.position.set(0.2, 0.8, -0.04);
+
+      this.wheel5.scale.set(2, 2, 1);
+      this.wheel5.rotateZ(-Math.PI/2);
+
+
+      this.add(this.wheel3);
+      this.add(this.wheel4);
+      this.add(this.wheel5);
+
+
+    }
 
     const portraitMesh = new THREE.Mesh(portraitGeometry, portraitMaterial);
 
