@@ -107,7 +107,7 @@ export class Room extends THREE.Object3D {
 
     this.add(this.wallMesh1);
     this.add(this.wallMesh2);
-    this.add(this.wallMesh3);
+    //this.add(this.wallMesh3);
     //this.add(this.wallMesh4);
 
     this.wallMesh2.add(tvMesh);
