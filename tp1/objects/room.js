@@ -18,14 +18,12 @@ export class Room extends THREE.Object3D {
     videoTexture.magFilter = THREE.LinearFilter;
     videoTexture.format = THREE.RGBAFormat;
 
-
     const tvMaterial = new THREE.MeshPhongMaterial({
       color: "#222222",
       specular: "#353535",
       emissive: "#000000",
       shininess: 30,
     });
-
 
     const screenMat = new THREE.MeshPhongMaterial({
       color: "#dddddd",
@@ -34,7 +32,6 @@ export class Room extends THREE.Object3D {
       shininess: 30,
       map: videoTexture,
     });
-
 
     const carpetMaterial = new THREE.MeshPhongMaterial({
       color: new THREE.Color(0.9, 0.85, 0.75),
@@ -46,15 +43,11 @@ export class Room extends THREE.Object3D {
 
     // ==================== Normals ====================
 
-
-
-
     // ==================== TV ====================
 
     const tv = new THREE.BoxGeometry(10, 4, 0.1);
 
-    const screen = new THREE.PlaneGeometry(8.4, 3.6);
-
+    const screen = new THREE.PlaneGeometry(9.5, 3.7);
 
     const tvMesh = new THREE.Mesh(tv, tvMaterial);
     const screenMesh = new THREE.Mesh(screen, screenMat);

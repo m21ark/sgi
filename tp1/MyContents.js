@@ -4,6 +4,7 @@ import { Table } from "./objects/table.js";
 import { Portrait } from "./objects/portrait.js";
 import { Room } from "./objects/room.js";
 import { WallWindow } from "./objects/wall_window.js";
+import { SkyBox } from "./objects/skybox.js";
 export class MyContents {
   constructor(app) {
     this.app = app;
@@ -73,6 +74,8 @@ export class MyContents {
 
     this.windowPane = new WallWindow();
 
+    this.skybox = new SkyBox(100);
+
     // ============== Positions ====================
 
     // Cake
@@ -97,6 +100,8 @@ export class MyContents {
     this.room.getWallMesh1().add(portrait2);
 
     this.room.getWallMesh3().add(this.windowPane);
+
+    this.app.scene.add(this.skybox);
 
     // ============== Lights ====================
 
@@ -175,7 +180,7 @@ export class MyContents {
   }
 
   animate() {
-    const playerSpeed = 0.15;
+    const playerSpeed = 0.25;
     const rotationSpeed = 0.05;
 
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
@@ -216,15 +221,21 @@ export class MyContents {
     this.player.position.add(moveVector);
 
     // Vertical rotation
-    if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
-    if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
+    if (this.keyboard["arrowleft"]) {
+      this.player.rotation.x = 0;
+      this.player.rotation.y += rotationSpeed;
+    }
+    if (this.keyboard["arrowright"]) {
+      this.player.rotation.x = 0;
+      this.player.rotation.y -= rotationSpeed;
+    }
     if (this.keyboard["arrowup"]) {
       const maxPitch = Math.PI / 2 - 0.5;
       const minPitch = -Math.PI / 2 - 0.5;
 
       this.player.rotation.x = Math.max(
         minPitch,
-        Math.min(maxPitch, this.player.rotation.x - rotationSpeed)
+        Math.min(maxPitch, this.player.rotation.x + rotationSpeed)
       );
     }
     if (this.keyboard["arrowdown"]) {
@@ -233,7 +244,7 @@ export class MyContents {
 
       this.player.rotation.x = Math.max(
         minPitch,
-        Math.min(maxPitch, this.player.rotation.x + rotationSpeed)
+        Math.min(maxPitch, this.player.rotation.x - rotationSpeed)
       );
     }
 
