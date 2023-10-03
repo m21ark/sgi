@@ -63,7 +63,7 @@ class MyApp {
   initCameras() {
     const aspect = window.innerWidth / window.innerHeight;
     const perspective = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-    perspective.position.set(18, 8, 0);
+    perspective.position.set(18, 6, 0);
     this.cameras["Perspective"] = perspective;
 
     const person1 = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);

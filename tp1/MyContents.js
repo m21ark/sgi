@@ -3,7 +3,8 @@ import { Cake } from "./objects/cake.js";
 import { Table } from "./objects/table.js";
 import { Portrait } from "./objects/portrait.js";
 import { Room } from "./objects/room.js";
-import { WallWindow } from "./objects/wall_window.js";
+import { SkyBox } from "./objects/skybox.js";
+import { Hole } from "./objects/hole.js";
 export class MyContents {
   constructor(app) {
     this.app = app;
@@ -22,15 +23,11 @@ export class MyContents {
     const floorTexture = textureLoader.load("textures/floor.jpg");
     const chairTexture = textureLoader.load("textures/chair.jpg");
     const ceilTexture = textureLoader.load("textures/floor.jpg");
-    const wallTexture = textureLoader.load("textures/wall.jpg");
-
-    wallTexture.normalMap = textureLoader.load("textures/wallN.jpg");
 
     // ============== Materials ====================
 
     const wallMaterial = new THREE.MeshPhongMaterial({
       color: "#B4A89C",
-      map: wallTexture,
     });
 
     const floorMaterial = new THREE.MeshPhongMaterial({
@@ -73,7 +70,26 @@ export class MyContents {
     const portrait2 = new Portrait(3, 3, "textures/portrait2.jpg");
     const portrait3 = new Portrait(3, 3, "carocha");
 
-    this.windowPane = new WallWindow();
+    this.skybox = new SkyBox(75);
+    this.hole = new Hole(0.2, 7.3, 25, 7, 1.8, wallMaterial);
+
+    this.windowPane = new Hole(0.5, 5.5, 11, 0.4, 0.4);
+
+    this.glassMesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(11, 5.5),
+      new THREE.MeshPhongMaterial({
+        color: 0xcccccc,
+        specular: 0xffaaaa,
+        shininess: 250,
+        transparent: true,
+        opacity: 0.2,
+        side: THREE.DoubleSide,
+      })
+    );
+
+    this.glassMesh.rotation.y = Math.PI / 2;
+    this.glassMesh.position.set(0.15, 2.8, 0);
+    this.windowPane.add(this.glassMesh);
 
     // ============== Positions ====================
 
@@ -87,7 +103,10 @@ export class MyContents {
     portrait3.position.set(9, 0, -0.1);
 
     // Window
-    this.windowPane.position.set(0, 0, 0.08);
+    this.windowPane.position.set(0.1, 1, 0);
+
+    // Hole
+    this.hole.position.set(-12.5, 0.8, 0);
 
     // ============== Display ====================
 
@@ -100,7 +119,10 @@ export class MyContents {
     this.room.getWallMesh1().add(portrait2);
     this.room.getWallMesh1().add(portrait3);
 
-    this.room.getWallMesh3().add(this.windowPane);
+    this.hole.add(this.windowPane);
+
+    this.app.scene.add(this.skybox);
+    this.app.scene.add(this.hole);
 
     // ============== Lights ====================
 
@@ -156,7 +178,7 @@ export class MyContents {
   player = null;
 
   addPlayer() {
-    const playerGeometry = new THREE.BoxGeometry(1, 1, 1); // Customize size as needed
+    const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1); // Customize size as needed
     const playerMaterial = new THREE.MeshBasicMaterial({
       color: 0x5fff70,
       opacity: 0,
@@ -179,7 +201,7 @@ export class MyContents {
   }
 
   animate() {
-    const playerSpeed = 0.15;
+    const playerSpeed = 0.25;
     const rotationSpeed = 0.05;
 
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
@@ -220,15 +242,21 @@ export class MyContents {
     this.player.position.add(moveVector);
 
     // Vertical rotation
-    if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
-    if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
+    if (this.keyboard["arrowleft"]) {
+      this.player.rotation.x = 0;
+      this.player.rotation.y += rotationSpeed;
+    }
+    if (this.keyboard["arrowright"]) {
+      this.player.rotation.x = 0;
+      this.player.rotation.y -= rotationSpeed;
+    }
     if (this.keyboard["arrowup"]) {
       const maxPitch = Math.PI / 2 - 0.5;
       const minPitch = -Math.PI / 2 - 0.5;
 
       this.player.rotation.x = Math.max(
         minPitch,
-        Math.min(maxPitch, this.player.rotation.x - rotationSpeed)
+        Math.min(maxPitch, this.player.rotation.x + rotationSpeed)
       );
     }
     if (this.keyboard["arrowdown"]) {
@@ -237,7 +265,7 @@ export class MyContents {
 
       this.player.rotation.x = Math.max(
         minPitch,
-        Math.min(maxPitch, this.player.rotation.x + rotationSpeed)
+        Math.min(maxPitch, this.player.rotation.x - rotationSpeed)
       );
     }
 
