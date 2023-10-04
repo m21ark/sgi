@@ -5,14 +5,16 @@ import { Portrait } from "./objects/portrait.js";
 import { Room } from "./objects/room.js";
 import { SkyBox } from "./objects/skybox.js";
 import { Hole } from "./objects/hole.js";
+import { Spring } from "./objects/spring.js";
+
 export class MyContents {
   constructor(app) {
     this.app = app;
   }
 
   update() {
-    
-  
+
+
   }
 
   init() {
@@ -73,6 +75,8 @@ export class MyContents {
     this.skybox = new SkyBox(75);
     this.hole = new Hole(0.2, 7.3, 25, 7, 1.8, wallMaterial);
 
+    this.spring = new Spring();
+
     this.windowPane = new Hole(0.5, 5.5, 11, 0.4, 0.4);
 
     this.glassMesh = new THREE.Mesh(
@@ -108,6 +112,10 @@ export class MyContents {
     // Hole
     this.hole.position.set(-12.5, 0.8, 0);
 
+    // Spring
+    this.spring.scale.set(2, 2, 2);
+    this.spring.position.set(2, 3.15, 2);
+
     // ============== Display ====================
 
     this.app.scene.add(this.room);
@@ -123,6 +131,7 @@ export class MyContents {
 
     this.app.scene.add(this.skybox);
     this.app.scene.add(this.hole);
+    table.add(this.spring);
 
     // ============== Lights ====================
 
@@ -168,6 +177,19 @@ export class MyContents {
       this.room.add(pointLightHelper);
     }
 
+
+    // add directional light
+    // const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    // directionalLight.position.set(-30, 40, -20);
+// 
+    // this.app.scene.add(directionalLight);
+// 
+    // const directionalLightHelper = new THREE.DirectionalLightHelper(
+    //   directionalLight,
+    //   0.5
+    // );
+// 
+    // this.app.scene.add(directionalLightHelper);
     const ambientLight = new THREE.AmbientLight(0x565656);
     this.app.scene.add(ambientLight);
   }
