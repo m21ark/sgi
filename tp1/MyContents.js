@@ -6,6 +6,7 @@ import { Room } from "./objects/room.js";
 import { SkyBox } from "./objects/skybox.js";
 import { Hole } from "./objects/hole.js";
 import { Spring } from "./objects/spring.js";
+import { Jornal } from "./objects/jornal.js";
 
 export class MyContents {
   constructor(app) {
@@ -76,6 +77,7 @@ export class MyContents {
     this.hole = new Hole(0.2, 7.3, 25, 7, 1.8, wallMaterial);
 
     this.spring = new Spring();
+    this.jornal = new Jornal();
 
     this.windowPane = new Hole(0.5, 5.5, 11, 0.4, 0.4);
 
@@ -96,6 +98,9 @@ export class MyContents {
     this.windowPane.add(this.glassMesh);
 
     // ============== Positions ====================
+
+    // Jornal
+    this.jornal.position.set(2.3, 3, 0.2);
 
     // Cake
     this.cake.position.y = 2.9;
@@ -132,6 +137,7 @@ export class MyContents {
     this.app.scene.add(this.skybox);
     this.app.scene.add(this.hole);
     table.add(this.spring);
+    this.app.scene.add(this.jornal);
 
     // ============== Lights ====================
 
