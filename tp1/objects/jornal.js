@@ -66,7 +66,7 @@ export class Jornal extends THREE.Object3D {
 
         this.material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, map: new THREE.TextureLoader().load('textures/jornal_tex.jpeg') });
 
-         const numPages = 8;
+        const numPages = 8;
         const spacing = 0.015; // Adjust the spacing between pages as needed
         const centerX = (numPages - 1) * spacing / 2; // Calculate the center of the pages
 

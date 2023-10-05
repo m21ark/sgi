@@ -7,6 +7,7 @@ import { SkyBox } from "./objects/skybox.js";
 import { Hole } from "./objects/hole.js";
 import { Spring } from "./objects/spring.js";
 import { Jornal } from "./objects/jornal.js";
+import { Vase } from "./objects/vase.js";
 
 export class MyContents {
   constructor(app) {
@@ -78,6 +79,7 @@ export class MyContents {
 
     this.spring = new Spring();
     this.jornal = new Jornal();
+    this.vase = new Vase();
 
     this.windowPane = new Hole(0.5, 5.5, 11, 0.4, 0.4);
 
@@ -101,6 +103,9 @@ export class MyContents {
 
     // Jornal
     this.jornal.position.set(2.3, 3, 0.2);
+
+    // Vase
+    this.vase.position.set(7, 2, 12);
 
     // Cake
     this.cake.position.y = 2.9;
@@ -137,7 +142,8 @@ export class MyContents {
     this.app.scene.add(this.skybox);
     this.app.scene.add(this.hole);
     table.add(this.spring);
-    this.app.scene.add(this.jornal);
+    table.add(this.jornal);
+    this.app.scene.add(this.vase);
 
     // ============== Lights ====================
 
