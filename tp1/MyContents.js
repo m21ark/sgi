@@ -8,6 +8,7 @@ import { Hole } from "./objects/hole.js";
 import { Spring } from "./objects/spring.js";
 import { Jornal } from "./objects/jornal.js";
 import { Vase } from "./objects/vase.js";
+import { Flower } from "./objects/flower.js";
 
 export class MyContents {
   constructor(app) {
@@ -80,6 +81,7 @@ export class MyContents {
     this.spring = new Spring();
     this.jornal = new Jornal();
     this.vase = new Vase();
+    this.flower = new Flower();
 
     this.windowPane = new Hole(0.5, 5.5, 11, 0.4, 0.4);
 
@@ -103,6 +105,9 @@ export class MyContents {
 
     // Jornal
     this.jornal.position.set(2.3, 3, 0.2);
+
+    // Flower
+    this.flower.position.set(2, 4, 2);  
 
     // Vase
     this.vase.position.set(7, 2, 12);
@@ -143,7 +148,9 @@ export class MyContents {
     this.app.scene.add(this.hole);
     table.add(this.spring);
     table.add(this.jornal);
-    this.app.scene.add(this.vase);
+    this.room.add(this.vase);
+    this.app.scene.add(this.flower);
+
 
     // ============== Lights ====================
 
