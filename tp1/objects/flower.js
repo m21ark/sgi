@@ -60,7 +60,7 @@ export class Flower extends THREE.Object3D {
         };
 
         let centerGeometry = new THREE.ExtrudeGeometry(centerShape, centerExtrudeSettings);
-        let centerMaterial = new THREE.MeshPhongMaterial({color: 0xffff00, side: THREE.DoubleSide});
+        let centerMaterial = new THREE.MeshPhongMaterial({color: 0x201c20, side: THREE.DoubleSide});
         let centerMesh = new THREE.Mesh(centerGeometry, centerMaterial);
 
         // add the center mesh to the scene
@@ -76,15 +76,14 @@ export class Flower extends THREE.Object3D {
         let stalkFlowerGeo = new THREE.ExtrudeGeometry(stalkFlowerShape, centerExtrudeSettings);
         stalkFlowerGeo.rotateZ(Math.PI/2);
 
-        let stalkFlowerMesh = new THREE.Mesh(stalkFlowerGeo, centerMaterial);
+        let leaveMat = new THREE.MeshPhongMaterial({color: 0x22cc22, side: THREE.DoubleSide});
+        let stalkFlowerMesh = new THREE.Mesh(stalkFlowerGeo, leaveMat);
         stalkFlowerMesh.position.set(2, 0.9, -0.04);
         stalkFlowerMesh.scale.set(1.5, 2, 1);
 
         this.add(stalkFlowerMesh);
 
-        // create a stalk using bezier cubic curves
-
-        
+        // create a stalk using bezier cubic curves        
 
         let curve = new THREE.CubicBezierCurve3(points[0], points[1], points[2], points[3]);
         let samp = curve.getPoints(32);
@@ -113,7 +112,7 @@ export class Flower extends THREE.Object3D {
         };
 
         var petalGeometry = new THREE.ExtrudeGeometry(petalShape, petalExtrudeSettings);
-        var petalMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
+        var petalMaterial = new THREE.MeshPhongMaterial({color: 0xb37512});
 
         // create the petals
         var numPetals = 8;
@@ -126,68 +125,10 @@ export class Flower extends THREE.Object3D {
             this.add(petalMesh);
         }
 
-        this.scale.set(0.3, 0.3, 0.2);
+        this.scale.set(0.4, 0.4, 0.4);
         this.rotateZ(-Math.PI/2);
     }
 
     
 }
 
-
-/*
-import * as THREE from 'three';
-
-export class Flower extends THREE.Object3D {
-
-    constructor() {
-        super();
-
-        // create the center of the flower
-        var centerShape = new THREE.Shape();
-        centerShape.moveTo(0, 0);
-        centerShape.absarc(0, 0, 0.2, 0, Math.PI * 2, false);
-
-        // extrude the center
-        var centerExtrudeSettings = {
-            steps: 1,
-            depth: 0.05,
-            bevelEnabled: false
-        };
-
-        var centerGeometry = new THREE.ExtrudeGeometry(centerShape, centerExtrudeSettings);
-        var centerMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
-        var centerMesh = new THREE.Mesh(centerGeometry, centerMaterial);
-
-        // add the center mesh to the scene
-        this.add(centerMesh);
-
-        // create the petal shape
-        var petalShape = new THREE.Shape();
-        petalShape.moveTo(0, 0);
-        petalShape.bezierCurveTo(0.25, 0.5, -0.25, 0.5, 0, 1);
-        petalShape.bezierCurveTo(0.25, 0.5, -0.25, 0.5, 0, 0);
-
-        // extrude the petal shape
-        var petalExtrudeSettings = {
-            steps: 1,
-            depth: 0.05,
-            bevelEnabled: false
-        };
-
-        var petalGeometry = new THREE.ExtrudeGeometry(petalShape, petalExtrudeSettings);
-        var petalMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
-
-        // create the petals
-        var numPetals = 8;
-        var angleStep = (Math.PI * 2) / numPetals;
-        for (var i = 0; i < numPetals; i++) {
-            var angle = i * angleStep;
-            var petalMesh = new THREE.Mesh(petalGeometry, petalMaterial);
-            petalMesh.position.set(Math.cos(angle) * 0.5, Math.sin(angle) * 0.5, 0);
-            petalMesh.rotation.z = angle;
-            this.add(petalMesh);
-        }
-    }
-
-}
- */

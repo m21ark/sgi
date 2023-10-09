@@ -108,10 +108,10 @@ export class MyContents {
     this.jornal.position.set(2.3, 3, 0.2);
 
     // Flower
-    this.flower.position.set(2, 4, 2);  
+    this.flower.position.set(6.7, 3, -11);  
 
     // Vase
-    this.vase.position.set(7, 2, 12);
+    this.vase.position.set(7, 0.05, -11);
 
     // Cake
     this.cake.position.y = 2.9;
@@ -149,8 +149,8 @@ export class MyContents {
     this.app.scene.add(this.hole);
     table.add(this.spring);
     table.add(this.jornal);
-    this.room.add(this.vase);
-    this.app.scene.add(this.flower);
+    this.app.scene.add(this.vase);
+    this.room.add(this.flower);
 
 
     // ============== Lights ====================

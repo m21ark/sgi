@@ -23,12 +23,12 @@ export class Spring extends THREE.Object3D {
         let curve = new THREE.CatmullRomCurve3(points);
         let samp = curve.getPoints(totalPoints);
 
-        this.curveGeometry = new THREE.BufferGeometry().setFromPoints(samp);
-        this.lineMaterial = new THREE.LineBasicMaterial({ color: 0xfcfcfc, linewidth: 10, linecap: 'round', });
+        const tubeGeometry = new THREE.TubeGeometry(curve, totalPoints, 0.008, 8, false);
+        this.tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xfcfcfc });
 
-        this.basicL = new THREE.Line(this.curveGeometry, this.lineMaterial);
+        this.tubeMesh = new THREE.Mesh(tubeGeometry, this.tubeMaterial);
 
-        this.add(this.basicL);
+        this.add(this.tubeMesh);
     }
 
 }
