@@ -149,7 +149,7 @@ export class MyContents {
     this.app.scene.add(this.hole);
     table.add(this.spring);
     table.add(this.jornal);
-    this.app.scene.add(this.vase);
+    this.room.add(this.vase);
     this.room.add(this.flower);
 
 
