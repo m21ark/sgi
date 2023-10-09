@@ -4,125 +4,57 @@ import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.j
 
 export class Vase extends THREE.Object3D {
 
-        constructor() {
-            super();
+    constructor() {
+        super();
 
-            this.createJar();
-        }
+        const curve = new THREE.CatmullRomCurve3([
+            new THREE.Vector2(-2, 0),          // Starting point
+            new THREE.Vector2(-1, 0),          // Starting point
+            new THREE.Vector2(0, 0),          // Starting point
+            new THREE.Vector2(1, 0),          // Control point 1
+            new THREE.Vector2(2, 0.5),          // Control point 2
+            new THREE.Vector2(2, 1),          // Control point 3
+            new THREE.Vector2(1.9, 1.75),         // Control point 4
+            new THREE.Vector2(1.5, 2),         // Control point 5
+            new THREE.Vector2(1, 2.3),         // Control point 6
+            new THREE.Vector2(0.6, 2.6),         // Control point 7
+            new THREE.Vector2(0.55, 3),        // Control point 8
+            new THREE.Vector2(0.55, 3.5),        // Control point 9
+            new THREE.Vector2(1.1, 3.5),        // Control point 10
+            new THREE.Vector2(1, 3.2),         // Control point 11
 
-        build(controlPoints, degree1, degree2, samples1, samples2, material) {
+        ]);
 
-            const knots1 = []
-            const knots2 = []
+        const points = curve.getPoints(50);
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-            for (var i = 0; i <= degree1; i++) {
-                knots1.push(0)
-            }
+        const material2 = new THREE.LineBasicMaterial({ color: 0xff0000 });
 
-            for (var i = 0; i <= degree1; i++) {
-                knots1.push(1)
-            }
+        // Create the final object to add to the scene
+        const curveObject = new THREE.Line(geometry, material2);
+        //this.add(curveObject);
 
-            for (var i = 0; i <= degree2; i++) {
-                knots2.push(0)
-            }
+        const segments = 64; // Increase for smoother curve
 
-            for (var i = 0; i <= degree2; i++) {
-                knots2.push(1)
-            }
+        const latheGeometry = new THREE.LatheGeometry(points, segments, 0, Math.PI * 2);
 
-            let stackedPoints = []
+        const material = new THREE.MeshPhongMaterial({
+            color: "#ffaaaa",
+            specular: "#222222",
+            emissive: "#111111",
+            shininess: 15, side: THREE.DoubleSide,
+            map: new THREE.TextureLoader().load('textures/Vase-Texture.png')
+        }); // Brown color
 
-            for (var i = 0; i < controlPoints.length; i++) {
-
-                let row = controlPoints[i]
-
-                let newRow = []
-
-                for (var j = 0; j < row.length; j++) {
-
-                    let item = row[j]
-
-                    newRow.push(new THREE.Vector4(item[0],
-
-                        item[1], item[2], item[3]));
-
-                }
-
-                stackedPoints[i] = newRow;
-
-            }
-
-            const nurbsSurface = new NURBSSurface(degree1, degree2,
-
-                knots1, knots2, stackedPoints);
-
-            const geometry = new ParametricGeometry(getSurfacePoint,
-
-                samples1, samples2);
-
-            const mesh = new THREE.Mesh(geometry, material);
-
-            return mesh;
-
-            function getSurfacePoint(u, v, target) {
-
-                return nurbsSurface.getPoint(u, v, target);
-
-            }
-
-        }
-
-        createJar() {
-            let controlPoints =  [
-                [
-                    [-0.3, 0, 0.3, 1], [-0.3, 0.3, 0.3, 0.7], [0.3, 0.3, 0.3, 0.7], [0.3, 0, 0.3, 1]
-                ],
-                [
-                    [-0.3, -0.3, 0.15, 1], [-0.3, 0.3, 0.3, 0.7], [0.3, 0.3, 0.3, 0.7], [0.3, -0.3, 0.15, 1]
-                ],
-                [
-                    [-0.3, -0.3, 0, 1], [-0.3, 0.3, 0.45, 0.7], [0.3, 0.3, 0.45, 0.7], [0.3, -0.3, 0, 1]
-                ],
-                [
-                    [-0.3, -0.3, -0.15, 1], [-0.3, 0.3, -0.3, 0.7], [0.3, 0.3, -0.3, 0.7], [0.3, -0.3, -0.15, 1]
-                ],
-                [
-                    [-0.3, 0, -0.3, 1], [-0.3, 0.3, -0.3, 0.7], [0.3, 0.3, -0.3, 0.7], [0.3, 0, -0.3, 1]
-                ],
-                [
-                    [-0.3, -0.3, -0.3, 1], [-0.3, 0.3, -0.3, 0.7], [0.3, 0.3, -0.3, 0.7], [0.3, -0.3, -0.3, 1]
-                ],
-                [
-                    [-0.3, -0.3, 0.3, 1], [-0.3, 0.3, 0.3, 0.7], [0.3, 0.3, 0.3, 0.7], [0.3, -0.3, 0.3, 1]
-                ],
-                [
-                    [-0.3, -0.3, 2, 1], [-0.3, 0.3, 2, 0.7], [0.3, 0.3, 2, 0.7], [0.3, -0.3, 2, 1]
-                ],
-            ];
-
-            let material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, map: new THREE.TextureLoader().load('textures/wood.jpg') });
-
-            let degree1 = 7;
-            let degree2 = 3;
-            let samples1 = 30;
-            let samples2 = 30;
-
-            let mesh = this.build(controlPoints, degree1, degree2, samples1, samples2, material);
-
-            let mesh2 = mesh.clone();
-            mesh.rotateX(Math.PI/2);
+        latheGeometry.scale(0.6, 0.6, 0.6);
+        const jarMesh = new THREE.Mesh(latheGeometry, material);
         
-            this.add(mesh);
-            
-            mesh2.scale.set(1,-1,1);
-            mesh2.translateZ(-0.5);
 
-            // put the mesh up ... rotating
-            mesh2.rotateX(Math.PI/2);
-            
-            this.add(mesh2);
-        }
+        this.add(jarMesh);
+
+
+    }
+
 
 }
 

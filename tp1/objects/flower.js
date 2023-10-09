@@ -126,7 +126,7 @@ export class Flower extends THREE.Object3D {
             this.add(petalMesh);
         }
 
-        this.scale.set(0.3, 0.3, 0.2);
+        this.scale.set(0.4, 0.4, 0.4);
         this.rotateZ(-Math.PI/2);
     }
 
