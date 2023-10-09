@@ -43,9 +43,10 @@ class MyApp {
     this.setActiveCamera("Perspective");
 
     // Create a renderer with Antialiasing
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setClearColor("#000000");
+    this.renderer.autoClear = false;
 
     // Configure renderer size
     this.renderer.setSize(window.innerWidth, window.innerHeight);

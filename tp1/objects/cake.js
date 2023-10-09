@@ -1,6 +1,8 @@
 import * as THREE from "three";
+import { Fire } from "./fire.js";
 
 export class Cake extends THREE.Object3D {
+  loader = new THREE.TextureLoader();
 
   candleMaterial = new THREE.MeshPhongMaterial({
     color: "#ffff00",
@@ -28,9 +30,9 @@ export class Cake extends THREE.Object3D {
     specular: "#222222",
     emissive: "#000000",
     shininess: 30,
-    map: new THREE.TextureLoader().load("textures/cake.jpg"),
+    map: this.loader.load("textures/cake.jpg"),
     side: THREE.DoubleSide, // Render both sides of the faces
-    normalMap: new THREE.TextureLoader().load("textures/cakeN.jpg"),
+    normalMap: this.loader.load("textures/cakeN.jpg"),
   });
 
   constructor(
@@ -65,7 +67,7 @@ export class Cake extends THREE.Object3D {
       );
     }
 
-    this.candle = new THREE.CylinderGeometry(0.3, 0.3, 0.5, 32);
+    this.candle = new THREE.CylinderGeometry(0.2, 0.2, 0.5, 32);
 
     this.candle.scale(1.0, 1.5, 1.0);
     this.candle.translate(0, height / 2.0 + 0.4, -0.2);
@@ -114,5 +116,54 @@ export class Cake extends THREE.Object3D {
     this.cakeMesh.add(this.candleMesh);
     this.cakeMesh.add(this.fireMesh);
     this.add(this.cakeMesh);
+
+    // ========================= FIRE =========================
+
+    const candle_params = {
+      color1: 0xffffff,
+      color2: 0xff9000,
+      color3: 0x000000,
+      windX: 0.0,
+      windY: 0.0,
+      colorBia: 0.4,
+      burnRate: 3,
+      diffuse: 2.8,
+      viscosity: 5,
+      expansion: 0.05,
+      swirl: 0.5,
+      drag: 0.0,
+      airSpeed: 8.0,
+      speed: 500.0,
+      massConservation: false,
+    };
+
+    const plane = new THREE.PlaneGeometry(3, 3);
+    const fire = new Fire(plane, {
+      textureWidth: 512,
+      textureHeight: 512,
+      debug: false,
+    });
+
+    fire.rotateY(Math.PI / 2);
+    fire.translateY(3);
+
+    // set parameters
+    fire.addSource(0.5, 0.1, 0.1, 1.0, 0.0, 1.0);
+    fire.color1.set(candle_params.color1);
+    fire.color2.set(candle_params.color2);
+    fire.color3.set(candle_params.color3);
+    fire.colorBias = candle_params.colorBias;
+    fire.burnRate = candle_params.burnRate;
+    fire.diffuse = candle_params.diffuse;
+    fire.viscosity = candle_params.viscosity;
+    fire.expansion = candle_params.expansion;
+    fire.swirl = candle_params.swirl;
+    fire.drag = candle_params.drag;
+    fire.airSpeed = candle_params.airSpeed;
+    fire.speed = candle_params.speed;
+    fire.massConservation = candle_params.massConservation;
+
+    this.fireMesh.add(fire);
+
   }
 }

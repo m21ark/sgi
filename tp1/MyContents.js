@@ -10,6 +10,7 @@ import { Jornal } from "./objects/jornal.js";
 import { Vase } from "./objects/vase.js";
 import { Flower } from "./objects/flower.js";
 
+
 export class MyContents {
   constructor(app) {
     this.app = app;
