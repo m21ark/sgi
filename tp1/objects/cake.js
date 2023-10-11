@@ -93,6 +93,7 @@ export class Cake extends THREE.Object3D {
     this.cakeMesh = new THREE.Mesh(this.cakeGeometry, this.cakeMaterial);
     this.oneSideMesh = new THREE.Mesh(oneSide, this.cakeMaterial);
     this.otherSideMesh = new THREE.Mesh(otherSide, this.cakeMaterial);
+    
 
     // adding a candle string
     const candleString = new THREE.CylinderGeometry(0.03, 0.03, 0.4, 32);
@@ -108,13 +109,19 @@ export class Cake extends THREE.Object3D {
     this.candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
     this.fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
 
+    this.candleMesh.castShadow = true;
+    this.candleMesh.receiveShadow = true;
+
     // CANDLE LIGHT
     const candleLight = new THREE.PointLight(0xffa500, 5, 1); // Color, Intensity, Distance
-    this.candleMesh.add(candleLight);
+    //this.candleMesh.add(candleLight);
 
     // Dish
     const dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
     const dishMesh = new THREE.Mesh(dish, this.plateMaterial);
+
+    dishMesh.castShadow = true;
+    dishMesh.receiveShadow = true;
 
     dishMesh.scale.set(4, 2, 4);
     dishMesh.translateY(-0.6);

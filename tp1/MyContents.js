@@ -34,8 +34,6 @@ export class MyContents {
 
     const wallMaterial = new THREE.MeshPhongMaterial({
       color: "#B4A89C",
-      shadowSide: THREE.DoubleSide,
-      side: THREE.DoubleSide,
     });
 
     const floorMaterial = new THREE.MeshPhongMaterial({
@@ -44,6 +42,7 @@ export class MyContents {
       emissive: "#000000",
       shininess: 30,
       map: floorTexture,
+
     });
 
     const woodMaterial = new THREE.MeshPhongMaterial({
@@ -66,8 +65,7 @@ export class MyContents {
       color: "#8f7256",
       shininess: 30,
       map: ceilTexture,
-      shadowSide: THREE.DoubleSide,
-      side: THREE.DoubleSide,
+
     });
 
     // ============== Objects ====================
@@ -174,6 +172,11 @@ export class MyContents {
     const spotLight = new THREE.SpotLight(0xffffff);
     spotLight.position.set(0, 9, 0);
     spotLight.target = this.cake;
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize.width = 4096;
+    spotLight.shadow.mapSize.height = 4096;
+    spotLight.shadow.camera.near = 0.5;
+    spotLight.shadow.camera.far = 100;
 
     spotLight.angle = Math.PI / 12;
     spotLight.penumbra = 0.25;
