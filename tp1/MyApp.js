@@ -71,6 +71,42 @@ class MyApp {
     person1.position.set(18, 8, 0);
     person1.lookAt(new THREE.Vector3(0, 0, 0));
     this.cameras["FirstPerson"] = person1;
+
+    // defines the frustum size for the orthographic cameras
+    const left = (-this.frustumSize / 2) * aspect;
+    const right = (this.frustumSize / 2) * aspect;
+    const top = this.frustumSize / 2;
+    const bottom = -this.frustumSize / 2;
+    const near = -this.frustumSize / 2;
+    const far = this.frustumSize;
+
+    // create a left view orthographic camera
+    const orthoBack = new THREE.OrthographicCamera(
+      left,
+      right,
+      top,
+      bottom,
+      near,
+      far
+    );
+    orthoBack.up = new THREE.Vector3(0, 1, 0);
+    orthoBack.position.set(-this.frustumSize / 4, 0, 0);
+    orthoBack.lookAt(new THREE.Vector3(0, 0, 0));
+    this.cameras["OrthoBack"] = orthoBack;
+
+    // create a right view orthographic camera
+    const orthoFront = new THREE.OrthographicCamera(
+      left,
+      right,
+      top,
+      bottom,
+      near,
+      far
+    );
+    orthoFront.up = new THREE.Vector3(0, 1, 0);
+    orthoFront.position.set(this.frustumSize / 4, 0, 0);
+    orthoFront.lookAt(new THREE.Vector3(0, 0, 0));
+    this.cameras["OrthoFront"] = orthoFront;
   }
 
   /**
@@ -141,15 +177,6 @@ class MyApp {
    */
   setGui(gui) {
     this.gui = gui;
-  }
-
-  toogleCamera() {
-    this.initCameras();
-    if (this.activeCameraName === "FirstPerson") {
-      this.setActiveCamera("Perspective");
-    } else {
-      this.setActiveCamera("FirstPerson");
-    }
   }
 
   /**

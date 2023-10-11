@@ -10,16 +10,12 @@ import { Jornal } from "./objects/jornal.js";
 import { Vase } from "./objects/vase.js";
 import { Flower } from "./objects/flower.js";
 
-
 export class MyContents {
   constructor(app) {
     this.app = app;
   }
 
-  update() {
-
-
-  }
+  update() {}
 
   init() {
     // ============== Textures ====================
@@ -108,7 +104,7 @@ export class MyContents {
     this.jornal.position.set(2.3, 3, 0.2);
 
     // Flower
-    this.flower.position.set(6.7, 3, -11);  
+    this.flower.position.set(6.7, 3, -11);
 
     // Vase
     this.vase.position.set(7, 0.05, -11);
@@ -151,7 +147,6 @@ export class MyContents {
     table.add(this.jornal);
     this.room.add(this.vase);
     this.room.add(this.flower);
-
 
     // ============== Lights ====================
 
@@ -197,18 +192,17 @@ export class MyContents {
       this.room.add(pointLightHelper);
     }
 
-
     // add directional light
     // const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     // directionalLight.position.set(-30, 40, -20);
-// 
+    //
     // this.app.scene.add(directionalLight);
-// 
+    //
     // const directionalLightHelper = new THREE.DirectionalLightHelper(
     //   directionalLight,
     //   0.5
     // );
-// 
+    //
     // this.app.scene.add(directionalLightHelper);
     const ambientLight = new THREE.AmbientLight(0x565656);
     this.app.scene.add(ambientLight);
@@ -309,11 +303,6 @@ export class MyContents {
         minPitch,
         Math.min(maxPitch, this.player.rotation.x - rotationSpeed)
       );
-    }
-
-    if (this.keyboard["k"]) {
-      this.app.toogleCamera();
-      this.keyboard["k"] = false;
     }
 
     if (this.keyboard["r"]) {
