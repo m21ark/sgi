@@ -49,6 +49,9 @@ export class Vase extends THREE.Object3D {
         latheGeometry.scale(0.6, 0.6, 0.6);
         const jarMesh = new THREE.Mesh(latheGeometry, material);
 
+        jarMesh.castShadow = true;
+        jarMesh.receiveShadow = true;
+
         // add land to the vase
         const landShape = new THREE.Shape();
         landShape.absarc(0, 0, 0.21, 0, Math.PI * 2, false);

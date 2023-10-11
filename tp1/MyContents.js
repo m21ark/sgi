@@ -34,6 +34,8 @@ export class MyContents {
 
     const wallMaterial = new THREE.MeshPhongMaterial({
       color: "#B4A89C",
+      shadowSide: THREE.DoubleSide,
+      side: THREE.DoubleSide,
     });
 
     const floorMaterial = new THREE.MeshPhongMaterial({
@@ -64,6 +66,8 @@ export class MyContents {
       color: "#8f7256",
       shininess: 30,
       map: ceilTexture,
+      shadowSide: THREE.DoubleSide,
+      side: THREE.DoubleSide,
     });
 
     // ============== Objects ====================
@@ -105,7 +109,7 @@ export class MyContents {
     // ============== Positions ====================
 
     // Jornal
-    this.jornal.position.set(2.3, 3, 0.2);
+    this.jornal.position.set(2.3, 3.05, 0.2);
 
     // Flower
     this.flower.position.set(6.7, 3, -11);  
@@ -127,6 +131,7 @@ export class MyContents {
 
     // Hole
     this.hole.position.set(-12.5, 0.8, 0);
+
 
     // Spring
     this.spring.scale.set(2, 2, 2);
@@ -184,9 +189,9 @@ export class MyContents {
     const xLight = 5;
     const yLight = -4.5;
     const zLight = 5;
-
+  
     for (let i = 0; i < 4; i++) {
-      const pointLight = new THREE.PointLight(0xffffff, 75, 0);
+      const pointLight = new THREE.PointLight(0xffffff, 50, 0);
       const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5);
 
       const x = (i % 2 === 0 ? 1 : -1) * xLight;
@@ -196,20 +201,28 @@ export class MyContents {
       this.room.getCeilMesh().add(pointLight);
       this.room.add(pointLightHelper);
     }
-
+    
 
     // add directional light
-    // const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    // directionalLight.position.set(-30, 40, -20);
-// 
-    // this.app.scene.add(directionalLight);
-// 
-    // const directionalLightHelper = new THREE.DirectionalLightHelper(
-    //   directionalLight,
-    //   0.5
-    // );
-// 
-    // this.app.scene.add(directionalLightHelper);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 10);
+    directionalLight.position.set(-30, 10, -25);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 4096;
+    directionalLight.shadow.mapSize.height = 4096;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 100;
+    directionalLight.shadow.camera.left = -100;
+    directionalLight.shadow.camera.right = 100;
+    directionalLight.shadow.camera.bottom = -100;
+    directionalLight.shadow.camera.top = 100; 
+    this.app.scene.add(directionalLight);
+
+    const directionalLightHelper = new THREE.DirectionalLightHelper(
+       directionalLight,
+       0.5
+    );
+
+    this.app.scene.add(directionalLightHelper);
     const ambientLight = new THREE.AmbientLight(0x565656);
     this.app.scene.add(ambientLight);
   }

@@ -117,6 +117,8 @@ export class Portrait extends THREE.Object3D {
 
     // Adjust the position
     portraitMesh.rotation.y = Math.PI;
+    portraitMesh.castShadow = true;
+    portraitMesh.receiveShadow = true;
 
     whiteFrameMesh.position.set(0, 0, -0.03);
     blackFrameMesh.position.set(0, 0, -0.05);
@@ -133,6 +135,8 @@ export class Portrait extends THREE.Object3D {
     const glassGeometry = new THREE.BoxGeometry(frameWidth, frameHeight, 0.01);
 
     const glassMesh = new THREE.Mesh(glassGeometry, glassMaterial);
+    glassMesh.castShadow = true;
+    glassMesh.receiveShadow = true;
     glassMesh.position.set(0, 0, 0.005);
 
     portraitMesh.position.set(0, 0.6, -0.03);
