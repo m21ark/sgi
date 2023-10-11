@@ -67,14 +67,29 @@ export class Room extends THREE.Object3D {
     this.floorMesh = new THREE.Mesh(floor, floorMaterial);
     this.ceilMesh = new THREE.Mesh(floor, ceilMaterial);
 
+    this.ceilMesh.receiveShadow = true;
+    this.ceilMesh.castShadow = true;
+
     this.wallMesh1 = new THREE.Mesh(wall, wallMaterial);
     this.wallMesh2 = new THREE.Mesh(wall, wallMaterial);
     this.wallMesh3 = new THREE.Mesh(wall, wallMaterial);
     this.wallMesh4 = new THREE.Mesh(wall, wallMaterial);
 
+    // enable cast and receive shaddow for wall meshes
+    this.wallMesh1.castShadow = true;
+    this.wallMesh1.receiveShadow = true;
+    this.wallMesh2.castShadow = true;
+    this.wallMesh2.receiveShadow = true;
+    this.wallMesh3.castShadow = true;
+    this.wallMesh3.receiveShadow = true;
+    this.wallMesh4.castShadow = true;
+    this.wallMesh4.receiveShadow = true;
+
     // ==================== Positions ====================
 
     this.floorMesh.position.y = -0.05;
+    this.floorMesh.receiveShadow = true;
+    this.floorMesh.castShadow = true;
     this.ceilMesh.position.y = 9.05;
 
     this.wallMesh1.position.y = 4.5;

@@ -6,64 +6,6 @@ export class Jornal extends THREE.Object3D {
     constructor() {
         super();
 
-/*
-        let controlPoints =[
-            // U = 0
-            [
-                [0, 0,   0.9, 1],
-                [1, 0,   0.9, 1],
-                [1, 0.1, 0.9, 1],
-                [0, 0.1, 0.9, 1]
-            ],
-            [
-                [0, 0, 0, 1],
-                [1, 0, 0.03, 1],
-                [1, 0.1, 0.4, 1],
-                [0, 0.1, 0, 1]
-            ],
-
-            [
-                [0, 0, 0, 1],
-                [1, 0, 0.02, 1],
-                [1, 0.1, 0.1, 1],
-                [0, 0.1, 0, 1]
-            ],
-            [
-                [0, 0, 0, 1],
-                [1, 0, 0, 1],
-                [1, 0.1, 0, 1],
-                [0, 0.1, 0, 1]
-            ],
-            // U = 1
-           
-           
-        ];
-
-
-        let surfaceData;
-        let mesh;
-        let orderU = 3
-        let orderV = 3
-
-        surfaceData = this.build(controlPoints,
-            orderU, orderV, this.samplesU,
-            this.samplesV, this.material)
-
-    
-        mesh = new THREE.Mesh(surfaceData, this.material);
-        mesh.rotation.x = 0
-        mesh.rotation.y = 0
-        mesh.rotation.z = 0
-
-        mesh.scale.set(1, 1, 1)
-        mesh.position.set(0, 0, 0)
-
-        this.add(mesh)
-
-
-        //this.add();
-        */
-
         this.material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, map: new THREE.TextureLoader().load('textures/jornal_tex.jpeg') });
 
         const numPages = 8;
@@ -76,25 +18,13 @@ export class Jornal extends THREE.Object3D {
                 [
                     [0, 0,   0.9, 1],
                     [1, 0,   0.9, 1],
-                    [1, 0.1, 0.9, 1],
+                    [1, 0.2, 0.9, 1],
                     [0, 0.04, 0.9, 1]
                 ],
-                // [
-                //     [0, 0, 0, 1],
-                //     [1, 0, 0.03, 1],
-                //     [1, 0.1, 0.4, 1],
-                //     [0, 0.04, 0, 1]
-                // ],
-                // [
-                //     [0, 0, 0, 1],
-                //     [1, 0, 0.02, 1],
-                //     [1, 0.1, 0.1, 1],
-                //     [0, 0.04, 0, 1]
-                // ],
                 [
                     [0, 0, 0, 1],
                     [1, 0, 0, 1],
-                    [1, 0.1, 0, 1],
+                    [1, 0.2, 0, 1],
                     [0, 0.04, 0, 1]
                 ],
                 // U = 1 
@@ -106,12 +36,6 @@ export class Jornal extends THREE.Object3D {
                 controlPoints[j][0][2] -= (i*spacing);
                 controlPoints[j][1][3] -= (i*spacing);
                 controlPoints[j][1][2] -= (i*spacing);
-                
-                
-                // controlPoints[j][0][2] -= centerX*i*0.3;
-                // controlPoints[j][1][2] -= centerX*i*0.3;
-                // controlPoints[j][2][2] -= centerX*i*0.3;
-                // controlPoints[j][3][2] -= centerX*i*0.3;
             }
 
             // Create the NURBS surface for each page

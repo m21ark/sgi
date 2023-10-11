@@ -11,6 +11,8 @@ export class TableStruct extends THREE.Object3D {
     this.TableStruct_leg = new THREE.CylinderGeometry(0.12, 0.12, posToGround);
 
     const TableStructMesh = new THREE.Mesh(this.TableStruct, material);
+    TableStructMesh.castShadow = true;
+    TableStructMesh.receiveShadow = true;
 
     let x = width - 0.4;
     let y = depth - 0.4;
