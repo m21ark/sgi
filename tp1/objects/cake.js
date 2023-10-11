@@ -94,6 +94,17 @@ export class Cake extends THREE.Object3D {
     this.oneSideMesh = new THREE.Mesh(oneSide, this.cakeMaterial);
     this.otherSideMesh = new THREE.Mesh(otherSide, this.cakeMaterial);
 
+    // adding a candle string
+    const candleString = new THREE.CylinderGeometry(0.03, 0.03, 0.4, 32);
+    candleString.translate(0, height / 2.0 + 0.2, -0.2);
+    const candleStringMesh = new THREE.Mesh(
+      candleString,
+      new THREE.MeshPhongMaterial({
+        color: "#fcfcfc",
+        shininess: 30,
+      })
+    );
+
     this.candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
     this.fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
 
@@ -107,14 +118,15 @@ export class Cake extends THREE.Object3D {
 
     dishMesh.scale.set(4, 2, 4);
     dishMesh.translateY(-0.6);
-
+    candleStringMesh.translateY(0.6);
     this.cakeMesh.translateY(1);
 
     this.cakeMesh.add(dishMesh);
     this.cakeMesh.add(this.oneSideMesh);
     this.cakeMesh.add(this.otherSideMesh);
     this.cakeMesh.add(this.candleMesh);
-    this.cakeMesh.add(this.fireMesh);
+    this.cakeMesh.add(candleStringMesh);
+    // this.cakeMesh.add(this.fireMesh);
     this.add(this.cakeMesh);
 
     // ========================= FIRE =========================
@@ -125,13 +137,13 @@ export class Cake extends THREE.Object3D {
       color3: 0x000000,
       windX: 0.0,
       windY: 0.0,
-      colorBia: 0.4,
+      colorBias: 0.3,
       burnRate: 3,
-      diffuse: 2.8,
-      viscosity: 5,
-      expansion: 0.05,
-      swirl: 0.5,
-      drag: 0.0,
+      diffuse: 3.3,
+      viscosity: 25,
+      expansion: 0.01,
+      swirl: 500.5,
+      drag: 50.0,
       airSpeed: 8.0,
       speed: 500.0,
       massConservation: false,
@@ -145,7 +157,8 @@ export class Cake extends THREE.Object3D {
     });
 
     fire.rotateY(Math.PI / 2);
-    fire.translateY(3);
+    fire.translateY(2.3);
+    fire.translateX(0.2)
 
     // set parameters
     fire.addSource(0.5, 0.1, 0.1, 1.0, 0.0, 1.0);
@@ -163,7 +176,6 @@ export class Cake extends THREE.Object3D {
     fire.speed = candle_params.speed;
     fire.massConservation = candle_params.massConservation;
 
-    this.fireMesh.add(fire);
-
+    candleStringMesh.add(fire);
   }
 }
