@@ -10,16 +10,12 @@ import { Jornal } from "./objects/jornal.js";
 import { Vase } from "./objects/vase.js";
 import { Flower } from "./objects/flower.js";
 
-
 export class MyContents {
   constructor(app) {
     this.app = app;
   }
 
-  update() {
-
-
-  }
+  update() {}
 
   init() {
     // ============== Textures ====================
@@ -110,7 +106,7 @@ export class MyContents {
     this.jornal.position.set(2.3, 3.05, 0.2);
 
     // Flower
-    this.flower.position.set(6.7, 3, -11);  
+    this.flower.position.set(6.7, 3, -11);
 
     // Vase
     this.vase.position.set(7, 0.05, -11);
@@ -154,7 +150,6 @@ export class MyContents {
     table.add(this.jornal);
     this.room.add(this.vase);
     this.room.add(this.flower);
-
 
     // ============== Lights ====================
 
@@ -325,11 +320,6 @@ export class MyContents {
         minPitch,
         Math.min(maxPitch, this.player.rotation.x - rotationSpeed)
       );
-    }
-
-    if (this.keyboard["k"]) {
-      this.app.toogleCamera();
-      this.keyboard["k"] = false;
     }
 
     if (this.keyboard["r"]) {

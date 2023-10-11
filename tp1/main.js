@@ -16,14 +16,15 @@ contents.init();
 app.setContents(contents);
 
 // create the gui interface object
-//let gui = new MyGuiInterface(app);
+let gui = new MyGuiInterface(app);
+
 // set the contents object in the gui interface object
-//gui.setContents(contents);
+gui.setContents(contents);
 
 // we call the gui interface init
 // after contents were created because
 // interface elements may control contents items
-//gui.init();
+gui.init();
 
 // main animation loop - calls every 50-60 ms.
 app.render();
