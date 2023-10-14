@@ -13,6 +13,20 @@ import { Flower } from "./objects/flower.js";
 export class MyContents {
   constructor(app) {
     this.app = app;
+
+    // GUI variables
+    this.useTextures = true;
+    this.useNormals = true;
+    this.castShadow = true;
+    this.showQuadLight = true;
+    this.showOutsideLight = true;
+    this.showSpotLight = true;
+    this.showFireShader = false;
+
+    // Objects
+    this.directionalLight = null;
+    this.spotLight = null;
+    this.spotLightHelper = null;
   }
 
   update() {}
@@ -38,7 +52,6 @@ export class MyContents {
       emissive: "#000000",
       shininess: 30,
       map: floorTexture,
-
     });
 
     const woodMaterial = new THREE.MeshPhongMaterial({
@@ -61,7 +74,6 @@ export class MyContents {
       color: "#8f7256",
       shininess: 30,
       map: ceilTexture,
-
     });
 
     // ============== Objects ====================
@@ -126,7 +138,6 @@ export class MyContents {
     // Hole
     this.hole.position.set(-12.5, 0.8, 0);
 
-
     // Spring
     this.spring.scale.set(2, 2, 2);
     this.spring.position.set(2, 3.15, 2);
@@ -163,64 +174,70 @@ export class MyContents {
     this.animate();
   }
 
-  addCakeSpotlight() {
-    const spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(0, 9, 0);
-    spotLight.target = this.cake;
-    spotLight.castShadow = true;
-    spotLight.shadow.mapSize.width = 4096;
-    spotLight.shadow.mapSize.height = 4096;
-    spotLight.shadow.camera.near = 0.5;
-    spotLight.shadow.camera.far = 100;
+  addDirectionalLight() {
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 10);
+    this.directionalLight.position.set(-30, 10, -25);
+    this.directionalLight.castShadow = this.castShadow;
+    this.directionalLight.shadow.mapSize.width = 4096;
+    this.directionalLight.shadow.mapSize.height = 4096;
+    this.directionalLight.shadow.camera.near = 0.5;
+    this.directionalLight.shadow.camera.far = 100;
+    this.directionalLight.shadow.camera.left = -100;
+    this.directionalLight.shadow.camera.right = 100;
+    this.directionalLight.shadow.camera.bottom = -100;
+    this.directionalLight.shadow.camera.top = 100;
+    this.app.scene.add(this.directionalLight);
 
-    spotLight.angle = Math.PI / 12;
-    spotLight.penumbra = 0.25;
-    spotLight.intensity = 650;
-    spotLight.distance = 7;
+    const directionalLightHelper = new THREE.DirectionalLightHelper(
+      this.directionalLight,
+      0.5
+    );
 
-    const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-    this.app.scene.add(spotLightHelper);
-    this.app.scene.add(spotLight);
+    this.app.scene.add(directionalLightHelper);
   }
 
-  addLights() {
+  addCakeSpotlight() {
+    this.spotLight = new THREE.SpotLight(0xffffff);
+    this.spotLight.position.set(0, 9, 0);
+    this.spotLight.target = this.cake;
+    this.spotLight.castShadow = this.castShadow;
+    this.spotLight.shadow.mapSize.width = 4096;
+    this.spotLight.shadow.mapSize.height = 4096;
+    this.spotLight.shadow.camera.near = 0.5;
+    this.spotLight.shadow.camera.far = 100;
+
+    this.spotLight.angle = Math.PI / 12;
+    this.spotLight.penumbra = 0.25;
+    this.spotLight.intensity = 650;
+    this.spotLight.distance = 7;
+
+    this.spotLightHelper = new THREE.SpotLightHelper(this.spotLight);
+    this.app.scene.add(this.spotLightHelper);
+    this.app.scene.add(this.spotLight);
+  }
+
+  addQuadLights() {
     const xLight = 5;
-    const yLight = -4.5;
+    const yLight = -5.5;
     const zLight = 5;
-  
+
     for (let i = 0; i < 4; i++) {
       const pointLight = new THREE.PointLight(0xffffff, 50, 0);
-      const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5);
+      const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.3);
 
       const x = (i % 2 === 0 ? 1 : -1) * xLight;
       const z = (i < 2 ? 1 : -1) * zLight;
       pointLight.position.set(x, yLight, z);
 
       this.room.getCeilMesh().add(pointLight);
-      this.room.add(pointLightHelper);
+      pointLight.add(pointLightHelper);
     }
-    
+  }
 
-    // add directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 10);
-    directionalLight.position.set(-30, 10, -25);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 4096;
-    directionalLight.shadow.mapSize.height = 4096;
-    directionalLight.shadow.camera.near = 0.5;
-    directionalLight.shadow.camera.far = 100;
-    directionalLight.shadow.camera.left = -100;
-    directionalLight.shadow.camera.right = 100;
-    directionalLight.shadow.camera.bottom = -100;
-    directionalLight.shadow.camera.top = 100; 
-    this.app.scene.add(directionalLight);
+  addLights() {
+    this.addQuadLights();
+    this.addDirectionalLight();
 
-    const directionalLightHelper = new THREE.DirectionalLightHelper(
-       directionalLight,
-       0.5
-    );
-
-    this.app.scene.add(directionalLightHelper);
     const ambientLight = new THREE.AmbientLight(0x565656);
     this.app.scene.add(ambientLight);
   }
@@ -353,4 +370,41 @@ export class MyContents {
     // Make the camera look at the player's position
     this.app.activeCamera.lookAt(playerPosition);
   }
+
+  update_shadows() {
+    this.directionalLight.castShadow = this.castShadow;
+    this.spotLight.castShadow = this.castShadow;
+  }
+
+  update_outside_light() {
+    if (this.showOutsideLight) this.app.scene.add(this.directionalLight);
+    else this.app.scene.remove(this.directionalLight);
+  }
+
+  update_quad_lights() {
+    if (this.showQuadLight) this.addQuadLights();
+    else {
+      for (let i = 0; i < 4; i++) {
+        this.room.getCeilMesh().remove(this.room.getCeilMesh().children[0]);
+      }
+    }
+  }
+
+  update_spotlight() {
+    if (this.showSpotLight) {
+      this.app.scene.add(this.spotLight);
+      this.app.scene.add(this.spotLightHelper);
+    } else {
+      this.app.scene.remove(this.spotLight);
+      this.app.scene.remove(this.spotLightHelper);
+    }
+  }
+
+  update_fire_shader() {
+    this.cake.updateShaderCondition(this.showFireShader);
+  }
+
+  update_textures() {}
+
+  update_normals() {}
 }

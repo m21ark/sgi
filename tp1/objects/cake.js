@@ -46,6 +46,9 @@ export class Cake extends THREE.Object3D {
   ) {
     super();
 
+    this.showShader = false;
+    this.candleStringMesh = null;
+
     // Create the original cake geometry
     this.cakeGeometry = new THREE.CylinderGeometry(
       radius,
@@ -93,12 +96,11 @@ export class Cake extends THREE.Object3D {
     this.cakeMesh = new THREE.Mesh(this.cakeGeometry, this.cakeMaterial);
     this.oneSideMesh = new THREE.Mesh(oneSide, this.cakeMaterial);
     this.otherSideMesh = new THREE.Mesh(otherSide, this.cakeMaterial);
-    
 
     // adding a candle string
     const candleString = new THREE.CylinderGeometry(0.03, 0.03, 0.4, 32);
     candleString.translate(0, height / 2.0 + 0.2, -0.2);
-    const candleStringMesh = new THREE.Mesh(
+    this.candleStringMesh = new THREE.Mesh(
       candleString,
       new THREE.MeshPhongMaterial({
         color: "#fcfcfc",
@@ -125,19 +127,22 @@ export class Cake extends THREE.Object3D {
 
     dishMesh.scale.set(4, 2, 4);
     dishMesh.translateY(-0.6);
-    candleStringMesh.translateY(0.6);
+    this.candleStringMesh.translateY(0.6);
     this.cakeMesh.translateY(1);
 
     this.cakeMesh.add(dishMesh);
     this.cakeMesh.add(this.oneSideMesh);
     this.cakeMesh.add(this.otherSideMesh);
     this.cakeMesh.add(this.candleMesh);
-    this.cakeMesh.add(candleStringMesh);
-    // this.cakeMesh.add(this.fireMesh);
+    this.cakeMesh.add(this.candleStringMesh);
     this.add(this.cakeMesh);
 
-    // ========================= FIRE =========================
+    this.setFire();
 
+    this.cakeMesh.add(this.fireMesh);
+  }
+
+  setFire() {
     const candle_params = {
       color1: 0xffffff,
       color2: 0xff9000,
@@ -157,32 +162,42 @@ export class Cake extends THREE.Object3D {
     };
 
     const plane = new THREE.PlaneGeometry(3, 3);
-    const fire = new Fire(plane, {
+    this.fire = new Fire(plane, {
       textureWidth: 512,
       textureHeight: 512,
       debug: false,
     });
 
-    fire.rotateY(Math.PI / 2);
-    fire.translateY(2.3);
-    fire.translateX(0.2)
+    this.fire.rotateY(Math.PI / 2);
+    this.fire.translateY(2.3);
+    this.fire.translateX(0.2);
 
     // set parameters
-    fire.addSource(0.5, 0.1, 0.1, 1.0, 0.0, 1.0);
-    fire.color1.set(candle_params.color1);
-    fire.color2.set(candle_params.color2);
-    fire.color3.set(candle_params.color3);
-    fire.colorBias = candle_params.colorBias;
-    fire.burnRate = candle_params.burnRate;
-    fire.diffuse = candle_params.diffuse;
-    fire.viscosity = candle_params.viscosity;
-    fire.expansion = candle_params.expansion;
-    fire.swirl = candle_params.swirl;
-    fire.drag = candle_params.drag;
-    fire.airSpeed = candle_params.airSpeed;
-    fire.speed = candle_params.speed;
-    fire.massConservation = candle_params.massConservation;
+    this.fire.addSource(0.5, 0.1, 0.1, 1.0, 0.0, 1.0);
+    this.fire.color1.set(candle_params.color1);
+    this.fire.color2.set(candle_params.color2);
+    this.fire.color3.set(candle_params.color3);
+    this.fire.colorBias = candle_params.colorBias;
+    this.fire.burnRate = candle_params.burnRate;
+    this.fire.diffuse = candle_params.diffuse;
+    this.fire.viscosity = candle_params.viscosity;
+    this.fire.expansion = candle_params.expansion;
+    this.fire.swirl = candle_params.swirl;
+    this.fire.drag = candle_params.drag;
+    this.fire.airSpeed = candle_params.airSpeed;
+    this.fire.speed = candle_params.speed;
+    this.fire.massConservation = candle_params.massConservation;
+  }
 
-    candleStringMesh.add(fire);
+  updateShaderCondition(bool) {
+    this.showShader = bool;
+    if (this.showShader) {
+      console.log(this.candleMesh);
+      this.cakeMesh.remove(this.fireMesh);
+      this.candleStringMesh.add(this.fire);
+    } else {
+      this.candleStringMesh.remove(this.fire);
+      this.cakeMesh.add(this.fireMesh);
+    }
   }
 }
