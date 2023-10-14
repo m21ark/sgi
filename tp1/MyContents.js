@@ -15,7 +15,6 @@ export class MyContents {
     this.app = app;
 
     // GUI variables
-    this.useTextures = true;
     this.useNormals = true;
     this.castShadow = true;
     this.showQuadLight = true;
@@ -404,7 +403,8 @@ export class MyContents {
     this.cake.updateShaderCondition(this.showFireShader);
   }
 
-  update_textures() {}
+  update_normals() {
 
-  update_normals() {}
+
+  }
 }

@@ -58,18 +58,6 @@ class MyGuiInterface {
     const othersFolder = this.datgui.addFolder("Others");
 
     othersFolder
-      .add(this.contents, "useTextures", true)
-      .name("Textures")
-      .onChange(() => {
-        this.contents.update_textures();
-      });
-    othersFolder
-      .add(this.contents, "useNormals", true)
-      .name("Normals")
-      .onChange(() => {
-        this.contents.update_normals();
-      });
-    othersFolder
       .add(this.contents, "showFireShader", true)
       .name("Show Fire Shader")
       .onChange(() => {

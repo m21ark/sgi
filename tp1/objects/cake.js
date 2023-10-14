@@ -4,11 +4,10 @@ import { Fire } from "./fire.js";
 export class Cake extends THREE.Object3D {
   loader = new THREE.TextureLoader();
 
-  candleMaterial = new THREE.MeshPhongMaterial({
-    color: "#ffff00",
-    specular: "#ffff00",
-    emissive: "#000000",
-    shininess: 30,
+  candleMaterial = new THREE.MeshStandardMaterial({
+    color: 0xfaf7c4,
+    roughness: 0.8,
+    metalness: 0.9,
   });
 
   fireMaterial = new THREE.MeshPhongMaterial({
@@ -70,15 +69,15 @@ export class Cake extends THREE.Object3D {
       );
     }
 
-    this.candle = new THREE.CylinderGeometry(0.2, 0.2, 0.5, 32);
+    this.candle = new THREE.CylinderGeometry(0.15, 0.15, 0.5, 32);
 
     this.candle.scale(1.0, 1.5, 1.0);
     this.candle.translate(0, height / 2.0 + 0.4, -0.2);
 
-    this.fire = new THREE.ConeGeometry(0.1, 0.3, 32);
+    this.fire = new THREE.ConeGeometry(0.06, 0.25, 32);
 
     this.fire.scale(2.3, 1.5, 2.3);
-    this.fire.translate(0, height / 2.0 + 1.0, -0.2);
+    this.fire.translate(0, height / 2.0 + 1.1, -0.2);
 
     const oneSide = new THREE.BoxGeometry(radius, height, 0.05);
 

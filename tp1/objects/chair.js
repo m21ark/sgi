@@ -15,11 +15,13 @@ export class Chair extends THREE.Object3D {
     this.chair.translateZ(XZOffset[1]);
     this.chair.scale.set(1, 1.15, 1);
 
+    const offset = XZOffset[0] > 0 ? 0.1 : -0.1;
+
     this.chairSupportMesh.translateX(
-      XZOffset[0] + (width * XZOffset[2]) / 2 - 0.1
+      offset + XZOffset[0] + (width * XZOffset[2]) / 2
     );
     this.chairSupportMesh.translateZ(XZOffset[1]);
-    this.chairSupportMesh.translateY(2.2);
+    this.chairSupportMesh.translateY(2.185);
 
     this.add(this.chairSupportMesh);
     this.add(this.chair);
