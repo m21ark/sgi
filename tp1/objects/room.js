@@ -1,6 +1,16 @@
 import * as THREE from "three";
 
+/**
+ * A class representing a room in a 3D scene.
+ * @extends THREE.Object3D
+ */
 export class Room extends THREE.Object3D {
+  /**
+   * Creates a new Room object.
+   * @param {THREE.Material} floorMaterial - The material to use for the floor.
+   * @param {THREE.Material} wallMaterial - The material to use for the walls.
+   * @param {THREE.Material} ceilMaterial - The material to use for the ceiling.
+   */
   constructor(floorMaterial, wallMaterial, ceilMaterial) {
     super();
 
@@ -18,6 +28,10 @@ export class Room extends THREE.Object3D {
     videoTexture.magFilter = THREE.LinearFilter;
     videoTexture.format = THREE.RGBAFormat;
 
+    /**
+     * The material to use for the TV.
+     * @type {THREE.MeshPhongMaterial}
+     */
     const tvMaterial = new THREE.MeshPhongMaterial({
       color: "#222222",
       specular: "#353535",
@@ -25,6 +39,10 @@ export class Room extends THREE.Object3D {
       shininess: 30,
     });
 
+    /**
+     * The material to use for the TV screen.
+     * @type {THREE.MeshPhongMaterial}
+     */
     const screenMat = new THREE.MeshPhongMaterial({
       color: "#dddddd",
       specular: "#353535",
@@ -33,6 +51,10 @@ export class Room extends THREE.Object3D {
       map: videoTexture,
     });
 
+    /**
+     * The material to use for the carpet.
+     * @type {THREE.MeshPhongMaterial}
+     */
     const carpetMaterial = new THREE.MeshPhongMaterial({
       color: new THREE.Color(0.9, 0.85, 0.75),
       specular: new THREE.Color(0.0, 0.0, 0.0),
@@ -66,15 +88,43 @@ export class Room extends THREE.Object3D {
 
     // ==================== Meshes ====================
 
+    /**
+     * The mesh for the floor.
+     * @type {THREE.Mesh}
+     */
     this.floorMesh = new THREE.Mesh(floor, floorMaterial);
+
+    /**
+     * The mesh for the ceiling.
+     * @type {THREE.Mesh}
+     */
     this.ceilMesh = new THREE.Mesh(floor, ceilMaterial);
 
     this.ceilMesh.receiveShadow = true;
     this.ceilMesh.castShadow = true;
 
+    /**
+     * The mesh for the first wall.
+     * @type {THREE.Mesh}
+     */
     this.wallMesh1 = new THREE.Mesh(wall, wallMaterial);
+
+    /**
+     * The mesh for the second wall.
+     * @type {THREE.Mesh}
+     */
     this.wallMesh2 = new THREE.Mesh(wall, wallMaterial);
+
+    /**
+     * The mesh for the third wall.
+     * @type {THREE.Mesh}
+     */
     this.wallMesh3 = new THREE.Mesh(wall, wallMaterial);
+
+    /**
+     * The mesh for the fourth wall.
+     * @type {THREE.Mesh}
+     */
     this.wallMesh4 = new THREE.Mesh(wall, wallMaterial);
 
     // enable cast and receive shaddow for wall meshes
@@ -132,14 +182,26 @@ export class Room extends THREE.Object3D {
     this.add(carpetMesh);
   }
 
+  /**
+   * Returns the mesh for the first wall.
+   * @returns {THREE.Mesh} The mesh for the first wall.
+   */
   getWallMesh1() {
     return this.wallMesh1;
   }
 
+  /**
+   * Returns the mesh for the ceiling.
+   * @returns {THREE.Mesh} The mesh for the ceiling.
+   */
   getCeilMesh() {
     return this.ceilMesh;
   }
 
+  /**
+   * Returns the mesh for the third wall.
+   * @returns {THREE.Mesh} The mesh for the third wall.
+   */
   getWallMesh3() {
     return this.wallMesh3;
   }

@@ -2,10 +2,15 @@ import * as THREE from "three";
 import { NURBSSurface } from "three/addons/curves/NURBSSurface.js";
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js";
 
+/**
+ * A class representing a vase object in a 3D scene.
+ * @extends THREE.Object3D
+ */
 export class Vase extends THREE.Object3D {
   constructor() {
     super();
 
+    // Silhouette of the vase
     const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector2(-2, 0), // Starting point
       new THREE.Vector2(-1, 0), // Starting point
@@ -23,17 +28,18 @@ export class Vase extends THREE.Object3D {
       new THREE.Vector2(1, 3.2), // Control point 11
     ]);
 
-    const points = curve.getPoints(50);
+    const points = curve.getPoints(50); // Nr of points to be used for drawing the curve
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
     const material2 = new THREE.LineBasicMaterial({ color: 0xff0000 });
 
-    // Create the final object to add to the scene
+    // Create the final Silhouette to add to the scene
     const curveObject = new THREE.Line(geometry, material2);
     //this.add(curveObject);
 
     const segments = 64; // Increase for smoother curve
 
+    // Rotation of the silhouette to create the vase
     const latheGeometry = new THREE.LatheGeometry(
       points,
       segments,
@@ -53,10 +59,11 @@ export class Vase extends THREE.Object3D {
     latheGeometry.scale(0.6, 0.6, 0.6);
     const jarMesh = new THREE.Mesh(latheGeometry, material);
 
+    // enable casting and receiving shadows
     jarMesh.castShadow = true;
     jarMesh.receiveShadow = true;
 
-    // add land to the vase
+    // add land to the vase ... a circular shape
     const landShape = new THREE.Shape();
     landShape.absarc(0, 0, 0.21, 0, Math.PI * 2, false);
 
@@ -66,6 +73,7 @@ export class Vase extends THREE.Object3D {
       bevelEnabled: false,
     };
 
+    // add depth to the shape created
     const landGeometry = new THREE.ExtrudeGeometry(
       landShape,
       landExtrudeSettings
@@ -77,6 +85,8 @@ export class Vase extends THREE.Object3D {
       side: THREE.DoubleSide,
       map: new THREE.TextureLoader().load("textures/earth.jpg"),
     });
+
+    // manipulate the texture to a smother land texture
     landMaterial.map.wrapS = THREE.RepeatWrapping;
     landMaterial.map.wrapT = THREE.RepeatWrapping;
     landMaterial.map.repeat.set(1, 1);
