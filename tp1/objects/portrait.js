@@ -32,7 +32,8 @@ export class Portrait extends THREE.Object3D {
         specular: 0x111111, // Set a moderate specular highlight color
         shininess: 30, // Adjust as needed
       });
-    } else { // else load the beetle
+    } else {
+      // else load the beetle
       portraitMaterial = new THREE.MeshPhongMaterial({
         color: 0xffffff, // Set the base color (white in this example)
         specular: 0x111111, // Set a moderate specular highlight color

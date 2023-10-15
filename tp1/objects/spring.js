@@ -68,7 +68,10 @@ export class Spring extends THREE.Object3D {
      * The material of the spring.
      * @type {THREE.MeshPhongMaterial}
      */
-    this.tubeMaterial = new THREE.MeshPhongMaterial({ color: 0xfcfcfc, emissive: 0x444444 });
+    this.tubeMaterial = new THREE.MeshPhongMaterial({
+      color: 0xfcfcfc,
+      emissive: 0x444444,
+    });
 
     /**
      * The mesh of the spring.
