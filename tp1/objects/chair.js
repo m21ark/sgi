@@ -10,6 +10,9 @@ export class Chair extends THREE.Object3D {
     this.chairSupport = new THREE.BoxGeometry(0.2, width - 0.3, depth);
 
     this.chairSupportMesh = new THREE.Mesh(this.chairSupport, material);
+    this.chairSupportMesh.castShadow = true;
+    this.chairSupportMesh.receiveShadow = true;
+
 
     this.chair.translateX(XZOffset[0]);
     this.chair.translateZ(XZOffset[1]);

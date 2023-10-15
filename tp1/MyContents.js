@@ -9,7 +9,6 @@ import { Spring } from "./objects/spring.js";
 import { Jornal } from "./objects/jornal.js";
 import { Vase } from "./objects/vase.js";
 import { Flower } from "./objects/flower.js";
-
 export class MyContents {
   constructor(app) {
     this.app = app;
@@ -133,8 +132,8 @@ export class MyContents {
 
     // ============== Display ====================
 
-    this.app.scene.add(this.room);
-    this.app.scene.add(table);
+    //this.app.scene.add(this.room);
+    //this.app.scene.add(table);
     table.add(this.cake);
 
     // Add Portraits
@@ -165,14 +164,13 @@ export class MyContents {
 
   addCakeSpotlight() {
     const spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(0, 9, 0);
+    spotLight.position.set(-0.5, 9, 0);
     spotLight.target = this.cake;
     spotLight.castShadow = true;
     spotLight.shadow.mapSize.width = 4096;
     spotLight.shadow.mapSize.height = 4096;
     spotLight.shadow.camera.near = 0.5;
     spotLight.shadow.camera.far = 100;
-
     spotLight.angle = Math.PI / 12;
     spotLight.penumbra = 0.25;
     spotLight.intensity = 650;

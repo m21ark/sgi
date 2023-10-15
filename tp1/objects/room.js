@@ -57,6 +57,8 @@ export class Room extends THREE.Object3D {
     const carpet = new THREE.PlaneGeometry(12, 18, 32);
     const carpetMesh = new THREE.Mesh(carpet, carpetMaterial);
 
+    carpetMesh.receiveShadow = true;
+
     // ==================== Geometries ====================
 
     const floor = new THREE.BoxGeometry(25, 0.1, 25);

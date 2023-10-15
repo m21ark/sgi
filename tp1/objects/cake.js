@@ -31,7 +31,6 @@ export class Cake extends THREE.Object3D {
     emissive: "#000000",
     shininess: 30,
     map: this.loader.load("textures/cake.jpg"),
-    side: THREE.DoubleSide, // Render both sides of the faces
     normalMap: this.loader.load("textures/cakeN.jpg"),
   });
 
@@ -93,7 +92,15 @@ export class Cake extends THREE.Object3D {
     this.cakeMesh = new THREE.Mesh(this.cakeGeometry, this.cakeMaterial);
     this.oneSideMesh = new THREE.Mesh(oneSide, this.cakeMaterial);
     this.otherSideMesh = new THREE.Mesh(otherSide, this.cakeMaterial);
+
+    this.cakeMesh.castShadow = true;
+    this.cakeMesh.receiveShadow = true;
     
+    this.oneSideMesh.castShadow = true;
+    this.oneSideMesh.receiveShadow = true;
+
+    this.otherSideMesh.castShadow = true;
+    this.otherSideMesh.receiveShadow = true;
 
     // adding a candle string
     const candleString = new THREE.CylinderGeometry(0.03, 0.03, 0.4, 32);
@@ -106,8 +113,14 @@ export class Cake extends THREE.Object3D {
       })
     );
 
+    candleStringMesh.castShadow = true;
+    candleStringMesh.receiveShadow = true; 
+
     this.candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
     this.fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
+
+    this.candleMesh.castShadow = true;
+    this.fireMesh.castShadow = true;
 
     this.candleMesh.castShadow = true;
     this.candleMesh.receiveShadow = true;
