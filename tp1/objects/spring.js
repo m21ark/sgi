@@ -1,14 +1,41 @@
 import * as THREE from "three";
 
+/**
+ * A class representing a spring object in 3D space.
+ * @extends THREE.Object3D
+ */
 export class Spring extends THREE.Object3D {
   constructor() {
     super();
 
-    const numCoils = 5; // Number of coils in the spring
-    const radius = 0.1; // Radius of the spring
-    const pitch = 0.1; // Distance between each coil
-    const totalPoints = 360 * numCoils; // Total points for the spring
+    /**
+     * The number of coils in the spring.
+     * @type {number}
+     */
+    const numCoils = 5;
 
+    /**
+     * The radius of the spring.
+     * @type {number}
+     */
+    const radius = 0.1;
+
+    /**
+     * The distance between each coil.
+     * @type {number}
+     */
+    const pitch = 0.1;
+
+    /**
+     * The total number of points for the spring.
+     * @type {number}
+     */
+    const totalPoints = 360 * numCoils;
+
+    /**
+     * An array of points that define the shape of the spring.
+     * @type {THREE.Vector3[]}
+     */
     let points = [];
 
     for (let i = 0; i <= totalPoints; i++) {
@@ -19,8 +46,16 @@ export class Spring extends THREE.Object3D {
       points.push(new THREE.Vector3(x, y, z));
     }
 
+    /**
+     * A curve that defines the shape of the spring.
+     * @type {THREE.CatmullRomCurve3}
+     */
     let curve = new THREE.CatmullRomCurve3(points);
 
+    /**
+     * The geometry of the spring. It gives shape to the line
+     * @type {THREE.TubeGeometry}
+     */
     const tubeGeometry = new THREE.TubeGeometry(
       curve,
       totalPoints,
@@ -28,8 +63,17 @@ export class Spring extends THREE.Object3D {
       8,
       false
     );
+
+    /**
+     * The material of the spring.
+     * @type {THREE.MeshPhongMaterial}
+     */
     this.tubeMaterial = new THREE.MeshPhongMaterial({ color: 0xfcfcfc, emissive: 0x444444 });
 
+    /**
+     * The mesh of the spring.
+     * @type {THREE.Mesh}
+     */
     this.tubeMesh = new THREE.Mesh(tubeGeometry, this.tubeMaterial);
 
     this.tubeMesh.castShadow = true;

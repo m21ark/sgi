@@ -1,13 +1,33 @@
 import * as THREE from "three";
 
+/**
+ * A class representing a table structure.
+ * @extends THREE.Object3D
+ */
 export class TableStruct extends THREE.Object3D {
+  /**
+   * Creates a table structure.
+   * @param {number} width - The width of the table.
+   * @param {number} height - The height of the table.
+   * @param {number} depth - The depth of the table.
+   * @param {THREE.Material} material - The material of the table.
+   * @param {number} posToGround - The position of the table to the ground.
+   */
   constructor(width, height, depth, material, posToGround) {
     super();
 
+    /**
+     * The geometry of the table structure.
+     * @type {THREE.BoxGeometry}
+     */
     this.TableStruct = new THREE.BoxGeometry(width, height, depth);
 
     this.TableStruct.translate(0, posToGround, 0);
 
+    /**
+     * The geometry of the table legs.
+     * @type {THREE.CylinderGeometry}
+     */
     this.TableStruct_leg = new THREE.CylinderGeometry(0.12, 0.12, posToGround);
 
     const TableStructMesh = new THREE.Mesh(this.TableStruct, material);
