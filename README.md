@@ -13,7 +13,7 @@
 ### [TP1 - ThreeJS Basics](tp1)
 
 - Exploration of different types of textures. Namely, video Textures and normal maps.
-- Exploration of different types of materials. For instance, metalic materials for the chair and table support, a wood material for the table top, ceil and floor, a red courino material for the chair, a clay material for the jar and a glass material for the window.
+- Exploration of different types of materials. For instance, metalic materials for the chair and table legs, a wood material for the table top, ceil and floor, a red courino material for the chair, a clay material for the jar and a glass material for the window.
 - Exploration of different types of lights and shadows. Namely, spotlights, point lights and directional lights. With lights entering the room from the windows, giving more realism for the scene.
 - Exploration of different types of cameras. Namely, perspective cameras, in person cameras and orthographic cameras.
 - Scene

@@ -43,6 +43,16 @@ export class TableStruct extends THREE.Object3D {
       this.TableStruct_leg,
       legMaterial
     );
+    
+    TableStruct_legMesh1.castShadow = true;
+    TableStruct_legMesh1.receiveShadow = true;
+    TableStruct_legMesh2.castShadow = true;
+    TableStruct_legMesh2.receiveShadow = true;
+    TableStruct_legMesh3.castShadow = true;
+    TableStruct_legMesh3.receiveShadow = true;
+    TableStruct_legMesh4.castShadow = true;
+    TableStruct_legMesh4.receiveShadow = true;
+    
 
     TableStruct_legMesh2.translateX(-x);
     TableStruct_legMesh3.translateZ(y);
