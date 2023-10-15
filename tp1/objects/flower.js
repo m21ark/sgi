@@ -1,6 +1,17 @@
 import * as THREE from "three";
 
+/**
+ *  Flower class
+ */
 export class Flower extends THREE.Object3D {
+  /**
+   * Draws a bezier oval quarter
+   * @param {number} centerX - center of the oval in x
+   * @param {number} centerY - center of the oval in y
+   * @param {number} sizeX - size of the oval in x
+   * @param {number} sizeY - size of the oval in y
+   * @param {THREE.Shape} centerShape - shape to draw
+   */
   drawBezierOvalQuarter(centerX, centerY, sizeX, sizeY, centerShape) {
     console.log(centerShape);
     centerShape.moveTo(centerX - sizeX, centerY - 0);
@@ -14,6 +25,14 @@ export class Flower extends THREE.Object3D {
     );
   }
 
+  /**
+   * Draws a bezier oval
+   * @param {number} centerX - center of the oval in x
+   * @param {number} centerY - center of the oval in y
+   * @param {number} sizeX - size of the oval in x
+   * @param {number} sizeY - size of the oval in y
+   * @param {THREE.Shape} centerShape - shape to draw
+   */
   drawBezierOval(centerX, centerY, sizeX, sizeY, centerShape) {
     this.drawBezierOvalQuarter(centerX, centerY, -sizeX, sizeY, centerShape);
     this.drawBezierOvalQuarter(centerX, centerY, sizeX, sizeY, centerShape);
@@ -21,6 +40,13 @@ export class Flower extends THREE.Object3D {
     this.drawBezierOvalQuarter(centerX, centerY, -sizeX, -sizeY, centerShape);
   }
 
+  /**
+   * Draws a bezier circle
+   * @param {number} centerX - center of the circle in x
+   * @param {number} centerY - center of the circle in y
+   * @param {number} size - size of the circle
+   * @param {THREE.Shape} centerShape - shape to draw
+   */
   drawBezierCircle(centerX, centerY, size, centerShape) {
     this.drawBezierOval(centerX, centerY, size, size, centerShape);
   }
@@ -28,6 +54,7 @@ export class Flower extends THREE.Object3D {
   constructor() {
     super();
 
+    // create the points for the bezier cubic curve
     let points = [
       new THREE.Vector3(-0.1, 0.9, 0.0),
       new THREE.Vector3(0.0, 3 * (2 / 3), 0.0),
@@ -38,14 +65,6 @@ export class Flower extends THREE.Object3D {
     // create the center of the flower
     var centerShape = new THREE.Shape();
     centerShape.absarc(0, 0, 0.4, 0, Math.PI * 2, false);
-
-    // TODO: what is wrong here?
-    //this.drawBezierCircle(0, 0, 0.4, centerShape);
-    // centerShape.moveTo(points[0].x, points[0].y);
-    // centerShape.bezierCurveTo(points[0].x, points[0].y, points[1].x, points[1].y, points[1].x, points[1].y);
-    // centerShape.bezierCurveTo(points[1].x, points[1].y, points[2].x, points[2].y, points[2].x, points[2].y);
-    // centerShape.bezierCurveTo(points[2].x, points[2].y, points[3].x, points[3].y, points[3].x, points[3].y);
-    // centerShape.bezierCurveTo(points[3].x, points[3].y, points[0].x, points[0].y, points[0].x, points[0].y);
 
     // extrude the center
     let centerExtrudeSettings = {

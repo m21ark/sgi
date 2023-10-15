@@ -1,8 +1,13 @@
 import * as THREE from "three";
 import { Fire } from "./fire.js";
 
+/**
+ * Cake class
+ */
 export class Cake extends THREE.Object3D {
   loader = new THREE.TextureLoader();
+
+  // ==================== MATERIALS ====================
 
   candleMaterial = new THREE.MeshStandardMaterial({
     color: 0xfaf7c4,
@@ -32,6 +37,8 @@ export class Cake extends THREE.Object3D {
     map: this.loader.load("textures/cake.jpg"),
     normalMap: this.loader.load("textures/cakeN.jpg"),
   });
+
+  // ==================== CONSTRUCTOR ====================
 
   constructor(
     radius,
@@ -68,25 +75,23 @@ export class Cake extends THREE.Object3D {
       );
     }
 
+    // candle
     this.candle = new THREE.CylinderGeometry(0.15, 0.15, 0.5, 32);
-
     this.candle.scale(1.0, 1.5, 1.0);
     this.candle.translate(0, height / 2.0 + 0.4, -0.2);
 
+    // fire
     this.fire = new THREE.ConeGeometry(0.06, 0.25, 32);
-
     this.fire.scale(2.3, 1.5, 2.3);
     this.fire.translate(0, height / 2.0 + 1.1, -0.2);
 
+    // sides to close the cake
     const oneSide = new THREE.BoxGeometry(radius, height, 0.05);
-
     const otherSide = new THREE.BoxGeometry(radius, height, 0.05);
 
     // place oneSide on the endangle of the cake
-    // oneSide.rotateY(endAngle);
     oneSide.translate(radius / 2, 0, 0);
     oneSide.rotateY(-startAngle);
-
     otherSide.translate(radius / 2, 0, 0);
     otherSide.rotateY(-(startAngle - endAngle));
 
@@ -95,9 +100,11 @@ export class Cake extends THREE.Object3D {
     this.oneSideMesh = new THREE.Mesh(oneSide, this.cakeMaterial);
     this.otherSideMesh = new THREE.Mesh(otherSide, this.cakeMaterial);
 
+    // ==================== SHADOWS ====================
+
     this.cakeMesh.castShadow = true;
     this.cakeMesh.receiveShadow = true;
-    
+
     this.oneSideMesh.castShadow = true;
     this.oneSideMesh.receiveShadow = true;
 
@@ -115,21 +122,19 @@ export class Cake extends THREE.Object3D {
       })
     );
 
-    this.candleStringMesh.castShadow = true;
-    this.candleStringMesh.receiveShadow = true; 
-
     this.candleMesh = new THREE.Mesh(this.candle, this.candleMaterial);
     this.fireMesh = new THREE.Mesh(this.fire, this.fireMaterial);
+
+    // ==================== SHADOWS ====================
+
+    this.candleStringMesh.castShadow = true;
+    this.candleStringMesh.receiveShadow = true;
 
     this.candleMesh.castShadow = true;
     this.fireMesh.castShadow = true;
 
     this.candleMesh.castShadow = true;
     this.candleMesh.receiveShadow = true;
-
-    // CANDLE LIGHT
-    const candleLight = new THREE.PointLight(0xffa500, 5, 1); // Color, Intensity, Distance
-    //this.candleMesh.add(candleLight);
 
     // Dish
     const dish = new THREE.CylinderGeometry(1.3, 1, 0.25, 32);
@@ -143,6 +148,8 @@ export class Cake extends THREE.Object3D {
     this.candleStringMesh.translateY(0.6);
     this.cakeMesh.translateY(1);
 
+    // ==================== DISPLAY ====================
+
     this.cakeMesh.add(dishMesh);
     this.cakeMesh.add(this.oneSideMesh);
     this.cakeMesh.add(this.otherSideMesh);
@@ -155,6 +162,9 @@ export class Cake extends THREE.Object3D {
     this.cakeMesh.add(this.fireMesh);
   }
 
+  /**
+   * Set the fire shader
+   */
   setFire() {
     const candle_params = {
       color1: 0xffffff,
@@ -185,7 +195,7 @@ export class Cake extends THREE.Object3D {
     this.fire.translateY(2.3);
     this.fire.translateX(0.2);
 
-    // set parameters
+    // set parameters for realistic fire
     this.fire.addSource(0.5, 0.1, 0.1, 1.0, 0.0, 1.0);
     this.fire.color1.set(candle_params.color1);
     this.fire.color2.set(candle_params.color2);
@@ -202,13 +212,18 @@ export class Cake extends THREE.Object3D {
     this.fire.massConservation = candle_params.massConservation;
   }
 
+  /**
+   * Update the shader condition. If true, the shader is on, otherwise it is off
+   * @param {boolean} bool - true if the shader is on, false otherwise
+   */
   updateShaderCondition(bool) {
     this.showShader = bool;
     if (this.showShader) {
-      console.log(this.candleMesh);
+      // add shader fire and remove a normal mesh fire
       this.cakeMesh.remove(this.fireMesh);
       this.candleStringMesh.add(this.fire);
     } else {
+      // remove shader fire and add a normal mesh fire
       this.candleStringMesh.remove(this.fire);
       this.cakeMesh.add(this.fireMesh);
     }

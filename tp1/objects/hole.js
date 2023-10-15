@@ -1,5 +1,14 @@
 import * as THREE from "three";
 
+/**
+ * Hole class - creates a parametrizable wall with a hole in the middle
+ * @param {number} frameDepth - depth of the frame
+ * @param {number} frameHeight - height of the frame
+ * @param {number} frameLength - length of the frame
+ * @param {number} Xthickness - thickness of the X frame
+ * @param {number} Ythickness - thickness of the Y frame
+ * @param {THREE.Material} boxMaterial - material of the frame
+ */
 export class Hole extends THREE.Object3D {
   constructor(
     frameDepth = 1,
@@ -16,6 +25,7 @@ export class Hole extends THREE.Object3D {
   ) {
     super();
 
+    // create the 4 boxes that compose the frame
     var box1 = new THREE.Mesh(
       new THREE.BoxGeometry(frameLength, Ythickness, frameDepth),
       boxMaterial

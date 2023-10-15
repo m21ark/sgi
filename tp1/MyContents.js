@@ -9,6 +9,11 @@ import { Spring } from "./objects/spring.js";
 import { Jornal } from "./objects/jornal.js";
 import { Vase } from "./objects/vase.js";
 import { Flower } from "./objects/flower.js";
+
+/**
+ * MyContents class
+ * @param {MyApp} app - Reference to the app
+ */
 export class MyContents {
   constructor(app) {
     this.app = app;
@@ -75,6 +80,15 @@ export class MyContents {
       shadowSide: THREE.FrontSide,
     });
 
+    const glassMaterial = new THREE.MeshPhongMaterial({
+      color: 0xcccccc,
+      specular: 0xffaaaa,
+      shininess: 250,
+      transparent: true,
+      opacity: 0.2,
+      side: THREE.DoubleSide,
+    });
+
     // ============== Objects ====================
 
     this.room = new Room(floorMaterial, wallMaterial, ceilMaterial);
@@ -97,14 +111,7 @@ export class MyContents {
 
     this.glassMesh = new THREE.Mesh(
       new THREE.PlaneGeometry(11, 5.5),
-      new THREE.MeshPhongMaterial({
-        color: 0xcccccc,
-        specular: 0xffaaaa,
-        shininess: 250,
-        transparent: true,
-        opacity: 0.2,
-        side: THREE.DoubleSide,
-      })
+      glassMaterial
     );
 
     this.glassMesh.rotation.y = Math.PI / 2;
@@ -173,7 +180,13 @@ export class MyContents {
     this.animate();
   }
 
+  // ============== Lights ====================
+
+  /**
+   * Adds a directional light to the scene that emites light like the sun
+   */
   addDirectionalLight() {
+    // setting up the directional light parameters
     this.directionalLight = new THREE.DirectionalLight(0xffffff, 10);
     this.directionalLight.position.set(-30, 10, -25);
     this.directionalLight.castShadow = this.castShadow;
@@ -186,9 +199,6 @@ export class MyContents {
     this.directionalLight.shadow.camera.bottom = -100;
     this.directionalLight.shadow.camera.top = 100;
 
-    // add bias
-    //this.directionalLight.shadow.bias = 0.0007;
-
     this.app.scene.add(this.directionalLight);
 
     const directionalLightHelper = new THREE.DirectionalLightHelper(
@@ -199,6 +209,9 @@ export class MyContents {
     this.app.scene.add(directionalLightHelper);
   }
 
+  /*
+   * Adds a spotlight to the scene that iluminates the cake
+   */
   addCakeSpotlight() {
     this.spotLight = new THREE.SpotLight(0xffffff);
     this.spotLight.position.set(-0.5, 9, 0);
@@ -219,6 +232,9 @@ export class MyContents {
     this.app.scene.add(this.spotLight);
   }
 
+  /*
+   * Adds 4 point lights to the scene that create an iluminated room
+   */
   addQuadLights() {
     const xLight = 5;
     const yLight = -5.5;
@@ -228,6 +244,7 @@ export class MyContents {
       const pointLight = new THREE.PointLight(0xffffff, 50, 0);
       const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.3);
 
+      // Set the position of the point light in the room as a square
       const x = (i % 2 === 0 ? 1 : -1) * xLight;
       const z = (i < 2 ? 1 : -1) * zLight;
       pointLight.position.set(x, yLight, z);
@@ -237,6 +254,9 @@ export class MyContents {
     }
   }
 
+  /*
+   * Adds lights to the scene
+   */
   addLights() {
     this.addQuadLights();
     this.addDirectionalLight();
@@ -245,11 +265,14 @@ export class MyContents {
     this.app.scene.add(ambientLight);
   }
 
-  // ============== Player Stuff ====================
+  // ============== First Person View ====================
 
   keyboard = {};
   player = null;
 
+  /*
+   * Adds a player to the scene that can move around
+   */
   addPlayer() {
     const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1); // Customize size as needed
     const playerMaterial = new THREE.MeshBasicMaterial({
@@ -263,6 +286,9 @@ export class MyContents {
     this.app.scene.add(this.player);
   }
 
+  /*
+   * Adds listeners to the scene that allow the player to move around
+   */
   addListeners() {
     window.addEventListener("keydown", (event) => {
       this.keyboard[event.key.toLowerCase()] = true;
@@ -273,6 +299,9 @@ export class MyContents {
     });
   }
 
+  /*
+   * Animates the player
+   */
   animate() {
     const playerSpeed = 0.25;
     const rotationSpeed = 0.05;
@@ -305,6 +334,8 @@ export class MyContents {
       );
       moveVector.add(rightDirection);
     }
+
+    // MOVE UP AND DOWN
     if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
     if (this.keyboard["shift"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
 
@@ -350,6 +381,7 @@ export class MyContents {
       this.keyboard["r"] = false;
     }
 
+    // Update the camera position if the player is in first person view
     if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
 
     requestAnimationFrame(() => {
@@ -357,6 +389,9 @@ export class MyContents {
     });
   }
 
+  /**
+   * Updates the camera position to be relative to the player's position and rotation (first person view)
+   */
   updatePlayerCamera() {
     const playerPosition = this.player.position.clone();
     const cameraPosition = this.app.activeCamera.position;
@@ -373,6 +408,8 @@ export class MyContents {
     // Make the camera look at the player's position
     this.app.activeCamera.lookAt(playerPosition);
   }
+
+  // ============== GUI UPDATERS ====================
 
   update_shadows() {
     this.directionalLight.castShadow = this.castShadow;
@@ -405,10 +442,5 @@ export class MyContents {
 
   update_fire_shader() {
     this.cake.updateShaderCondition(this.showFireShader);
-  }
-
-  update_normals() {
-
-
   }
 }

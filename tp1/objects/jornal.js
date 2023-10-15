@@ -2,9 +2,14 @@ import * as THREE from "three";
 import { NURBSSurface } from "three/addons/curves/NURBSSurface.js";
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js";
 
+/**
+ * Jornal class
+ */
 export class Jornal extends THREE.Object3D {
   constructor() {
     super();
+
+    // ==================== MATERIALS ====================
 
     this.material = new THREE.MeshPhongMaterial({
       color: 0xffffff,
@@ -12,10 +17,12 @@ export class Jornal extends THREE.Object3D {
       map: new THREE.TextureLoader().load("textures/jornal_tex.jpeg"),
     });
 
+    // Parametrization letiables
     const numPages = 8;
     const spacing = 0.015; // Adjust the spacing between pages as needed
     const centerX = ((numPages - 1) * spacing) / 2; // Calculate the center of the pages
 
+    // Create the control points for each page
     for (let i = 0; i < numPages; i++) {
       let controlPoints = [
         // U = 0
@@ -52,10 +59,10 @@ export class Jornal extends THREE.Object3D {
         this.material
       );
       const mesh = new THREE.Mesh(surfaceData, this.material);
-        
-      mesh.scale.set(-1, -1, -1); // Adjust the scale of the pages as needed
 
-      mesh.position.set(-i * spacing, 0, 0); // Adjust the position to stack the pages and center them
+      // Adjust scale and position of the pages (in order to stack them)
+      mesh.scale.set(-1, -1, -1);
+      mesh.position.set(-i * spacing, 0, 0);
 
       this.add(mesh);
     }
@@ -67,32 +74,24 @@ export class Jornal extends THREE.Object3D {
 
     // build knots1 = [ 0, 0, 0, 1, 1, 1 ];
 
-    for (var i = 0; i <= degree1; i++) {
-      knots1.push(0);
-    }
+    for (let i = 0; i <= degree1; i++) knots1.push(0);
 
-    for (var i = 0; i <= degree1; i++) {
-      knots1.push(1);
-    }
+    for (let i = 0; i <= degree1; i++) knots1.push(1);
 
     // build knots2 = [ 0, 0, 0, 0, 1, 1, 1, 1 ];
 
-    for (var i = 0; i <= degree2; i++) {
-      knots2.push(0);
-    }
+    for (let i = 0; i <= degree2; i++) knots2.push(0);
 
-    for (var i = 0; i <= degree2; i++) {
-      knots2.push(1);
-    }
+    for (let i = 0; i <= degree2; i++) knots2.push(1);
 
     let stackedPoints = [];
 
-    for (var i = 0; i < controlPoints.length; i++) {
+    for (let i = 0; i < controlPoints.length; i++) {
       let row = controlPoints[i];
 
       let newRow = [];
 
-      for (var j = 0; j < row.length; j++) {
+      for (let j = 0; j < row.length; j++) {
         let item = row[j];
 
         newRow.push(
@@ -127,6 +126,7 @@ export class Jornal extends THREE.Object3D {
 
     return geometry;
 
+    // Calculate the surface point
     function getSurfacePoint(u, v, target) {
       return nurbsSurface.getPoint(u, v, target);
     }
