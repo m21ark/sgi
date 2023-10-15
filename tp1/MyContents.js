@@ -72,6 +72,7 @@ export class MyContents {
       color: "#8f7256",
       shininess: 30,
       map: ceilTexture,
+      shadowSide: THREE.FrontSide,
     });
 
     // ============== Objects ====================
@@ -113,7 +114,7 @@ export class MyContents {
     // ============== Positions ====================
 
     // Jornal
-    this.jornal.position.set(2.3, 3.05, 0.2);
+    this.jornal.position.set(2.1, 3.05, 0.2);
 
     // Flower
     this.flower.position.set(6.7, 3, -11);
@@ -184,6 +185,10 @@ export class MyContents {
     this.directionalLight.shadow.camera.right = 100;
     this.directionalLight.shadow.camera.bottom = -100;
     this.directionalLight.shadow.camera.top = 100;
+
+    // add bias
+    //this.directionalLight.shadow.bias = 0.0007;
+
     this.app.scene.add(this.directionalLight);
 
     const directionalLightHelper = new THREE.DirectionalLightHelper(

@@ -115,6 +115,9 @@ export class Portrait extends THREE.Object3D {
     const whiteFrameMesh = new THREE.Mesh(whiteFrameGeometry, whiteMaterial);
     const blackFrameMesh = new THREE.Mesh(blackFrameGeometry, blackMaterial);
 
+    whiteFrameMesh.receiveShadow = true;
+    blackFrameMesh.receiveShadow = true;
+
     // Adjust the position
     portraitMesh.rotation.y = Math.PI;
     portraitMesh.castShadow = true;

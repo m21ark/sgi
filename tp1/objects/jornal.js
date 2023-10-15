@@ -6,7 +6,7 @@ export class Jornal extends THREE.Object3D {
   constructor() {
     super();
 
-    this.material = new THREE.MeshBasicMaterial({
+    this.material = new THREE.MeshPhongMaterial({
       color: 0xffffff,
       side: THREE.DoubleSide,
       map: new THREE.TextureLoader().load("textures/jornal_tex.jpeg"),
@@ -52,7 +52,7 @@ export class Jornal extends THREE.Object3D {
         this.material
       );
       const mesh = new THREE.Mesh(surfaceData, this.material);
-
+        
       mesh.scale.set(-1, -1, -1); // Adjust the scale of the pages as needed
 
       mesh.position.set(-i * spacing, 0, 0); // Adjust the position to stack the pages and center them

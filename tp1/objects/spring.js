@@ -28,9 +28,12 @@ export class Spring extends THREE.Object3D {
       8,
       false
     );
-    this.tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xfcfcfc });
+    this.tubeMaterial = new THREE.MeshPhongMaterial({ color: 0xfcfcfc, emissive: 0x444444 });
 
     this.tubeMesh = new THREE.Mesh(tubeGeometry, this.tubeMaterial);
+
+    this.tubeMesh.castShadow = true;
+    this.tubeMesh.receiveShadow = true;
 
     this.add(this.tubeMesh);
   }
