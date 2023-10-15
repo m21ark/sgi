@@ -18,9 +18,9 @@ export class TableStruct extends THREE.Object3D {
     let y = depth - 0.4;
 
     const legMaterial = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(0.5, 0.5, 0.5), // Set the metal color (gray)
-      roughness: 0.2, // Adjust the roughness to control the surface appearance
-      metalness: 1.0, // Maximize the metalness for a raw metal look
+      color: new THREE.Color(0.5, 0.5, 0.5),
+      roughness: 0.2,
+      metalness: 1.0,
       map: material.map,
     });
 

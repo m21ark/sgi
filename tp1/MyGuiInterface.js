@@ -14,68 +14,55 @@ class MyGuiInterface {
   }
 
   init() {
-    
     const cameraFolder = this.datgui.addFolder("Camera");
     cameraFolder
       .add(this.app, "activeCameraName", [
         "Perspective",
         "FirstPerson",
         "OrthoBack",
-        "OrthoFront"
+        "OrthoFront",
       ])
       .name("active camera");
-    /* 
-    boxFolder
-      .add(this.contents, "boxMeshSize", 0, 10)
-      .name("size")
+
+    // ========================================================================
+
+    const lightsFolder = this.datgui.addFolder("Lights");
+
+    lightsFolder
+      .add(this.contents, "showQuadLight", true)
+      .name("Quad Lights")
       .onChange(() => {
-        this.contents.rebuildBox();
+        this.contents.update_quad_lights();
       });
-    boxFolder.add(this.contents, "boxEnabled", true).name("enabled");
-    boxFolder.add(this.contents.boxDisplacement, "x", -5, 5);
-    boxFolder.add(this.contents.boxDisplacement, "y", -5, 5);
-    boxFolder.add(this.contents.boxDisplacement, "z", -5, 5);
-    boxFolder.open();
-
-    const data = {
-      "diffuse color": this.contents.diffusePlaneColor,
-      "specular color": this.contents.specularPlaneColor,
-    };
-
-    const planeFolder = this.datgui.addFolder("Plane");
-    planeFolder.addColor(data, "diffuse color").onChange((value) => {
-      this.contents.updateDiffusePlaneColor(value);
-    });
-    planeFolder.addColor(data, "specular color").onChange((value) => {
-      this.contents.updateSpecularPlaneColor(value);
-    });
-
-    planeFolder
-      .add(this.contents, "planeShininess", 0, 1000)
-      .name("shininess")
-      .onChange((value) => {
-        this.contents.updatePlaneShininess(value);
+    lightsFolder
+      .add(this.contents, "showOutsideLight", true)
+      .name("Outside Light")
+      .onChange(() => {
+        this.contents.update_outside_light();
+      });
+    lightsFolder
+      .add(this.contents, "showSpotLight", true)
+      .name("Spotlight")
+      .onChange(() => {
+        this.contents.update_spotlight();
+      });
+    lightsFolder
+      .add(this.contents, "castShadow", true)
+      .name("Cast Shadow")
+      .onChange(() => {
+        this.contents.update_shadows();
       });
 
-    planeFolder.open();
+    // ========================================================================
 
-    const cameraFolder = this.datgui.addFolder("Camera");
-    cameraFolder
-      .add(this.app, "activeCameraName", [
-        "Perspective",
-        "First Person",
-        "Left",
-        "Top",
-        "Right",
-        "Back",
-        "Front",
-      ])
-      .name("active camera");
+    const othersFolder = this.datgui.addFolder("Others");
 
-    cameraFolder
-      .add(this.app.activeCamera.position, "x", 0, 10)
-      .name("x coord");
-    cameraFolder.open(); */
+    othersFolder
+      .add(this.contents, "showFireShader", true)
+      .name("Show Fire Shader")
+      .onChange(() => {
+        this.contents.update_fire_shader();
+      });
   }
 }
 
