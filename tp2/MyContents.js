@@ -52,21 +52,12 @@ class MyContents {
     this.endFunc();
   }
 
-  output(obj, indent = 0) {
-    console.log(
-      "" +
-        new Array(indent * 4).join(" ") +
-        " - " +
-        obj.type +
-        " " +
-        (obj.id !== undefined ? "'" + obj.id + "'" : "")
-    );
-  }
-
   onAfterSceneLoadedAndBeforeRender(data) {
     /*   Object.keys(obj).forEach((key) => {
         console.log(key, obj[key]);
       }) */
+
+    console.log(data);
 
     this.setOptions(data.options);
     this.setFog(data.fog);
@@ -74,13 +65,13 @@ class MyContents {
     this.setMaterials(data.materials);
     this.setCameras(data.cameras);
 
+    // TO-DO: TRAVEL THE GRAPH AND SET THE OBJECTS STARTING AT data.rootId
+    // and visiting data.nodes that contain .children
     for (let key in data.nodes) {
       let node = data.nodes[key];
-      // this.output(node, 1);
       for (let i = 0; i < node.children.length; i++) {
         let child = node.children[i];
         if (child.type === "primitive") this.setPrimitve(child);
-        // else this.output(child, 2);
       }
     }
 
@@ -276,10 +267,10 @@ class MyContents {
   }
 
   endFunc() {
-    console.log(this.textures);
-    console.log(this.materials);
-    console.log(this.cameras);
-    console.log(this.objs);
+    //  console.log(this.textures);
+    // console.log(this.materials);
+    // console.log(this.cameras);
+    // console.log(this.objs);
   }
 }
 
