@@ -15,6 +15,12 @@ class MyContents {
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
     this.reader.open("scenes/demo/demo.xml");
+
+    // Variables to store the contents of the scene
+    this.materials = [];
+    this.lights = [];
+    this.textures = [];
+    this.cameras = [];
   }
 
   /**
@@ -40,6 +46,8 @@ class MyContents {
         ". visit MySceneData javascript class to check contents for each data item."
     );
     this.onAfterSceneLoadedAndBeforeRender(data);
+
+    this.endFunc();
   }
 
   output(obj, indent = 0) {
@@ -54,27 +62,17 @@ class MyContents {
   }
 
   onAfterSceneLoadedAndBeforeRender(data) {
-    // refer to descriptors in class MySceneData.js
-    // to see the data structure for each item
+    /*   Object.keys(obj).forEach((key) => {
+        console.log(key, obj[key]);
+      }) */
 
-    this.output(data.options);
-    console.log("textures:");
-    for (var key in data.textures) {
-      let texture = data.textures[key];
-      this.output(texture, 1);
-    }
+    this.setOptions(data.options);
+    this.setFog(data.fog);
+    this.setTextures(data.textures);
+    this.setMaterials(data.materials);
+    this.setCameras(data.cameras);
 
-    console.log("materials:");
-    for (var key in data.materials) {
-      let material = data.materials[key];
-      this.output(material, 1);
-    }
-
-    console.log("cameras:");
-    for (var key in data.cameras) {
-      let camera = data.cameras[key];
-      this.output(camera, 1);
-    }
+    return;
 
     console.log("nodes:");
     for (var key in data.nodes) {
@@ -111,6 +109,121 @@ class MyContents {
   }
 
   update() {}
+
+  // ===================================== LOADERS =====================================
+
+  setTextures(textures) {
+    // ['id', 'filepath', 'type', 'custom']
+
+    let textureLoader = new THREE.TextureLoader();
+
+    for (let key in textures) {
+      let texture = textures[key];
+
+      // load texture
+      let textureObj = textureLoader.load("scenes/demo/" + texture.filepath);
+      this.textures[texture.id] = textureObj;
+    }
+  }
+
+  setMaterials(materials) {
+    for (let key in materials) {
+      let material = materials[key];
+
+      let color = material.color;
+      let emissive = material.emissive;
+      let specular = material.specular;
+
+      let materialObj = new THREE.MeshPhongMaterial({
+        color: new THREE.Color(color.r, color.g, color.b),
+        emissive: new THREE.Color(emissive.r, emissive.g, emissive.b),
+        specular: new THREE.Color(specular.r, specular.g, specular.b),
+        wireframe: material.wireframe,
+        shininess: material.shininess,
+        side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
+        flatShading: material.shading.toLowerCase() === "flat",
+        map: this.textures[material.textureref],
+        // falta texlength_s, texlength_t
+      });
+
+      this.materials[material.id] = materialObj;
+    }
+  }
+
+  setCameras(cameras) {
+    // TO DO: SET ACTIVE CAM TO: data.activeCameraId
+
+    for (let key in cameras) {
+      let camera = cameras[key];
+
+      if (camera.type == "orthogonal") {
+        this.newOrthogonalCamera(camera);
+      } else if (camera.type == "perspective") {
+        this.newPerspectiveCamera(camera);
+      } else {
+        console.log("ERROR: camera type not supported");
+      }
+    }
+  }
+
+  newOrthogonalCamera(camera) {
+    const cam = new THREE.OrthographicCamera(
+      camera.left,
+      camera.right,
+      camera.top,
+      camera.bottom,
+      camera.near,
+      camera.far
+    );
+    cam.up = new THREE.Vector3(0, 1, 0);
+    cam.position.set(...camera.location);
+    cam.lookAt(new THREE.Vector3(...camera.target));
+    this.cameras[camera.id] = cam;
+  }
+
+  newPerspectiveCamera(camera) {
+    const aspect = window.innerWidth / window.innerHeight;
+    const cam = new THREE.PerspectiveCamera(
+      camera.angle,
+      aspect,
+      camera.near,
+      camera.far
+    );
+    cam.position.set(...camera.location);
+    cam.lookAt(new THREE.Vector3(...camera.target));
+    this.cameras[camera.id] = cam;
+  }
+
+  setOptions(options) {
+    this.app.scene.background = new THREE.Color(
+      options.background.r,
+      options.background.g,
+      options.background.b
+    );
+
+    this.app.scene.add(
+      new THREE.AmbientLight(
+        options.ambient.r,
+        options.ambient.g,
+        options.ambient.b
+      )
+    );
+  }
+
+  setFog(fog) {
+    this.app.scene.fog = new THREE.Fog(
+      new THREE.Color(fog.color.r, fog.color.g, fog.color.b),
+      fog.near,
+      fog.far
+    );
+  }
+
+  endFunc() {
+    // console.log(this.textures);
+    // console.log(this.materials);
+    console.log(this.cameras);
+    // console.log(this.lights);
+  }
 }
 
 export { MyContents };
