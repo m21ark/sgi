@@ -58,22 +58,24 @@ class MyContents {
       }) */
 
     console.log(data);
-
     this.setOptions(data.options);
     this.setFog(data.fog);
     this.setTextures(data.textures);
     this.setMaterials(data.materials);
     this.setCameras(data.cameras);
 
+    // Start the traversal from the root node
+    this.traverseFromRoot(data);
+
     // TO-DO: TRAVEL THE GRAPH AND SET THE OBJECTS STARTING AT data.rootId
     // and visiting data.nodes that contain .children
-    for (let key in data.nodes) {
+    /*  for (let key in data.nodes) {
       let node = data.nodes[key];
       for (let i = 0; i < node.children.length; i++) {
         let child = node.children[i];
         if (child.type === "primitive") this.setPrimitve(child);
       }
-    }
+    } */
 
     // display objects (TO DO: to change later for groups)
     for (let key in this.objs) this.app.scene.add(this.objs[key]);
@@ -189,7 +191,7 @@ class MyContents {
     );
   }
 
-  setPrimitve(obj) {
+  setPrimitive(obj, material, texture) {
     if (obj.subtype === "nurbs") return; // TO DO
     if (!obj.loaded) return; // to do: how to deal with unloaded objects?
 
@@ -254,16 +256,49 @@ class MyContents {
       }
 
     if (geometry === null) return;
+    if (texture != null && material != null) material.map = texture;
+
+    let defaultMaterial = new THREE.MeshBasicMaterial({
+      color: Math.random() * 0xffffff,
+      wireframe: true,
+    });
 
     let mesh = new THREE.Mesh(
       geometry,
-      new THREE.MeshBasicMaterial({
-        color: Math.random() * 0xffffff,
-        wireframe: true,
-      })
+      /* material ? material : */ defaultMaterial
     );
-
     this.objs.push(mesh);
+  }
+
+  // ===================================== END LOADERS =====================================
+
+  // Define a method to traverse and inherit values
+  traverseAndInheritValues(node, parentMaterial, parentTexture) {
+    // Inherit values from the parent
+    if (node.materialIds != null)
+      if (node.materialIds.length > 0)
+        for (let i = 0; i < node.materialIds.length; i++) {
+          let material = this.materials[node.materialIds[i]];
+          if (material) parentMaterial = material;
+        }
+
+    if (node.type === "primitive")
+      this.setPrimitive(node, parentMaterial, parentTexture);
+
+    // Traverse the children recursively
+    if (node.children && node.children.length > 0)
+      for (let i = 0; i < node.children.length; i++)
+        this.traverseAndInheritValues(
+          node.children[i],
+          parentMaterial,
+          parentTexture
+        );
+  }
+
+  // Method to start traversal from the root node
+  traverseFromRoot(data) {
+    const rootNode = data.nodes[data.rootId];
+    this.traverseAndInheritValues(rootNode, null, null);
   }
 
   endFunc() {
