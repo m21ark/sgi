@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
+
 /**
  *  This class contains the contents of out application
  */
@@ -21,6 +22,7 @@ class MyContents {
     this.lights = [];
     this.textures = [];
     this.cameras = [];
+    this.objs = [];
   }
 
   /**
@@ -72,40 +74,18 @@ class MyContents {
     this.setMaterials(data.materials);
     this.setCameras(data.cameras);
 
-    return;
-
-    console.log("nodes:");
-    for (var key in data.nodes) {
+    for (let key in data.nodes) {
       let node = data.nodes[key];
-      this.output(node, 1);
+      // this.output(node, 1);
       for (let i = 0; i < node.children.length; i++) {
         let child = node.children[i];
-        if (child.type === "primitive") {
-          console.log(
-            "" +
-              new Array(2 * 4).join(" ") +
-              " - " +
-              child.type +
-              " with " +
-              child.representations.length +
-              " " +
-              child.subtype +
-              " representation(s)"
-          );
-          if (child.subtype === "nurbs") {
-            console.log(
-              "" +
-                new Array(3 * 4).join(" ") +
-                " - " +
-                child.representations[0].controlpoints.length +
-                " control points"
-            );
-          }
-        } else {
-          this.output(child, 2);
-        }
+        if (child.type === "primitive") this.setPrimitve(child);
+        // else this.output(child, 2);
       }
     }
+
+    // display objects (TO DO: to change later for groups)
+    for (let key in this.objs) this.app.scene.add(this.objs[key]);
   }
 
   update() {}
@@ -218,11 +198,88 @@ class MyContents {
     );
   }
 
+  setPrimitve(obj) {
+    if (obj.subtype === "nurbs") return; // TO DO
+    if (!obj.loaded) return; // to do: how to deal with unloaded objects?
+
+    let geometry = null;
+    let rep = obj.representations[0]; // TO DO: multiple representations
+
+    if (obj.loaded)
+      switch (obj.subtype) {
+        case "rectangle":
+          geometry = new THREE.PlaneGeometry(
+            Math.abs(rep.xy1[0] - rep.xy2[0]),
+            Math.abs(rep.xy1[1] - rep.xy2[1])
+          );
+          break;
+        case "box":
+          geometry = new THREE.BoxGeometry(
+            Math.abs(rep.xyz1[0] - rep.xyz2[0]),
+            Math.abs(rep.xyz1[1] - rep.xyz2[1]),
+            Math.abs(rep.xyz1[2] - rep.xyz2[2])
+          );
+          break;
+        case "cylinder":
+          geometry = new THREE.CylinderGeometry(
+            obj.top,
+            obj.base,
+            obj.height,
+            obj.slices,
+            obj.stacks,
+            obj.capsclose,
+            obj.thetastart,
+            obj.tethalenght
+          );
+
+          break;
+        case "triangle":
+          geometry = new THREE.Geometry();
+          geometry.vertices.push(
+            new THREE.Vector3(obj.xyz1[0], obj.xyz1[1], obj.xyz1[2])
+          );
+          geometry.vertices.push(
+            new THREE.Vector3(obj.xyz2[0], obj.xyz2[1], obj.xyz2[2])
+          );
+          geometry.vertices.push(
+            new THREE.Vector3(obj.xyz3[0], obj.xyz3[1], obj.xyz3[2])
+          );
+          geometry.faces.push(new THREE.Face3(0, 1, 2));
+          geometry.computeFaceNormals();
+          break;
+        case "sphere":
+          geometry = new THREE.SphereGeometry(
+            obj.radius,
+            obj.slices,
+            obj.stacks,
+            obj.phistart,
+            obj.philength,
+            obj.thetastart,
+            obj.thetalength
+          );
+          break;
+        default:
+          console.log("ERROR: primitive type not supported");
+      }
+
+    if (geometry === null) return;
+
+    let mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshBasicMaterial({
+        color: Math.random() * 0xffffff,
+        wireframe: true,
+      })
+    );
+
+    this.objs.push(mesh);
+  }
+
   endFunc() {
-    // console.log(this.textures);
-    // console.log(this.materials);
+    console.log(this.textures);
+    console.log(this.materials);
     console.log(this.cameras);
-    // console.log(this.lights);
+    console.log(this.objs);
   }
 }
 
