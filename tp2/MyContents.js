@@ -139,12 +139,13 @@ class MyContents {
       this.app.scene.add(this.cameras[camera.id])
     }
     this.app.activeCamera = this.cameras[activeCameraId];
-    this.app.controls = new OrbitControls(
-      this.app.activeCamera,
-      this.app.renderer.domElement
-    );
-    this.app.controls.enableZoom = true;
-    this.app.controls.update();
+    this.app.controls.object = this.cameras[activeCameraId];
+    //this.app.controls = new OrbitControls(
+    //  this.app.activeCamera,
+    //  this.app.renderer.domElement
+    //);
+    //this.app.controls.enableZoom = true;
+    //this.app.controls.update();
     //this.app.activeCameraName = activeCameraId;
     //this.app.controls == null ; ... fazer estes 2 n funciona por alguma razão ... o updateCameraIfRequired meio que faz o mesmo
   }
