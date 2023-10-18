@@ -91,7 +91,6 @@ class MyContents {
 
     for (let key in textures) {
       let texture = textures[key];
-
       // load texture
       let textureObj = textureLoader.load("scenes/demo/" + texture.filepath);
       this.textures[texture.id] = textureObj;
@@ -122,7 +121,7 @@ class MyContents {
         // falta texlength_s, texlength_t
       });
 
-      this.materials[key] = materialObj; // nesta linha
+      this.materials[key] = materialObj; 
     }
   }
 
@@ -318,6 +317,8 @@ class MyContents {
       geometry,
       material ?? defaultMaterial,
     );
+
+    mesh.applyMatrix4(obj.transformations_matrix);
     this.objs.push(mesh);
   }
 
@@ -349,28 +350,47 @@ class MyContents {
     this.lights[obj.id] = directionalLight;
   }
 
-  setMatrixTransform(obj) {
-    if (obj.transformations == undefined) return;
-    if (obj.transformations.length === 0) return;
+  setMatrixTransform(obj, father) {
+   
+    if (obj.transformations == undefined || obj.transformations.length === 0) {
+      if (father == null) {
+        obj.transformations_matrix = new THREE.Matrix4();
+        obj.transformations_matrix.identity();
+        return;
+      }
+      obj.transformations_matrix = father.transformations_matrix;
+      return;
+    };
 
-    // iterate transformations and apply them
-    for (let i = 0; i < obj.transformations.length; i++) {
+    // identity matrix  
+    let local_trans = new THREE.Matrix4();
+    local_trans.identity();
+
+    // iterate transformations and apply them .... TODO: IS THIS THE RIGHT ORDER?
+    for (let i = 0; i < obj.transformations.length - 1; i++) {
       let transf = obj.transformations[i];
 
       switch (transf.type) {
         case "T":
-          // this.objs[obj.id].translate.set(transf.translate[0],transf.translate[1] ,transf.translate[2]);
+          //console.log(transf.translate[0],transf.translate[1] ,transf.translate[2]);
+          local_trans.multiply(new THREE.Matrix4().makeTranslation(...transf.translate));
           break;
         case "R":
-          // this.objs[obj.id].rotation.set(transf.rotation[0], transf.rotation[1], transf.rotation[2]);
+          //console.log(transf.rotation[0], transf.rotation[1], transf.rotation[2]);
+          local_trans.multiply(new THREE.Matrix4().makeRotationX(transf.rotation[0]));
+          local_trans.multiply(new THREE.Matrix4().makeRotationY(transf.rotation[1]));
+          local_trans.multiply(new THREE.Matrix4().makeRotationZ(transf.rotation[2]));
           break;
         case "S":
-          // this.objs[obj.id].scale.set(transf.scale[0],transf.scale[1],transf.scale[2]);
+          //console.log(transf.scale[0],transf.scale[1],transf.scale[2]);
+          local_trans.multiply(new THREE.Matrix4().makeScale(...transf.scale));
           break;
         default:
           console.log("ERROR: transformation type not supported");
       }
     }
+
+    obj.transformations_matrix = local_trans.multiply(father.transformations_matrix);
   }
 
   setPointLight(obj) {
@@ -427,11 +447,20 @@ class MyContents {
   // Define a method to traverse and inherit values
   traverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
 
+   //if (node.transformations != null && parentNode == null) {
+   //  // make the identity matrix
+   //  let identity = new THREE.Matrix4();
+   //  identity.identity();
+   //  node.transformations_matrix = identity;    
+   //}
+
     let this_material = parentMaterial;
 
     // Inherit values from the parentº
     if (node.materialIds != null) this_material = this.materials[node.materialIds];
 
+
+    this.setMatrixTransform(node, parentNode);
     if (node.type === "primitive")
       this.setPrimitive(node, this_material, parentTexture);
 
