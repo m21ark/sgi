@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 /**
  *  This class contains the contents of out application
@@ -62,8 +63,7 @@ class MyContents {
     this.setFog(data.fog);
     this.setTextures(data.textures);
     this.setMaterials(data.materials);
-    this.setCameras(data.cameras);
-
+    this.setCameras(data.cameras, data.activeCameraId);
     // Start the traversal from the root node
     this.traverseFromRoot(data);
 
@@ -123,8 +123,7 @@ class MyContents {
     }
   }
 
-  setCameras(cameras) {
-    // TO DO: SET ACTIVE CAM TO: data.activeCameraId
+  setCameras(cameras, activeCameraId) {
 
     for (let key in cameras) {
       let camera = cameras[key];
@@ -136,7 +135,18 @@ class MyContents {
       } else {
         console.log("ERROR: camera type not supported");
       }
+
+      this.app.scene.add(this.cameras[camera.id])
     }
+    this.app.activeCamera = this.cameras[activeCameraId];
+    this.app.controls = new OrbitControls(
+      this.app.activeCamera,
+      this.app.renderer.domElement
+    );
+    this.app.controls.enableZoom = true;
+    this.app.controls.update();
+    //this.app.activeCameraName = activeCameraId;
+    //this.app.controls == null ; ... fazer estes 2 n funciona por alguma razão ... o updateCameraIfRequired meio que faz o mesmo
   }
 
   newOrthogonalCamera(camera) {
