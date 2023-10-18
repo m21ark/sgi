@@ -69,7 +69,7 @@ class MyContents {
 
 
     // Start the traversal from the root node
-    this.traverseFromRoot(data);
+    this.transverseFromRoot(data);
 
     // TO-DO: TRAVEL THE GRAPH AND SET THE OBJECTS STARTING AT data.rootId
     // and visiting data.nodes that contain .children
@@ -444,7 +444,7 @@ class MyContents {
   // ===================================== END LOADERS =====================================
 
   // Define a method to traverse and inherit values
-  traverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
+  transverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
 
     //if (node.transformations != null && parentNode == null) {
     //  // make the identity matrix
@@ -466,7 +466,7 @@ class MyContents {
     if (node.children && node.children.length > 0) {
       for (let i = 0; i < node.children.length; i++) {
 
-        node.group.add(this.traverseAndInheritValues(
+        node.group.add(this.transverseAndInheritValues(
           node.children[i],
           node,
           this_material,
@@ -481,9 +481,9 @@ class MyContents {
   }
 
   // Method to start traversal from the root node
-  traverseFromRoot(data) {
+  transverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
-    let the_big_scene = this.traverseAndInheritValues(rootNode, null, null)
+    let the_big_scene = this.transverseAndInheritValues(rootNode, null, null)
     console.log(the_big_scene);
     this.app.scene.add(the_big_scene)
   }
