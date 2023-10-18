@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-
+import { NURBSSurface } from "three/addons/curves/NURBSSurface.js";
+import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js";
+import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 /**
  *  This class contains the contents of out application
  */
@@ -45,8 +46,8 @@ class MyContents {
   onSceneLoaded(data) {
     console.info(
       "scene data loaded " +
-        data +
-        ". visit MySceneData javascript class to check contents for each data item."
+      data +
+      ". visit MySceneData javascript class to check contents for each data item."
     );
     this.onAfterSceneLoadedAndBeforeRender(data);
 
@@ -81,7 +82,7 @@ class MyContents {
     for (let key in this.objs) this.app.scene.add(this.objs[key]);
   }
 
-  update() {}
+  update() { }
 
   // ===================================== LOADERS =====================================
 
@@ -205,7 +206,6 @@ class MyContents {
   }
 
   setPrimitive(obj, material, texture) {
-    if (obj.subtype === "nurbs") return; // TO DO
     if (!obj.loaded) return; // to do: how to deal with unloaded objects?
 
     let geometry = null;
@@ -265,18 +265,38 @@ class MyContents {
           );
           break;
         case "nurbs":
-          // TO-DO impelment
-          /*
-          {name: "degree_u", type: "integer"},
-			    {name: "degree_v", type: "integer"},
-          {name: "parts_u", type: "integer"},
-          {name: "parts_v", type: "integer"},
-          */
+          let degree_u = obj.representations[0].degree_u;
+          let degree_v = obj.representations[0].degree_v;
+          let parts_u = obj.representations[0].parts_u;
+          let parts_v = obj.representations[0].parts_v;
+
+
+          let controlpoints = obj.representations[0].controlpoints;
+          let controlpoints_cleaned = [];
+
+
+          for (let u = 0; u <= degree_u; u++) {
+            let u_l = []
+            for (let v = 0; v <= degree_v; v++) {
+
+              u_l.push([controlpoints[u * (degree_v + 1) + v].xx,
+              controlpoints[u * (degree_v + 1) + v].yy,
+              controlpoints[u * (degree_v + 1) + v].zz, 1])
+            }
+            controlpoints_cleaned.push(u_l);
+          }
+
+
+          let builder = new MyNurbsBuilder();
+
+          geometry = builder.build(controlpoints_cleaned, degree_u, degree_v, parts_u, parts_v, material);
+
+
           break;
         case "controlpoint":
           // TO-DO impelment
           /*
-          	{name: "xx", type: "float"},
+            {name: "xx", type: "float"},
             {name: "yy", type: "float"},
             {name: "zz", type: "float"},
           */
