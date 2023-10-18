@@ -14,13 +14,13 @@
             near="0.1"
             far="1000"
             location="15 15 15"
-            target="0 0.0 0" />
+            target="0 0 0" />
 
         <orthogonal id="cam2"
             near="0.1"
             far="1000"
-            location="0 15 15"
-            target="0.0 15 0.0"
+            location="0 15 0"
+            target="0 0 0"
             left="-5"
             right="5"
             bottom="-5"
