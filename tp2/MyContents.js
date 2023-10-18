@@ -114,8 +114,11 @@ class MyContents {
         wireframe: material.wireframe,
         shininess: material.shininess,
         side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
-        flatShading: material.shading.toLowerCase() === "flat",
-        map: this.textures[material.textureref],
+        flatShading: material.shading.toLowerCase() === "flat", // ver melhor isto
+        map:
+          material.textureref != null
+            ? this.textures[material.textureref]
+            : null,
         // falta texlength_s, texlength_t
       });
 
@@ -124,7 +127,6 @@ class MyContents {
   }
 
   setCameras(cameras, activeCameraId) {
-
     for (let key in cameras) {
       let camera = cameras[key];
 
@@ -136,7 +138,7 @@ class MyContents {
         console.log("ERROR: camera type not supported");
       }
 
-      this.app.scene.add(this.cameras[camera.id])
+      this.app.scene.add(this.cameras[camera.id]);
     }
     this.app.activeCamera = this.cameras[activeCameraId];
     this.app.controls.object = this.cameras[activeCameraId];
@@ -214,7 +216,7 @@ class MyContents {
         case "rectangle":
           geometry = new THREE.PlaneGeometry(
             Math.abs(rep.xy1[0] - rep.xy2[0]),
-            Math.abs(rep.xy1[1] - rep.xy2[1])
+            Math.abs(rep.xy1[1] - rep.xy2[1]) // TO-DO waht is parts_x and parts_y?
           );
           break;
         case "box":
@@ -261,6 +263,35 @@ class MyContents {
             obj.thetastart,
             obj.thetalength
           );
+          break;
+        case "nurbs":
+          // TO-DO impelment
+          /*
+          {name: "degree_u", type: "integer"},
+			    {name: "degree_v", type: "integer"},
+          {name: "parts_u", type: "integer"},
+          {name: "parts_v", type: "integer"},
+          */
+          break;
+        case "controlpoint":
+          // TO-DO impelment
+          /*
+          	{name: "xx", type: "float"},
+            {name: "yy", type: "float"},
+            {name: "zz", type: "float"},
+          */
+          break;
+
+        case "spotlight":
+          // TO-DO impelment
+          break;
+
+        case "pointlight":
+          // TO-DO impelment
+          break;
+
+        case "directionallight":
+          // TO-DO impelment
           break;
         default:
           console.log("ERROR: primitive type not supported");
