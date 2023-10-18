@@ -23,6 +23,7 @@ class MyContents {
     this.textures = [];
     this.cameras = [];
     this.objs = [];
+    this.groups = [];
   }
 
   /**
@@ -66,7 +67,7 @@ class MyContents {
 
     // add a light to the scene
     this.app.scene.add(new THREE.AmbientLight(0x404040));
-    
+
 
     // Start the traversal from the root node
     this.traverseFromRoot(data);
@@ -82,7 +83,7 @@ class MyContents {
     } */
 
     // display objects (TO DO: to change later for groups)
-    for (let key in this.objs) this.app.scene.add(this.objs[key]);
+    // for (let key in this.objs) this.app.scene.add(this.objs[key]);
   }
 
   update() { }
@@ -126,7 +127,7 @@ class MyContents {
         // falta texlength_s, texlength_t
       });
 
-      this.materials[key] = materialObj; 
+      this.materials[key] = materialObj;
     }
   }
 
@@ -323,8 +324,9 @@ class MyContents {
       material ?? defaultMaterial,
     );
 
-    mesh.applyMatrix4(obj.transformations_matrix);
-    this.objs.push(mesh);
+    //mesh.applyMatrix4(obj.transformations_matrix);
+    return mesh;
+    //this.objs.push(mesh);
   }
 
   setDirectionalLight(obj) {
@@ -359,52 +361,45 @@ class MyContents {
     return angle * (Math.PI / 180);
   }
 
+  toRadians_3dVector(Vector3) {
+    return new THREE.Vector3(this.toRadians(Vector3[0]),
+      this.toRadians(Vector3[1]),
+      this.toRadians(Vector3[2]));
+  }
+
   setMatrixTransform(obj, father) {
-   
-    if (obj.transformations == undefined || obj.transformations.length === 0) {
-      if (father == null) {
-        obj.transformations_matrix = new THREE.Matrix4();
-        obj.transformations_matrix.identity();
-        return;
-      }
-      obj.transformations_matrix = father.transformations_matrix;
+
+    if (father == null) {
+      //obj.group.matrix = new THREE.Matrix4().identity();
       return;
-    };
+    }
+    //obj.group.matrix = father.group.matrix;
 
-    // identity matrix  
-    let local_trans = new THREE.Matrix4();
-    local_trans.identity();
-
+    if (obj.transformations == null) return;
     // iterate transformations and apply them .... TODO: IS THIS THE RIGHT ORDER?
-    for (let i = obj.transformations.length - 1; i >= 0 ; i--) {
+    for (let i = 0; i < obj.transformations.length; i++) {
       let transf = obj.transformations[i];
-      // if i is the last transformation, then apply the inverse of that transformation
-      
-      let to_mult;
+
       switch (transf.type) {
         case "T":
-          to_mult = new THREE.Matrix4().makeTranslation(...transf.translate);
+          obj.group.position.set(...transf.translate);
           break;
         case "R":
-
-          to_mult = new THREE.Matrix4().makeRotationX(this.toRadians(transf.rotation[0]));
-          to_mult = to_mult.multiply(new THREE.Matrix4().makeRotationY(this.toRadians(transf.rotation[1])));
-          to_mult = to_mult.multiply(new THREE.Matrix4().makeRotationZ(this.toRadians(transf.rotation[2])));
-
+          
+          console.log(transf);
+          console.log(this.toRadians_3dVector(transf.rotation));
+          obj.group.rotation.set(...this.toRadians_3dVector(transf.rotation));
           break;
-        case "S":
-          to_mult =  new THREE.Matrix4().makeScale(...transf.scale);
+          case "S":
+          obj.group.scale.set(...transf.scale);
           break;
         default:
           console.log("ERROR: transformation type not supported");
       }
-      if (i == obj.transformations.length - 1) {
-        to_mult = to_mult.invert();
-      }
-      local_trans.multiply(to_mult);
+
     }
 
-    obj.transformations_matrix = local_trans.multiply(father.transformations_matrix);
+
   }
 
   setPointLight(obj) {
@@ -461,60 +456,44 @@ class MyContents {
   // Define a method to traverse and inherit values
   traverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
 
-   //if (node.transformations != null && parentNode == null) {
-   //  // make the identity matrix
-   //  let identity = new THREE.Matrix4();
-   //  identity.identity();
-   //  node.transformations_matrix = identity;    
-   //}
-
+    //if (node.transformations != null && parentNode == null) {
+    //  // make the identity matrix
+    //  let identity = new THREE.Matrix4();
+    //  identity.identity();
+    //  node.transformations_matrix = identity;    
+    //}
+    node.group = new THREE.Group();
     let this_material = parentMaterial;
 
     // Inherit values from the parentº
-    if (node.materialIds != null ) this_material = this.materials[node.materialIds];
+    if (node.materialIds != null) this_material = this.materials[node.materialIds];
 
     this.setMatrixTransform(node, parentNode);
     if (node.type === "primitive")
-      this.setPrimitive(node, this_material, parentTexture);
+      return this.setPrimitive(node, this_material, parentTexture);
 
     // Traverse the children recursively
-    if (node.children && node.children.length > 0)
-      for (let i = 0; i < node.children.length; i++)
-        this.traverseAndInheritValues(
+    if (node.children && node.children.length > 0) {
+      for (let i = 0; i < node.children.length; i++) {
+
+        node.group.add(this.traverseAndInheritValues(
           node.children[i],
           node,
           this_material,
           parentTexture
-        );
+        )); // TODO: change
+      }
+    }
 
+    //console.log(node.group);
 
-    // if (node.materialIds != null)
-
-    //   if (node.materialIds.length > 0)
-    //     for (let i = 0; i < node.materialIds.length; i++) {
-    //       let material = this.materials[node.materialIds[i]];
-    //       if (material) parentMaterial = material;
-    //     }
-
-    // this.setMatrixTransform(node);
-
-    // if (node.type === "primitive")
-    //   this.setPrimitive(node, parentMaterial, parentTexture);
-
-    // // Traverse the children recursively
-    // if (node.children && node.children.length > 0)
-    //   for (let i = 0; i < node.children.length; i++)
-    //     this.traverseAndInheritValues(
-    //       node.children[i],
-    //       parentMaterial,
-    //       parentTexture
-    //     );
+    return node.group;
   }
 
   // Method to start traversal from the root node
   traverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
-    this.traverseAndInheritValues(rootNode, null, null);
+    this.app.scene.add(this.traverseAndInheritValues(rootNode, null, null))
   }
 
   endFunc() {
