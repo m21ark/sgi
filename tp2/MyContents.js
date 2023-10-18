@@ -1,8 +1,6 @@
 import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
-import { NURBSSurface } from "three/addons/curves/NURBSSurface.js";
-import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 /**
  *  This class contains the contents of out application
@@ -102,6 +100,7 @@ class MyContents {
 
   setMaterials(materials) {
     for (let key in materials) {
+
       let material = materials[key];
 
       let color = material.color;
@@ -123,7 +122,7 @@ class MyContents {
         // falta texlength_s, texlength_t
       });
 
-      this.materials[material.id] = materialObj;
+      this.materials[key] = materialObj; // nesta linha
     }
   }
 
@@ -205,7 +204,7 @@ class MyContents {
     );
   }
 
-  setPrimitive(obj, material, texture) {
+  setPrimitive(obj, material, texture, father) {
     if (!obj.loaded) return; // to do: how to deal with unloaded objects?
 
     let geometry = null;
@@ -289,17 +288,9 @@ class MyContents {
 
           let builder = new MyNurbsBuilder();
 
-          geometry = builder.build(controlpoints_cleaned, degree_u, degree_v, parts_u, parts_v, material);
+          geometry = builder.build(controlpoints_cleaned, degree_u, degree_v, parts_u, parts_v);
 
 
-          break;
-        case "controlpoint":
-          // TO-DO impelment
-          /*
-            {name: "xx", type: "float"},
-            {name: "yy", type: "float"},
-            {name: "zz", type: "float"},
-          */
           break;
 
         case "spotlight":
@@ -325,7 +316,7 @@ class MyContents {
 
     let mesh = new THREE.Mesh(
       geometry,
-      /* material ? material : */ defaultMaterial
+      material ?? defaultMaterial,
     );
     this.objs.push(mesh);
   }
@@ -434,28 +425,48 @@ class MyContents {
   // ===================================== END LOADERS =====================================
 
   // Define a method to traverse and inherit values
-  traverseAndInheritValues(node, parentMaterial, parentTexture) {
-    // Inherit values from the parent
-    if (node.materialIds != null)
-      if (node.materialIds.length > 0)
-        for (let i = 0; i < node.materialIds.length; i++) {
-          let material = this.materials[node.materialIds[i]];
-          if (material) parentMaterial = material;
-        }
+  traverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
 
-    this.setMatrixTransform(node);
+    let this_material = parentMaterial;
+
+    // Inherit values from the parentº
+    if (node.materialIds != null) this_material = this.materials[node.materialIds];
 
     if (node.type === "primitive")
-      this.setPrimitive(node, parentMaterial, parentTexture);
+      this.setPrimitive(node, this_material, parentTexture);
 
     // Traverse the children recursively
     if (node.children && node.children.length > 0)
       for (let i = 0; i < node.children.length; i++)
         this.traverseAndInheritValues(
           node.children[i],
-          parentMaterial,
+          node,
+          this_material,
           parentTexture
         );
+
+
+    // if (node.materialIds != null)
+
+    //   if (node.materialIds.length > 0)
+    //     for (let i = 0; i < node.materialIds.length; i++) {
+    //       let material = this.materials[node.materialIds[i]];
+    //       if (material) parentMaterial = material;
+    //     }
+
+    // this.setMatrixTransform(node);
+
+    // if (node.type === "primitive")
+    //   this.setPrimitive(node, parentMaterial, parentTexture);
+
+    // // Traverse the children recursively
+    // if (node.children && node.children.length > 0)
+    //   for (let i = 0; i < node.children.length; i++)
+    //     this.traverseAndInheritValues(
+    //       node.children[i],
+    //       parentMaterial,
+    //       parentTexture
+    //     );
   }
 
   // Method to start traversal from the root node

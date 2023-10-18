@@ -4,7 +4,7 @@ import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.j
 
 export class MyNurbsBuilder extends THREE.Object3D {
 
-    build(controlPoints, degree1, degree2, samples1, samples2, material) {
+    build(controlPoints, degree1, degree2, samples1, samples2) {
         const knots1 = [];
         const knots2 = [];
 
