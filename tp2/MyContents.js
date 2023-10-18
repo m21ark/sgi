@@ -282,15 +282,13 @@ class MyContents {
           break;
 
         case "spotlight":
-          // TO-DO impelment
+          this.setSpotlight(obj);
           break;
-
         case "pointlight":
-          // TO-DO impelment
+          this.setPointLight(obj);
           break;
-
         case "directionallight":
-          // TO-DO impelment
+          this.setDirectionalLight(obj);
           break;
         default:
           console.log("ERROR: primitive type not supported");
@@ -309,6 +307,83 @@ class MyContents {
       /* material ? material : */ defaultMaterial
     );
     this.objs.push(mesh);
+  }
+
+  setDirectionalLight(obj) {
+    // creation
+    let directionalLight = new THREE.DirectionalLight(
+      THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      obj.intensity
+    );
+
+    if (!obj.enabled) directionalLight.intensity = 0;
+
+    // position and target
+    directionalLight.position.set(...obj.position);
+    // directionalLight.target.position.set(...obj.target);
+    // VER COMO FAZER TARGET? TALVEZ SEJA O PAI
+
+    //shadows
+    directionalLight.castShadow = obj.castshadow;
+    directionalLight.shadow.mapSize.width = obj.shadowmapsize;
+    directionalLight.shadow.mapSize.height = obj.shadowmapsize;
+    directionalLight.shadow.camera.far = obj.shadowfar;
+
+    directionalLight.shadow.camera.left = obj.shadowleft;
+    directionalLight.shadow.camera.right = obj.shadowright;
+    directionalLight.shadow.camera.top = obj.shadowtop;
+    directionalLight.shadow.camera.bottom = obj.shadowbottom;
+
+    this.lights[obj.id] = directionalLight;
+  }
+
+  setPointLight(obj) {
+    // creation
+    let pointLight = new THREE.PointLight(
+      THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      obj.intensity,
+      obj.distance,
+      obj.decay
+    );
+
+    if (!obj.enabled) pointLight.intensity = 0;
+
+    // position
+    pointLight.position.set(...obj.location);
+
+    //shadows
+    pointLight.castShadow = obj.castshadow;
+    pointLight.shadow.mapSize.width = obj.shadowmapsize;
+    pointLight.shadow.mapSize.height = obj.shadowmapsize;
+    pointLight.shadow.camera.far = obj.shadowfar;
+
+    this.lights[obj.id] = pointLight;
+  }
+
+  setSpotlight(obj) {
+    // creation
+    let spotLight = new THREE.SpotLight(
+      THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      obj.intensity,
+      obj.distance,
+      obj.angle,
+      obj.penumbra,
+      obj.decay
+    );
+
+    if (!obj.enabled) spotLight.intensity = 0;
+
+    // position and target
+    spotLight.position.set(...obj.location);
+    spotLight.target.position.set(...obj.target);
+
+    //shadows
+    spotLight.castShadow = obj.castshadow;
+    spotLight.shadow.mapSize.width = obj.shadowmapsize;
+    spotLight.shadow.mapSize.height = obj.shadowmapsize;
+    spotLight.shadow.camera.far = obj.shadowfar;
+
+    this.lights[obj.id] = spotLight;
   }
 
   // ===================================== END LOADERS =====================================
