@@ -23,7 +23,6 @@ class MyContents {
     this.textures = [];
     this.cameras = [];
     this.objs = [];
-    this.groups = [];
   }
 
   /**
@@ -324,9 +323,7 @@ class MyContents {
       material ?? defaultMaterial,
     );
 
-    //mesh.applyMatrix4(obj.transformations_matrix);
     return mesh;
-    //this.objs.push(mesh);
   }
 
   setDirectionalLight(obj) {
@@ -367,13 +364,11 @@ class MyContents {
       this.toRadians(Vector3[2]));
   }
 
-  setMatrixTransform(obj, father) {
+  sum_position(vec1, vec2) {
+    return new THREE.Vector3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
+  }
 
-    if (father == null) {
-      //obj.group.matrix = new THREE.Matrix4().identity();
-      return;
-    }
-    //obj.group.matrix = father.group.matrix;
+  setMatrixTransform(obj) {
 
     if (obj.transformations == null) return;
     // iterate transformations and apply them .... TODO: IS THIS THE RIGHT ORDER?
@@ -382,23 +377,18 @@ class MyContents {
 
       switch (transf.type) {
         case "T":
-          obj.group.position.set(...transf.translate);
+          obj.group.position.set(...this.sum_position(obj.group.position, new THREE.Vector3(...transf.translate)));
           break;
         case "R":
-          
-          console.log(transf);
-          console.log(this.toRadians_3dVector(transf.rotation));
           obj.group.rotation.set(...this.toRadians_3dVector(transf.rotation));
           break;
-          case "S":
+        case "S":
           obj.group.scale.set(...transf.scale);
           break;
         default:
           console.log("ERROR: transformation type not supported");
       }
-
     }
-
 
   }
 
@@ -468,7 +458,7 @@ class MyContents {
     // Inherit values from the parentº
     if (node.materialIds != null) this_material = this.materials[node.materialIds];
 
-    this.setMatrixTransform(node, parentNode);
+    this.setMatrixTransform(node);
     if (node.type === "primitive")
       return this.setPrimitive(node, this_material, parentTexture);
 
@@ -493,7 +483,9 @@ class MyContents {
   // Method to start traversal from the root node
   traverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
-    this.app.scene.add(this.traverseAndInheritValues(rootNode, null, null))
+    let the_big_scene = this.traverseAndInheritValues(rootNode, null, null)
+    console.log(the_big_scene);
+    this.app.scene.add(the_big_scene)
   }
 
   endFunc() {
