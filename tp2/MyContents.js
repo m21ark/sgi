@@ -63,6 +63,11 @@ class MyContents {
     this.setTextures(data.textures);
     this.setMaterials(data.materials);
     this.setCameras(data.cameras, data.activeCameraId);
+
+    // add a light to the scene
+    this.app.scene.add(new THREE.AmbientLight(0x404040));
+    
+
     // Start the traversal from the root node
     this.traverseFromRoot(data);
 
@@ -309,7 +314,7 @@ class MyContents {
     if (texture != null && material != null) material.map = texture;
 
     let defaultMaterial = new THREE.MeshBasicMaterial({
-      color: Math.random() * 0xffffff,
+      color: 0xffffff,
       wireframe: true,
     });
 
@@ -350,6 +355,10 @@ class MyContents {
     this.lights[obj.id] = directionalLight;
   }
 
+  toRadians(angle) {
+    return angle * (Math.PI / 180);
+  }
+
   setMatrixTransform(obj, father) {
    
     if (obj.transformations == undefined || obj.transformations.length === 0) {
@@ -367,22 +376,19 @@ class MyContents {
     local_trans.identity();
 
     // iterate transformations and apply them .... TODO: IS THIS THE RIGHT ORDER?
-    for (let i = 0; i < obj.transformations.length - 1; i++) {
+    for (let i = 0; i < obj.transformations.length; i++) {
       let transf = obj.transformations[i];
 
       switch (transf.type) {
         case "T":
-          //console.log(transf.translate[0],transf.translate[1] ,transf.translate[2]);
           local_trans.multiply(new THREE.Matrix4().makeTranslation(...transf.translate));
           break;
         case "R":
-          //console.log(transf.rotation[0], transf.rotation[1], transf.rotation[2]);
-          local_trans.multiply(new THREE.Matrix4().makeRotationX(transf.rotation[0]));
-          local_trans.multiply(new THREE.Matrix4().makeRotationY(transf.rotation[1]));
-          local_trans.multiply(new THREE.Matrix4().makeRotationZ(transf.rotation[2]));
+          local_trans.multiply(new THREE.Matrix4().makeRotationX(this.toRadians(transf.rotation[0])));
+          local_trans.multiply(new THREE.Matrix4().makeRotationY(this.toRadians(transf.rotation[1])));
+          local_trans.multiply(new THREE.Matrix4().makeRotationZ(this.toRadians(transf.rotation[2])));
           break;
         case "S":
-          //console.log(transf.scale[0],transf.scale[1],transf.scale[2]);
           local_trans.multiply(new THREE.Matrix4().makeScale(...transf.scale));
           break;
         default:
@@ -457,8 +463,7 @@ class MyContents {
     let this_material = parentMaterial;
 
     // Inherit values from the parentº
-    if (node.materialIds != null) this_material = this.materials[node.materialIds];
-
+    if (node.materialIds != null ) this_material = this.materials[node.materialIds];
 
     this.setMatrixTransform(node, parentNode);
     if (node.type === "primitive")
