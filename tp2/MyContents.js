@@ -203,7 +203,7 @@ class MyContents {
     );
   }
 
-  setPrimitive(obj, material, texture) {
+  setPrimitive(obj, material, texture, matrixTransform = null) {
     if (obj.subtype === "nurbs") return; // TO DO
     if (!obj.loaded) return; // to do: how to deal with unloaded objects?
 
@@ -337,6 +337,30 @@ class MyContents {
     this.lights[obj.id] = directionalLight;
   }
 
+  setMatrixTransform(obj) {
+    if (obj.transformations == undefined) return;
+    if (obj.transformations.length === 0) return;
+
+    // iterate transformations and apply them
+    for (let i = 0; i < obj.transformations.length; i++) {
+      let transf = obj.transformations[i];
+
+      switch (transf.type) {
+        case "T":
+          // this.objs[obj.id].translate.set(transf.translate[0],transf.translate[1] ,transf.translate[2]);
+          break;
+        case "R":
+          // this.objs[obj.id].rotation.set(transf.rotation[0], transf.rotation[1], transf.rotation[2]);
+          break;
+        case "S":
+          // this.objs[obj.id].scale.set(transf.scale[0],transf.scale[1],transf.scale[2]);
+          break;
+        default:
+          console.log("ERROR: transformation type not supported");
+      }
+    }
+  }
+
   setPointLight(obj) {
     // creation
     let pointLight = new THREE.PointLight(
@@ -397,6 +421,8 @@ class MyContents {
           let material = this.materials[node.materialIds[i]];
           if (material) parentMaterial = material;
         }
+
+    this.setMatrixTransform(node);
 
     if (node.type === "primitive")
       this.setPrimitive(node, parentMaterial, parentTexture);
