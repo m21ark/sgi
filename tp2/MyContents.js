@@ -376,24 +376,32 @@ class MyContents {
     local_trans.identity();
 
     // iterate transformations and apply them .... TODO: IS THIS THE RIGHT ORDER?
-    for (let i = 0; i < obj.transformations.length; i++) {
+    for (let i = obj.transformations.length - 1; i >= 0 ; i--) {
       let transf = obj.transformations[i];
-
+      // if i is the last transformation, then apply the inverse of that transformation
+      
+      let to_mult;
       switch (transf.type) {
         case "T":
-          local_trans.multiply(new THREE.Matrix4().makeTranslation(...transf.translate));
+          to_mult = new THREE.Matrix4().makeTranslation(...transf.translate);
           break;
         case "R":
-          local_trans.multiply(new THREE.Matrix4().makeRotationX(this.toRadians(transf.rotation[0])));
-          local_trans.multiply(new THREE.Matrix4().makeRotationY(this.toRadians(transf.rotation[1])));
-          local_trans.multiply(new THREE.Matrix4().makeRotationZ(this.toRadians(transf.rotation[2])));
+
+          to_mult = new THREE.Matrix4().makeRotationX(this.toRadians(transf.rotation[0]));
+          to_mult = to_mult.multiply(new THREE.Matrix4().makeRotationY(this.toRadians(transf.rotation[1])));
+          to_mult = to_mult.multiply(new THREE.Matrix4().makeRotationZ(this.toRadians(transf.rotation[2])));
+
           break;
         case "S":
-          local_trans.multiply(new THREE.Matrix4().makeScale(...transf.scale));
+          to_mult =  new THREE.Matrix4().makeScale(...transf.scale);
           break;
         default:
           console.log("ERROR: transformation type not supported");
       }
+      if (i == obj.transformations.length - 1) {
+        to_mult = to_mult.invert();
+      }
+      local_trans.multiply(to_mult);
     }
 
     obj.transformations_matrix = local_trans.multiply(father.transformations_matrix);
