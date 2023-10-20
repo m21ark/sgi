@@ -429,18 +429,19 @@ class MyContents {
 
   // ===================================== END LOADERS =====================================
 
-  transverseAndInheritValues(
-    node,
-    parentNode,
-    currentMaterial = null,
-    currentTexture = null
-  ) {
+  transverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
     // recursive function to transverse the scene graph and create the objects
     // a node is checked if it is a leaf node, aka if it has a primitive
     // if it is a leaf node, a primitive is created and added to the scene
     // if it is not a leaf node, the function is called again for each child node
     // while going down, the transformations are applied to the object
     // while going up, the material and texture are inherited from the parent node if they are not defined in the current node
+
+    let this_material = parentMaterial;
+
+    // Inherit values from the parent
+    if (node.materialIds != null)
+      this_material = this.materials[node.materialIds];
 
     // set transformations
     this.setMatrixTransform(node);
@@ -449,8 +450,8 @@ class MyContents {
     if (node.type === "primitive") {
       let primitiveMesh = this.setPrimitive(
         node,
-        currentMaterial,
-        currentTexture,
+        this_material,
+        parentTexture,
         parentNode
       );
       parentNode.add(primitiveMesh);
@@ -461,14 +462,6 @@ class MyContents {
     if (node.children == null) return;
 
     node.children.forEach((child) => {
-      // inherit material and texture from parent if not defined
-      let childMaterial = child.materialref
-        ? this.materials[child.materialref]
-        : currentMaterial;
-      let childTexture = child.textureref
-        ? this.textures[child.textureref]
-        : currentTexture;
-
       // create and set group
       let group = new THREE.Group();
       parentNode.add(group);
@@ -478,8 +471,8 @@ class MyContents {
       this.transverseAndInheritValues(
         child,
         group,
-        childMaterial,
-        childTexture
+        this_material,
+        parentTexture
       );
     });
   }
