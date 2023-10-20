@@ -429,49 +429,67 @@ class MyContents {
 
   // ===================================== END LOADERS =====================================
 
-  // Define a method to traverse and inherit values
-  transverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
-    //if (node.transformations != null && parentNode == null) {
-    //  // make the identity matrix
-    //  let identity = new THREE.Matrix4();
-    //  identity.identity();
-    //  node.transformations_matrix = identity;
-    //}
-    node.group = new THREE.Group();
-    let this_material = parentMaterial;
+  transverseAndInheritValues(
+    node,
+    parentNode,
+    currentMaterial = null,
+    currentTexture = null
+  ) {
+    // recursive function to transverse the scene graph and create the objects
+    // a node is checked if it is a leaf node, aka if it has a primitive
+    // if it is a leaf node, a primitive is created and added to the scene
+    // if it is not a leaf node, the function is called again for each child node
+    // while going down, the transformations are applied to the object
+    // while going up, the material and texture are inherited from the parent node if they are not defined in the current node
 
-    // Inherit values from the parentº
-    if (node.materialIds != null)
-      this_material = this.materials[node.materialIds];
-
+    // set transformations
     this.setMatrixTransform(node);
-    if (node.type === "primitive")
-      return this.setPrimitive(node, this_material, parentTexture);
 
-    // Traverse the children recursively
-    if (node.children && node.children.length > 0) {
-      for (let i = 0; i < node.children.length; i++) {
-        node.group.add(
-          this.transverseAndInheritValues(
-            node.children[i],
-            node,
-            this_material,
-            parentTexture
-          )
-        ); // TODO: change
-      }
+    // check if leaf node and create primitive if it is, breaking the recursion
+    if (node.type === "primitive") {
+      let primitiveMesh = this.setPrimitive(
+        node,
+        currentMaterial,
+        currentTexture,
+        parentNode
+      );
+      parentNode.add(primitiveMesh);
+      return;
     }
 
-    //console.log(node.group);
+    // go down the tree if node has children
+    if (node.children == null) return;
 
-    return node.group;
+    node.children.forEach((child) => {
+      // inherit material and texture from parent if not defined
+      let childMaterial = child.materialref
+        ? this.materials[child.materialref]
+        : currentMaterial;
+      let childTexture = child.textureref
+        ? this.textures[child.textureref]
+        : currentTexture;
+
+      // create and set group
+      let group = new THREE.Group();
+      parentNode.add(group);
+      child.group = group;
+
+      // recursive call
+      this.transverseAndInheritValues(
+        child,
+        group,
+        childMaterial,
+        childTexture
+      );
+    });
   }
 
   // Method to start traversal from the root node
   transverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
-    let x = this.transverseAndInheritValues(rootNode, null, null);
-    this.app.scene.add(x);
+    this.rootScene = new THREE.Group();
+    this.transverseAndInheritValues(rootNode, this.rootScene);
+    this.app.scene.add(this.rootScene);
   }
 
   endFunc() {
@@ -479,6 +497,7 @@ class MyContents {
     // console.log(this.materials);
     // console.log(this.cameras);
     // console.log(this.objs);
+    console.log(this.app.scene);
   }
 }
 
