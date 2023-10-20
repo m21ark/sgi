@@ -493,7 +493,7 @@ class MyContents {
     let this_material = parentMaterial;
 
     // Inherit values from the parent
-    if (node.materialIds != null)
+    if (Array.isArray(node.materialIds) && node.materialIds.length)
       this_material = this.materials[node.materialIds];
 
     // set transformations
