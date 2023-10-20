@@ -201,12 +201,26 @@ class MyContents {
             Math.abs(rep.xy1[0] - rep.xy2[0]),
             Math.abs(rep.xy1[1] - rep.xy2[1]) // TO-DO waht is parts_x and parts_y?
           );
+
+          // ofsset the plane so that it is centered on the origin
+          geometry.translate(
+            (rep.xy1[0] + rep.xy2[0]) / 2,
+            (rep.xy1[1] + rep.xy2[1]) / 2,
+            0
+          );
           break;
         case "box":
           geometry = new THREE.BoxGeometry(
             Math.abs(rep.xyz1[0] - rep.xyz2[0]),
             Math.abs(rep.xyz1[1] - rep.xyz2[1]),
             Math.abs(rep.xyz1[2] - rep.xyz2[2])
+          );
+
+          // ofsset the box so that it is centered on the origin
+          geometry.translate(
+            (rep.xyz1[0] + rep.xyz2[0]) / 2,
+            (rep.xyz1[1] + rep.xyz2[1]) / 2,
+            (rep.xyz1[2] + rep.xyz2[2]) / 2
           );
           break;
         case "cylinder":
@@ -352,30 +366,68 @@ class MyContents {
   }
 
   setMatrixTransform(obj) {
-    if (obj.transformations == null) return;
-    // iterate transformations and apply them .... TODO: IS THIS THE RIGHT ORDER?
+    if (obj.group == null || obj.transformations == null) {
+      return;
+    }
+
+    // Initialize arrays for translation, rotation, and scale matrices
+    const translationMatrices = [];
+    const rotationMatrices = [];
+    const scaleMatrices = [];
+
     for (let i = 0; i < obj.transformations.length; i++) {
       let transf = obj.transformations[i];
 
       switch (transf.type) {
         case "T":
-          obj.group.position.set(
-            ...this.sum_position(
-              obj.group.position,
-              new THREE.Vector3(...transf.translate)
-            )
+          const translation = new THREE.Vector3(...transf.translate);
+          const translationMatrix = new THREE.Matrix4().makeTranslation(
+            translation.x,
+            translation.y,
+            translation.z
           );
+          translationMatrices.push(translationMatrix);
           break;
         case "R":
-          obj.group.rotation.set(...this.toRadians_3dVector(transf.rotation));
+          const rotation = new THREE.Euler().setFromVector3(
+            new THREE.Vector3(...this.toRadians_3dVector(transf.rotation))
+          );
+          const rotationMatrix = new THREE.Matrix4().makeRotationFromEuler(
+            rotation
+          );
+          rotationMatrices.push(rotationMatrix);
           break;
         case "S":
-          obj.group.scale.set(...transf.scale);
+          const scale = new THREE.Vector3(...transf.scale);
+          const scaleMatrix = new THREE.Matrix4().makeScale(
+            scale.x,
+            scale.y,
+            scale.z
+          );
+          scaleMatrices.push(scaleMatrix);
           break;
         default:
-          console.log("ERROR: transformation type not supported");
+          console.log("ERROR: Transformation type not supported");
       }
     }
+
+    // Combine the accumulated transformation matrices for each type
+    const transformationMatrix = new THREE.Matrix4();
+
+    translationMatrices.forEach((translationMatrix) => {
+      transformationMatrix.multiply(translationMatrix);
+    });
+
+    rotationMatrices.forEach((rotationMatrix) => {
+      transformationMatrix.multiply(rotationMatrix);
+    });
+
+    scaleMatrices.forEach((scaleMatrix) => {
+      transformationMatrix.multiply(scaleMatrix);
+    });
+
+    // Apply the accumulated transformation to each child object in the group
+    obj.group.applyMatrix4(transformationMatrix);
   }
 
   setPointLight(obj) {
