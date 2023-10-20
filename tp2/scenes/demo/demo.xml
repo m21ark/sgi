@@ -134,7 +134,7 @@
 
     <graph rootid="scene">
 
-        <node id="scene">
+        <node id="scene">z
             <children>
                 <noderef id="leftWall" />
                 <noderef id="rightWall" />

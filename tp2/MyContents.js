@@ -225,16 +225,17 @@ class MyContents {
           break;
         case "cylinder":
           geometry = new THREE.CylinderGeometry(
-            obj.top,
-            obj.base,
-            obj.height,
-            obj.slices,
-            obj.stacks,
-            obj.capsclose,
-            obj.thetastart,
-            obj.tethalenght
+            rep.top,
+            rep.base,
+            rep.height,
+            rep.slices,
+            rep.stacks,
+            rep.capsclose,
+            rep.thetastart,
+            rep.tethalenght
           );
 
+        
           break;
         case "triangle":
           geometry = new THREE.Geometry();
