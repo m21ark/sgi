@@ -44,8 +44,8 @@ class MyContents {
   onSceneLoaded(data) {
     console.info(
       "scene data loaded " +
-      data +
-      ". visit MySceneData javascript class to check contents for each data item."
+        data +
+        ". visit MySceneData javascript class to check contents for each data item."
     );
     this.onAfterSceneLoadedAndBeforeRender(data);
 
@@ -64,28 +64,11 @@ class MyContents {
     this.setMaterials(data.materials);
     this.setCameras(data.cameras, data.activeCameraId);
 
-    // add a light to the scene
-    this.app.scene.add(new THREE.AmbientLight(0x404040));
-
-
     // Start the traversal from the root node
     this.transverseFromRoot(data);
-
-    // TO-DO: TRAVEL THE GRAPH AND SET THE OBJECTS STARTING AT data.rootId
-    // and visiting data.nodes that contain .children
-    /*  for (let key in data.nodes) {
-      let node = data.nodes[key];
-      for (let i = 0; i < node.children.length; i++) {
-        let child = node.children[i];
-        if (child.type === "primitive") this.setPrimitve(child);
-      }
-    } */
-
-    // display objects (TO DO: to change later for groups)
-    // for (let key in this.objs) this.app.scene.add(this.objs[key]);
   }
 
-  update() { }
+  update() {}
 
   // ===================================== LOADERS =====================================
 
@@ -104,7 +87,6 @@ class MyContents {
 
   setMaterials(materials) {
     for (let key in materials) {
-
       let material = materials[key];
 
       let color = material.color;
@@ -193,9 +175,7 @@ class MyContents {
 
     this.app.scene.add(
       new THREE.AmbientLight(
-        options.ambient.r,
-        options.ambient.g,
-        options.ambient.b
+        new THREE.Color(options.ambient.r, options.ambient.g, options.ambient.b)
       )
     );
   }
@@ -273,27 +253,31 @@ class MyContents {
           let parts_u = obj.representations[0].parts_u;
           let parts_v = obj.representations[0].parts_v;
 
-
           let controlpoints = obj.representations[0].controlpoints;
           let controlpoints_cleaned = [];
 
-
           for (let u = 0; u <= degree_u; u++) {
-            let u_l = []
+            let u_l = [];
             for (let v = 0; v <= degree_v; v++) {
-
-              u_l.push([controlpoints[u * (degree_v + 1) + v].xx,
-              controlpoints[u * (degree_v + 1) + v].yy,
-              controlpoints[u * (degree_v + 1) + v].zz, 1])
+              u_l.push([
+                controlpoints[u * (degree_v + 1) + v].xx,
+                controlpoints[u * (degree_v + 1) + v].yy,
+                controlpoints[u * (degree_v + 1) + v].zz,
+                1,
+              ]);
             }
             controlpoints_cleaned.push(u_l);
           }
 
-
           let builder = new MyNurbsBuilder();
 
-          geometry = builder.build(controlpoints_cleaned, degree_u, degree_v, parts_u, parts_v);
-
+          geometry = builder.build(
+            controlpoints_cleaned,
+            degree_u,
+            degree_v,
+            parts_u,
+            parts_v
+          );
 
           break;
 
@@ -318,10 +302,7 @@ class MyContents {
       wireframe: true,
     });
 
-    let mesh = new THREE.Mesh(
-      geometry,
-      material ?? defaultMaterial,
-    );
+    let mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
 
     return mesh;
   }
@@ -359,9 +340,11 @@ class MyContents {
   }
 
   toRadians_3dVector(Vector3) {
-    return new THREE.Vector3(this.toRadians(Vector3[0]),
+    return new THREE.Vector3(
+      this.toRadians(Vector3[0]),
       this.toRadians(Vector3[1]),
-      this.toRadians(Vector3[2]));
+      this.toRadians(Vector3[2])
+    );
   }
 
   sum_position(vec1, vec2) {
@@ -369,7 +352,6 @@ class MyContents {
   }
 
   setMatrixTransform(obj) {
-
     if (obj.transformations == null) return;
     // iterate transformations and apply them .... TODO: IS THIS THE RIGHT ORDER?
     for (let i = 0; i < obj.transformations.length; i++) {
@@ -377,7 +359,12 @@ class MyContents {
 
       switch (transf.type) {
         case "T":
-          obj.group.position.set(...this.sum_position(obj.group.position, new THREE.Vector3(...transf.translate)));
+          obj.group.position.set(
+            ...this.sum_position(
+              obj.group.position,
+              new THREE.Vector3(...transf.translate)
+            )
+          );
           break;
         case "R":
           obj.group.rotation.set(...this.toRadians_3dVector(transf.rotation));
@@ -389,7 +376,6 @@ class MyContents {
           console.log("ERROR: transformation type not supported");
       }
     }
-
   }
 
   setPointLight(obj) {
@@ -445,18 +431,18 @@ class MyContents {
 
   // Define a method to traverse and inherit values
   transverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
-
     //if (node.transformations != null && parentNode == null) {
     //  // make the identity matrix
     //  let identity = new THREE.Matrix4();
     //  identity.identity();
-    //  node.transformations_matrix = identity;    
+    //  node.transformations_matrix = identity;
     //}
     node.group = new THREE.Group();
     let this_material = parentMaterial;
 
     // Inherit values from the parentº
-    if (node.materialIds != null) this_material = this.materials[node.materialIds];
+    if (node.materialIds != null)
+      this_material = this.materials[node.materialIds];
 
     this.setMatrixTransform(node);
     if (node.type === "primitive")
@@ -465,13 +451,14 @@ class MyContents {
     // Traverse the children recursively
     if (node.children && node.children.length > 0) {
       for (let i = 0; i < node.children.length; i++) {
-
-        node.group.add(this.transverseAndInheritValues(
-          node.children[i],
-          node,
-          this_material,
-          parentTexture
-        )); // TODO: change
+        node.group.add(
+          this.transverseAndInheritValues(
+            node.children[i],
+            node,
+            this_material,
+            parentTexture
+          )
+        ); // TODO: change
       }
     }
 
@@ -483,9 +470,8 @@ class MyContents {
   // Method to start traversal from the root node
   transverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
-    let the_big_scene = this.transverseAndInheritValues(rootNode, null, null)
-    console.log(the_big_scene);
-    this.app.scene.add(the_big_scene)
+    let x = this.transverseAndInheritValues(rootNode, null, null);
+    this.app.scene.add(x);
   }
 
   endFunc() {
