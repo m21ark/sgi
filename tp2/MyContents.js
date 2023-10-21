@@ -416,6 +416,8 @@ class MyContents {
     pointLight.shadow.mapSize.height = obj.shadowmapsize;
     pointLight.shadow.camera.far = obj.shadowfar;
 
+    pointLight.shadow.bias = -0.001; // VER ISTO
+
     this.lights[obj.id] = pointLight;
 
     // create helper
@@ -450,6 +452,8 @@ class MyContents {
     directionalLight.shadow.camera.top = obj.shadowtop;
     directionalLight.shadow.camera.bottom = obj.shadowbottom;
 
+    directionalLight.shadow.bias = -0.001; // VER ISTO
+
     this.lights[obj.id] = directionalLight;
 
     // create helper
@@ -483,6 +487,8 @@ class MyContents {
     spotLight.shadow.mapSize.width = obj.shadowmapsize;
     spotLight.shadow.mapSize.height = obj.shadowmapsize;
     spotLight.shadow.camera.far = obj.shadowfar;
+
+    spotLight.shadow.bias = -0.001; // VER ISTO
 
     this.lights[obj.id] = spotLight;
 
