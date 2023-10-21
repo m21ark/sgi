@@ -4,9 +4,9 @@
     <!-- Credits of the original file go to Group 1, class 1 of course LAIG school year 2013/2014,
     FEUP, University of Porto -->
 
-    <globals background="0.2 0.2 0.2 1" ambient="0.1 0.1 0.1 1" />
+    <globals background="0.1 0.1 0.1 1" ambient="0.1 0.1 0.1 1" />
 
-    <fog color="1.0 1.0 1.0 1.0" near="0.0" far="100.0" />
+    <fog color="0 0 0 0" near="0.0" far="200.0" />
 
     <cameras initial="cam1">
         <perspective id="cam1"
