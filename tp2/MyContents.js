@@ -22,7 +22,6 @@ class MyContents {
     this.lights = [];
     this.textures = [];
     this.cameras = [];
-    this.objs = [];
   }
 
   /**
@@ -235,7 +234,6 @@ class MyContents {
             rep.tethalenght
           );
 
-        
           break;
         case "triangle":
           geometry = new THREE.Geometry();
@@ -296,15 +294,6 @@ class MyContents {
 
           break;
 
-        case "spotlight":
-          this.setSpotlight(obj);
-          break;
-        case "pointlight":
-          this.setPointLight(obj);
-          break;
-        case "directionallight":
-          this.setDirectionalLight(obj);
-          break;
         default:
           console.log("ERROR: primitive type not supported");
       }
@@ -319,35 +308,11 @@ class MyContents {
 
     let mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
 
+    // make sure the object casts and receives shadows
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
     return mesh;
-  }
-
-  setDirectionalLight(obj) {
-    // creation
-    let directionalLight = new THREE.DirectionalLight(
-      THREE.Color(obj.color.r, obj.color.g, obj.color.b),
-      obj.intensity
-    );
-
-    if (!obj.enabled) directionalLight.intensity = 0;
-
-    // position and target
-    directionalLight.position.set(...obj.position);
-    // directionalLight.target.position.set(...obj.target);
-    // VER COMO FAZER TARGET? TALVEZ SEJA O PAI
-
-    //shadows
-    directionalLight.castShadow = obj.castshadow;
-    directionalLight.shadow.mapSize.width = obj.shadowmapsize;
-    directionalLight.shadow.mapSize.height = obj.shadowmapsize;
-    directionalLight.shadow.camera.far = obj.shadowfar;
-
-    directionalLight.shadow.camera.left = obj.shadowleft;
-    directionalLight.shadow.camera.right = obj.shadowright;
-    directionalLight.shadow.camera.top = obj.shadowtop;
-    directionalLight.shadow.camera.bottom = obj.shadowbottom;
-
-    this.lights[obj.id] = directionalLight;
   }
 
   toRadians(angle) {
@@ -434,7 +399,7 @@ class MyContents {
   setPointLight(obj) {
     // creation
     let pointLight = new THREE.PointLight(
-      THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
       obj.intensity,
       obj.distance,
       obj.decay
@@ -443,7 +408,7 @@ class MyContents {
     if (!obj.enabled) pointLight.intensity = 0;
 
     // position
-    pointLight.position.set(...obj.location);
+    pointLight.position.set(...obj.position);
 
     //shadows
     pointLight.castShadow = obj.castshadow;
@@ -452,12 +417,54 @@ class MyContents {
     pointLight.shadow.camera.far = obj.shadowfar;
 
     this.lights[obj.id] = pointLight;
+
+    // create helper
+    let pointLightHelper = new THREE.PointLightHelper(pointLight);
+    this.lights[obj.id + "_helper"] = pointLightHelper;
+
+    return [pointLight, pointLightHelper];
+  }
+
+  setDirectionalLight(obj) {
+    // creation
+    let directionalLight = new THREE.DirectionalLight(
+      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      obj.intensity
+    );
+
+    if (!obj.enabled) directionalLight.intensity = 0;
+
+    // position and target
+    directionalLight.position.set(...obj.position);
+    directionalLight.target.position.set(...[0, 0, 0]);
+    // VER COMO FAZER TARGET? TALVEZ SEJA O PAI
+
+    //shadows
+    directionalLight.castShadow = obj.castshadow;
+    directionalLight.shadow.mapSize.width = obj.shadowmapsize;
+    directionalLight.shadow.mapSize.height = obj.shadowmapsize;
+    directionalLight.shadow.camera.far = obj.shadowfar;
+
+    directionalLight.shadow.camera.left = obj.shadowleft;
+    directionalLight.shadow.camera.right = obj.shadowright;
+    directionalLight.shadow.camera.top = obj.shadowtop;
+    directionalLight.shadow.camera.bottom = obj.shadowbottom;
+
+    this.lights[obj.id] = directionalLight;
+
+    // create helper
+    let directionalLightHelper = new THREE.DirectionalLightHelper(
+      directionalLight
+    );
+    this.lights[obj.id + "_helper"] = directionalLightHelper;
+
+    return [directionalLight, directionalLightHelper];
   }
 
   setSpotlight(obj) {
     // creation
     let spotLight = new THREE.SpotLight(
-      THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
       obj.intensity,
       obj.distance,
       obj.angle,
@@ -468,7 +475,7 @@ class MyContents {
     if (!obj.enabled) spotLight.intensity = 0;
 
     // position and target
-    spotLight.position.set(...obj.location);
+    spotLight.position.set(...obj.position);
     spotLight.target.position.set(...obj.target);
 
     //shadows
@@ -478,18 +485,17 @@ class MyContents {
     spotLight.shadow.camera.far = obj.shadowfar;
 
     this.lights[obj.id] = spotLight;
+
+    // create helper
+    let spotLightHelper = new THREE.SpotLightHelper(spotLight);
+    this.lights[obj.id + "_helper"] = spotLightHelper;
+
+    return [spotLight, spotLightHelper];
   }
 
   // ===================================== END LOADERS =====================================
 
   transverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
-    // recursive function to transverse the scene graph and create the objects
-    // a node is checked if it is a leaf node, aka if it has a primitive
-    // if it is a leaf node, a primitive is created and added to the scene
-    // if it is not a leaf node, the function is called again for each child node
-    // while going down, the transformations are applied to the object
-    // while going up, the material and texture are inherited from the parent node if they are not defined in the current node
-
     let this_material = parentMaterial;
 
     // Inherit values from the parent
@@ -509,6 +515,29 @@ class MyContents {
       );
       parentNode.add(primitiveMesh);
       return;
+    } else if (
+      ["spotlight", "pointlight", "directionallight"].includes(node.type)
+    ) {
+      let light = null;
+      let helper = null;
+      console.log(node);
+      switch (node.type) {
+        case "spotlight":
+          [light, helper] = this.setSpotlight(node);
+          break;
+        case "pointlight":
+          [light, helper] = this.setPointLight(node);
+          break;
+        case "directionallight":
+          [light, helper] = this.setDirectionalLight(node);
+          break;
+        default:
+          console.log("ERROR: light type not supported");
+      }
+
+      parentNode.add(light);
+      parentNode.add(helper);
+      return;
     }
 
     // go down the tree if node has children
@@ -517,6 +546,7 @@ class MyContents {
     node.children.forEach((child) => {
       // create and set group
       let group = new THREE.Group();
+      group.castShadow = true;
       parentNode.add(group);
       child.group = group;
 
@@ -534,6 +564,9 @@ class MyContents {
   transverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
     this.rootScene = new THREE.Group();
+    this.app.scene.castShadow = true;
+    this.rootScene.name = "rootScene";
+    this.rootScene.castShadow = true;
     this.transverseAndInheritValues(rootNode, this.rootScene);
     this.app.scene.add(this.rootScene);
   }
@@ -542,8 +575,9 @@ class MyContents {
     //  console.log(this.textures);
     // console.log(this.materials);
     // console.log(this.cameras);
-    // console.log(this.objs);
     console.log(this.app.scene);
+    console.log(this.lights);
+    // console.log(this.app.scene);
   }
 }
 
