@@ -156,6 +156,8 @@ class MyContents {
   }
   setActiveCamera(cameraId) {
     this.app.activeCamera = this.cameras[cameraId];
+    console.log(this.app.activeCamera);
+    console.log("kdkdkd");
     this.app.controls.object = this.cameras[cameraId];
     this.app.controls = new OrbitControls(
       this.app.activeCamera,

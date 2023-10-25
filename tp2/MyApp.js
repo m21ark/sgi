@@ -142,7 +142,7 @@ class MyApp {
     // camera changed?
     if (this.lastCameraName !== this.activeCameraName) {
       this.lastCameraName = this.activeCameraName;
-      this.activeCamera = this.cameras[this.activeCameraName];
+      // this.activeCamera = this.cameras[this.activeCameraName];
       document.getElementById("camera").innerHTML = this.activeCameraName;
 
       // call on resize to update the camera aspect ratio
@@ -194,7 +194,9 @@ class MyApp {
    */
   render() {
     this.stats.begin();
+
     this.updateCameraIfRequired();
+
 
     // update the animation if contents were provided
     if (this.activeCamera !== undefined && this.activeCamera !== null) {
