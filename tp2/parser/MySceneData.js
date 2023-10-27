@@ -122,7 +122,7 @@ class MySceneData  {
 
         // to be used in final classes of TP2 or in TP3
         this.descriptors["model3d"] = [
-			{name: "filepath", type: "String"},
+			{name: "filepath", type: "string"},
             {name: "distance", type: "float", required: false, default: 0.0}, // The distance at which to display this level of detail. Default 0.0.  
 		]
 
@@ -389,4 +389,3 @@ class MySceneData  {
     }
 }
 export { MySceneData };
-

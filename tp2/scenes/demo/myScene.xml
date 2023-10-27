@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<yaf>
+    <globals background="0.1 0.1 0.1 1" ambient="0.8 0.8 0.8 1" />
+
+    <fog color="0 0 0 0" near="0.0" far="200.0" />
+
+    <cameras initial="cam1">
+        <perspective id="cam1"
+            angle="60"
+            near="0.1"
+            far="1000"
+            location="40 40 40"
+            target="0 0 0" />
+
+        <orthogonal id="cam2"
+            near="0.1"
+            far="1000"
+            location="0 40 0"
+            target="0 0 0"
+            left="-5"
+            right="5"
+            bottom="-5"
+            top="-5" />
+    </cameras>
+
+
+    <textures>
+        <texture id="floorTex" filepath="textures/floor.jpg" />
+        <texture id="wallTex" filepath="textures/floor.jpg" />
+    </textures>
+
+    <materials>
+
+        <material id="wallMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.20 0.20 0.20 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="wallTex"
+            texlength_s="40"
+            texlength_t="20"
+            twosided="true" />
+
+
+        <material id="floorMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.20 0.20 0.20 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="floorTex"
+            texlength_s="40"
+            texlength_t="20"
+            twosided="true" />
+
+
+    </materials>
+
+    <graph rootid="scene">
+
+        <node id="scene">
+            <children>
+                <noderef id="room" />
+                <noderef id="lights" />
+                <noderef id="policeWarning1" />
+                <noderef id="statue" />
+            </children>
+        </node>
+
+
+        
+
+        <node id="statue">
+            <transforms>
+                <translate value3="15 10 15" />
+                <scale value3="0.3 0.3 0.3" />
+            </transforms>
+            <children>
+                <noderef id="petal1" />
+                <noderef id="petal2" />
+                <noderef id="statue_base" />
+            </children>
+        </node>
+
+        <node id="petal1">
+            <transforms>
+                <rotate value3="180 -48.4 0.18" />
+            </transforms>
+            <children>
+                <primitive>
+                    <nurbs degree_u="3" degree_v="3" parts_u="20" parts_v="20" distance="0.0">
+                        <controlpoint xx="-6.5758" yy="-5.3952" zz="4.5806" />
+                        <controlpoint xx="-7.6782" yy="-0.8729" zz="5.0502" />
+                        <controlpoint xx="-10.5246" yy="4.5508" zz="0.8393" />
+                        <controlpoint xx="-7.3339" yy="4.8127" zz="-2.8372" />
+                        <controlpoint xx="-2.3410" yy="-1.8118" zz="2.9402" />
+                        <controlpoint xx="2.0977" yy="3.4348" zz="3.1256" />
+                        <controlpoint xx="-4.9792" yy="7.8847" zz="-2.9254" />
+                        <controlpoint xx="-4.5595" yy="5.1917" zz="-6.6777" />
+                        <controlpoint xx="0.3310" yy="-3.0162" zz="-0.7202" />
+                        <controlpoint xx="1.2187" yy="4.7663" zz="-1.8717" />
+                        <controlpoint xx="3.9664" yy="6.7792" zz="-8.0425" />
+                        <controlpoint xx="-4.1480" yy="2.6693" zz="-12.8381" />
+                        <controlpoint xx="1.1101" yy="-1.7422" zz="-3.4423" />
+                        <controlpoint xx="2.3437" yy="0.5894" zz="-8.2922" />
+                        <controlpoint xx="1.2609" yy="-0.6214" zz="-12.8047" />
+                        <controlpoint xx="-3.1458" yy="-5.5801" zz="-13.9343" />
+                    </nurbs>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="petal2">
+            <transforms>
+                <rotate value3="200 -121 4" />
+            </transforms>
+            <children>
+                <primitive>
+                    <nurbs degree_u="3" degree_v="3" parts_u="20" parts_v="20" distance="0.0">
+                        <controlpoint xx="-6.4093" yy="-6.0770" zz="3.0955" />
+                        <controlpoint xx="-6.8219" yy="-1.9044" zz="3.3802" />
+                        <controlpoint xx="-7.1898" yy="0.3927" zz="0.3941" />
+                        <controlpoint xx="-6.3689" yy="2.0889" zz="-2.3912" />
+                        <controlpoint xx="-3.0833" yy="-3.5178" zz="3.9165" />
+                        <controlpoint xx="-0.1542" yy="4.0806" zz="4.1850" />
+                        <controlpoint xx="-1.7995" yy="5.7094" zz="-4.7321" />
+                        <controlpoint xx="-5.8876" yy="3.8816" zz="-4.8058" />
+                        <controlpoint xx="1.1022" yy="-3.6364" zz="-0.4909" />
+                        <controlpoint xx="1.9690" yy="3.0715" zz="-3.6882" />
+                        <controlpoint xx="-0.0816" yy="5.6491" zz="-11.2666" />
+                        <controlpoint xx="-4.2114" yy="3.8855" zz="-11.2982" />
+                        <controlpoint xx="1.1805" yy="-1.8563" zz="-4.7101" />
+                        <controlpoint xx="1.4816" yy="0.2226" zz="-9.2544" />
+                        <controlpoint xx="-0.3022" yy="2.8457" zz="-12.7877" />
+                        <controlpoint xx="-5.8324" yy="0.5049" zz="-18.8236" />
+                    </nurbs>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="statue_base">
+            <transforms>
+                <translate value3="0 -10 0" />
+                <rotate value3="0 45 0" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base="30" top="24" height="4.8" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="lights">
+            <children>
+            </children>
+        </node>
+
+        <node id="room">
+            <children>
+                <noderef id="floor" />
+                <noderef id="wall1" />
+                <noderef id="wall2" />
+                <!--              <noderef id="wall3" />
+                <noderef id="wall4" /> 
+                <noderef id="ceil" />-->
+            </children>
+        </node>
+
+        <node id="wall1">
+            <transforms>
+                <translate value3="0 0 40" />
+                <rotate value3="0.0 90 0.0" />
+            </transforms>
+
+            <materialref id="wallMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="40 20" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="wall2">
+            <transforms>
+            </transforms>
+
+            <materialref id="wallMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="40 20" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="wall3">
+            <transforms>
+                <translate value3="0 0 40" />
+                <rotate value3="0.0 0 0.0" />
+            </transforms>
+
+            <materialref id="wallMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="40 20" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="wall4">
+            <transforms>
+                <translate value3="40 0 0" />
+                <rotate value3="0.0 -90 0.0" />
+            </transforms>
+
+            <materialref id="wallMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="40 20" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="floor">
+            <transforms>
+                <rotate value3="90 0 0" />
+            </transforms>
+
+            <materialref id="floorMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="40 40" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="ceil">
+            <transforms>
+                <translate value3="0 20 0" />
+                <rotate value3="90.0 0 0.0" />
+            </transforms>
+
+            <materialref id="floorMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="40 40" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <!-- ============================================================ -->
+
+        <node id="support">
+            <children>
+                <primitive>
+                    <cylinder base="0.2" top="0.2" height="3" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="tapeSupport1">
+            <transforms>
+                <translate value3="-6 1.5 0" />
+            </transforms>
+
+            <materialref id="tapeSupportApp" />
+
+            <children>
+                <noderef id="support" />
+            </children>
+        </node>
+
+        <node id="tapeSupport2">
+            <transforms>
+                <translate value3="6 1.5 0" />
+            </transforms>
+
+            <materialref id="tapeSupportApp" />
+
+            <children>
+                <noderef id="support" />
+            </children>
+        </node>
+
+        <node id="tape">
+            <transforms>
+                <translate value3="0 2.6 0" />
+            </transforms>
+
+            <materialref id="tapeApp" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-6 -0.2" xy2="6 0.2" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="policeWarning">
+            <children>
+                <noderef id="tape" />
+                <noderef id="tapeSupport1" />
+                <noderef id="tapeSupport2" />
+            </children>
+        </node>
+
+        <node id="policeWarning1">
+            <transforms>
+                <translate value3="25 0 35" />
+            </transforms>
+
+            <children>
+                <noderef id="policeWarning" />
+            </children>
+        </node>
+
+
+    </graph>
+</yaf> 
