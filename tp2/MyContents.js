@@ -2,6 +2,9 @@ import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
+import { MyGuiInterface } from "./MyGuiInterface.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
 /**
  *  This class contains the contents of out application
  */
@@ -22,12 +25,15 @@ class MyContents {
     this.lights = [];
     this.textures = [];
     this.cameras = [];
+    this.camerasNames = [];
   }
 
   /**
    * initializes the contents
    */
   init() {
+
+
     // create once
     if (this.axis === null) {
       // create and attach the axis to the scene
@@ -43,10 +49,20 @@ class MyContents {
   onSceneLoaded(data) {
     console.info(
       "scene data loaded " +
-        data +
-        ". visit MySceneData javascript class to check contents for each data item."
+      data +
+      ". visit MySceneData javascript class to check contents for each data item."
     );
     this.onAfterSceneLoadedAndBeforeRender(data);
+
+    // create the gui interface object
+    let gui = new MyGuiInterface(this.app);
+    // set the contents object in the gui interface object
+    gui.setContents(this.app.contents);
+
+    // we call the gui interface init
+    // after contents were created because
+    // interface elements may control contents items
+    gui.init();
 
     this.endFunc();
   }
@@ -56,7 +72,7 @@ class MyContents {
         console.log(key, obj[key]);
       }) */
 
-    console.log(data);
+    // console.log(data);
     this.setOptions(data.options);
     this.setFog(data.fog);
     this.setTextures(data.textures);
@@ -66,8 +82,9 @@ class MyContents {
     // Start the traversal from the root node
     this.transverseFromRoot(data);
   }
+  
 
-  update() {}
+  update() { }
 
   // ===================================== LOADERS =====================================
 
@@ -124,6 +141,7 @@ class MyContents {
       }
 
       this.app.scene.add(this.cameras[camera.id]);
+      this.camerasNames.push(camera.id);
     }
     this.app.activeCamera = this.cameras[activeCameraId];
     this.app.controls.object = this.cameras[activeCameraId];
@@ -136,6 +154,20 @@ class MyContents {
     //this.app.activeCameraName = activeCameraId;
     //this.app.controls == null ; ... fazer estes 2 n funciona por alguma razão ... o updateCameraIfRequired meio que faz o mesmo
   }
+  setActiveCamera(cameraId) {
+    this.app.activeCamera = this.cameras[cameraId];
+    console.log(this.app.activeCamera);
+    console.log("kdkdkd");
+    this.app.controls.object = this.cameras[cameraId];
+    this.app.controls = new OrbitControls(
+      this.app.activeCamera,
+      this.app.renderer.domElement
+    );
+    this.app.controls.enableZoom = true;
+    this.app.controls.update();
+    this.app.activeCameraName = cameraId;
+  }
+
 
   newOrthogonalCamera(camera) {
     const cam = new THREE.OrthographicCamera(
