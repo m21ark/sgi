@@ -251,13 +251,13 @@ class MyContents {
           break;
         case "sphere":
           geometry = new THREE.SphereGeometry(
-            obj.radius,
-            obj.slices,
-            obj.stacks,
-            obj.phistart,
-            obj.philength,
-            obj.thetastart,
-            obj.thetalength
+            rep.radius,
+            rep.slices,
+            rep.stacks,
+            rep.phistart,
+            rep.philength,
+            rep.thetastart,
+            rep.thetalength
           );
           break;
         case "nurbs":

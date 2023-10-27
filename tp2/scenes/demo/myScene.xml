@@ -63,11 +63,82 @@
                 <noderef id="lights" />
                 <noderef id="policeWarning1" />
                 <noderef id="statue" />
+                <noderef id="pentagon_frame" />
             </children>
         </node>
 
 
-        
+        <node id="pentagon_frame">
+            <transforms>
+                <translate value3="0 30 0" />
+            </transforms>
+            <children>
+                <noderef id="edge1" />
+                <noderef id="edge2" />
+                <noderef id="edge3" />
+                <noderef id="edge4" />
+                <noderef id="edge5" />
+            </children>
+        </node>
+
+        <node id="edge1">
+            <transforms>
+                <translate value3="-5 0 0" />
+                <rotate value3="0 144 0" />
+            </transforms>
+            <children>
+                <noderef id="box_primitive" />
+            </children>
+        </node>
+
+        <node id="edge2">
+            <transforms>
+                <translate value3="0 0 0" />
+                <rotate value3="0 144 0" />
+            </transforms>
+            <children>
+                <noderef id="box_primitive" />
+            </children>
+        </node>
+
+        <node id="edge3">
+            <transforms>
+                <translate value3="0 0 0" />
+                <rotate value3="0 216 0" />
+            </transforms>
+            <children>
+                <noderef id="box_primitive" />
+            </children>
+        </node>
+
+        <node id="edge4">
+            <transforms>
+                <translate value3="0 0 0" />
+                <rotate value3="0 288 0" />
+            </transforms>
+            <children>
+                <noderef id="box_primitive" />
+            </children>
+        </node>
+
+        <node id="edge5">
+            <transforms>
+                <translate value3="0 0 0" />
+                <rotate value3="0 360 0" />
+            </transforms>
+            <children>
+                <noderef id="box_primitive" />
+            </children>
+        </node>
+
+        <node id="box_primitive">
+            <children>
+                <primitive>
+                    <box xyz1="0 0 0" xyz2="0.1 0.1 5" />
+                </primitive>
+            </children>
+        </node>
+
 
         <node id="statue">
             <transforms>
@@ -78,6 +149,7 @@
                 <noderef id="petal1" />
                 <noderef id="petal2" />
                 <noderef id="statue_base" />
+                <noderef id="statue_orb" />
             </children>
         </node>
 
@@ -145,6 +217,17 @@
             <children>
                 <primitive>
                     <cylinder base="30" top="24" height="4.8" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="statue_orb">
+            <transforms>
+                <translate value3="0 15 0" />
+            </transforms>
+            <children>
+                <primitive>
+                    <sphere radius="5.0" slices="10" stacks="10" />
                 </primitive>
             </children>
         </node>
