@@ -2,7 +2,7 @@
 <yaf>
     <globals background="0.1 0.1 0.1 1" ambient="0.8 0.8 0.8 1" />
 
-    <fog color="0 0 0 0" near="0.0" far="200.0" />
+    <fog color="0 0 0 0" near="0.0" far="350.0" />
 
     <cameras initial="cam1">
         <perspective id="cam1"
@@ -105,6 +105,23 @@
                 <noderef id="room" />
                 <noderef id="lights" />
                 <noderef id="statue" />
+                <noderef id="controlTable" />
+
+
+                <primitive>
+                    <skybox
+                        width="150"
+                        height="150"
+                        depth="150"
+                        texture_lt_ref="textures/skybox/left.png"
+                        texture_rt_ref="textures/skybox/right.png"
+                        texture_ft_ref="textures/skybox/front.png"
+                        texture_bk_ref="textures/skybox/back.png"
+                        texture_up_ref="textures/skybox/top.png"
+                        texture_dn_ref="textures/skybox/bottom.png" />
+                </primitive>
+
+
             </children>
         </node>
 
@@ -266,6 +283,40 @@
             </children>
         </node>
 
+
+        <node id="controlTable">
+            <transforms>
+
+            </transforms>
+
+            <materialref id="metalMat" />
+
+            <children>
+                <primitive>
+                    <box xyz1="0 4.5 0" xyz2="30 5 6" />
+                </primitive>
+                <noderef id="controlTableLegs" />
+            </children>
+        </node>
+
+        <node id="controlTableLegs">
+
+            <transforms>
+                <translate value3="29 2.5 5" />
+            </transforms>
+
+
+            <materialref id="metalMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.2" top="0.35" height="4.3" slices="20" stacks="1" />
+                </primitive>
+            </children>
+
+        </node>
+
+
         <node id="lights">
             <children>
 
@@ -286,6 +337,18 @@
                     decay="2.0"
                     castshadow="false"
                     position="30 15 30"
+                />
+
+                <spotlight id="light3" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="20"
+                    decay="2.0"
+                    castshadow="true"
+                    position="20 20 20"
+                    target="20 0 20"
+                    penumbra="1.0"
+                    angle="25"
                 />
 
 

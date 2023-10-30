@@ -18,7 +18,8 @@ class MyContents {
     this.axis = null;
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-    this.reader.open("scenes/demo/myScene.xml");
+    this.sceneDir = "scenes/demo/";
+    this.reader.open(this.sceneDir + "myScene.xml");
 
     // Variables to store the contents of the scene
     this.materials = [];
@@ -32,8 +33,6 @@ class MyContents {
    * initializes the contents
    */
   init() {
-
-
     // create once
     if (this.axis === null) {
       // create and attach the axis to the scene
@@ -49,21 +48,13 @@ class MyContents {
   onSceneLoaded(data) {
     console.info(
       "scene data loaded " +
-      data +
-      ". visit MySceneData javascript class to check contents for each data item."
+        data +
+        ". visit MySceneData javascript class to check contents for each data item."
     );
     this.onAfterSceneLoadedAndBeforeRender(data);
-
-    // create the gui interface object
     let gui = new MyGuiInterface(this.app);
-    // set the contents object in the gui interface object
     gui.setContents(this.app.contents);
-
-    // we call the gui interface init
-    // after contents were created because
-    // interface elements may control contents items
     gui.init();
-
     this.endFunc();
   }
 
@@ -82,21 +73,20 @@ class MyContents {
     // Start the traversal from the root node
     this.transverseFromRoot(data);
   }
-  
 
-  update() { }
+  update() {}
 
   // ===================================== LOADERS =====================================
 
   setTextures(textures) {
-    // ['id', 'filepath', 'type', 'custom']
-
     let textureLoader = new THREE.TextureLoader();
 
     for (let key in textures) {
       let texture = textures[key];
-      // load texture
-      let textureObj = textureLoader.load("scenes/demo/" + texture.filepath);
+      let textureObj = textureLoader.load(this.sceneDir + texture.filepath);
+
+      // isVideo, magFilter, minFilter, mipmaps, anisotropy are missing
+
       this.textures[texture.id] = textureObj;
     }
   }
@@ -116,14 +106,13 @@ class MyContents {
         wireframe: material.wireframe,
         shininess: material.shininess,
         side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
-        flatShading: material.shading.toLowerCase() === "flat", // ver melhor isto
-        map:
-          material.textureref != null
-            ? this.textures[material.textureref]
-            : null,
+        flatShading: material.shading.toLowerCase() === "flat",
+        map: this.textures[material.textureref] ?? null,
+        // bumpref: this.textures[material.bumpref] ?? null,
+        // bumpScale: material.bumpscale,
       });
 
-      materialObj.map.repeat.set(material.texlength_s, material.texlength_t)
+      materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
 
       this.materials[key] = materialObj;
     }
@@ -168,7 +157,6 @@ class MyContents {
     this.app.controls.update();
     this.app.activeCameraName = cameraId;
   }
-
 
   newOrthogonalCamera(camera) {
     const cam = new THREE.OrthographicCamera(
@@ -231,7 +219,9 @@ class MyContents {
         case "rectangle":
           geometry = new THREE.PlaneGeometry(
             Math.abs(rep.xy1[0] - rep.xy2[0]),
-            Math.abs(rep.xy1[1] - rep.xy2[1]) // TO-DO waht is parts_x and parts_y?
+            Math.abs(rep.xy1[1] - rep.xy2[1]),
+            rep.parts_x,
+            rep.parts_y
           );
 
           // ofsset the plane so that it is centered on the origin
@@ -245,7 +235,10 @@ class MyContents {
           geometry = new THREE.BoxGeometry(
             Math.abs(rep.xyz1[0] - rep.xyz2[0]),
             Math.abs(rep.xyz1[1] - rep.xyz2[1]),
-            Math.abs(rep.xyz1[2] - rep.xyz2[2])
+            Math.abs(rep.xyz1[2] - rep.xyz2[2]),
+            rep.parts_x,
+            rep.parts_y,
+            rep.parts_z
           );
 
           // ofsset the box so that it is centered on the origin
@@ -282,6 +275,9 @@ class MyContents {
           geometry.faces.push(new THREE.Face3(0, 1, 2));
           geometry.computeFaceNormals();
           break;
+        case "model3d":
+          console.log("Model 3D not supported yet");
+          break;
         case "sphere":
           geometry = new THREE.SphereGeometry(
             rep.radius,
@@ -293,6 +289,8 @@ class MyContents {
             rep.thetalength
           );
           break;
+        case "skybox":
+          return this.createSkybox(rep);
         case "nurbs":
           let degree_u = obj.representations[0].degree_u;
           let degree_v = obj.representations[0].degree_v;
@@ -342,6 +340,51 @@ class MyContents {
     let mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
 
     // make sure the object casts and receives shadows
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
+    return mesh;
+  }
+
+  createSkybox(rep) {
+    let skyboxGeometry = new THREE.BoxGeometry(
+      rep.width,
+      rep.height,
+      rep.depth
+    );
+
+    const loader = new THREE.TextureLoader();
+
+    // TODO: Textures are not in the correct order
+    let skyboxMaterials = [
+      new THREE.MeshBasicMaterial({
+        map: loader.load(this.sceneDir + rep.texture_lt_ref),
+        
+        side: THREE.BackSide,
+      }),
+      new THREE.MeshBasicMaterial({
+      map: loader.load(this.sceneDir + rep.texture_rt_ref),
+        side: THREE.BackSide,
+      }),
+      new THREE.MeshBasicMaterial({
+       map: loader.load(this.sceneDir + rep.texture_up_ref),
+        side: THREE.BackSide,
+      }),
+      new THREE.MeshBasicMaterial({
+        map: loader.load(this.sceneDir + rep.texture_dn_ref),
+        side: THREE.BackSide,
+      }),
+      new THREE.MeshBasicMaterial({
+        map: loader.load(this.sceneDir + rep.texture_ft_ref),
+        side: THREE.BackSide,
+      }),
+      new THREE.MeshBasicMaterial({
+        map: loader.load(this.sceneDir + rep.texture_bk_ref),
+        side: THREE.BackSide,
+      }),
+    ];
+
+    const mesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
 
@@ -504,7 +547,7 @@ class MyContents {
       new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
       obj.intensity,
       obj.distance,
-      obj.angle,
+      this.toRadians(obj.angle),
       obj.penumbra,
       obj.decay
     );
