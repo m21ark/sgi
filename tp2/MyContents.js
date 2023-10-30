@@ -121,8 +121,9 @@ class MyContents {
           material.textureref != null
             ? this.textures[material.textureref]
             : null,
-        // falta texlength_s, texlength_t
       });
+
+      materialObj.map.repeat.set(material.texlength_s, material.texlength_t)
 
       this.materials[key] = materialObj;
     }

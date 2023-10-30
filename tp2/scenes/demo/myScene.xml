@@ -26,19 +26,22 @@
 
     <textures>
         <texture id="floorTex" filepath="textures/floor.jpg" />
-        <texture id="wallTex" filepath="textures/floor.jpg" />
+        <texture id="energyTex" filepath="textures/energy.jpg" />
+        <texture id="petalTex" filepath="textures/petal.jpg" />
+        <texture id="metalTex" filepath="textures/metal.jpg" />
+        <texture id="gridTex" filepath="textures/grid.jpg" />
     </textures>
 
     <materials>
 
         <material id="wallMat"
             emissive="0.0 0.0 0.0 1"
-            color="0.20 0.20 0.20 1.0"
+            color="0.05 0.05 0.05 1.0"
             specular="0 0 0 0"
             shininess="0"
-            textureref="wallTex"
-            texlength_s="40"
-            texlength_t="20"
+            textureref="metalTex"
+            texlength_s="1"
+            texlength_t="1"
             twosided="true" />
 
 
@@ -47,9 +50,49 @@
             color="0.20 0.20 0.20 1.0"
             specular="0 0 0 0"
             shininess="0"
+            texlength_s="1"
+            texlength_t="1"
             textureref="floorTex"
-            texlength_s="40"
-            texlength_t="20"
+            twosided="true" />
+
+        <material id="energyMat"
+            emissive="0.1 0.1 0.3 1"
+            color="0.3 0.7 1 1.0"
+            specular="0.3 0.3 0.3 0"
+            shininess="100"
+            textureref="energyTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="false" />
+
+        <material id="petalMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.1 0.1 0.15 1.0"
+            specular="0.5 0.7 0.8 0"
+            shininess="30"
+            textureref="petalTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+        <material id="metalMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.20 0.20 0.20 1.0"
+            specular="0.5 0.5 0.5 1.0"
+            shininess="30"
+            textureref="metalTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+        <material id="gridMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.10 0.10 0.10 1.0"
+            specular="0.1 0.1 0.4 1.0"
+            shininess="30"
+            textureref="gridTex"
+            texlength_s="1"
+            texlength_t="1"
             twosided="true" />
 
 
@@ -61,73 +104,7 @@
             <children>
                 <noderef id="room" />
                 <noderef id="lights" />
-                <noderef id="policeWarning1" />
                 <noderef id="statue" />
-                <noderef id="pentagon_frame" />
-            </children>
-        </node>
-
-
-        <node id="pentagon_frame">
-            <transforms>
-                <translate value3="0 30 0" />
-            </transforms>
-            <children>
-                <noderef id="edge1" />
-                <noderef id="edge2" />
-                <noderef id="edge3" />
-                <noderef id="edge4" />
-                <noderef id="edge5" />
-            </children>
-        </node>
-
-        <node id="edge1">
-            <transforms>
-                <translate value3="-5 0 0" />
-                <rotate value3="0 144 0" />
-            </transforms>
-            <children>
-                <noderef id="box_primitive" />
-            </children>
-        </node>
-
-        <node id="edge2">
-            <transforms>
-                <translate value3="0 0 0" />
-                <rotate value3="0 144 0" />
-            </transforms>
-            <children>
-                <noderef id="box_primitive" />
-            </children>
-        </node>
-
-        <node id="edge3">
-            <transforms>
-                <translate value3="0 0 0" />
-                <rotate value3="0 216 0" />
-            </transforms>
-            <children>
-                <noderef id="box_primitive" />
-            </children>
-        </node>
-
-        <node id="edge4">
-            <transforms>
-                <translate value3="0 0 0" />
-                <rotate value3="0 288 0" />
-            </transforms>
-            <children>
-                <noderef id="box_primitive" />
-            </children>
-        </node>
-
-        <node id="edge5">
-            <transforms>
-                <translate value3="0 0 0" />
-                <rotate value3="0 360 0" />
-            </transforms>
-            <children>
-                <noderef id="box_primitive" />
             </children>
         </node>
 
@@ -142,40 +119,46 @@
 
         <node id="statue">
             <transforms>
-                <translate value3="15 10 15" />
+                <translate value3="19 5 19" />
                 <scale value3="0.3 0.3 0.3" />
             </transforms>
             <children>
                 <noderef id="petal1" />
                 <noderef id="petal2" />
                 <noderef id="statue_base" />
+                <noderef id="statue_support" />
                 <noderef id="statue_orb" />
             </children>
         </node>
 
         <node id="petal1">
             <transforms>
-                <rotate value3="180 -48.4 0.18" />
+                <translate value3="-8 2 0" />
+                <rotate value3="0 -140 180" />
+                <scale value3="-1.8 1.8 1.8" />
             </transforms>
+
+            <materialref id="petalMat" />
+
             <children>
                 <primitive>
                     <nurbs degree_u="3" degree_v="3" parts_u="20" parts_v="20" distance="0.0">
-                        <controlpoint xx="-6.5758" yy="-5.3952" zz="4.5806" />
-                        <controlpoint xx="-7.6782" yy="-0.8729" zz="5.0502" />
-                        <controlpoint xx="-10.5246" yy="4.5508" zz="0.8393" />
-                        <controlpoint xx="-7.3339" yy="4.8127" zz="-2.8372" />
-                        <controlpoint xx="-2.3410" yy="-1.8118" zz="2.9402" />
-                        <controlpoint xx="2.0977" yy="3.4348" zz="3.1256" />
-                        <controlpoint xx="-4.9792" yy="7.8847" zz="-2.9254" />
-                        <controlpoint xx="-4.5595" yy="5.1917" zz="-6.6777" />
-                        <controlpoint xx="0.3310" yy="-3.0162" zz="-0.7202" />
-                        <controlpoint xx="1.2187" yy="4.7663" zz="-1.8717" />
-                        <controlpoint xx="3.9664" yy="6.7792" zz="-8.0425" />
-                        <controlpoint xx="-4.1480" yy="2.6693" zz="-12.8381" />
-                        <controlpoint xx="1.1101" yy="-1.7422" zz="-3.4423" />
-                        <controlpoint xx="2.3437" yy="0.5894" zz="-8.2922" />
-                        <controlpoint xx="1.2609" yy="-0.6214" zz="-12.8047" />
-                        <controlpoint xx="-3.1458" yy="-5.5801" zz="-13.9343" />
+                        <controlpoint xx="-3.7587" yy="7.4253" zz="-7.0358" />
+                        <controlpoint xx="-4.1714" yy="7.7100" zz="-2.8631" />
+                        <controlpoint xx="-4.5392" yy="4.7239" zz="-0.5660" />
+                        <controlpoint xx="-3.7184" yy="1.9386" zz="1.1301" />
+                        <controlpoint xx="-0.4328" yy="8.2464" zz="-4.4766" />
+                        <controlpoint xx="2.4964" yy="8.5149" zz="3.1218" />
+                        <controlpoint xx="0.8511" yy="-0.4023" zz="4.7506" />
+                        <controlpoint xx="-3.2371" yy="-0.4759" zz="2.9228" />
+                        <controlpoint xx="3.7527" yy="3.8389" zz="-4.5952" />
+                        <controlpoint xx="4.6195" yy="0.6416" zz="2.1127" />
+                        <controlpoint xx="2.5690" yy="-6.9368" zz="4.6903" />
+                        <controlpoint xx="-1.5608" yy="-6.9683" zz="2.9267" />
+                        <controlpoint xx="3.8310" yy="-0.3803" zz="-2.8151" />
+                        <controlpoint xx="4.1321" yy="-4.9245" zz="-0.7362" />
+                        <controlpoint xx="2.3483" yy="-8.4578" zz="1.8869" />
+                        <controlpoint xx="-3.1818" yy="-14.4938" zz="-0.4539" />
                     </nurbs>
                 </primitive>
             </children>
@@ -183,27 +166,32 @@
 
         <node id="petal2">
             <transforms>
-                <rotate value3="200 -121 4" />
+                <translate value3="0 -6.5 -5" />
+                <rotate value3="160 210 0" />
+                <scale value3="1 1 -1" />
             </transforms>
+
+            <materialref id="petalMat" />
+
             <children>
                 <primitive>
                     <nurbs degree_u="3" degree_v="3" parts_u="20" parts_v="20" distance="0.0">
-                        <controlpoint xx="-6.4093" yy="-6.0770" zz="3.0955" />
-                        <controlpoint xx="-6.8219" yy="-1.9044" zz="3.3802" />
-                        <controlpoint xx="-7.1898" yy="0.3927" zz="0.3941" />
-                        <controlpoint xx="-6.3689" yy="2.0889" zz="-2.3912" />
-                        <controlpoint xx="-3.0833" yy="-3.5178" zz="3.9165" />
-                        <controlpoint xx="-0.1542" yy="4.0806" zz="4.1850" />
-                        <controlpoint xx="-1.7995" yy="5.7094" zz="-4.7321" />
-                        <controlpoint xx="-5.8876" yy="3.8816" zz="-4.8058" />
-                        <controlpoint xx="1.1022" yy="-3.6364" zz="-0.4909" />
-                        <controlpoint xx="1.9690" yy="3.0715" zz="-3.6882" />
-                        <controlpoint xx="-0.0816" yy="5.6491" zz="-11.2666" />
-                        <controlpoint xx="-4.2114" yy="3.8855" zz="-11.2982" />
-                        <controlpoint xx="1.1805" yy="-1.8563" zz="-4.7101" />
-                        <controlpoint xx="1.4816" yy="0.2226" zz="-9.2544" />
-                        <controlpoint xx="-0.3022" yy="2.8457" zz="-12.7877" />
-                        <controlpoint xx="-5.8324" yy="0.5049" zz="-18.8236" />
+                        <controlpoint xx="-4.1409" yy="8.1963" zz="-6.7477" />
+                        <controlpoint xx="-5.2433" yy="8.6658" zz="-2.2253" />
+                        <controlpoint xx="-8.0898" yy="4.4550" zz="3.1984" />
+                        <controlpoint xx="-4.8990" yy="0.7785" zz="3.4602" />
+                        <controlpoint xx="0.0939" yy="6.5559" zz="-3.1643" />
+                        <controlpoint xx="4.5325" yy="6.7413" zz="2.0824" />
+                        <controlpoint xx="-2.5443" yy="0.6903" zz="6.5322" />
+                        <controlpoint xx="-2.1246" yy="-3.0621" zz="3.8393" />
+                        <controlpoint xx="2.7659" yy="2.8954" zz="-4.3687" />
+                        <controlpoint xx="3.6535" yy="1.7439" zz="3.4139" />
+                        <controlpoint xx="6.4013" yy="-4.4269" zz="5.4268" />
+                        <controlpoint xx="-1.7132" yy="-9.2225" zz="1.3168" />
+                        <controlpoint xx="3.5449" yy="0.1734" zz="-3.0947" />
+                        <controlpoint xx="4.7785" yy="-4.6766" zz="-0.7630" />
+                        <controlpoint xx="3.6957" yy="-9.1891" zz="-1.9738" />
+                        <controlpoint xx="-0.7110" yy="-10.3187" zz="-6.9325" />
                     </nurbs>
                 </primitive>
             </children>
@@ -211,9 +199,12 @@
 
         <node id="statue_base">
             <transforms>
-                <translate value3="0 -10 0" />
+                <translate value3="0 -14 0" />
                 <rotate value3="0 45 0" />
             </transforms>
+
+            <materialref id="metalMat" />
+
             <children>
                 <primitive>
                     <cylinder base="30" top="24" height="4.8" slices="4" stacks="1" />
@@ -221,19 +212,83 @@
             </children>
         </node>
 
-        <node id="statue_orb">
+        <node id="statue_support">
             <transforms>
-                <translate value3="0 15 0" />
+                <translate value3="0 -2 0" />
             </transforms>
+
+            <materialref id="gridMat" />
+
+            <children>
+                <noderef id="statue_support_top" />
+                <noderef id="statue_support_bottom" />
+            </children>
+        </node>
+
+        <node id="statue_support_top">
+            <transforms>
+                <translate value3="0 6 0" />
+
+            </transforms>
+
+
             <children>
                 <primitive>
-                    <sphere radius="5.0" slices="10" stacks="10" />
+                    <cylinder base="3" top="0.01" height="6" slices="5" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="statue_support_bottom">
+            <transforms>
+                <translate value3="0 0 0" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <cylinder base="0.01" top="3" height="6" slices="5" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="statue_orb">
+            <transforms>
+                <translate value3="0 13 0" />
+            </transforms>
+
+            <materialref id="energyMat" />
+
+            <children>
+                <primitive>
+                    <sphere radius="2.5" slices="35" stacks="35" />
                 </primitive>
             </children>
         </node>
 
         <node id="lights">
             <children>
+
+                <pointlight id="light1" enabled="true"
+                    color="0.5 0.6 0.8 1"
+                    intensity="1000"
+                    distance="1000"
+                    decay="2.0"
+                    castshadow="false"
+                    position="10 15 10"
+                />
+
+
+                <pointlight id="light2" enabled="true"
+                    color="0.5 0.6 0.8 1"
+                    intensity="1000"
+                    distance="1000"
+                    decay="2.0"
+                    castshadow="false"
+                    position="30 15 30"
+                />
+
+
             </children>
         </node>
 
@@ -338,70 +393,6 @@
 
 
         <!-- ============================================================ -->
-
-        <node id="support">
-            <children>
-                <primitive>
-                    <cylinder base="0.2" top="0.2" height="3" slices="32" stacks="32" />
-                </primitive>
-            </children>
-        </node>
-
-        <node id="tapeSupport1">
-            <transforms>
-                <translate value3="-6 1.5 0" />
-            </transforms>
-
-            <materialref id="tapeSupportApp" />
-
-            <children>
-                <noderef id="support" />
-            </children>
-        </node>
-
-        <node id="tapeSupport2">
-            <transforms>
-                <translate value3="6 1.5 0" />
-            </transforms>
-
-            <materialref id="tapeSupportApp" />
-
-            <children>
-                <noderef id="support" />
-            </children>
-        </node>
-
-        <node id="tape">
-            <transforms>
-                <translate value3="0 2.6 0" />
-            </transforms>
-
-            <materialref id="tapeApp" />
-
-            <children>
-                <primitive>
-                    <rectangle xy1="-6 -0.2" xy2="6 0.2" />
-                </primitive>
-            </children>
-        </node>
-
-        <node id="policeWarning">
-            <children>
-                <noderef id="tape" />
-                <noderef id="tapeSupport1" />
-                <noderef id="tapeSupport2" />
-            </children>
-        </node>
-
-        <node id="policeWarning1">
-            <transforms>
-                <translate value3="25 0 35" />
-            </transforms>
-
-            <children>
-                <noderef id="policeWarning" />
-            </children>
-        </node>
 
 
     </graph>
