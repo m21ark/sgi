@@ -112,7 +112,8 @@ class MyContents {
         // bumpScale: material.bumpscale,
       });
 
-      materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
+      if (material.map != null) 
+        materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
 
       this.materials[key] = materialObj;
     }
