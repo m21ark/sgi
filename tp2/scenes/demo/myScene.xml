@@ -150,7 +150,7 @@
 
         <node id="petal1">
             <transforms>
-                <translate value3="-8 2 0" />
+                <translate value3="-8 2.1 0" />
                 <rotate value3="0 -140 180" />
                 <scale value3="-1.8 1.8 1.8" />
             </transforms>
@@ -183,7 +183,7 @@
 
         <node id="petal2">
             <transforms>
-                <translate value3="0 -6.5 -5" />
+                <translate value3="0 -6.1 -5" />
                 <rotate value3="160 210 0" />
                 <scale value3="1 1 -1" />
             </transforms>

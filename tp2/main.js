@@ -13,8 +13,6 @@ contents.init();
 // hooks the contents object in the application object
 app.setContents(contents);
 
-
-
 // main animation loop - calls every 50-60 ms.
 app.render();
 
