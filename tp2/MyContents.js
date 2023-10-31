@@ -168,8 +168,8 @@ class MyContents {
       camera.far
     );
     cam.up = new THREE.Vector3(0, 1, 0);
-    cam.position.set(...camera.location);
     cam.lookAt(new THREE.Vector3(...camera.target));
+    cam.position.set(...camera.location);
     this.cameras[camera.id] = cam;
   }
 
