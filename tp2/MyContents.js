@@ -317,8 +317,8 @@ class MyContents {
     let mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
 
     // make sure the object casts and receives shadows
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
+    // mesh.castShadow = true;
+    // mesh.receiveShadow = true;
 
     return mesh;
   }
@@ -362,8 +362,8 @@ class MyContents {
     ];
 
     const mesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
+    // mesh.castShadow = true;
+    // mesh.receiveShadow = true;
 
     return mesh;
   }
@@ -604,7 +604,7 @@ class MyContents {
     node.children.forEach((child) => {
       // create and set group
       let group = new THREE.Group();
-      group.castShadow = true;
+      // group.castShadow = true;
       parentNode.add(group);
       child.group = group;
 
@@ -622,9 +622,9 @@ class MyContents {
   transverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
     this.rootScene = new THREE.Group();
-    this.app.scene.castShadow = true;
+    // this.app.scene.castShadow = true;
     this.rootScene.name = "rootScene";
-    this.rootScene.castShadow = true;
+    // this.rootScene.castShadow = true;
     this.transverseAndInheritValues(rootNode, this.rootScene);
     this.app.scene.add(this.rootScene);
   }

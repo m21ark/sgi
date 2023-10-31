@@ -30,6 +30,8 @@
         <texture id="petalTex" filepath="textures/petal.jpg" />
         <texture id="metalTex" filepath="textures/metal.jpg" />
         <texture id="gridTex" filepath="textures/grid.jpg" />
+        <texture id="holoTex1" filepath="textures/holo1.jpg" />
+        <texture id="holoTex2" filepath="textures/holo2.jpg" />
     </textures>
 
     <materials>
@@ -44,6 +46,26 @@
             texlength_t="1"
             twosided="true" />
 
+        <material id="holoMat1"
+            emissive="0.0 0.0 0.0 1"
+            color="0.5 0.5 0.7 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="holoTex1"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+
+        <material id="holoMat2"
+            emissive="0.0 0.0 0.0 1"
+            color="0.5 0.5 0.7 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="holoTex2"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
 
         <material id="floorMat"
             emissive="0.0 0.0 0.0 1"
@@ -68,8 +90,8 @@
         <material id="petalMat"
             emissive="0.0 0.0 0.0 1"
             color="0.1 0.1 0.15 1.0"
-            specular="0.5 0.7 0.8 0"
-            shininess="30"
+            specular="0.0 0.2 0.2 0"
+            shininess="100"
             textureref="petalTex"
             texlength_s="1"
             texlength_t="1"
@@ -195,7 +217,7 @@
             </transforms>
 
             <children>
-                <noderef id="tape" />   
+                <noderef id="tape" />
             </children>
         </node>
 
@@ -204,7 +226,7 @@
                 <translate value3="0 0 -6.3" />
             </transforms>
             <children>
-                <noderef id="tape" />   
+                <noderef id="tape" />
             </children>
         </node>
 
@@ -214,7 +236,7 @@
                 <translate value3="6.3 0 0" />
             </transforms>
             <children>
-                <noderef id="tape" />   
+                <noderef id="tape" />
             </children>
         </node>
 
@@ -224,7 +246,7 @@
                 <translate value3="-6.3 0 0" />
             </transforms>
             <children>
-                <noderef id="tape" />   
+                <noderef id="tape" />
             </children>
         </node>
 
@@ -244,7 +266,7 @@
 
         <node id="noPassage">
             <transforms>
-                <translate value3="19 1.5 19" />
+                <translate value3="19 2.3 19" />
             </transforms>
 
             <children>
@@ -256,7 +278,7 @@
                 <noderef id="tape2" />
                 <noderef id="tape3" />
                 <noderef id="tape4" />
-                
+
             </children>
         </node>
 
@@ -428,10 +450,49 @@
 
             <children>
                 <primitive>
-                    <box xyz1="0 4.5 0" xyz2="30 5 6" />
+                    <box xyz1="0.01 4.5 0.01" xyz2="30 5 6" />
                 </primitive>
+
+                <noderef id="holographic1" />
+                <noderef id="holographic2" />
+
                 <noderef id="controlTableLegs" />
             </children>
+        </node>
+
+        <node id="holographic1">
+            <transforms>
+                <translate value3="0.01 5.01 0.01" />
+                <rotate value3="90 0 0" />
+            </transforms>
+
+            <materialref id="holoMat1" />
+
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0.01 0.01" xy2="15 6" />
+                </primitive>
+            </children>
+
+        </node>
+
+
+        <node id="holographic2">
+            <transforms>
+                <translate value3="0.01 5.01 0.01" />
+                <rotate value3="90 0 0" />
+            </transforms>
+
+            <materialref id="holoMat2" />
+
+
+            <children>
+                <primitive>
+                    <rectangle xy1="15.01 0.01" xy2="30 6" />
+                </primitive>
+            </children>
+
         </node>
 
         <node id="controlTableLegs">
@@ -454,7 +515,7 @@
 
         <node id="lights">
             <children>
-
+                <!-- 
                 <pointlight id="light1" enabled="true"
                     color="0.5 0.6 0.8 1"
                     intensity="1000"
@@ -472,9 +533,9 @@
                     decay="2.0"
                     castshadow="false"
                     position="30 15 30"
-                />
+                /> -->
 
-                <spotlight id="light3" enabled="true"
+                <!--        <spotlight id="light3" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="100.0"
                     distance="20"
@@ -484,6 +545,16 @@
                     target="20 0 20"
                     penumbra="1.0"
                     angle="25"
+                />
+
+ -->
+                <pointlight id="orb_light" enabled="true"
+                    color="0.5 0.6 0.8 1"
+                    intensity="1000"
+                    distance="1000000"
+                    decay="2.0"
+                    castshadow="false"
+                    position="19 9 19"
                 />
 
 
