@@ -36,10 +36,12 @@ class MyContents {
 
   onSceneLoaded(data) {
     this.onAfterSceneLoadedAndBeforeRender(data);
+
     let gui = new MyGuiInterface(this.app);
     gui.setContents(this.app.contents);
     this.app.setGui(gui);
     gui.init();
+    
     this.endFunc();
   }
 
@@ -48,7 +50,6 @@ class MyContents {
         console.log(key, obj[key]);
       }) */
 
-    console.log(data);
     this.setOptions(data.options);
     this.setFog(data.fog);
     this.setTextures(data.textures);

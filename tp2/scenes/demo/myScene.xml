@@ -97,6 +97,9 @@
             color="1.0 0.10 0.10 1.0"
             specular="0.2 0.1 0.1 1.0"
             shininess="50"
+            textureref="metalTex"
+            texlength_s="1"
+            texlength_t="1"
             twosided="true" />
 
         <material id="gridMat"

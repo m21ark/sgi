@@ -1,5 +1,6 @@
 import { MyApp } from "./MyApp.js";
 import { MyContents } from "./MyContents.js";
+import { MyGuiInterface } from "./MyGuiInterface.js";
 
 // create the application object
 let app = new MyApp();
@@ -12,6 +13,8 @@ let contents = new MyContents(app);
 contents.init();
 // hooks the contents object in the application object
 app.setContents(contents);
+
+
 
 // main animation loop - calls every 50-60 ms.
 app.render();
