@@ -17,10 +17,10 @@
             far="100"
             location="0 0 20"
             target="0 0 0"
-            left="-10"
-            right="10"
-            bottom="-10"
-            top="10" />
+            left="-5"
+            right="5"
+            bottom="-5"
+            top="5" />
     </cameras>
 
 
@@ -85,6 +85,20 @@
             texlength_t="1"
             twosided="true" />
 
+        <material id="metallicMaterial"
+            emissive="0.0 0.0 0.0 1.0"
+            color="0.0 0.0 0.0 1.0"
+            specular="1.0 1.0 1.0 1.0"
+            shininess="50"
+            twosided="true" />
+
+        <material id="controlFlowTape"
+            emissive="0.0 0.0 0.0 1.0"
+            color="1.0 0.10 0.10 1.0"
+            specular="0.2 0.1 0.1 1.0"
+            shininess="50"
+            twosided="true" />
+
         <material id="gridMat"
             emissive="0.0 0.0 0.0 1"
             color="0.10 0.10 0.10 1.0"
@@ -106,7 +120,7 @@
                 <noderef id="lights" />
                 <noderef id="statue" />
                 <noderef id="controlTable" />
-
+                <noderef id="noPassage" />
 
                 <primitive>
                     <skybox
@@ -122,6 +136,127 @@
                 </primitive>
 
 
+            </children>
+        </node>
+
+        <node id="support">
+            <materialref id="metallicMaterial" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.2" top="0.2" height="4.3" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="support1">
+            <transforms>
+                <translate value3="6.3 0 6.3" />
+            </transforms>
+
+            <children>
+                <noderef id="support" />
+            </children>
+        </node>
+
+        <node id="support2">
+            <transforms>
+                <translate value3="6.3 0 -6.3" />
+            </transforms>
+
+            <children>
+                <noderef id="support" />
+            </children>
+        </node>
+
+        <node id="support3">
+            <transforms>
+                <translate value3="-6.3 0 6.3" />
+            </transforms>
+
+            <children>
+                <noderef id="support" />
+            </children>
+        </node>
+
+        <node id="support4">
+            <transforms>
+                <translate value3="-6.3 0 -6.3" />
+            </transforms>
+
+            <children>
+                <noderef id="support" />
+            </children>
+        </node>
+
+        <node id="tape1">
+            <transforms>
+                <translate value3="0 0 6.3" />
+            </transforms>
+
+            <children>
+                <noderef id="tape" />   
+            </children>
+        </node>
+
+        <node id="tape2">
+            <transforms>
+                <translate value3="0 0 -6.3" />
+            </transforms>
+            <children>
+                <noderef id="tape" />   
+            </children>
+        </node>
+
+        <node id="tape3">
+            <transforms>
+                <rotate value3="0 90 0" />
+                <translate value3="6.3 0 0" />
+            </transforms>
+            <children>
+                <noderef id="tape" />   
+            </children>
+        </node>
+
+        <node id="tape4">
+            <transforms>
+                <rotate value3="0 90 0" />
+                <translate value3="-6.3 0 0" />
+            </transforms>
+            <children>
+                <noderef id="tape" />   
+            </children>
+        </node>
+
+        <node id="tape">
+            <transforms>
+                <translate value3="0 1.5 0" />
+            </transforms>
+
+            <materialref id="controlFlowTape" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-6.3 -0.2" xy2="6.3 0.2" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="noPassage">
+            <transforms>
+                <translate value3="19 1.5 19" />
+            </transforms>
+
+            <children>
+                <noderef id="support1" />
+                <noderef id="support2" />
+                <noderef id="support3" />
+                <noderef id="support4" />
+                <noderef id="tape1" />
+                <noderef id="tape2" />
+                <noderef id="tape3" />
+                <noderef id="tape4" />
+                
             </children>
         </node>
 

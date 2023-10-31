@@ -98,7 +98,7 @@ class MyContents {
       });
 
       if (materialObj.map != null) {
-       // materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
+        // materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
       } else console.log("ERROR: texture not found");
 
       this.materials[key] = materialObj;
