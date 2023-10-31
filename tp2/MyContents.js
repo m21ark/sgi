@@ -17,8 +17,12 @@ class MyContents {
     this.cameras = [];
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
+
     this.sceneDir = "scenes/demo/";
     this.reader.open(this.sceneDir + "myScene.xml");
+
+    // this.sceneDir = "scenes/demo/SGI_TP2_XML_T08_G04_v01/";
+    // this.reader.open(this.sceneDir + "SGI_TP2_XML_T08_G04_v01.xml");
   }
 
   init() {
@@ -93,7 +97,9 @@ class MyContents {
         // bumpScale: material.bumpscale,
       });
 
-      materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
+      if (materialObj.map != null) {
+       // materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
+      } else console.log("ERROR: texture not found");
 
       this.materials[key] = materialObj;
     }
