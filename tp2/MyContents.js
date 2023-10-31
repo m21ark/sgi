@@ -5,33 +5,22 @@ import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 import { MyGuiInterface } from "./MyGuiInterface.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-/**
- *  This class contains the contents of out application
- */
 class MyContents {
-  /**
-       constructs the object
-       @param {MyApp} app The application object
-    */
   constructor(app) {
     this.app = app;
     this.axis = null;
-
-    this.reader = new MyFileReader(app, this, this.onSceneLoaded);
-    this.sceneDir = "scenes/demo/";
-    this.reader.open(this.sceneDir + "myScene.xml");
 
     // Variables to store the contents of the scene
     this.materials = [];
     this.lights = [];
     this.textures = [];
     this.cameras = [];
-    this.camerasNames = [];
+
+    this.reader = new MyFileReader(app, this, this.onSceneLoaded);
+    this.sceneDir = "scenes/demo/";
+    this.reader.open(this.sceneDir + "myScene.xml");
   }
 
-  /**
-   * initializes the contents
-   */
   init() {
     // create once
     if (this.axis === null) {
@@ -41,19 +30,11 @@ class MyContents {
     }
   }
 
-  /**
-   * Called when the scene xml file load is complete
-   * @param {MySceneData} data the entire scene data object
-   */
   onSceneLoaded(data) {
-    console.info(
-      "scene data loaded " +
-        data +
-        ". visit MySceneData javascript class to check contents for each data item."
-    );
     this.onAfterSceneLoadedAndBeforeRender(data);
     let gui = new MyGuiInterface(this.app);
     gui.setContents(this.app.contents);
+    this.app.setGui(gui);
     gui.init();
     this.endFunc();
   }
@@ -63,7 +44,7 @@ class MyContents {
         console.log(key, obj[key]);
       }) */
 
-    // console.log(data);
+    console.log(data);
     this.setOptions(data.options);
     this.setFog(data.fog);
     this.setTextures(data.textures);
@@ -87,7 +68,7 @@ class MyContents {
 
       // isVideo, magFilter, minFilter, mipmaps, anisotropy are missing
 
-      this.textures[texture.id] = textureObj;
+      this.textures[key] = textureObj;
     }
   }
 
@@ -132,23 +113,13 @@ class MyContents {
       }
 
       this.app.scene.add(this.cameras[camera.id]);
-      this.camerasNames.push(camera.id);
     }
     this.app.activeCamera = this.cameras[activeCameraId];
-    this.app.controls.object = this.cameras[activeCameraId];
-    //this.app.controls = new OrbitControls(
-    //  this.app.activeCamera,
-    //  this.app.renderer.domElement
-    //);
-    //this.app.controls.enableZoom = true;
-    //this.app.controls.update();
-    //this.app.activeCameraName = activeCameraId;
-    //this.app.controls == null ; ... fazer estes 2 n funciona por alguma razão ... o updateCameraIfRequired meio que faz o mesmo
+    // this.app.controls.object = this.cameras[activeCameraId];
   }
+
   setActiveCamera(cameraId) {
     this.app.activeCamera = this.cameras[cameraId];
-    console.log(this.app.activeCamera);
-    console.log("kdkdkd");
     this.app.controls.object = this.cameras[cameraId];
     this.app.controls = new OrbitControls(
       this.app.activeCamera,
@@ -169,8 +140,8 @@ class MyContents {
       camera.far
     );
     cam.up = new THREE.Vector3(0, 1, 0);
-    cam.position.set(...camera.location);
     cam.lookAt(new THREE.Vector3(...camera.target));
+    cam.position.set(...camera.location);
     this.cameras[camera.id] = cam;
   }
 
@@ -360,15 +331,15 @@ class MyContents {
     let skyboxMaterials = [
       new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.texture_lt_ref),
-        
+
         side: THREE.BackSide,
       }),
       new THREE.MeshBasicMaterial({
-      map: loader.load(this.sceneDir + rep.texture_rt_ref),
+        map: loader.load(this.sceneDir + rep.texture_rt_ref),
         side: THREE.BackSide,
       }),
       new THREE.MeshBasicMaterial({
-       map: loader.load(this.sceneDir + rep.texture_up_ref),
+        map: loader.load(this.sceneDir + rep.texture_up_ref),
         side: THREE.BackSide,
       }),
       new THREE.MeshBasicMaterial({
@@ -603,7 +574,6 @@ class MyContents {
     ) {
       let light = null;
       let helper = null;
-      console.log(node);
       switch (node.type) {
         case "spotlight":
           [light, helper] = this.setSpotlight(node);
@@ -654,14 +624,7 @@ class MyContents {
     this.app.scene.add(this.rootScene);
   }
 
-  endFunc() {
-    //  console.log(this.textures);
-    // console.log(this.materials);
-    // console.log(this.cameras);
-    console.log(this.app.scene);
-    console.log(this.lights);
-    // console.log(this.app.scene);
-  }
+  endFunc() {}
 }
 
 export { MyContents };

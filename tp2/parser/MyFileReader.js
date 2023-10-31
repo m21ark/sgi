@@ -49,7 +49,7 @@ class MyFileReader {
       this.xmlhttp.onload = this.onStateChange;
       this.xmlhttp.reader = this;
       this.xmlfilename = xmlfile;
-      this.xmlhttp.open("GET", xmlfile, true); //  (httpMethod,  URL,  asynchronous)
+      this.xmlhttp.open("GET", xmlfile, false); //  (httpMethod,  URL,  asynchronous)
       this.xmlhttp.setRequestHeader("Content-Type", "text/xml");
       this.xmlhttp.send(null);
     } else {
@@ -69,11 +69,6 @@ class MyFileReader {
         // HTTP status code  ( 200 => OK )
 
         let reader = this.reader;
-        console.info(
-          "------------------ " +
-            reader.xmlfilename +
-            " file read. begin parsing ------------------"
-        );
 
         let parser = new window.DOMParser();
         reader.xmlDoc = parser.parseFromString(this.response, "text/xml");
