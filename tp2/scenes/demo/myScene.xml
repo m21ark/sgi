@@ -49,8 +49,8 @@
         <material id="holoMat1"
             emissive="0.0 0.0 0.0 1"
             color="0.5 0.5 0.7 1.0"
-            specular="0 0 0 0"
-            shininess="0"
+            specular="0.3 0.3 0.3 0"
+            shininess="100"
             textureref="holoTex1"
             texlength_s="1"
             texlength_t="1"
@@ -60,8 +60,8 @@
         <material id="holoMat2"
             emissive="0.0 0.0 0.0 1"
             color="0.5 0.5 0.7 1.0"
-            specular="0 0 0 0"
-            shininess="0"
+            specular="0.3 0.3 0.3 0"
+            shininess="100"
             textureref="holoTex2"
             texlength_s="1"
             texlength_t="1"
@@ -515,43 +515,62 @@
 
         <node id="lights">
             <children>
-                <!-- 
-                <pointlight id="light1" enabled="true"
-                    color="0.5 0.6 0.8 1"
-                    intensity="1000"
-                    distance="1000"
-                    decay="2.0"
-                    castshadow="false"
-                    position="10 15 10"
-                />
 
 
-                <pointlight id="light2" enabled="true"
-                    color="0.5 0.6 0.8 1"
-                    intensity="1000"
-                    distance="1000"
-                    decay="2.0"
-                    castshadow="false"
-                    position="30 15 30"
-                /> -->
-
-                <!--        <spotlight id="light3" enabled="true"
+                <spotlight id="light1" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="100.0"
-                    distance="20"
-                    decay="2.0"
+                    distance="40"
+                    decay="0.4"
                     castshadow="true"
-                    position="20 20 20"
-                    target="20 0 20"
+                    position="19 25 19"
+                    target="0 0 0"
+                    penumbra="1"
+                    angle="25"
+                />
+
+                <spotlight id="light2" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="40"
+                    decay="0.4"
+                    castshadow="true"
+                    position="19 25 19"
+                    target="0 0 40"
+                    penumbra="1"
+                    angle="25"
+                />
+
+                <spotlight id="light3" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="40"
+                    decay="0.4"
+                    castshadow="true"
+                    position="19 25 19"
+                    target="40 0 0"
                     penumbra="1.0"
                     angle="25"
                 />
 
- -->
+
+                <spotlight id="light4" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="40"
+                    decay="0.4"
+                    castshadow="true"
+                    position="19 25 19"
+                    target="40 0 40"
+                    penumbra="1.0"
+                    angle="25"
+                />
+
+
                 <pointlight id="orb_light" enabled="true"
                     color="0.5 0.6 0.8 1"
                     intensity="1000"
-                    distance="1000000"
+                    distance="15"
                     decay="2.0"
                     castshadow="false"
                     position="19 9 19"
