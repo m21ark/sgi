@@ -32,6 +32,7 @@
         <texture id="gridTex" filepath="textures/grid.jpg" />
         <texture id="holoTex1" filepath="textures/holo1.jpg" />
         <texture id="holoTex2" filepath="textures/holo2.jpg" />
+        <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
     </textures>
 
     <materials>
@@ -134,6 +135,26 @@
             texlength_t="1"
             twosided="true" />
 
+        <material id="windowMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.10 0.10 0.10 1.0"
+            specular="0.0 0.0 0.04 1.0"
+            shininess="30"
+            textureref="moving_stars"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+        <material id="borderMat"
+            emissive="0.0 0.0 0.0 1.0"
+            color="0 0 0 1.0"
+            specular="0.2 0.1 0.1 1.0"
+            shininess="50"
+            textureref="metalTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
 
     </materials>
 
@@ -146,6 +167,7 @@
                 <noderef id="statue" />
                 <noderef id="controlTable" />
                 <noderef id="noPassage" />
+                <noderef id="window" />
 
                 <primitive>
                     <skybox
@@ -161,6 +183,87 @@
                 </primitive>
 
 
+            </children>
+        </node>
+
+        <node id="border1">
+            <materialref id="borderMat" />
+
+            <transforms>
+                <translate value3="0 0 0" />
+
+            </transforms>
+
+            <children>
+                <primitive>
+                    <box xyz1="-0.2 0 -0.2" xyz2="0.2 10 0.2" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="border2">
+            <materialref id="borderMat" />
+
+            <transforms>
+                <translate value3="20 0 0" />
+
+            </transforms>
+
+            <children>
+                <primitive>
+                    <box xyz1="-0.2 0 -0.2" xyz2="0.2 10 0.2" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="border4">
+            <materialref id="borderMat" />
+
+            <transforms>
+                <translate value3="20 10 0" />
+                <rotate value3="0 0 90.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <box xyz1="-0.2 0 -0.2" xyz2="0.2 20 0.2" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="border3">
+
+            <materialref id="borderMat" />
+
+            <transforms>
+                <translate value3="20 0 0" />
+                <rotate value3="0 0 90.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <box xyz1="-0.2 0 -0.2" xyz2="0.2 20 0.2" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="window">
+
+            <materialref id="windowMat" />
+
+            <transforms>
+                <translate value3="0.1 5 30" />
+                <rotate value3="0.0 90 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="20 10" />
+                </primitive>
+                <noderef id="border1" />
+                <noderef id="border2" />
+                <noderef id="border3" />
+                <noderef id="border4" />
             </children>
         </node>
 
