@@ -2,7 +2,7 @@
 <yaf>
     <globals background="0.1 0.1 0.1 1" ambient="0.8 0.8 0.8 1" />
 
-    <fog color="0 0 0 0" near="0.0" far="350.0" />
+    <fog color="0 0 0 0" near="0.0" far="250.0" />
 
     <cameras initial="cam1">
         <perspective id="cam1"
@@ -50,8 +50,8 @@
         <material id="holoMat1"
             emissive="0.0 0.0 0.0 1"
             color="0.5 0.5 0.7 1.0"
-            specular="0 0 0 0"
-            shininess="0"
+            specular="0.3 0.3 0.3 0"
+            shininess="100"
             textureref="holoTex1"
             texlength_s="1"
             texlength_t="1"
@@ -61,8 +61,8 @@
         <material id="holoMat2"
             emissive="0.0 0.0 0.0 1"
             color="0.5 0.5 0.7 1.0"
-            specular="0 0 0 0"
-            shininess="0"
+            specular="0.3 0.3 0.3 0"
+            shininess="100"
             textureref="holoTex2"
             texlength_s="1"
             texlength_t="1"
@@ -79,9 +79,9 @@
             twosided="true" />
 
         <material id="energyMat"
-            emissive="0.1 0.1 0.3 1"
-            color="0.3 0.7 1 1.0"
-            specular="0.3 0.3 0.3 0"
+            emissive="0 0.05 0.1 1"
+            color="0.5 0.7 0.7 1.0"
+            specular="0.5 0.5 0.7 0"
             shininess="100"
             textureref="energyTex"
             texlength_s="1"
@@ -621,44 +621,75 @@
 
         <node id="lights">
             <children>
-                <!-- 
-                <pointlight id="light1" enabled="true"
-                    color="0.5 0.6 0.8 1"
-                    intensity="1000"
-                    distance="1000"
-                    decay="2.0"
-                    castshadow="false"
-                    position="10 15 10"
-                />
 
 
-                <pointlight id="light2" enabled="true"
-                    color="0.5 0.6 0.8 1"
-                    intensity="1000"
-                    distance="1000"
-                    decay="2.0"
-                    castshadow="false"
-                    position="30 15 30"
-                /> -->
-
-                <!--        <spotlight id="light3" enabled="true"
+                <spotlight id="light1" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="100.0"
-                    distance="20"
-                    decay="2.0"
+                    distance="40"
+                    decay="0.75"
                     castshadow="true"
-                    position="20 20 20"
-                    target="20 0 20"
-                    penumbra="1.0"
-                    angle="25"
+                    position="19 25 19"
+                    target="0 0 0"
+                    penumbra="1"
+                    angle="30"
                 />
 
- -->
+                <spotlight id="light2" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="40"
+                    decay="0.75"
+                    castshadow="true"
+                    position="19 25 19"
+                    target="0 0 40"
+                    penumbra="1"
+                    angle="30"
+                />
+
+                <spotlight id="light3" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="40"
+                    decay="0.75"
+                    castshadow="true"
+                    position="19 25 19"
+                    target="40 0 0"
+                    penumbra="1.0"
+                    angle="30"
+                />
+
+
+                <spotlight id="light4" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="40"
+                    decay="0.75"
+                    castshadow="true"
+                    position="19 25 19"
+                    target="40 0 40"
+                    penumbra="1.0"
+                    angle="30"
+                />
+
+                <spotlight id="light5" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="7"
+                    decay="0.75"
+                    castshadow="true"
+                    position="19 14 19"
+                    target="19 0 19"
+                    penumbra="1.0"
+                    angle="7"
+                />
+
+
                 <pointlight id="orb_light" enabled="true"
                     color="0.5 0.6 0.8 1"
-                    intensity="1000"
-                    distance="1000000"
-                    decay="2.0"
+                    intensity="500"
+                    distance="15"
+                    decay="1.5"
                     castshadow="false"
                     position="19 9 19"
                 />
