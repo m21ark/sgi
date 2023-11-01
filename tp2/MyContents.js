@@ -16,6 +16,8 @@ class MyContents {
     this.textures = [];
     this.cameras = [];
 
+    this.useLightHelpers = false;
+
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
 
     this.sceneDir = "scenes/demo/";
@@ -594,7 +596,7 @@ class MyContents {
       }
 
       parentNode.add(light);
-      parentNode.add(helper);
+      if (this.useLightHelpers) parentNode.add(helper);
       return;
     }
 
