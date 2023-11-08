@@ -614,24 +614,16 @@ class MyContents {
 
     node.children.forEach((child) => {
       let group2 = new THREE.Group();
-      // parentNode.add(group2);
-      console.log(child);
-      child.node.children.forEach((child) => {
-        // create and set group
-        let group = new THREE.Group();
-        group.matrixWorldNeedsUpdate = true;
-        group2.add(group);
-        child.group = group;
-        // recursive call
-        this.transverseAndInheritValues(
-          child,
-          group,
-          parentMaterial,
-          parentTexture
-          );
-          console.log(group.matrix);
-      });
-      console.log(group2.matrix);
+
+      child.node.group = group2;
+
+      this.transverseAndInheritValues(
+        child.node,
+        group2,
+        parentMaterial,
+        parentTexture
+      );
+
 
       lod.addLevel(group2, child.mindist);
     });
@@ -682,7 +674,7 @@ class MyContents {
       parentNode.add(light);
       if (this.useLightHelpers) parentNode.add(helper);
       return;
-    } 
+    }
     // go down the tree if node has children
     if (node.children == null) return;
 

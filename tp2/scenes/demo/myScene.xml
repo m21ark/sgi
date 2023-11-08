@@ -173,7 +173,6 @@
             <children>
                 <noderef id="room" />
                 <noderef id="lights" />
-                <noderef id="statue" />
                 <noderef id="controlTable" />
                 <noderef id="noPassage" />
                 <noderef id="window" />
@@ -208,10 +207,9 @@
                 <scale value3="0.3 0.3 0.3" />
             </transforms>
             <children>
-
+                <noderef id="petal1" />
+                <noderef id="petal2" />
                 <noderef id="statue_base" />
-                <noderef id="statue_support" />
-                <noderef id="statue_orb" />
             </children>
         </node>
 
