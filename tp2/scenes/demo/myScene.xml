@@ -30,9 +30,18 @@
         <texture id="petalTex" filepath="textures/petal.jpg" />
         <texture id="metalTex" filepath="textures/metal.jpg" />
         <texture id="gridTex" filepath="textures/grid.jpg" />
-        <texture id="holoTex1" filepath="textures/holo1.jpg" />
         <texture id="holoTex2" filepath="textures/holo2.jpg" />
         <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
+
+        <texture id="holoTex1" 
+            filepath="textures/holo1.jpg"
+            mipmap0="textures/holo1.jpg"
+            mipmap1="textures/holo1.50.jpg"
+            mipmap2="textures/holo1.25.jpg"
+            mipmap3="textures/holo1.125.jpg"
+         
+         />
+
     </textures>
 
     <materials>

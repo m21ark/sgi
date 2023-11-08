@@ -43,7 +43,7 @@ class MyContents {
     gui.setContents(this.app.contents);
     this.app.setGui(gui);
     gui.init();
-    
+
     this.endFunc();
   }
 
@@ -62,7 +62,33 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() {}
+  update() { }
+  loadMipmap(parentTexture, level, path) {
+    // load texture. On loaded call the function to create the mipmap for the specified level 
+    new THREE.TextureLoader().load(path,
+      function (mipmapTexture)  // onLoad callback
+      {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        ctx.scale(1, 1);
+
+        // const fontSize = 48
+        const img = mipmapTexture.image
+        canvas.width = img.width;
+        canvas.height = img.height
+
+        // first draw the image
+        ctx.drawImage(img, 0, 0)
+
+        // set the mipmap image in the parent texture in the appropriate level
+        parentTexture.mipmaps[level] = canvas
+      },
+      undefined, // onProgress callback currently not supported
+      function (err) {
+        console.error('Unable to load the image ' + path + ' as mipmap level ' + level + ".", err)
+      }
+    )
+  }
 
   // ===================================== LOADERS =====================================
 
@@ -73,6 +99,21 @@ class MyContents {
       let texture = textures[key];
       let textureObj = textureLoader.load(this.sceneDir + texture.filepath);
 
+      if (texture.mipmap0 != null) {
+        textureObj.generateMipmaps = false
+
+        this.loadMipmap(textureObj, 0, this.sceneDir + texture.mipmap0)
+        if (texture.mipmap1) this.loadMipmap(textureObj, 1, this.sceneDir + texture.mipmap1)
+        if (texture.mipmap2) this.loadMipmap(textureObj, 2, this.sceneDir + texture.mipmap2)
+        if (texture.mipmap3) this.loadMipmap(textureObj, 3, this.sceneDir + texture.mipmap3)
+        if (texture.mipmap4) this.loadMipmap(textureObj, 4, this.sceneDir + texture.mipmap4)
+        if (texture.mipmap5) this.loadMipmap(textureObj, 5, this.sceneDir + texture.mipmap5)
+        if (texture.mipmap6) this.loadMipmap(textureObj, 6, this.sceneDir + texture.mipmap6)
+        if (texture.mipmap7) this.loadMipmap(textureObj, 7, this.sceneDir + texture.mipmap7)
+
+        textureObj.needsUpdate = true
+
+      }
       // isVideo, magFilter, minFilter, mipmaps, anisotropy are missing
 
       this.textures[key] = textureObj;
@@ -101,7 +142,7 @@ class MyContents {
       });
 
       if (materialObj.map != null) {
-          materialObj.map.repeat.set(1/material.texlength_s, 1/material.texlength_t);
+        materialObj.map.repeat.set(1 / material.texlength_s, 1 / material.texlength_t);
       } else console.log("ERROR: texture not found");
 
       this.materials[key] = materialObj;
@@ -379,7 +420,7 @@ class MyContents {
     // mesh.receiveShadow = true;
 
     mesh.position.set(rep.center[0], rep.center[1], rep.center[2]);
-    
+
     return mesh;
   }
 
@@ -644,7 +685,7 @@ class MyContents {
     this.app.scene.add(this.rootScene);
   }
 
-  endFunc() {}
+  endFunc() { }
 }
 
 export { MyContents };
