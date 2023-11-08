@@ -171,15 +171,16 @@
 
                 <primitive>
                     <skybox
-                        width="150"
-                        height="150"
-                        depth="150"
-                        texture_lt_ref="textures/skybox/left.png"
-                        texture_rt_ref="textures/skybox/right.png"
-                        texture_ft_ref="textures/skybox/front.png"
-                        texture_bk_ref="textures/skybox/back.png"
-                        texture_up_ref="textures/skybox/top.png"
-                        texture_dn_ref="textures/skybox/bottom.png" />
+                        size="150 150 150" 
+                        center="0 0 0"
+                        emissive="0 0 0 0"
+                        intensity="1"
+                        left="textures/skybox/left.png"
+                        right="textures/skybox/right.png"
+                        front="textures/skybox/front.png"
+                        back="textures/skybox/back.png"
+                        up="textures/skybox/top.png"
+                        down="textures/skybox/bottom.png" />
                 </primitive>
 
 

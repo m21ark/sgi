@@ -101,7 +101,7 @@ class MyContents {
       });
 
       if (materialObj.map != null) {
-        // materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
+          materialObj.map.repeat.set(1/material.texlength_s, 1/material.texlength_t);
       } else console.log("ERROR: texture not found");
 
       this.materials[key] = materialObj;
@@ -328,38 +328,48 @@ class MyContents {
 
   createSkybox(rep) {
     let skyboxGeometry = new THREE.BoxGeometry(
-      rep.width,
-      rep.height,
-      rep.depth
+      rep.size[0],
+      rep.size[1],
+      rep.size[2]
     );
+
+
 
     const loader = new THREE.TextureLoader();
 
+    let emissive = new THREE.Color(rep.emissive); // TODO: PERGUNTAR
+    //emissive.multiplyScalar(rep.intensity); 
+
     // TODO: Textures are not in the correct order
     let skyboxMaterials = [
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.texture_lt_ref),
-
+      new THREE.MeshPhongMaterial({
+        map: loader.load(this.sceneDir + rep.left),
+        emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.texture_rt_ref),
+      new THREE.MeshPhongMaterial({
+        map: loader.load(this.sceneDir + rep.right),
+        emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.texture_up_ref),
+      new THREE.MeshPhongMaterial({
+        map: loader.load(this.sceneDir + rep.up),
+        emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.texture_dn_ref),
+      new THREE.MeshPhongMaterial({
+        map: loader.load(this.sceneDir + rep.down),
+        emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.texture_ft_ref),
+      new THREE.MeshPhongMaterial({
+        map: loader.load(this.sceneDir + rep.front),
+        emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.texture_bk_ref),
+      new THREE.MeshPhongMaterial({
+        map: loader.load(this.sceneDir + rep.back),
+        emissive: emissive,
         side: THREE.BackSide,
       }),
     ];
@@ -368,6 +378,8 @@ class MyContents {
     // mesh.castShadow = true;
     // mesh.receiveShadow = true;
 
+    mesh.position.set(rep.center[0], rep.center[1], rep.center[2]);
+    
     return mesh;
   }
 
