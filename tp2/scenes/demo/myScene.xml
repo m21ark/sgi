@@ -177,7 +177,8 @@
                 <noderef id="controlTable" />
                 <noderef id="noPassage" />
                 <noderef id="window" />
-
+                <lodref id="ss" />
+                
                 <primitive>
                     <skybox
                         size="150 150 150" 
@@ -193,6 +194,38 @@
                 </primitive>
 
 
+            </children>
+        </node>
+
+        <lod id="ss">
+            <noderef id="statue2"  mindist="100"/>
+            <noderef id="statue"  mindist="20"/>
+        </lod>
+
+        <node id="statue2">
+            <transforms>
+                <translate value3="19 5 19" />
+                <scale value3="0.3 0.3 0.3" />
+            </transforms>
+            <children>
+
+                <noderef id="statue_base" />
+                <noderef id="statue_support" />
+                <noderef id="statue_orb" />
+            </children>
+        </node>
+
+        <node id="statue">
+            <transforms>
+                <translate value3="19 5 19" />
+                <scale value3="0.3 0.3 0.3" />
+            </transforms>
+            <children>
+                <noderef id="petal1" />
+                <noderef id="petal2" />
+                <noderef id="statue_base" />
+                <noderef id="statue_support" />
+                <noderef id="statue_orb" />
             </children>
         </node>
 
@@ -403,21 +436,6 @@
                 <primitive>
                     <box xyz1="0 0 0" xyz2="0.1 0.1 5" />
                 </primitive>
-            </children>
-        </node>
-
-
-        <node id="statue">
-            <transforms>
-                <translate value3="19 5 19" />
-                <scale value3="0.3 0.3 0.3" />
-            </transforms>
-            <children>
-                <noderef id="petal1" />
-                <noderef id="petal2" />
-                <noderef id="statue_base" />
-                <noderef id="statue_support" />
-                <noderef id="statue_orb" />
             </children>
         </node>
 

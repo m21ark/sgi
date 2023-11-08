@@ -608,6 +608,36 @@ class MyContents {
     return [spotLight, spotLightHelper];
   }
 
+  loadLod(node, parentNode, parentMaterial, parentTexture) {
+    let lod = new THREE.LOD();
+    parentNode.add(lod);
+
+    node.children.forEach((child) => {
+      let group2 = new THREE.Group();
+      // parentNode.add(group2);
+      console.log(child);
+      child.node.children.forEach((child) => {
+        // create and set group
+        let group = new THREE.Group();
+        group.matrixWorldNeedsUpdate = true;
+        group2.add(group);
+        child.group = group;
+        // recursive call
+        this.transverseAndInheritValues(
+          child,
+          group,
+          parentMaterial,
+          parentTexture
+          );
+          console.log(group.matrix);
+      });
+      console.log(group2.matrix);
+
+      lod.addLevel(group2, child.mindist);
+    });
+    return;
+  }
+
   // ===================================== END LOADERS =====================================
 
   transverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
@@ -652,26 +682,33 @@ class MyContents {
       parentNode.add(light);
       if (this.useLightHelpers) parentNode.add(helper);
       return;
-    }
-
+    } 
     // go down the tree if node has children
     if (node.children == null) return;
 
     node.children.forEach((child) => {
-      // create and set group
-      let group = new THREE.Group();
-      // group.castShadow = true;
-      parentNode.add(group);
-      child.group = group;
 
-      // recursive call
-      this.transverseAndInheritValues(
-        child,
-        group,
-        this_material,
-        parentTexture
-      );
-    });
+      if (child.type === "lod") {
+        this.loadLod(child, parentNode, this_material, parentTexture);
+
+      } else {
+        // create and set group
+
+        let group = new THREE.Group();
+        // group.castShadow = true;
+        parentNode.add(group);
+        child.group = group;
+        // recursive call
+        this.transverseAndInheritValues(
+          child,
+          group,
+          this_material,
+          parentTexture
+        );
+      }
+    }
+    );
+
   }
 
   // Method to start traversal from the root node
@@ -682,6 +719,7 @@ class MyContents {
     this.rootScene.name = "rootScene";
     // this.rootScene.castShadow = true;
     this.transverseAndInheritValues(rootNode, this.rootScene);
+    console.log(this.rootScene);
     this.app.scene.add(this.rootScene);
   }
 
