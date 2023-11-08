@@ -15,6 +15,7 @@ class MyContents {
     this.lights = [];
     this.textures = [];
     this.cameras = [];
+    this.camerasNames = [];
 
     this.useLightHelpers = false;
 
@@ -38,12 +39,6 @@ class MyContents {
 
   onSceneLoaded(data) {
     this.onAfterSceneLoadedAndBeforeRender(data);
-
-    let gui = new MyGuiInterface(this.app);
-    gui.setContents(this.app.contents);
-    this.app.setGui(gui);
-    gui.init();
-
     this.endFunc();
   }
 
@@ -137,8 +132,9 @@ class MyContents {
         side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
         flatShading: material.shading.toLowerCase() === "flat",
         map: this.textures[material.textureref] ?? null,
-        // bumpref: this.textures[material.bumpref] ?? null,
-        // bumpScale: material.bumpscale,
+        specularMap: this.textures[material.specularref] ?? null,
+        bumpref: this.textures[material.bumpref] ?? null,
+        bumpScale: material.bumpscale,
       });
 
       if (materialObj.map != null) {
@@ -162,9 +158,9 @@ class MyContents {
       }
 
       this.app.scene.add(this.cameras[camera.id]);
+      this.camerasNames.push(camera.id);
     }
     this.app.activeCamera = this.cameras[activeCameraId];
-    // this.app.controls.object = this.cameras[activeCameraId];
   }
 
   setActiveCamera(cameraId) {
@@ -378,8 +374,7 @@ class MyContents {
 
     const loader = new THREE.TextureLoader();
 
-    let emissive = new THREE.Color(rep.emissive); // TODO: PERGUNTAR
-    //emissive.multiplyScalar(rep.intensity); 
+    let emissive = new THREE.Color(rep.emissive);
 
     // TODO: Textures are not in the correct order
     let skyboxMaterials = [
