@@ -34,12 +34,11 @@
         <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true"/>
 
         <texture id="holoTex1" 
-            filepath="textures/holo1.jpg"
-            mipmap0="textures/holo1.jpg"
-            mipmap1="textures/holo1.50.jpg"
-            mipmap2="textures/holo1.25.jpg"
-            mipmap3="textures/holo1.125.jpg"
-         
+            filepath="textures/holo3.jpg"
+            mipmap0="textures/holo3.jpg"
+            mipmap1="textures/holo3_2.jpg"
+            mipmap2="textures/holo3_3.jpg"
+            mipmap3="textures/holo3_4.jpg"
          />
 
     </textures>
