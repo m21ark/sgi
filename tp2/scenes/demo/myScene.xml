@@ -28,10 +28,10 @@
         <texture id="floorTex" filepath="textures/floor.jpg" />
         <texture id="petalTex" filepath="textures/petal.jpg" />
         <texture id="metalTex" filepath="textures/metal.jpg" />
-        <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true"/>
+        <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true" />
         <texture id="holoTex2" filepath="textures/holo2.jpg" />
         <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
-        <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true"/>
+        <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true" />
 
         <texture id="holoTex1"
             filepath="textures/holo3.jpg"
@@ -163,6 +163,17 @@
             texlength_t="1"
             twosided="true" />
 
+        <material id="hologlobeMat"
+            emissive="0 0.5 0.2 1.0"
+            color="0 0 0 1.0"
+            specular="0 0.5 0.0 1.0"
+            shininess="50"
+            textureref="metalTex"
+            texlength_s="1"
+            wireframe="true"
+            texlength_t="1"
+            twosided="true" />
+
 
     </materials>
 
@@ -175,7 +186,8 @@
                 <noderef id="controlTable" />
                 <noderef id="noPassage" />
                 <noderef id="window" />
-                <lodref id="ss" />
+                <lodref id="statue_lod" />
+                <noderef id="globe_holo" />
 
                 <primitive>
                     <skybox
@@ -195,8 +207,8 @@
             </children>
         </node>
 
-        <lod id="ss">
-            <noderef id="statue2" mindist="95" /> 
+        <lod id="statue_lod">
+            <noderef id="statue2" mindist="95" />
             <noderef id="statue" mindist="20" />
         </lod>
 
@@ -224,6 +236,22 @@
                 <noderef id="statue_base" />
                 <noderef id="statue_support" />
                 <noderef id="statue_orb" />
+            </children>
+        </node>
+
+        <node id="globe_holo">
+            <transforms>
+                <translate value3="30 3.25 30" />
+                <scale value3="0.1 0.1 0.1" />
+            </transforms>
+
+            <materialref id="hologlobeMat" />
+
+            <children>
+                <primitive>
+                    <sphere radius="16" slices="17" stacks="7" />
+                </primitive>
+                <noderef id="globo_holo_base" />
             </children>
         </node>
 
@@ -535,6 +563,22 @@
         <node id="statue_base">
             <transforms>
                 <translate value3="0 -14 0" />
+                <rotate value3="0 45 0" />
+            </transforms>
+
+            <materialref id="metalMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="30" top="24" height="4.8" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="globo_holo_base">
+            <transforms>
+                <translate value3="0 -30 0" />
                 <rotate value3="0 45 0" />
             </transforms>
 
