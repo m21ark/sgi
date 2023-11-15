@@ -32,6 +32,7 @@
         <texture id="gridTex" filepath="textures/grid.jpg" />
         <texture id="holoTex2" filepath="textures/holo2.jpg" />
         <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
+        <texture id="sphere_video" filepath="videos/oceans.mp4" isVideo="true"/>
 
         <texture id="holoTex1" 
             filepath="textures/holo1.jpg"
