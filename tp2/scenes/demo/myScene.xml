@@ -26,13 +26,12 @@
 
     <textures>
         <texture id="floorTex" filepath="textures/floor.jpg" />
-        <texture id="energyTex" filepath="textures/energy.jpg" />
         <texture id="petalTex" filepath="textures/petal.jpg" />
         <texture id="metalTex" filepath="textures/metal.jpg" />
-        <texture id="gridTex" filepath="textures/grid.jpg" />
+        <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true"/>
         <texture id="holoTex2" filepath="textures/holo2.jpg" />
         <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
-        <texture id="sphere_video" filepath="videos/oceans.mp4" isVideo="true"/>
+        <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true"/>
 
         <texture id="holoTex1" 
             filepath="textures/holo1.jpg"
@@ -93,7 +92,7 @@
             color="0.5 0.7 0.7 1.0"
             specular="0.5 0.5 0.7 0"
             shininess="100"
-            textureref="energyTex"
+            textureref="sphereVideo"
             texlength_s="1"
             texlength_t="1"
             twosided="false" />
@@ -140,7 +139,7 @@
             color="0.10 0.10 0.10 1.0"
             specular="0.1 0.1 0.4 1.0"
             shininess="30"
-            textureref="gridTex"
+            textureref="gridVideo"
             texlength_s="1"
             texlength_t="1"
             twosided="true" />

@@ -98,7 +98,11 @@ class MyContents {
         const video = document.getElementById(texture.id);
         
         textureObj = new THREE.VideoTexture(video);
-        textureObj.colorSpace = THREE.SRGBColorSpace;
+        textureObj.minFilter = THREE.LinearFilter;
+        textureObj.magFilter = THREE.LinearFilter;
+        textureObj.format = THREE.RGBAFormat;
+        this.textures[key] = textureObj;
+       
       }
 
       if (texture.mipmap0 != null) {
