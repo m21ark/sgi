@@ -643,7 +643,8 @@ class MyFileReader  {
 	 */
 	loadFog(rootElement) {
 		let elem = this.getAndCheck(rootElement, 'fog', 0, 1)
-		this.data.setFog(this.loadXmlItem({elem: elem, descriptor: this.data.descriptors["fog"], extras: [["type", "fog"]]}))
+		if (elem !== null && elem !== undefined)
+			this.data.setFog(this.loadXmlItem({elem: elem, descriptor: this.data.descriptors["fog"], extras: [["type", "fog"]]}))
 	}
 
 	/**

@@ -94,6 +94,17 @@ class MyContents {
       let texture = textures[key];
       let textureObj = textureLoader.load(this.sceneDir + texture.filepath);
 
+      if (texture.isVideo) {
+        const video = document.getElementById(texture.id);
+        
+        textureObj = new THREE.VideoTexture(video);
+        textureObj.minFilter = THREE.LinearFilter;
+        textureObj.magFilter = THREE.LinearFilter;
+        textureObj.format = THREE.RGBAFormat;
+        this.textures[key] = textureObj;
+       
+      }
+
       if (texture.mipmap0 != null) {
         textureObj.generateMipmaps = false
 
