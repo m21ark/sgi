@@ -4,6 +4,7 @@ import { MyFileReader } from "./parser/MyFileReader.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 import { MyGuiInterface } from "./MyGuiInterface.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { MyPolygon } from "./MyPolygon.js"
 
 class MyContents {
   constructor(app) {
@@ -96,13 +97,13 @@ class MyContents {
 
       if (texture.isVideo) {
         const video = document.getElementById(texture.id);
-        
+
         textureObj = new THREE.VideoTexture(video);
         textureObj.minFilter = THREE.LinearFilter;
         textureObj.magFilter = THREE.LinearFilter;
         textureObj.format = THREE.RGBAFormat;
         this.textures[key] = textureObj;
-       
+
       }
 
       if (texture.mipmap0 != null) {
@@ -352,6 +353,14 @@ class MyContents {
           );
 
           break;
+        case "polygon":
+          console.log(material);
+          //if (materials != null )
+           // material.vertexColors = true;
+          geometry = MyPolygon.createBufferGeometry(rep.radius, rep.stacks, rep.slices,
+            rep.color_c, rep.color_p);
+
+          break;
 
         default:
           console.log("ERROR: primitive type not supported");
@@ -364,6 +373,8 @@ class MyContents {
       color: 0xffffff,
       wireframe: true,
     });
+
+    defaultMaterial.vertexColors = true;
 
     let mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
 
