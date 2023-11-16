@@ -19,7 +19,7 @@
             target="0 0 0"
             left="-5"
             right="5"
-            bottom="-5" 
+            bottom="-5"
             top="5" />
     </cameras>
 
@@ -28,18 +28,18 @@
         <texture id="floorTex" filepath="textures/floor.jpg" />
         <texture id="petalTex" filepath="textures/petal.jpg" />
         <texture id="metalTex" filepath="textures/metal.jpg" />
-        <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true"/>
+        <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true" />
         <texture id="holoTex2" filepath="textures/holo2.jpg" />
         <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
-        <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true"/>
+        <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true" />
 
-        <texture id="holoTex1" 
+        <texture id="holoTex1"
             filepath="textures/holo3.jpg"
             mipmap0="textures/holo3.jpg"
             mipmap1="textures/holo3_2.jpg"
             mipmap2="textures/holo3_3.jpg"
             mipmap3="textures/holo3_4.jpg"
-         />
+        />
 
     </textures>
 
@@ -163,6 +163,17 @@
             texlength_t="1"
             twosided="true" />
 
+        <material id="hologlobeMat"
+            emissive="0 0.5 0.2 1.0"
+            color="0 0 0 1.0"
+            specular="0 0.5 0.0 1.0"
+            shininess="50"
+            textureref="metalTex"
+            texlength_s="1"
+            wireframe="true"
+            texlength_t="1"
+            twosided="true" />
+
 
     </materials>
 
@@ -176,12 +187,12 @@
                 <noderef id="noPassage" />
                 <noderef id="window" />
                 <noderef id="temp" />
-                <lodref id="ss" />
-
+                <lodref id="statue_lod" />
+                <noderef id="globe_holo" />
 
                 <primitive>
                     <skybox
-                        size="150 150 150" 
+                        size="150 150 150"
                         center="0 0 0"
                         emissive="0 0 0 0"
                         intensity="1"
@@ -206,10 +217,10 @@
 
             </children>
         </node>
-
-        <lod id="ss">
-            <noderef id="statue2"  mindist="100"/>
-            <noderef id="statue"  mindist="20"/>
+        
+        <lod id="statue_lod">
+            <noderef id="statue2" mindist="95" />
+            <noderef id="statue" mindist="20" />
         </lod>
 
         <node id="statue2">
@@ -218,8 +229,9 @@
                 <scale value3="0.3 0.3 0.3" />
             </transforms>
             <children>
-                <noderef id="petal1" />
-                <noderef id="petal2" />
+                <noderef id="petal1_simple" />
+                <noderef id="petal2_simple" />
+                <noderef id="simple_state_orb" />
                 <noderef id="statue_base" />
             </children>
         </node>
@@ -235,6 +247,22 @@
                 <noderef id="statue_base" />
                 <noderef id="statue_support" />
                 <noderef id="statue_orb" />
+            </children>
+        </node>
+
+        <node id="globe_holo">
+            <transforms>
+                <translate value3="30 3.25 30" />
+                <scale value3="0.1 0.1 0.1" />
+            </transforms>
+
+            <materialref id="hologlobeMat" />
+
+            <children>
+                <primitive>
+                    <sphere radius="16" slices="17" stacks="7" />
+                </primitive>
+                <noderef id="globo_holo_base" />
             </children>
         </node>
 
@@ -514,9 +542,54 @@
             </children>
         </node>
 
+        <node id="petal1_simple">
+            <transforms>
+                <translate value3="-8 -16 -13" />
+                <rotate value3="90 90 0" />
+            </transforms>
+            <materialref id="petalMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="3 5" xy2="35 22" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="petal2_simple">
+            <transforms>
+                <translate value3="-12 -16 -8" />
+                <rotate value3="0 0 0" />
+            </transforms>
+            <materialref id="petalMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="3 5" xy2="20 20" />
+                </primitive>
+            </children>
+        </node>
+
+
         <node id="statue_base">
             <transforms>
                 <translate value3="0 -14 0" />
+                <rotate value3="0 45 0" />
+            </transforms>
+
+            <materialref id="metalMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="30" top="24" height="4.8" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="globo_holo_base">
+            <transforms>
+                <translate value3="0 -30 0" />
                 <rotate value3="0 45 0" />
             </transforms>
 
@@ -583,6 +656,20 @@
             </children>
         </node>
 
+
+        <node id="simple_state_orb">
+            <transforms>
+                <translate value3="0 7 0" />
+            </transforms>
+
+            <materialref id="energyMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="1.5" top="1.5" height="14" slices="20" stacks="20" />
+                </primitive>
+            </children>
+        </node>
 
         <node id="controlTable">
             <transforms>
