@@ -241,12 +241,12 @@
             </children>
         </node>
         
-        <lod id="statue_lod">
+        <lod id="statue_lod" castshadows="true" receiveshadows="true">
             <noderef id="statue2" mindist="95" />
             <noderef id="statue" mindist="20" />
         </lod>
 
-        <node id="statue2">
+        <node id="statue2" >
             <transforms>
                 <translate value3="19 5 19" />
                 <scale value3="0.3 0.3 0.3" />
@@ -273,7 +273,7 @@
             </children>
         </node>
 
-        <node id="globe_holo">
+        <node id="globe_holo" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="30 3.25 30" />
                 <scale value3="0.1 0.1 0.1" />
@@ -473,7 +473,7 @@
             </children>
         </node>
 
-        <node id="noPassage">
+        <node id="noPassage" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="19 2.3 19" />
             </transforms>
@@ -724,7 +724,7 @@
             </children>
         </node>
 
-        <node id="controlTable">
+        <node id="controlTable" castshadows="true" receiveshadows="true">
             <transforms>
 
             </transforms>
@@ -875,7 +875,7 @@
             </children>
         </node>
 
-        <node id="room">
+        <node id="room" castshadows="true" receiveshadows="true">
             <children>
                 <noderef id="floor" />
                 <noderef id="wall1" />

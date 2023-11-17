@@ -399,8 +399,8 @@ class MyContents {
     let mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
 
     // make sure the object casts and receives shadows
-    // mesh.castShadow = true;
-    // mesh.receiveShadow = true;
+    if (father.castShadow) mesh.castShadow = true;
+    if (father.receiveShadow) mesh.receiveShadow = true;
 
     return mesh;
   }
@@ -562,7 +562,7 @@ class MyContents {
     pointLight.shadow.mapSize.height = obj.shadowmapsize;
     pointLight.shadow.camera.far = obj.shadowfar;
 
-    pointLight.shadow.bias = -0.001; // VER ISTO
+    //pointLight.shadow.bias = -0.001; // VER ISTO
 
     this.lights[obj.id] = pointLight;
 
@@ -598,7 +598,7 @@ class MyContents {
     directionalLight.shadow.camera.top = obj.shadowtop;
     directionalLight.shadow.camera.bottom = obj.shadowbottom;
 
-    directionalLight.shadow.bias = -0.001; // VER ISTO
+    //directionalLight.shadow.bias = -0.001; // VER ISTO
 
     this.lights[obj.id] = directionalLight;
 
@@ -634,7 +634,7 @@ class MyContents {
     spotLight.shadow.mapSize.height = obj.shadowmapsize;
     spotLight.shadow.camera.far = obj.shadowfar;
 
-    spotLight.shadow.bias = -0.001; // VER ISTO
+    //spotLight.shadow.bias = -0.001; // VER ISTO
 
     this.lights[obj.id] = spotLight;
 
@@ -724,7 +724,18 @@ class MyContents {
         // create and set group
 
         let group = new THREE.Group();
-        // group.castShadow = true;
+       
+        if (child.castshadows || node.castShadows || parentNode.castShadow) {
+          parentNode.castShadow = true;
+          child.castShadows = true;
+          group.castShadow = true;
+        }
+        if (child.receiveshadows || node.receiveShadows || parentNode.receiveShadow) {
+          parentNode.receiveShadow = true;
+          child.receiveShadows = true;
+          group.receiveShadow = true;
+        }
+
         parentNode.add(group);
         child.group = group;
         // recursive call
