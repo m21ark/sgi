@@ -134,20 +134,37 @@ class MyContents {
       let color = material.color;
       let emissive = material.emissive;
       let specular = material.specular;
+      let materialObj;
 
-      let materialObj = new THREE.MeshPhongMaterial({
-        color: new THREE.Color(color.r, color.g, color.b),
-        emissive: new THREE.Color(emissive.r, emissive.g, emissive.b),
-        specular: new THREE.Color(specular.r, specular.g, specular.b),
-        wireframe: material.wireframe,
-        shininess: material.shininess,
-        side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
-        flatShading: material.shading.toLowerCase() === "flat",
-        map: this.textures[material.textureref] ?? null,
-        specularMap: this.textures[material.specularref] ?? null,
-        bumpref: this.textures[material.bumpref] ?? null,
-        bumpScale: material.bumpscale,
-      });
+      if (material.shading === 'none') {
+        materialObj = new THREE.MeshBasicMaterial({
+          color: new THREE.Color(color.r, color.g, color.b),
+          emissive: new THREE.Color(emissive.r, emissive.g, emissive.b),
+          specular: new THREE.Color(specular.r, specular.g, specular.b),
+          wireframe: material.wireframe,
+          shininess: material.shininess,
+          side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
+          map: this.textures[material.textureref] ?? null,
+          specularMap: this.textures[material.specularref] ?? null,
+          bumpref: this.textures[material.bumpref] ?? null,
+          bumpScale: material.bumpscale,
+        });
+      } else {
+        materialObj = new THREE.MeshPhongMaterial({
+          color: new THREE.Color(color.r, color.g, color.b),
+          emissive: new THREE.Color(emissive.r, emissive.g, emissive.b),
+          specular: new THREE.Color(specular.r, specular.g, specular.b),
+          wireframe: material.wireframe,
+          shininess: material.shininess,
+          side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
+          flatShading: material.shading.toLowerCase() === "flat",
+          map: this.textures[material.textureref] ?? null,
+          specularMap: this.textures[material.specularref] ?? null,
+          bumpref: this.textures[material.bumpref] ?? null,
+          bumpScale: material.bumpscale,
+        });
+      }
+
 
       if (materialObj.map != null) {
         materialObj.map.repeat.set(1 / material.texlength_s, 1 / material.texlength_t);
@@ -355,8 +372,11 @@ class MyContents {
           break;
         case "polygon":
           console.log(material);
-          //if (materials != null )
-           // material.vertexColors = true;
+          if (material != null ) {
+            material.vertexColors = true;
+            material.needsUpdate = true;
+          }
+            
           geometry = MyPolygon.createBufferGeometry(rep.radius, rep.stacks, rep.slices,
             rep.color_c, rep.color_p);
 

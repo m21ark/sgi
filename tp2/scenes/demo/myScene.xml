@@ -163,6 +163,19 @@
             texlength_t="1"
             twosided="true" />
 
+        <material id="targeMaterial"
+            emissive="1.0 1.0 1.0 1.0"
+            color="0.4 0.4 0.4 1.0"
+            specular="0.2 0.1 0.1 1.0"
+            shininess="50"
+            texlength_s="1"
+            texlength_t="1"
+            wireframe="true"
+
+            twosided="true"
+            shading="none"
+        />
+
         <material id="hologlobeMat"
             emissive="0 0.5 0.2 1.0"
             color="0 0 0 1.0"
@@ -186,7 +199,8 @@
                 <noderef id="controlTable" />
                 <noderef id="noPassage" />
                 <noderef id="window" />
-                <noderef id="temp" />
+                <noderef id="aim" />
+                <noderef id="spaceship" />
                 <lodref id="statue_lod" />
                 <noderef id="globe_holo" />
 
@@ -208,11 +222,20 @@
             </children>
         </node>
 
-        <node id="temp" >
+        <node id="aim" >
+            
+            <transforms>
+                <translate value3="0.12 10 20" />
+                <rotate value3="0.0 90 0.0" />
+            </transforms>
+
+            <materialref id="targeMaterial"/>
+
+
             <children>
                 <primitive>
-                    <polygon radius="5" stacks="5" slices="5"
-                                  color_p="0.2 0.9 0.2 1.0" color_c="0.9 0.2 0.2 1.0" /> 
+                    <polygon radius="2" stacks="5" slices="20"
+                                  color_p="0.2 0.9 0.2 1.0" color_c="0.9 0.1 0.1 1.0" /> 
                 </primitive>
 
             </children>
@@ -475,6 +498,36 @@
                 </primitive>
             </children>
         </node>
+
+<node id="spaceship">
+    <transforms>
+        <translate value3="0 0 0" />
+        <rotate value3="0 0 0" />
+        <scale value3="1 1 1" />
+    </transforms>
+
+    <materialref id="metalMat" />
+
+
+    <children>
+        <primitive>
+            <nurbs degree_u="2" degree_v="1" parts_u="20" parts_v="20" distance="0.0">
+                <!-- Define control points for the spaceship NURBS surface -->
+                <!-- Customize the control points based on your spaceship design -->
+                <controlpoint xx="-5.0" yy="5.0" zz="-5.0" />
+                <controlpoint xx="-5.0" yy="5.0" zz="5.0" />
+                <controlpoint xx="5.0" yy="5.0" zz="5.0" />
+                <controlpoint xx="5.0" yy="5.0" zz="-5.0" />
+                <controlpoint xx="-5.0" yy="-5.0" zz="-5.0" />
+                <controlpoint xx="-5.0" yy="-5.0" zz="5.0" />
+                <controlpoint xx="5.0" yy="-5.0" zz="5.0" />
+                <controlpoint xx="5.0" yy="-5.0" zz="-5.0" />
+                <!-- Add more control points as needed -->
+            </nurbs>
+        </primitive>
+    </children>
+</node>
+
 
         <node id="petal1">
             <transforms>
