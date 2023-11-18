@@ -108,7 +108,6 @@ class MyContents {
 
       if (texture.isVideo) {
         const video = document.getElementById(texture.id);
-
         textureObj = new THREE.VideoTexture(video);
         textureObj.minFilter = THREE.LinearFilter;
         textureObj.magFilter = THREE.LinearFilter;
@@ -137,7 +136,6 @@ class MyContents {
 
         textureObj.needsUpdate = true;
       }
-      // isVideo, magFilter, minFilter, mipmaps, anisotropy are missing
 
       this.textures[key] = textureObj;
       this.textureNode.set(textureObj, texture);
@@ -276,6 +274,7 @@ class MyContents {
       camera.far
     );
     cam.position.set(...camera.location);
+    console.log(new THREE.Vector3(...camera.target));
     cam.lookAt(new THREE.Vector3(...camera.target));
     this.cameras[camera.id] = cam;
   }

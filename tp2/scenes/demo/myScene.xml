@@ -9,7 +9,7 @@
             angle="60"
             near="0.1"
             far="1000"
-            location="40 40 40"
+            location="100 20 30"
             target="0 0 0" />
 
         <orthogonal id="cam2"
@@ -27,12 +27,18 @@
     <textures>
         <texture id="floorTex" filepath="textures/floor.jpg" />
         <texture id="floorTexN" filepath="textures/floorN.jpg" />
+
+        <texture id="desertFloorTex" filepath="textures/desertFloor.jpg" />
+        <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" />
+
         <texture id="petalTex" filepath="textures/petal.jpg" />
         <texture id="metalTex" filepath="textures/metal.jpg" />
         <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true" />
         <texture id="holoTex2" filepath="textures/holo2.jpg" />
         <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
         <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true" />
+
+        <texture id="passwordVideo" filepath="videos/password.mp4" isVideo="true" />
 
         <texture id="holoTex1"
             filepath="textures/holo3.jpg"
@@ -53,8 +59,7 @@
             shininess="0"
             textureref="metalTex"
             texlength_s="1"
-            texlength_t="1"
-            twosided="true" />
+            texlength_t="1" />
 
         <material id="holoMat1"
             emissive="0.0 0.0 0.0 1"
@@ -86,6 +91,17 @@
             texlength_t="1"
             textureref="floorTex"
             bumpref="floorTexN"
+            twosided="true" />
+
+        <material id="desertFloorMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.30 0.20 0.10 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            texlength_s="1"
+            texlength_t="1"
+            textureref="desertFloorTex"
+            bumpref="desertFloorTexN"
             twosided="true" />
 
         <material id="energyMat"
@@ -195,6 +211,24 @@
             shininess="50"
         />
 
+        <material id="glassMat"
+            emissive="0.0 0.0 0.0 1.0"
+            color="0.65 0.65 0.65 0.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="200"
+            twosided="true"
+        />
+
+
+        <material id="doorHandleMat"
+            emissive="0.0 0.0 0.0 1.0"
+            color="0.0 0.0 0.0 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="200"
+            twosided="true"
+            textureref="doorHandleVideo"
+        />
+
 
     </materials>
 
@@ -212,9 +246,20 @@
                 <lodref id="statue_lod" />
                 <noderef id="globe_holo" />
 
+                <noderef id="spaceBox" />
+
+
+            </children>
+        </node>
+
+        <node id="spaceBox">
+            <transforms>
+                <translate value3="25 0 25" />
+            </transforms>
+            <children>
                 <primitive>
                     <skybox
-                        size="150 150 150"
+                        size="180 180 180"
                         center="0 0 0"
                         emissive="0 0 0 0"
                         intensity="1"
@@ -225,8 +270,6 @@
                         up="textures/skybox/top.png"
                         down="textures/skybox/bottom.png" />
                 </primitive>
-
-
             </children>
         </node>
 
@@ -511,7 +554,7 @@
 
         <node id="spaceship">
             <transforms>
-                <translate value3="35 30 40" />
+                <translate value3="60 4 20" />
             </transforms>
 
             <materialref id="" />
@@ -881,6 +924,15 @@
                     position="19 9 19"
                 />
 
+                <pointlight id="desertLight" enabled="true"
+                    color="0.5 0.6 0.8 1"
+                    intensity="500"
+                    distance="35"
+                    decay="1"
+                    castshadow="false"
+                    position="60 15 20"
+                />
+
 
             </children>
         </node>
@@ -888,11 +940,17 @@
         <node id="room" castshadows="true" receiveshadows="true">
             <children>
                 <noderef id="floor" />
+                <noderef id="desertFloor" />
                 <noderef id="wall1" />
                 <noderef id="wall2" />
-                <!--              <noderef id="wall3" />
-                <noderef id="wall4" /> 
-                <noderef id="ceil" />-->
+                <noderef id="wall3" />
+                <noderef id="wall4" />
+
+                <noderef id="door1" />
+                <noderef id="door1_handle" />
+                <!--
+                    
+                    <noderef id="ceil" />-->
             </children>
         </node>
 
@@ -919,7 +977,7 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="40 20" />
+                    <rectangle xy1="0 0" xy2="80 20" />
                 </primitive>
             </children>
         </node>
@@ -927,21 +985,21 @@
         <node id="wall3">
             <transforms>
                 <translate value3="0 0 40" />
-                <rotate value3="0.0 0 0.0" />
+                <rotate value3="0.0 -180 0" />
             </transforms>
 
             <materialref id="wallMat" />
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="40 20" />
+                    <rectangle xy1="0 0" xy2="-80 20" />
                 </primitive>
             </children>
         </node>
 
         <node id="wall4">
             <transforms>
-                <translate value3="40 0 0" />
+                <translate value3="80 0 0" />
                 <rotate value3="0.0 -90 0.0" />
             </transforms>
 
@@ -957,7 +1015,8 @@
 
         <node id="floor">
             <transforms>
-                <rotate value3="90 0 0" />
+                <rotate value3="-90 0 0" />
+                <translate value3="0 0 40" />
             </transforms>
 
             <materialref id="floorMat" />
@@ -965,6 +1024,21 @@
             <children>
                 <primitive>
                     <rectangle xy1="0 0" xy2="40 40" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="desertFloor">
+            <transforms>
+                <rotate value3="-90 0 0" />
+                <translate value3="0 0 80" />
+            </transforms>
+
+            <materialref id="desertFloorMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="40 40" xy2="80 80" />
                 </primitive>
             </children>
         </node>
@@ -984,6 +1058,59 @@
             </children>
         </node>
 
+        <node id="door1">
+            <transforms>
+                <translate value3="20 7.3 40" />
+                <rotate value3="90.0 36 0.0" />
+                <scale value3="3 1 3" />
+            </transforms>
+
+            <materialref id="orangeMat" />
+
+
+            <children>
+                <primitive>
+                    <cylinder base="3" top="3" height="2" slices="5" stacks="2" />
+                </primitive>
+
+                <noderef id="door1_middle" />
+            </children>
+        </node>
+
+
+        <node id="door1_middle">
+            <transforms>
+                <translate value3="0 0 0" />
+                <scale value3="0.8 1 0.8" />
+            </transforms>
+
+            <materialref id="wallMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="3" top="3" height="3" slices="5" stacks="2" />
+                </primitive>
+
+    
+
+            </children>
+        </node>
+
+        <node id="door1_handle">
+            <transforms>
+                <translate value3="17 7 38.49" />
+                
+            </transforms>
+
+            <materialref id="doorHandleMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="6 2" />
+                </primitive>
+            </children>
+        </node>
+
 
         <!-- ============================================================ -->
 
@@ -991,8 +1118,11 @@
         <node id="spaceTop">
             <transforms>
                 <rotate value3="-90 0 0" />
-                <scale value3="3 3 3" />
+                <scale value3="5 5 4" />
+                <translate value3="0 -0.5 0" />
             </transforms>
+
+            <materialref id="glassMat" />
 
             <children>
                 <primitive>
@@ -1433,8 +1563,10 @@
             <transforms>
                 <translate value3="0 -1.8 0" />
                 <rotate value3="0 0 90" />
-                <scale value3="1 1 1" />
+                <scale value3="1 2 1.5" />
             </transforms>
+
+            <materialref id="orangeMat" />
 
             <children>
                 <primitive>
