@@ -369,6 +369,25 @@ class MyContents {
             parts_v
           );
 
+
+          // Create a mesh for each control point and add them to the scene
+          for (let u = 0; u <= degree_u; u++) {
+            for (let v = 0; v <= degree_v; v++) {
+              let hue = (u / degree_u) * 100; // Calculate hue value based on u coordinate
+              let color = new THREE.Color(`hsl(${hue}, 100%, 50%)`); // Create color using HSL model
+
+              let controlPointGeometry = new THREE.SphereGeometry(0.2);
+              let controlPointMaterial = new THREE.MeshBasicMaterial({ color: color });
+              let controlPointMesh = new THREE.Mesh(controlPointGeometry, controlPointMaterial);
+              controlPointMesh.position.set(
+                controlpoints[u * (degree_v + 1) + v].xx,
+                controlpoints[u * (degree_v + 1) + v].yy,
+                controlpoints[u * (degree_v + 1) + v].zz
+              );
+              //father.add(controlPointMesh);
+            }
+          }
+
           break;
         case "polygon":
           console.log(material);
