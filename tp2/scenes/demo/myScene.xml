@@ -31,14 +31,20 @@
         <texture id="desertFloorTex" filepath="textures/desertFloor.jpg" />
         <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" />
 
+        <texture id="garageTex" filepath="textures/garage.jpg" />
+        <texture id="garageTexN" filepath="textures/garageN.jpg" />
+
         <texture id="petalTex" filepath="textures/petal.jpg" />
         <texture id="metalTex" filepath="textures/metal.jpg" />
-        <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true" />
         <texture id="holoTex2" filepath="textures/holo2.jpg" />
         <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
-        <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true" />
+        <texture id="ceilTex" filepath="textures/ceil.jpg" />
+        <texture id="licencePlateTex" filepath="textures/plate.jpg" />
 
+        <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true" />
+        <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true" />
         <texture id="passwordVideo" filepath="videos/password.mp4" isVideo="true" />
+
 
         <texture id="holoTex1"
             filepath="textures/holo3.jpg"
@@ -213,9 +219,9 @@
 
         <material id="glassMat"
             emissive="0.0 0.0 0.0 1.0"
-            color="0.65 0.65 0.65 0.0"
-            specular="0.9 0.9 0.9 1.0"
-            shininess="200"
+            color="0.35 0.35 0.95 0.0"
+            specular="0.5 0.5 0.5 1.0"
+            shininess="300"
             twosided="true"
         />
 
@@ -226,6 +232,31 @@
             specular="0.9 0.9 0.9 1.0"
             shininess="200"
             textureref="passwordVideo"
+        />
+
+        <material id="garageMat"
+            emissive="0.0 0.0 0.0 1.0"
+            color="0.7 0.7 0.7 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="200"
+            textureref="garageTex"
+            bumpref="garageTexN"
+        />
+
+        <material id="ceilMat"
+            emissive="0.0 0.0 0.0 1.0"
+            color="0.7 0.7 0.7 1.0"
+            specular="0.9 0.9 0.9 1.0"
+            shininess="200"
+            textureref="ceilTex"
+        />
+
+        <material id="licenceMat"
+            emissive="0.0 0.0 0.0 1.0"
+            color="1 1 1 1.0"
+            specular="0 0 0 1.0"
+            shininess="0"
+            textureref="licencePlateTex"
         />
 
 
@@ -241,10 +272,11 @@
                 <noderef id="noPassage" />
                 <noderef id="window" />
                 <noderef id="aim" />
-                <noderef id="spaceship" />
+
                 <lodref id="statue_lod" />
                 <noderef id="globe_holo" />
-
+                <noderef id="garage" />
+                <lodref id="spaceship_lod" />
                 <noderef id="spaceBox" />
 
 
@@ -524,6 +556,26 @@
             </children>
         </node>
 
+        <node id="garage">
+            <transforms>
+                <translate value3="47.5 0 0" />
+            </transforms>
+
+
+            <materialref id="garageMat" />
+
+            <children>
+
+                <primitive>
+                    <box xyz1="0 0.05 0" xyz2="25 16 1.2" />
+                </primitive>
+
+
+            </children>
+
+
+        </node>
+
         <node id="noPassage" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="19 2.3 19" />
@@ -551,13 +603,92 @@
         </node>
 
 
+        <lod id="spaceship_lod" castshadows="true" receiveshadows="true">
+            <noderef id="spaceship3" mindist="180" />
+            <noderef id="spaceship2" mindist="120" />
+            <noderef id="spaceship" mindist="20" />
+        </lod>
+
         <node id="spaceship">
             <transforms>
                 <translate value3="60 4 20" />
             </transforms>
 
-            <materialref id="" />
 
+            <children>
+                <noderef id="spaceTop" />
+                <noderef id="spaceSide" />
+                <noderef id="carlight1" />
+                <noderef id="carlight2" />
+                <noderef id="licensePlate" />
+            </children>
+        </node>
+
+        <node id="carlight1">
+            <transforms>
+                <translate value3="4 -0.8 -5" />
+                <rotate value3="90 0 0" />
+            </transforms>
+
+            <materialref id="glassMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.9" top="0.2" height="2" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="carlight2">
+            <transforms>
+                <translate value3="-4 -0.8 -5" />
+                <rotate value3="90 0 0" />
+            </transforms>
+
+            <materialref id="glassMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.9" top="0.2" height="2" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="licensePlate">
+            <transforms>
+                <translate value3="-2.5 -2.6 8.6" />
+            </transforms>
+
+            <materialref id="orangeMat" />
+
+            <children>
+                <primitive>
+                    <box xyz1="0 0 0" xyz2="5 1.5 0.4" />
+
+                </primitive>
+                <noderef id="plateLetters" />
+            </children>
+        </node>
+
+        <node id="plateLetters">
+            <transforms>
+                <translate value3="0 0 0.41" />
+            </transforms>
+
+            <materialref id="licenceMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="5 1.5" />
+                </primitive>
+            </children>
+
+        </node>
+
+        <node id="spaceship2">
+            <transforms>
+                <translate value3="60 4 20" />
+            </transforms>
 
             <children>
                 <noderef id="spaceTop" />
@@ -565,6 +696,48 @@
             </children>
         </node>
 
+
+        <node id="spaceship3">
+            <transforms>
+                <translate value3="60 4 20" />
+            </transforms>
+
+
+            <children>
+                <noderef id="spaceTop3" />
+                <noderef id="spaceSide3" />
+            </children>
+        </node>
+
+
+        <node id="spaceTop3">
+            <transforms>
+                <translate value3="0 0 0" />
+            </transforms>
+
+            <materialref id="glassMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="3.8" top="3" height="3.5" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="spaceSide3">
+            <transforms>
+                <translate value3="0 -2 0" />
+            </transforms>
+
+            <materialref id="orangeMat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="7.5" top="7.5" height="2.5" slices="32" stacks="32" />
+
+                </primitive>
+            </children>
+        </node>
 
         <node id="petal1">
             <transforms>
@@ -858,7 +1031,7 @@
                     distance="40"
                     decay="0.75"
                     castshadow="true"
-                    position="19 25 19"
+                    position="19 19 19"
                     target="0 0 0"
                     penumbra="1"
                     angle="30"
@@ -870,7 +1043,7 @@
                     distance="40"
                     decay="0.75"
                     castshadow="true"
-                    position="19 25 19"
+                    position="19 19 19"
                     target="0 0 40"
                     penumbra="1"
                     angle="30"
@@ -882,7 +1055,7 @@
                     distance="40"
                     decay="0.75"
                     castshadow="true"
-                    position="19 25 19"
+                    position="19 19 19"
                     target="40 0 0"
                     penumbra="1.0"
                     angle="30"
@@ -895,7 +1068,7 @@
                     distance="40"
                     decay="0.75"
                     castshadow="true"
-                    position="19 25 19"
+                    position="19 19 19"
                     target="40 0 40"
                     penumbra="1.0"
                     angle="30"
@@ -947,9 +1120,9 @@
 
                 <noderef id="door1" />
                 <noderef id="door1_handle" />
-                <!--
-                    
-                    <noderef id="ceil" />-->
+
+
+                <noderef id="ceil" />
             </children>
         </node>
 
@@ -1048,11 +1221,11 @@
                 <rotate value3="90.0 0 0.0" />
             </transforms>
 
-            <materialref id="floorMat" />
+            <materialref id="ceilMat" />
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="40 40" />
+                    <rectangle xy1="0 0" xy2="80 40" />
                 </primitive>
             </children>
         </node>
@@ -1083,14 +1256,13 @@
                 <scale value3="0.8 1 0.8" />
             </transforms>
 
-            <materialref id="wallMat" />
+            <materialref id="ceilMat" />
 
             <children>
                 <primitive>
                     <cylinder base="3" top="3" height="3" slices="5" stacks="2" />
                 </primitive>
 
-    
 
             </children>
         </node>
@@ -1098,7 +1270,7 @@
         <node id="door1_handle">
             <transforms>
                 <translate value3="23 7 38.49" />
-                <scale value3="-1 1 -1"/>
+                <scale value3="-1 1 -1" />
             </transforms>
 
             <materialref id="doorHandleMat" />
