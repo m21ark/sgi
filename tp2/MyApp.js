@@ -197,7 +197,6 @@ class MyApp {
 
     this.updateCameraIfRequired();
 
-
     // update the animation if contents were provided
     if (this.activeCamera !== undefined && this.activeCamera !== null) {
       this.contents.update();

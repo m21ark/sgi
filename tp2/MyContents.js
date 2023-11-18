@@ -4,7 +4,7 @@ import { MyFileReader } from "./parser/MyFileReader.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 import { MyGuiInterface } from "./MyGuiInterface.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { MyPolygon } from "./MyPolygon.js"
+import { MyPolygon } from "./MyPolygon.js";
 
 class MyContents {
   constructor(app) {
@@ -59,32 +59,41 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() { }
+  update() {}
   loadMipmap(parentTexture, level, path) {
-    // load texture. On loaded call the function to create the mipmap for the specified level 
-    new THREE.TextureLoader().load(path,
-      function (mipmapTexture)  // onLoad callback
-      {
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d')
+    // load texture. On loaded call the function to create the mipmap for the specified level
+    new THREE.TextureLoader().load(
+      path,
+      function (
+        mipmapTexture // onLoad callback
+      ) {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
         ctx.scale(1, 1);
 
         // const fontSize = 48
-        const img = mipmapTexture.image
+        const img = mipmapTexture.image;
         canvas.width = img.width;
-        canvas.height = img.height
+        canvas.height = img.height;
 
         // first draw the image
-        ctx.drawImage(img, 0, 0)
+        ctx.drawImage(img, 0, 0);
 
         // set the mipmap image in the parent texture in the appropriate level
-        parentTexture.mipmaps[level] = canvas
+        parentTexture.mipmaps[level] = canvas;
       },
       undefined, // onProgress callback currently not supported
       function (err) {
-        console.error('Unable to load the image ' + path + ' as mipmap level ' + level + ".", err)
+        console.error(
+          "Unable to load the image " +
+            path +
+            " as mipmap level " +
+            level +
+            ".",
+          err
+        );
       }
-    )
+    );
   }
 
   // ===================================== LOADERS =====================================
@@ -104,23 +113,28 @@ class MyContents {
         textureObj.magFilter = THREE.LinearFilter;
         textureObj.format = THREE.RGBAFormat;
         this.textures[key] = textureObj;
-
       }
 
       if (texture.mipmap0 != null) {
-        textureObj.generateMipmaps = false
+        textureObj.generateMipmaps = false;
 
-        this.loadMipmap(textureObj, 0, this.sceneDir + texture.mipmap0)
-        if (texture.mipmap1) this.loadMipmap(textureObj, 1, this.sceneDir + texture.mipmap1)
-        if (texture.mipmap2) this.loadMipmap(textureObj, 2, this.sceneDir + texture.mipmap2)
-        if (texture.mipmap3) this.loadMipmap(textureObj, 3, this.sceneDir + texture.mipmap3)
-        if (texture.mipmap4) this.loadMipmap(textureObj, 4, this.sceneDir + texture.mipmap4)
-        if (texture.mipmap5) this.loadMipmap(textureObj, 5, this.sceneDir + texture.mipmap5)
-        if (texture.mipmap6) this.loadMipmap(textureObj, 6, this.sceneDir + texture.mipmap6)
-        if (texture.mipmap7) this.loadMipmap(textureObj, 7, this.sceneDir + texture.mipmap7)
+        this.loadMipmap(textureObj, 0, this.sceneDir + texture.mipmap0);
+        if (texture.mipmap1)
+          this.loadMipmap(textureObj, 1, this.sceneDir + texture.mipmap1);
+        if (texture.mipmap2)
+          this.loadMipmap(textureObj, 2, this.sceneDir + texture.mipmap2);
+        if (texture.mipmap3)
+          this.loadMipmap(textureObj, 3, this.sceneDir + texture.mipmap3);
+        if (texture.mipmap4)
+          this.loadMipmap(textureObj, 4, this.sceneDir + texture.mipmap4);
+        if (texture.mipmap5)
+          this.loadMipmap(textureObj, 5, this.sceneDir + texture.mipmap5);
+        if (texture.mipmap6)
+          this.loadMipmap(textureObj, 6, this.sceneDir + texture.mipmap6);
+        if (texture.mipmap7)
+          this.loadMipmap(textureObj, 7, this.sceneDir + texture.mipmap7);
 
-        textureObj.needsUpdate = true
-
+        textureObj.needsUpdate = true;
       }
       // isVideo, magFilter, minFilter, mipmaps, anisotropy are missing
 
@@ -129,7 +143,6 @@ class MyContents {
     }
   }
 
-  
   cloneTextureNode(textureObj) {
     if (textureObj == null) return null;
 
@@ -140,18 +153,25 @@ class MyContents {
 
     if (texture.mipmap0 != null) {
       console.log(texture);
-      clonedTexture.generateMipmaps = false
+      clonedTexture.generateMipmaps = false;
 
-        this.loadMipmap(clonedTexture, 0, this.sceneDir + texture.mipmap0)
-        if (texture.mipmap1) this.loadMipmap(clonedTexture, 1, this.sceneDir + texture.mipmap1)
-        if (texture.mipmap2) this.loadMipmap(clonedTexture, 2, this.sceneDir + texture.mipmap2)
-        if (texture.mipmap3) this.loadMipmap(clonedTexture, 3, this.sceneDir + texture.mipmap3)
-        if (texture.mipmap4) this.loadMipmap(clonedTexture, 4, this.sceneDir + texture.mipmap4)
-        if (texture.mipmap5) this.loadMipmap(clonedTexture, 5, this.sceneDir + texture.mipmap5)
-        if (texture.mipmap6) this.loadMipmap(clonedTexture, 6, this.sceneDir + texture.mipmap6)
-        if (texture.mipmap7) this.loadMipmap(clonedTexture, 7, this.sceneDir + texture.mipmap7)
+      this.loadMipmap(clonedTexture, 0, this.sceneDir + texture.mipmap0);
+      if (texture.mipmap1)
+        this.loadMipmap(clonedTexture, 1, this.sceneDir + texture.mipmap1);
+      if (texture.mipmap2)
+        this.loadMipmap(clonedTexture, 2, this.sceneDir + texture.mipmap2);
+      if (texture.mipmap3)
+        this.loadMipmap(clonedTexture, 3, this.sceneDir + texture.mipmap3);
+      if (texture.mipmap4)
+        this.loadMipmap(clonedTexture, 4, this.sceneDir + texture.mipmap4);
+      if (texture.mipmap5)
+        this.loadMipmap(clonedTexture, 5, this.sceneDir + texture.mipmap5);
+      if (texture.mipmap6)
+        this.loadMipmap(clonedTexture, 6, this.sceneDir + texture.mipmap6);
+      if (texture.mipmap7)
+        this.loadMipmap(clonedTexture, 7, this.sceneDir + texture.mipmap7);
 
-        clonedTexture.needsUpdate = true
+      clonedTexture.needsUpdate = true;
     }
 
     return clonedTexture;
@@ -166,7 +186,7 @@ class MyContents {
       let specular = material.specular;
       let materialObj;
 
-      if (material.shading === 'none') {
+      if (material.shading === "none") {
         materialObj = new THREE.MeshBasicMaterial({
           color: new THREE.Color(color.r, color.g, color.b),
           emissive: new THREE.Color(emissive.r, emissive.g, emissive.b),
@@ -188,16 +208,18 @@ class MyContents {
           shininess: material.shininess,
           side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
           flatShading: material.shading.toLowerCase() === "flat",
-          map:  this.cloneTextureNode(this.textures[material.textureref]),
+          map: this.cloneTextureNode(this.textures[material.textureref]),
           specularMap: this.textures[material.specularref] ?? null,
           bumpref: this.textures[material.bumpref] ?? null,
           bumpScale: material.bumpscale,
         });
       }
 
-
       if (materialObj.map != null) {
-        materialObj.map.repeat.set(1 / material.texlength_s, 1 / material.texlength_t);
+        materialObj.map.repeat.set(
+          1 / material.texlength_s,
+          1 / material.texlength_t
+        );
       } else console.log("ERROR: texture not found");
 
       this.materials[key] = materialObj;
@@ -399,7 +421,6 @@ class MyContents {
             parts_v
           );
 
-
           // Create a mesh for each control point and add them to the scene
           for (let u = 0; u <= degree_u; u++) {
             for (let v = 0; v <= degree_v; v++) {
@@ -407,8 +428,13 @@ class MyContents {
               let color = new THREE.Color(`hsl(${hue}, 100%, 50%)`); // Create color using HSL model
 
               let controlPointGeometry = new THREE.SphereGeometry(0.2);
-              let controlPointMaterial = new THREE.MeshBasicMaterial({ color: color });
-              let controlPointMesh = new THREE.Mesh(controlPointGeometry, controlPointMaterial);
+              let controlPointMaterial = new THREE.MeshBasicMaterial({
+                color: color,
+              });
+              let controlPointMesh = new THREE.Mesh(
+                controlPointGeometry,
+                controlPointMaterial
+              );
               controlPointMesh.position.set(
                 controlpoints[u * (degree_v + 1) + v].xx,
                 controlpoints[u * (degree_v + 1) + v].yy,
@@ -421,13 +447,18 @@ class MyContents {
           break;
         case "polygon":
           console.log(material);
-          if (material != null ) {
+          if (material != null) {
             material.vertexColors = true;
             material.needsUpdate = true;
           }
-            
-          geometry = MyPolygon.createBufferGeometry(rep.radius, rep.stacks, rep.slices,
-            rep.color_c, rep.color_p);
+
+          geometry = MyPolygon.createBufferGeometry(
+            rep.radius,
+            rep.stacks,
+            rep.slices,
+            rep.color_c,
+            rep.color_p
+          );
 
           break;
 
@@ -460,8 +491,6 @@ class MyContents {
       rep.size[1],
       rep.size[2]
     );
-
-
 
     const loader = new THREE.TextureLoader();
 
@@ -710,7 +739,6 @@ class MyContents {
         parentTexture
       );
 
-
       lod.addLevel(group2, child.mindist);
     });
     return;
@@ -765,21 +793,23 @@ class MyContents {
     if (node.children == null) return;
 
     node.children.forEach((child) => {
-
       if (child.type === "lod") {
         this.loadLod(child, parentNode, this_material, parentTexture);
-
       } else {
         // create and set group
 
         let group = new THREE.Group();
-       
+
         if (child.castshadows || node.castShadows || parentNode.castShadow) {
           parentNode.castShadow = true;
           child.castShadows = true;
           group.castShadow = true;
         }
-        if (child.receiveshadows || node.receiveShadows || parentNode.receiveShadow) {
+        if (
+          child.receiveshadows ||
+          node.receiveShadows ||
+          parentNode.receiveShadow
+        ) {
           parentNode.receiveShadow = true;
           child.receiveShadows = true;
           group.receiveShadow = true;
@@ -795,9 +825,7 @@ class MyContents {
           parentTexture
         );
       }
-    }
-    );
-
+    });
   }
 
   // Method to start traversal from the root node
@@ -812,7 +840,7 @@ class MyContents {
     this.app.scene.add(this.rootScene);
   }
 
-  endFunc() { }
+  endFunc() {}
 }
 
 export { MyContents };

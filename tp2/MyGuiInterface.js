@@ -32,17 +32,18 @@ class MyGuiInterface {
     const cameras = this.datgui.addFolder("Cameras");
     cameras.open();
 
-
     // drop down of the cameras to be selected
     const cameraNames = [...this.contents.camerasNames];
-    
-    
+
     // push to the camera names the keys od the camera names
-    this.cameraSelector = cameras.add(this.app, "activeCameraName", cameraNames);
+    this.cameraSelector = cameras.add(
+      this.app,
+      "activeCameraName",
+      cameraNames
+    );
     this.cameraSelector.onChange((value) => {
       this.contents.setActiveCamera(value);
     });
-
   }
 }
 
