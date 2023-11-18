@@ -15,6 +15,7 @@ class MyContents {
     this.materials = [];
     this.lights = [];
     this.textures = [];
+    this.textureNode = new Map();
     this.cameras = [];
     this.camerasNames = [];
 
@@ -124,7 +125,36 @@ class MyContents {
       // isVideo, magFilter, minFilter, mipmaps, anisotropy are missing
 
       this.textures[key] = textureObj;
+      this.textureNode.set(textureObj, texture);
     }
+  }
+
+  
+  cloneTextureNode(textureObj) {
+    if (textureObj == null) return null;
+
+    // this is not a deepcopy ... it allows to efficiently share the same texture between different objects
+    // while still ensuring that length_s and length_t are correctly set ... as those are not passed by ref
+    const clonedTexture = textureObj.clone();
+    const texture = this.textureNode.get(textureObj);
+
+    if (texture.mipmap0 != null) {
+      console.log(texture);
+      clonedTexture.generateMipmaps = false
+
+        this.loadMipmap(clonedTexture, 0, this.sceneDir + texture.mipmap0)
+        if (texture.mipmap1) this.loadMipmap(clonedTexture, 1, this.sceneDir + texture.mipmap1)
+        if (texture.mipmap2) this.loadMipmap(clonedTexture, 2, this.sceneDir + texture.mipmap2)
+        if (texture.mipmap3) this.loadMipmap(clonedTexture, 3, this.sceneDir + texture.mipmap3)
+        if (texture.mipmap4) this.loadMipmap(clonedTexture, 4, this.sceneDir + texture.mipmap4)
+        if (texture.mipmap5) this.loadMipmap(clonedTexture, 5, this.sceneDir + texture.mipmap5)
+        if (texture.mipmap6) this.loadMipmap(clonedTexture, 6, this.sceneDir + texture.mipmap6)
+        if (texture.mipmap7) this.loadMipmap(clonedTexture, 7, this.sceneDir + texture.mipmap7)
+
+        clonedTexture.needsUpdate = true
+    }
+
+    return clonedTexture;
   }
 
   setMaterials(materials) {
@@ -144,7 +174,7 @@ class MyContents {
           wireframe: material.wireframe,
           shininess: material.shininess,
           side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
-          map: this.textures[material.textureref] ?? null,
+          map: this.cloneTextureNode(this.textures[material.textureref]),
           specularMap: this.textures[material.specularref] ?? null,
           bumpref: this.textures[material.bumpref] ?? null,
           bumpScale: material.bumpscale,
@@ -158,7 +188,7 @@ class MyContents {
           shininess: material.shininess,
           side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
           flatShading: material.shading.toLowerCase() === "flat",
-          map: this.textures[material.textureref] ?? null,
+          map:  this.cloneTextureNode(this.textures[material.textureref]),
           specularMap: this.textures[material.specularref] ?? null,
           bumpref: this.textures[material.bumpref] ?? null,
           bumpScale: material.bumpscale,
