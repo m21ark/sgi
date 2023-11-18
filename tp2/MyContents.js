@@ -5,6 +5,7 @@ import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 import { MyGuiInterface } from "./MyGuiInterface.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyPolygon } from "./MyPolygon.js";
+import { MyTriangle } from "./MyTriangle.js";
 
 class MyContents {
   constructor(app) {
@@ -196,7 +197,7 @@ class MyContents {
           side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
           map: this.cloneTextureNode(this.textures[material.textureref]),
           specularMap: this.textures[material.specularref] ?? null,
-          bumpref: this.textures[material.bumpref] ?? null,
+          bumpMap: this.textures[material.bumpref] ?? null,
           bumpScale: material.bumpscale,
         });
       } else {
@@ -210,7 +211,7 @@ class MyContents {
           flatShading: material.shading.toLowerCase() === "flat",
           map: this.cloneTextureNode(this.textures[material.textureref]),
           specularMap: this.textures[material.specularref] ?? null,
-          bumpref: this.textures[material.bumpref] ?? null,
+          bumpMap: this.textures[material.bumpref] ?? null,
           bumpScale: material.bumpscale,
         });
       }
@@ -360,18 +361,17 @@ class MyContents {
 
           break;
         case "triangle":
-          geometry = new THREE.Geometry();
-          geometry.vertices.push(
-            new THREE.Vector3(obj.xyz1[0], obj.xyz1[1], obj.xyz1[2])
+          geometry = new MyTriangle(
+            obj.xyz1[0],
+            obj.xyz1[1],
+            obj.xyz1[2],
+            obj.xyz2[0],
+            obj.xyz2[1],
+            obj.xyz2[2],
+            obj.xyz3[0],
+            obj.xyz3[1],
+            obj.xyz3[2]
           );
-          geometry.vertices.push(
-            new THREE.Vector3(obj.xyz2[0], obj.xyz2[1], obj.xyz2[2])
-          );
-          geometry.vertices.push(
-            new THREE.Vector3(obj.xyz3[0], obj.xyz3[1], obj.xyz3[2])
-          );
-          geometry.faces.push(new THREE.Face3(0, 1, 2));
-          geometry.computeFaceNormals();
           break;
         case "model3d":
           console.log("Model 3D not supported yet");
