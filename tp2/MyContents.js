@@ -190,15 +190,10 @@ class MyContents {
       if (material.shading === "none") {
         materialObj = new THREE.MeshBasicMaterial({
           color: new THREE.Color(color.r, color.g, color.b),
-          emissive: new THREE.Color(emissive.r, emissive.g, emissive.b),
-          specular: new THREE.Color(specular.r, specular.g, specular.b),
-          wireframe: material.wireframe,
-          shininess: material.shininess,
-          side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
           map: this.cloneTextureNode(this.textures[material.textureref]),
           specularMap: this.textures[material.specularref] ?? null,
-          bumpMap: this.textures[material.bumpref] ?? null,
-          bumpScale: material.bumpscale,
+          wireframe: material.wireframe,
+          side: material.twosided ? THREE.DoubleSide : THREE.FrontSide,
         });
       } else {
         materialObj = new THREE.MeshPhongMaterial({
