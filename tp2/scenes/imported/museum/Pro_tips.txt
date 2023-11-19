@@ -1,0 +1,15 @@
+The ones soaring high above (professors) have finally heeded our calls, and updated the parser. Now the lights are working as we intended them to. 
+
+
+Also, if the textures are not being displayed, its probably because of the filepath. The ones up above (professors) were so kind so as to not define a standart for this. We have the filepaths as they are in the original demo.xml:
+
+<texture id="baseTex" filepath="textures/Marble014_1K-JPG_Color.jpg"/>
+
+some of y'all have added the whole scenes/<folder>/textures/.... path. 
+
+Again, not saying y'all are wrong. when in doubt, the blame should always go to the ones high above (professors).
+
+
+Also also, we left a nifty python script in the textures folder that makes textures into videos for the videoTexture texture. Have fun with it.
+
+

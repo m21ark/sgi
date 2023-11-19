@@ -29,7 +29,7 @@
         <texture id="floorTexN" filepath="textures/floorN.jpg" />
 
         <texture id="desertFloorTex" filepath="textures/desertFloor.jpg" />
-        <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" />
+        <!--- <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" /> -->
 
         <texture id="garageTex" filepath="textures/garage.jpg" />
         <texture id="garageTexN" filepath="textures/garageN.jpg" />

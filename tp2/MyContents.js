@@ -24,11 +24,11 @@ class MyContents {
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
 
-    this.sceneDir = "scenes/demo/";
-    this.reader.open(this.sceneDir + "myScene.xml");
+   //this.sceneDir = "scenes/demo/";
+   //this.reader.open(this.sceneDir + "myScene.xml");
 
-    // this.sceneDir = "scenes/demo/SGI_TP2_XML_T08_G04_v01/";
-    // this.reader.open(this.sceneDir + "SGI_TP2_XML_T08_G04_v01.xml");
+    this.sceneDir = "scenes/imported/museum/";
+    this.reader.open(this.sceneDir + "museum.xml");
   }
 
   init() {
@@ -107,11 +107,17 @@ class MyContents {
       let textureObj = textureLoader.load(this.sceneDir + texture.filepath);
 
       if (texture.isVideo) {
-        const video = document.getElementById(texture.id);
+        const video = document.createElement("video");
+        video.src = this.sceneDir + texture.filepath;
+        video.loop = true;
+        video.muted = true;
+        video.autoplay = true;
+
         textureObj = new THREE.VideoTexture(video);
         textureObj.minFilter = THREE.LinearFilter;
         textureObj.magFilter = THREE.LinearFilter;
         textureObj.format = THREE.RGBAFormat;
+
         this.textures[key] = textureObj;
       }
 
@@ -719,7 +725,7 @@ class MyContents {
 
   loadLod(node, parentNode, parentMaterial, parentTexture) {
     let lod = new THREE.LOD();
-    parentNode.add(lod);
+    parentNode.add(lod); 
 
     node.children.forEach((child) => {
       let group2 = new THREE.Group();
