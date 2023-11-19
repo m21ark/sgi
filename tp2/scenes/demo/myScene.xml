@@ -1266,8 +1266,8 @@
                     distance="7"
                     decay="0.75"
                     castshadow="true"
-                    position="19 14 19"
-                    target="19 0 19"
+                    position="20 14 20"
+                    target="20 0 20"
                     penumbra="1.0"
                     angle="7"
                 />
@@ -1279,7 +1279,7 @@
                     distance="15"
                     decay="1.5"
                     castshadow="false"
-                    position="19 9 19"
+                    position="20 9 20"
                 />
 
                 <pointlight id="garageLight" enabled="true"
@@ -1288,7 +1288,7 @@
                     distance="35"
                     decay="1"
                     castshadow="false"
-                    position="60 15 20"
+                    position="60 17 20"
                 />
 
 
@@ -1298,7 +1298,7 @@
                     distance="35"
                     decay="1"
                     castshadow="false"
-                    position="20 15 60"
+                    position="20 17 60"
                 />
 
 

@@ -51,6 +51,38 @@ class MyGuiInterface {
       .onChange(() => {
         this.contents.toggleLightHelpers();
       });
+
+      // shadow biass slinder
+      lightsFolder
+      .add(this.contents, "shadowBias", -0.1, 0.1, 0.001)
+      .name("shadowBias")
+      .onChange(() => {
+        this.contents.modifyShadowBias();
+      });
+
+    const materialsFolder = this.datgui.addFolder("Materials");
+    materialsFolder.open();
+
+    materialsFolder
+      .add(this.contents, "showWireframes", true)
+      .name("showWireframes")
+      .onChange(() => {
+        this.contents.toggleWireframes();
+      });
+
+    materialsFolder
+      .add(this.contents, "useTextures", true)
+      .name("useTextures")
+      .onChange(() => {
+        this.contents.toggleTextures();
+      });
+
+    materialsFolder
+      .add(this.contents, "useBumpMaps", true)
+      .name("useBumpMaps")
+      .onChange(() => {
+        this.contents.toggleBumpMaps();
+      });
   }
 }
 

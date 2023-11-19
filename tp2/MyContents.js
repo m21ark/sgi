@@ -25,6 +25,10 @@ class MyContents {
     this.lightsOn = true;
     this.useShadows = true;
     this.showHelpers = false;
+    this.showWireframes = false;
+    this.useTextures = true;
+    this.useBumpMaps = true;
+    this.shadowBias = 0;
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
 
@@ -680,7 +684,7 @@ class MyContents {
     pointLight.shadow.mapSize.height = obj.shadowmapsize;
     pointLight.shadow.camera.far = obj.shadowfar;
 
-    //pointLight.shadow.bias = -0.001; // VER ISTO
+    pointLight.shadow.bias = this.shadowBias;
 
     this.lights[obj.id] = pointLight;
 
@@ -716,7 +720,7 @@ class MyContents {
     directionalLight.shadow.camera.top = obj.shadowtop;
     directionalLight.shadow.camera.bottom = obj.shadowbottom;
 
-    //directionalLight.shadow.bias = -0.001; // VER ISTO
+    directionalLight.shadow.bias = this.shadowBias;
 
     this.lights[obj.id] = directionalLight;
 
@@ -752,7 +756,7 @@ class MyContents {
     spotLight.shadow.mapSize.height = obj.shadowmapsize;
     spotLight.shadow.camera.far = obj.shadowfar;
 
-    //spotLight.shadow.bias = -0.001; // VER ISTO
+    spotLight.shadow.bias = this.shadowBias;
 
     this.lights[obj.id] = spotLight;
 
@@ -894,11 +898,8 @@ class MyContents {
   transverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
     this.rootScene = new THREE.Group();
-    // this.app.scene.castShadow = true;
     this.rootScene.name = "rootScene";
-    // this.rootScene.castShadow = true;
     this.transverseAndInheritValues(rootNode, this.rootScene);
-
     this.app.scene.add(this.rootScene);
   }
 
@@ -910,11 +911,70 @@ class MyContents {
 
   toggleShadows() {
     console.log(this.useShadows);
+    // TODO: nem todas as luzes têm shadow para ligar de volta
+    for (let key in this.lights) {
+      let light = this.lights[key];
+      light.castShadow = this.useShadows;
+      light.receiveShadow = this.useShadows;
+    }
   }
 
   toggleLightHelpers() {
-    console.log(this.showHelpers);
+    for (let key in this.lights) {
+      let light = this.lights[key];
+      if (this.showHelpers) this.app.scene.add(this.lights[key + "_helper"]);
+      else this.app.scene.remove(this.lights[key + "_helper"]);
+    }
   }
+
+  toggleBumpMaps() {
+    console.log(this.useBumpMaps);
+
+    for (let key in this.materials) {
+      let material = this.materials[key];
+      material.bumpMap = this.useBumpMaps
+        ? this.textures[material.bumpref] ?? null
+        : null;
+
+      material.needsUpdate = true;
+    }
+  }
+
+  toggleTextures() {
+    console.log(this.useTextures);
+
+    for (let key in this.materials) {
+      let material = this.materials[key];
+      material.map = this.useTextures
+        ? this.textures[material.textureref] ?? null
+        : null;
+
+      material.needsUpdate = true;
+    }
+  }
+
+  toggleWireframes() {
+    // TODO: Globo wireframe fica lixado
+    console.log(this.showWireframes);
+
+    for (let key in this.materials) {
+      let material = this.materials[key];
+      material.wireframe = this.showWireframes;
+      material.needsUpdate = true;
+    }
+  }
+
+  modifyShadowBias() {
+    console.log(this.shadowBias);
+    for (let key in this.lights) {
+      let light = this.lights[key];
+      light.shadow.bias = this.shadowBias;
+    }
+  }
+
+  // TODO: see this
+  // pontos auxiliares nurbs
+  // controlar intensidade luz
 }
 
 export { MyContents };
