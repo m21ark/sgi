@@ -25,7 +25,7 @@ class MyContents {
     this.lightsOn = true;
     this.useShadows = true;
     this.showHelpers = false;
-    this.showWireframes = false;
+
     this.useTextures = true;
     this.useBumpMaps = true;
     this.shadowBias = 0;
@@ -906,8 +906,6 @@ class MyContents {
   // =======================================
 
   toggleLights() {
-    console.log(this.lightsOn);
-
     for (let key in this.lights) {
       let light = this.lights[key];
       if (this.lightsOn) light.intensity = 200;
@@ -927,15 +925,12 @@ class MyContents {
 
   toggleLightHelpers() {
     for (let key in this.lights) {
-      let light = this.lights[key];
       if (this.showHelpers) this.app.scene.add(this.lights[key + "_helper"]);
       else this.app.scene.remove(this.lights[key + "_helper"]);
     }
   }
 
   toggleBumpMaps() {
-    console.log(this.useBumpMaps);
-
     for (let key in this.materials) {
       let material = this.materials[key];
       material.bumpMap = this.useBumpMaps
@@ -947,8 +942,6 @@ class MyContents {
   }
 
   toggleTextures() {
-    console.log(this.useTextures);
-
     for (let key in this.materials) {
       let material = this.materials[key];
       material.map = this.useTextures
@@ -959,28 +952,14 @@ class MyContents {
     }
   }
 
-  toggleWireframes() {
-    // TODO: Globo wireframe fica lixado
-    console.log(this.showWireframes);
-
-    for (let key in this.materials) {
-      let material = this.materials[key];
-      material.wireframe = this.showWireframes;
-      material.needsUpdate = true;
-    }
-  }
-
   modifyShadowBias() {
-    console.log(this.shadowBias);
     for (let key in this.lights) {
       let light = this.lights[key];
       light.shadow.bias = this.shadowBias;
     }
   }
 
-  // TODO: see this
   // pontos auxiliares nurbs
-  // controlar intensidade luz
 }
 
 export { MyContents };

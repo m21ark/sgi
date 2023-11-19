@@ -52,8 +52,8 @@ class MyGuiInterface {
         this.contents.toggleLightHelpers();
       });
 
-      // shadow biass slinder
-      lightsFolder
+    // shadow biass slinder
+    lightsFolder
       .add(this.contents, "shadowBias", -0.1, 0.1, 0.001)
       .name("shadowBias")
       .onChange(() => {
@@ -63,19 +63,12 @@ class MyGuiInterface {
     const materialsFolder = this.datgui.addFolder("Materials");
     materialsFolder.open();
 
-    materialsFolder
-      .add(this.contents, "showWireframes", true)
-      .name("showWireframes")
-      .onChange(() => {
-        this.contents.toggleWireframes();
-      });
-
-    materialsFolder
+       materialsFolder
       .add(this.contents, "useTextures", true)
       .name("useTextures")
       .onChange(() => {
         this.contents.toggleTextures();
-      });
+      }); 
 
     materialsFolder
       .add(this.contents, "useBumpMaps", true)
@@ -83,6 +76,23 @@ class MyGuiInterface {
       .onChange(() => {
         this.contents.toggleBumpMaps();
       });
+
+    // ===================================================================
+
+    const wireframeFolder = this.datgui.addFolder("Wireframes");
+    wireframeFolder.close();
+    const materialIds = Object.keys(this.contents.materials);
+
+    for (let materialId of materialIds) {
+      wireframeFolder
+        .add(this.contents.materials[materialId], "wireframe", true)
+        .name(materialId)
+        .onChange(() => {
+          this.contents.toggleWireframeMode(materialId);
+        });
+    }
+
+   
   }
 }
 
