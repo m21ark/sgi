@@ -238,7 +238,7 @@
 
         <material id="glassMat"
             emissive="0.0 0.0 0.0 1.0"
-            color="0.35 0.35 0.95 0.0"
+            color="0.35 0.35 0.95 1.0"
             specular="0.5 0.5 0.5 1.0"
             shininess="300"
             twosided="true"
