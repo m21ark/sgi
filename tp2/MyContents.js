@@ -62,7 +62,7 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() {}
+  update() { }
   loadMipmap(parentTexture, level, path) {
     // load texture. On loaded call the function to create the mipmap for the specified level
     new THREE.TextureLoader().load(
@@ -89,10 +89,10 @@ class MyContents {
       function (err) {
         console.error(
           "Unable to load the image " +
-            path +
-            " as mipmap level " +
-            level +
-            ".",
+          path +
+          " as mipmap level " +
+          level +
+          ".",
           err
         );
       }
@@ -769,19 +769,42 @@ class MyContents {
     let lod = new THREE.LOD();
     parentNode.add(lod);
 
-    node.children.forEach((child) => {
-      let group2 = new THREE.Group();
+    this.setMatrixTransform(node);
 
-      child.node.group = group2;
+    lod.castShadow = true; // parser does not support shadows for lod
+    lod.receiveShadow = true;
+    parentNode.castShadow = true;
+    parentNode.receiveShadow = true;
+
+    node.children.forEach((child) => {
+      let group = new THREE.Group();
+
+      child.node.group = group;
+
+      if (child.castshadows || node.castShadows || parentNode.castShadow) {
+        parentNode.castShadow = true;
+        child.castShadows = true;
+        group.castShadow = true;
+      }
+      if (
+        child.receiveshadows ||
+        node.receiveShadows ||
+        parentNode.receiveShadow
+      ) {
+        parentNode.receiveShadow = true;
+        child.receiveShadows = true;
+        group.receiveShadow = true;
+      }
+
 
       this.transverseAndInheritValues(
         child.node,
-        group2,
+        group,
         parentMaterial,
         parentTexture
       );
 
-      lod.addLevel(group2, child.mindist);
+      lod.addLevel(group, child.mindist);
     });
     return;
   }
