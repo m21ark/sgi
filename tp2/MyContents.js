@@ -361,11 +361,6 @@ class MyContents {
 
       let lenS = material.map.repeat.x, lenT = material.map.repeat.y;
 
-      console.log("AQUI")
-      console.log(lenS, lenT)
-      console.log(width / lenS, height / lenT)
-      console.log(width, height)
-
       materialObj.map.repeat.set(
         width / lenS,
         height / lenT
@@ -373,6 +368,8 @@ class MyContents {
     }
 
     materialObj.map.needsUpdate = true;
+
+    this.materials.push(materialObj);
 
     return materialObj;
   }
