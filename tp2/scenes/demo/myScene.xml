@@ -67,6 +67,7 @@
             texlength_s="1"
             texlength_t="1" />
 
+
         <material id="holoMat1"
             emissive="0.0 0.0 0.0 1"
             color="0.5 0.5 0.7 1.0"
@@ -259,6 +260,13 @@
             textureref="licencePlateTex"
         />
 
+        <material id="blueNeonMat"
+            emissive="0.0 0.0 1 1.0"
+            color="0.0 0.0 0 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+        />
+
 
     </materials>
 
@@ -273,15 +281,30 @@
                 <noderef id="window" />
                 <noderef id="aim" />
 
+                <!--     <noderef id="energyStatue" /> -->
                 <lodref id="statue_lod" />
                 <noderef id="globe_holo" />
                 <noderef id="garage" />
                 <lodref id="spaceship_lod" />
                 <noderef id="spaceBox" />
 
+                <noderef id="dockingStation" />
+                <noderef id="chargingLine" />
+                <noderef id="chargingExtract" />
+                <noderef id="neonLine" />
+
 
             </children>
         </node>
+
+        <!--         <node id="energyStatue">
+            <translate value3="50 0 0" />
+
+            <children>
+                <lodref id="statue_lod" />
+            </children>
+        </node>
+ -->
 
         <node id="spaceBox">
             <transforms>
@@ -304,6 +327,167 @@
             </children>
         </node>
 
+        <node id="neonLine">
+
+            <materialref id="blueNeonMat" />
+
+
+            <children>
+                <noderef id="neonLine1" />
+                <noderef id="neonLine2" />
+                <noderef id="neonLine3" />
+                <noderef id="neonLine4" />
+                <noderef id="neonLine5" />
+                <noderef id="neonLine6" />
+            </children>
+        </node>
+
+        <node id="neonLine2">
+            <transforms>
+                <translate value3="40 20 40" />
+                <rotate value3="0 0 90" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <cylinder base="0.3" top="0.3" height="80" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="neonLine1">
+            <transforms>
+                <translate value3="40 20 0" />
+                <rotate value3="0 0 90" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <cylinder base="0.3" top="0.3" height="80" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="neonLine3">
+            <transforms>
+                <translate value3="0 20 40" />
+                <rotate value3="90 0 0" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <cylinder base="0.3" top="0.3" height="80" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="neonLine4">
+            <transforms>
+                <translate value3="80 20 20" />
+                <rotate value3="90 0 0" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <cylinder base="0.3" top="0.3" height="40" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="neonLine5">
+            <transforms>
+                <translate value3="40 20 60" />
+                <rotate value3="90 0 0" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <cylinder base="0.3" top="0.3" height="40" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="neonLine6">
+            <transforms>
+                <translate value3="20 20 80" />
+                <rotate value3="0 0 90" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <cylinder base="0.3" top="0.3" height="40" slices="32" stacks="32" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="dockingStation">
+            <transforms>
+                <translate value3="0 0.01 0" />
+            </transforms>
+
+            <materialref id="metalMat" />
+
+            <children>
+                <primitive>
+                    <box xyz1="55 0 15" xyz2="65 0.2 25" />
+                </primitive>
+                <noderef id="energyCharge" />
+            </children>
+        </node>
+
+        <node id="energyCharge">
+            <transforms>
+                <translate value3="0 0.03 0" />
+            </transforms>
+
+            <materialref id="energyMat" />
+
+            <children>
+                <primitive>
+                    <box xyz1="57.5 0 17.5" xyz2="62.5 0.2 22.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="chargingLine">
+            <transforms>
+                <translate value3="0 0.01 0" />
+            </transforms>
+
+            <materialref id="blueNeonMat" />
+
+            <children>
+                <primitive>
+                    <box xyz1="26.5 0 19.5" xyz2="55 0.2 20.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="chargingExtract">
+            <transforms>
+                <translate value3="0 0.01 0" />
+            </transforms>
+
+            <materialref id="orangeMat" />
+
+            <children>
+                <primitive>
+                    <box xyz1="25 0 19.5" xyz2="26.5 1.51 20.5" />
+                </primitive>
+            </children>
+        </node>
+
+
+
         <node id="aim">
 
             <transforms>
@@ -324,13 +508,13 @@
         </node>
 
         <lod id="statue_lod" castshadows="true" receiveshadows="true">
-            <noderef id="statue2" mindist="95" />
+            <noderef id="statue2" mindist="140" />
             <noderef id="statue" mindist="20" />
         </lod>
 
         <node id="statue2">
             <transforms>
-                <translate value3="19 5 19" />
+                <translate value3="20 5 20" />
                 <scale value3="0.3 0.3 0.3" />
             </transforms>
             <children>
@@ -343,7 +527,7 @@
 
         <node id="statue">
             <transforms>
-                <translate value3="19 5 19" />
+                <translate value3="20 5 20" />
                 <scale value3="0.3 0.3 0.3" />
             </transforms>
             <children>
@@ -505,7 +689,7 @@
 
         <node id="tape1">
             <transforms>
-                <translate value3="0 0 6.3" />
+                <translate value3="-0.3 0 6.3" />
             </transforms>
 
             <children>
@@ -515,7 +699,7 @@
 
         <node id="tape2">
             <transforms>
-                <translate value3="0 0 -6.3" />
+                <translate value3="-0.3 0 -6.3" />
             </transforms>
             <children>
                 <noderef id="tape" />
@@ -525,7 +709,7 @@
         <node id="tape3">
             <transforms>
                 <rotate value3="0 90 0" />
-                <translate value3="6.3 0 0" />
+                <translate value3="6.3 0 0.3" />
             </transforms>
             <children>
                 <noderef id="tape" />
@@ -535,7 +719,7 @@
         <node id="tape4">
             <transforms>
                 <rotate value3="0 90 0" />
-                <translate value3="-6.3 0 0" />
+                <translate value3="-6.3 0 0.3" />
             </transforms>
             <children>
                 <noderef id="tape" />
@@ -544,7 +728,7 @@
 
         <node id="tape">
             <transforms>
-                <translate value3="0 1.5 0" />
+                <translate value3="0.5 1.5 0" />
             </transforms>
 
             <materialref id="controlFlowTape" />
@@ -578,7 +762,7 @@
 
         <node id="noPassage" castshadows="true" receiveshadows="true">
             <transforms>
-                <translate value3="19 2.3 19" />
+                <translate value3="20 2.3 20" />
             </transforms>
 
             <children>
@@ -604,14 +788,14 @@
 
 
         <lod id="spaceship_lod" castshadows="true" receiveshadows="true">
-            <noderef id="spaceship3" mindist="180" />
-            <noderef id="spaceship2" mindist="120" />
-            <noderef id="spaceship" mindist="20" />
+            <noderef id="spaceship3" mindist="200" castshadows="true" receiveshadows="true" />
+            <noderef id="spaceship2" mindist="140" castshadows="true" receiveshadows="true" />
+            <noderef id="spaceship" mindist="20" castshadows="true" receiveshadows="true" />
         </lod>
 
         <node id="spaceship">
             <transforms>
-                <translate value3="60 4 20" />
+                <translate value3="60 5 20" />
             </transforms>
 
 
@@ -654,7 +838,7 @@
             </children>
         </node>
 
-        <node id="licensePlate">
+        <node id="licensePlate" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="-2.5 -2.6 8.6" />
             </transforms>
@@ -1096,13 +1280,23 @@
                     position="19 9 19"
                 />
 
-                <pointlight id="desertLight" enabled="true"
+                <pointlight id="garageLight" enabled="true"
                     color="0.5 0.6 0.8 1"
                     intensity="500"
                     distance="35"
                     decay="1"
                     castshadow="false"
                     position="60 15 20"
+                />
+
+
+                <pointlight id="desertLight" enabled="true"
+                    color="0.5 0.6 0.8 1"
+                    intensity="500"
+                    distance="35"
+                    decay="1"
+                    castshadow="false"
+                    position="20 15 60"
                 />
 
 
@@ -1117,18 +1311,22 @@
                 <noderef id="wall2" />
                 <noderef id="wall3" />
                 <noderef id="wall4" />
+                <noderef id="wall5" />
+                <noderef id="wall6" />
+                <noderef id="wall7" />
 
                 <noderef id="door1" />
                 <noderef id="door1_handle" />
 
 
                 <noderef id="ceil" />
+                <noderef id="ceilBedroom" />
             </children>
         </node>
 
         <node id="wall1">
             <transforms>
-                <translate value3="0 0 40" />
+                <translate value3="0 0 80" />
                 <rotate value3="0.0 90 0.0" />
             </transforms>
 
@@ -1136,7 +1334,7 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="40 20" />
+                    <rectangle xy1="0 0" xy2="80 20" />
                 </primitive>
             </children>
         </node>
@@ -1184,6 +1382,53 @@
             </children>
         </node>
 
+        <node id="wall5">
+            <transforms>
+                <translate value3="0 0 80" />
+                <rotate value3="0.0 -180 0" />
+            </transforms>
+
+            <materialref id="wallMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="-40 20" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="wall6">
+            <transforms>
+                <translate value3="40 0 40" />
+                <rotate value3="0.0 -90 0.0" />
+            </transforms>
+
+            <materialref id="wallMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="40 20" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="wall7">
+            <transforms>
+                <translate value3="40 0 40" />
+                <rotate value3="0.0 0 0" />
+            </transforms>
+
+            <materialref id="wallMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="-40 20" />
+                </primitive>
+            </children>
+        </node>
+
 
         <node id="floor">
             <transforms>
@@ -1195,7 +1440,7 @@
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="40 40" />
+                    <rectangle xy1="0 0" xy2="80 40" />
                 </primitive>
             </children>
         </node>
@@ -1203,14 +1448,14 @@
         <node id="desertFloor">
             <transforms>
                 <rotate value3="-90 0 0" />
-                <translate value3="0 0 80" />
+                <translate value3="0 0 120" />
             </transforms>
 
             <materialref id="desertFloorMat" />
 
             <children>
                 <primitive>
-                    <rectangle xy1="40 40" xy2="80 80" />
+                    <rectangle xy1="0 40" xy2="40 80" />
                 </primitive>
             </children>
         </node>
@@ -1229,6 +1474,23 @@
                 </primitive>
             </children>
         </node>
+
+
+        <node id="ceilBedroom">
+            <transforms>
+                <translate value3="0 20 40" />
+                <rotate value3="90.0 0 0.0" />
+            </transforms>
+
+            <materialref id="ceilMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="40 40" />
+                </primitive>
+            </children>
+        </node>
+
 
         <node id="door1">
             <transforms>
