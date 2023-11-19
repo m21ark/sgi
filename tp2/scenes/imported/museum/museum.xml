@@ -1,0 +1,1194 @@
+<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<yaf>
+
+    <globals background="0.05 0.05 0.05 0.05" ambient="0.05 0.05 0.05 1" />
+
+    <fog color="1.0 1.0 1.0 1.0" near="0.0" far="5000.0" />
+
+    <cameras initial="cam1">
+        <perspective id="cam1"
+            angle="40"
+            near="0.1"
+            far="1000"
+            location="15 15 15"
+            target="0 40 0" />
+
+        <orthogonal id="cam2"
+            near="-50"
+            far="100"
+            location="0 0 20"
+            target="0 0 0"
+            left="-10"
+            right="10"
+            bottom="-10"
+            top="10" />
+    </cameras>
+
+
+    <textures>
+        <texture id="wingTex" filepath="textures/wing1.png" />
+
+        <texture id="fireTex" filepath="textures/texture_translation.mp4" isVideo="true"/>
+        <texture id="baseTex" filepath="textures/Marble014_1K-JPG_Color.jpg"/>
+        <texture id="wallTex" filepath="textures/Plaster003_1K-JPG_Color.jpg"/>
+        <texture id="floorTex" filepath="textures/Tiles089x4_1K-JPG_Color.jpg"/>
+        <texture id="floorBumpTex" filepath="textures/Tiles089x4_1K-JPG_Displacement.jpg"/>
+
+
+        <texture id="tilesTex" filepath="textures/Tiles089x4_1K-JPG_Color.jpg"/>
+        <texture id="tilesBumpTex" filepath="textures/Tiles089x4_1K-JPG_Displacement.jpg"/>
+
+        <texture id="sandstoneTex" filepath="textures/sandstone_cracks_diff_1k.jpg" mipmap0="textures/sandstone_cracks_diff_1k.jpg" mipmap1="textures/sandstone_cracks_diff_512.jpg" mipmap2="textures/sandstone_cracks_diff_256.jpg" mipmap3="textures/sandstone_cracks_diff_128.jpg" />
+        <texture id="sandstoneBumpTex" filepath="textures/sandstone_cracks_disp_1k.jpg"/>
+
+
+        <texture id="signature1Tex" filepath="textures/fafnir_sig.png" />
+        <texture id="signature2Tex" filepath="textures/henrique_sig.png" />
+
+
+
+        <texture id="discTex" filepath="textures/Metal007_1K-JPG_Color.jpg" />
+        <texture id="discBumpTex" filepath="textures/Metal007_1K-JPG_Displacement.jpg" />
+
+
+
+
+
+        <texture id="bottomSkyboxTex" filepath="textures/skybox.png" />
+        <texture id="topSkyboxTex" filepath="textures/skybox.png" />
+        <texture id="frontSkyboxTex" filepath="textures/skybox.png" />
+        <texture id="backSkyboxTex" filepath="textures/skybox.png" />
+        <texture id="rightSkyboxTex" filepath="textures/skybox.png" />
+        <texture id="leftSkyboxTex" filepath="textures/skybox.png" />
+
+
+    </textures>
+
+    <materials>
+
+        <material id="root_mat"
+            color="0.1 0.1 0.1 1"
+            emissive="0 0 0 0"
+            specular="1 1 1 1"
+            shininess="1"
+            wireframe="false"
+            twosided="true"/>
+
+        <material id="disc_mat"
+            color="0.8 0.8 0.8 1"
+            emissive="0.0 0.0 0.0 0.0"
+            specular="0.8471 0.4824 0.0275 1"
+            shininess="50"
+            textureref="discTex"
+            bumpref="discBumpTex"
+            shading="flat"
+            wireframe="false"
+            bumpscale="5"
+            twosided="true"/>
+
+        <material id="disc2_mat"
+            color="0.8 0.8 0.8 1"
+            emissive="0.0 0.0 0.0 0.0"
+            specular="0.8471 0.4824 0.0275 1"
+            shininess="50"
+            shading="none"
+            twosided="true"/>
+
+        <material id="wing_mat"
+            color="1 1 1 1"
+            emissive="0.0 0.0 0.0 0.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="wingTex"
+            twosided="true"/>
+
+        <material id="octahedron_mat"
+            color="0.02 0.02 0.02 1.0"
+            emissive="0 0 0 0"
+            specular="0.2 0.2 0.2 0.2"
+            shininess="100"
+            texlength_s=".3"
+            texlength_t="1" 
+            shading="flat"/>
+
+        <material id="glowsphere_mat"
+            color="1 1 1 1"
+            emissive="0.4 0.2 0.01 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="fireTex"
+            texlength_s="1"
+            texlength_t="1" 
+            shading="none"/>
+
+        <material id="emissor_1_mat"
+            color="1.0 0.5 0.5 1"
+            emissive="1.0 0.5 0.5 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            shading="none"/>
+            
+        <material id="emissor_2_mat"
+            color="0.5 0.5 1.0 1"
+            emissive="0.5 0.5 1.0 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            shading="none"/>
+
+        <material id="stanchion_mat"
+            color="0.05 0.05 0.05 1.0"
+            emissive="0 0 0 0"
+            specular="0 0 0 0"
+            shininess="0"/>
+
+        <material id="belt_mat"
+            color="0 0 0 1"
+            emissive="0 0 0 0"
+            specular="0 0 0 0"
+            shininess="0"
+            twosided="true"/>
+
+        <material id="statue_base_mat"
+            color="0.2 0.2 0.23 1"
+            emissive="0 0 0 0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="baseTex"/>
+
+                
+        <material id="floor_mat"
+            color="0.3 0.3 0.33 1"
+            emissive="0 0 0 0"
+            specular="0.3 0.3 0.33 1"
+            shininess="15"
+            textureref="sandstoneTex"
+            bumpref="sandstoneBumpTex"
+            bumpscale="5"
+            />
+
+        <material id="walls_mat"
+            color="0.2 0.2 0.23 1"
+            emissive="0 0 0 0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="sandstoneTex"
+            bumpref="tilesBumpTex"
+            bumpscale="5"
+            />
+
+
+        <material id="sig1_mat"
+            color="1 1 1 1"
+            emissive="0 0 0 0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="signature1Tex"/>
+        
+        <material id="sig2_mat"
+            color="1 1 1 1"
+            emissive="0 0 0 0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="signature2Tex"/>
+
+
+
+    </materials>
+
+    <graph rootid="scene">
+
+        <node id="scene">
+
+            <materialref id="root_mat"/>
+
+            <children>
+                <noderef id="triangle1"/>
+                <noderef id="disc"/>
+                <noderef id="disc2"/>
+
+                <noderef id="column1"/>
+                <noderef id="column2"/>
+                <noderef id="column3"/>
+                <noderef id="column4"/>
+                <noderef id="column5"/>
+                <noderef id="column6"/>
+
+
+                <noderef id="walls" />
+                <noderef id="floor" />
+                <noderef id="ceiling"/>
+
+                <noderef id="skybox"/>
+
+                <noderef id="stanchions"/>
+
+                <!-- <noderef id="statue_base" /> -->
+                <noderef id="statue_core" />
+                <noderef id="statue_wings" />
+
+                <noderef id="signature_stand_1" />
+                <noderef id="signature_stand_2" />
+
+                <noderef id="spotlight1_focus" />
+                <noderef id="spotlight2_focus" />
+
+
+                <pointlight id="lightSphere" enabled="true"
+                    color="0.8471 0.4824 0.0275 1"
+                    intensity="300"
+                    distance="1000"
+                    decay="1.15"
+                    castshadow="true"
+                    position="0 40 0"
+                />
+
+                <pointlight id="defaultLight" enabled="true"
+                    color="1 1 1 1"
+                    intensity="0"
+                    distance="1000"
+                    decay="1"
+                    castshadow="true"
+                    position="0 200 0"
+                />
+                
+
+                <spotlight id="spotlight1" enabled="true"
+                    color="1.0 0.5 0.5 1"
+                    intensity="0"
+                    distance="800"
+                    decay="0.75"
+                    castshadow="true"
+                    position="-197 76 -172"
+                    target="0 40 0"
+                    penumbra="0.2"
+                    angle="30.0"
+                />
+
+                <spotlight id="spotlight2" enabled="true"
+                    color="0.5 0.5 1.0 1"
+                    intensity="0"
+                    distance="700"
+                    decay="0.75"
+                    castshadow="true"
+                    position="78 157 -19"
+                    target="0 40 0"
+                    penumbra="1.0"
+                    angle="30.0"
+                />
+
+
+            </children>
+        </node>
+
+
+  <!--       <node id="triangle1">
+            <children>
+                <primitive>
+                    <triangle xyz1="0 0 0" xyz2="0 50 40" xyz3="0 0 40"/>
+                </primitive>
+            </children>
+        </node> -->
+
+        <node id="disc" castshadows="true" receiveshadows="true">
+            <transforms>
+                    <translate value3="202 34 200" />
+                    <rotate value3="15 45 15" />
+                    <scale value3="2.5 2.5 2.5" />
+            </transforms>
+
+            <materialref id="disc_mat"/>
+        
+            <children>
+                <primitive>
+                    <polygon radius="30" stacks="1" slices="64" color_c="0 0 0 0" color_p="0 0 0 0"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="disc2" castshadows="true" receiveshadows="true">
+            <transforms>
+                    <translate value3="180 -41 -180" />
+                    <rotate value3="90 0 0" />
+                    <scale value3="0.3 0.3 0.3" />
+            </transforms>
+
+            <materialref id="disc2_mat"/>
+        
+            <children>
+                <primitive>
+                    <polygon radius="30" stacks="1" slices="64" color_c="1 0 0 0" color_p="0 0 1 0"/>
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="column1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="180 90 -180" />
+                <rotate value3="0 0 0" />
+            </transforms>
+
+            <children>
+                <noderef id="column" />
+            </children>
+        </node>
+
+        <node id="column2" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-70 -30 -150" />
+                <rotate value3="0 15 95" />
+            </transforms>
+
+            <children>
+                <noderef id="column" />
+            </children>
+        </node> 
+        
+        <node id="column3" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-160 -30 100" />
+                <rotate value3="0 25 50" />
+            </transforms>
+
+            <children>
+                <noderef id="column" />
+            </children>
+        </node>
+
+        <node id="column4" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-180 -120 180" />
+                <rotate value3="0 0 -20" />
+            </transforms>
+
+            <children>
+                <noderef id="column" />
+            </children>
+        </node>
+
+        <node id="column5" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="180 250 180" />
+                <rotate value3="0 -10 -10" />
+            </transforms>
+
+            <children>
+                <noderef id="column" />
+            </children>
+        </node>
+
+        <node id="column6" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="140 -50 140" />
+                <rotate value3="0 60 75" />
+            </transforms>
+
+            <children>
+                <noderef id="column" />
+            </children>
+        </node>
+
+        <node id="column">
+            <materialref id="walls_mat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="25" top="25" height="260" slices="8" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+ 
+        <node id="skybox">
+            <children>
+                <primitive>
+                    <skybox  size="5000, 5000, 5000" center="0, 0, 0" emissive="0 0 0 0" intensity="0"
+                        down="bottomSkyboxTex"
+                        up="topSkyboxTex"
+                        left="leftSkyboxTex" 
+                        right="rightSkyboxTex" 
+                        back="backSkyboxTex"
+                        front="frontSkyboxTex"
+                    />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="floor" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-250 -40 250" />
+                <rotate value3="-90 0.0 0.0" />
+            </transforms>
+
+            <materialref id="floor_mat" />
+
+            <children>
+                <primitive>
+                  <!--   <box xyz1="-5 -5 0" xyz2="505 505 -5"/> -->
+                    <rectangle xy1="-5 -5" xy2="505 505"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="ceiling" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-250 220 -250" />
+                <rotate value3="90 0.0 0.0" />
+            </transforms>
+
+            <materialref id="floor_mat" />
+
+            <children>
+                <primitive>
+                  <!--   <box xyz1="-5 -5 0" xyz2="505 505 -5"/> -->
+                    <rectangle xy1="-5 -5" xy2="505 505"/>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="walls" castshadows="true" receiveshadows="true">
+            <materialref id="walls_mat" />
+
+            <children>
+                <noderef id="wall1" />
+                <noderef id="wall2" />
+                <noderef id="wall3" />
+                <noderef id="wall4" />
+            </children>
+        </node>
+
+        <node id="wall1">
+            <children>
+                <noderef id="wall" />
+            </children>
+        </node>
+
+        <node id="wall2">
+            <transforms>
+                <rotate value3="0.0 -90 0.0" />
+            </transforms>
+
+            <children>
+                <noderef id="wall" />
+            </children>
+        </node>
+
+        <node id="wall3">
+            <transforms>
+                <rotate value3="0.0 90 0.0" />
+            </transforms>
+
+            <children>
+                <noderef id="wall" />
+            </children>
+        </node>
+
+        
+        <node id="wall4">
+            <transforms>
+                <rotate value3="0.0 180 0.0" />
+            </transforms>
+
+            <children>
+                <noderef id="wall" />
+            </children>
+        </node>
+
+        <node id="wall">
+            <transforms>
+                <translate value3="-255 -40 255" />
+                <rotate value3="0.0 90 0.0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                 <!--    <box xyz1="0 0 0" xyz2="505 260 -5"/> -->
+                    <rectangle xy1="0 0" xy2="510 260" />
+                </primitive>
+            </children>
+        </node>
+
+    
+
+        <node id="signature_stand_1" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="0 -40 25" />
+            </transforms>
+            <children>
+                 <noderef id="signature_stand_base" />
+                 <noderef id="signature_stand_foot" />
+                 <noderef id="signature_stand_holder" />
+                 <noderef id="signature_stand_plane_1" />
+            </children>
+        </node>
+
+        <node id="signature_stand_2" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="25 -40 0" />
+                <rotate value3="0 90 0" />
+            </transforms>
+            <children>
+                 <noderef id="signature_stand_base" />
+                 <noderef id="signature_stand_foot" />
+                 <noderef id="signature_stand_holder" />
+                 <noderef id="signature_stand_plane_2" />
+            </children>
+        </node>
+
+        <node id="signature_stand_base">
+            <children>
+                <primitive>
+                    <box xyz1="0 0 0" xyz2="1 6 1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="signature_stand_foot">
+            <transforms>
+                <translate value3="-2 0 -2" />
+            </transforms>
+            <children>
+                <primitive>
+                    <box xyz1="0 0 0" xyz2="5 .5 5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="signature_stand_holder">
+            <transforms>
+                <translate value3="-2.5 6.5 -.5" />
+                <rotate value3="45 0 0" />
+            </transforms>
+            <children>
+                <primitive>
+                    <box xyz1="0 0 0" xyz2="6 1 4" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="signature_stand_plane_1">
+            <transforms>
+                <translate value3="-2.25 4.5 3" />
+                <rotate value3="-45 0 0" />
+            </transforms>
+
+            <materialref id="sig1_mat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="5.5 3.5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="signature_stand_plane_2">
+            <transforms>
+                <translate value3="-2.25 4.5 3" />
+                <rotate value3="-45 0 0" />
+            </transforms>
+
+            <materialref id="sig2_mat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="5.5 3.5" />
+                </primitive>
+            </children>
+        </node>
+
+
+        
+
+
+        <node id="spotlight1_focus">
+            <transforms>
+                <translate value3="-197 101 -172" />
+            </transforms>
+            <children>
+                <noderef id="spotlight_stick" />
+                <noderef id="spotlight1_core" />
+            </children>
+        </node>
+
+        <node id="spotlight2_focus">
+            <transforms>
+                <translate value3="78 182 -19" />
+            </transforms>
+            <children>
+                <noderef id="spotlight_stick" />
+                <noderef id="spotlight2_core" />
+            </children>
+        </node>
+
+
+        <node id="spotlight_stick" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="0 75 0" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <cylinder base=".1" top=".1" height="200" slices="12" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="spotlight1_core">
+            <transforms>
+                <translate value3="0 -25 0" />
+                <rotate value3="0 140 -80"/>
+            </transforms>
+
+
+            <children>
+                <noderef id="spotlight1_emissor"/>
+                <primitive>
+                    <cylinder base=".6" top=".3" height="1.5" slices="12" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="spotlight2_core">
+            <transforms>
+                <translate value3="0 -25 0" />
+                <rotate value3="0 15 -30"/>
+            </transforms>
+
+
+            <children>
+                <noderef id="spotlight2_emissor"/>
+                <primitive>
+                    <cylinder base=".6" top=".3" height="1.5" slices="12" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+
+         <node id="spotlight1_emissor">
+            <transforms>
+                <translate value3="0 -0.75 0" />
+            </transforms>
+
+            <materialref id="emissor_1_mat" />
+
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height=".1" slices="12" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+         <node id="spotlight2_emissor">
+            <transforms>
+                <translate value3="0 -0.75 0" />
+            </transforms>
+
+            <materialref id="emissor_2_mat" />
+
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height=".1" slices="12" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        
+
+
+        <node id="statue_core">
+            <transforms>
+                <translate value3="0 40 0" />
+            </transforms>
+            <children>
+                <noderef id="octahedron" />
+                <lodref id="spherelod" />  
+            </children>
+        </node>
+
+        <node id="octahedron" castshadows="true" receiveshadows="true">
+            <transforms>
+                <scale value3="1.5 1.5 1.5" />
+                <rotate value3="0 15 55" />
+            </transforms>
+            
+            <materialref id="octahedron_mat" />
+
+            <children>
+                <noderef id="edge1" />
+                <noderef id="edge2" />
+                <noderef id="edge3" />
+                <noderef id="edge4" />
+                <noderef id="edge5" />
+                <noderef id="edge6" />
+                <noderef id="edge7" />
+                <noderef id="edge8" />
+                <noderef id="edge9" />
+                <noderef id="edge10" />
+                <noderef id="edge11" />
+                <noderef id="edge12" />
+                <noderef id="vert1" />
+                <noderef id="vert2" />
+                <noderef id="vert3" />
+                <noderef id="vert4" />
+                <noderef id="vert5" />
+                <noderef id="vert6" />
+            </children>
+        </node>
+
+        <node id="edge1">
+            <transforms>
+                <translate value3="0 0 5" />
+                <rotate value3="0 0 90" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="edge2">
+            <transforms>
+                <translate value3="0 0 -5" />
+                <rotate value3="0 0 90" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="edge3">
+            <transforms>
+                <translate value3="5 0 0" />
+                <rotate value3="0 90 90" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="edge4">
+            <transforms>
+                <translate value3="-5 0 0" />
+                <rotate value3="0 90 90" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="edge5">
+            <transforms>
+                <translate value3="2.5 3.53553390593 2.5" />
+                <rotate value3="0 -45 45" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="edge6">
+            <transforms>
+                <translate value3="2.5 3.53553390593 -2.5" />
+                <rotate value3="0 45 45" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="edge7">
+            <transforms>
+                <translate value3="-2.5 3.53553390593 2.5" />
+                <rotate value3="0 45 -45" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="edge8">
+            <transforms>
+                <translate value3="-2.5 3.53553390593 -2.5" />
+                <rotate value3="0 -45 -45" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="edge9">
+            <transforms>
+                <translate value3="2.5 -3.53553390593 -2.5" />
+                <rotate value3="0 45 -45" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="edge10">
+            <transforms>
+                <translate value3="-2.5 -3.53553390593 -2.5" />
+                <rotate value3="0 -45 45" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="edge11">
+            <transforms>
+                <translate value3="-2.5 -3.53553390593 2.5" />
+                <rotate value3="0 45 45" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="edge12">
+            <transforms>
+                <translate value3="2.5 -3.53553390593 2.5" />
+                <rotate value3="0 -45 -45" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top=".5" height="10" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="vert1">
+            <transforms>
+                <translate value3="5.323 0 5.323" />
+                <rotate value3="0 -45 -90" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top="0" height=".5" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="vert2">
+            <transforms>
+                <translate value3="-5.323 0 5.323" />
+                <rotate value3="0 45 90" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top="0" height=".5" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="vert3">
+            <transforms>
+                <translate value3="5.323 0 -5.323" />
+                <rotate value3="0 45 -90" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top="0" height=".5" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+         <node id="vert4">
+            <transforms>
+                <translate value3="-5.323 0 -5.323" />
+                <rotate value3="0 -45 90" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top="0" height=".5" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="vert5">
+            <transforms>
+                <translate value3="0 7.525 0" />
+                <rotate value3="0 45 0" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top="0" height=".5" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+        <node id="vert6">
+            <transforms>
+                <translate value3="0 -7.525 0" />
+                <rotate value3="180 -45 0" />
+            </transforms>
+            <children>
+                <primitive>
+                    <cylinder base=".5" top="0" height=".5" slices="4" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="glowsphere">
+            <transforms>
+                <translate value3="0 0 0" />
+                <rotate value3="0 0 0" />
+            </transforms>
+
+            <materialref id="glowsphere_mat" />
+
+            <children>   
+                <primitive>
+                    <sphere radius="3" slices="32" stacks="32" distance="0" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="lowglowsphere">
+            <transforms>
+                <translate value3="0 0 0" />
+                <rotate value3="0 0 0" />
+            </transforms>
+
+            <materialref id="glowsphere_mat" />
+
+            <children> 
+                <primitive>
+                    <sphere radius="3" slices="5" stacks="3" />
+                </primitive>
+            </children>
+        </node>
+
+        <lod id="spherelod">
+            <noderef id="glowsphere"  mindist="0"/>
+            <noderef id="lowglowsphere"  mindist="200"/>
+        </lod>
+
+
+
+        <node id="statue_base" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="0 -35 0" />
+                <rotate value3="0 45 0" />
+            </transforms>
+
+            <materialref id="statue_base_mat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="25" top="5" height="10" slices="4" stacks="1" />
+                  <!--  <box xyz1="-10 -15 -10" xyz2="10 15 10" /> -->
+                </primitive>
+            </children>
+        </node>
+
+        <node id="statue_wings" castshadows="true" receiveshadows="true">
+            <transforms>
+                <translate value3="-50 40 -50" />
+                <scale value3="6 6 6" />
+            </transforms>
+            
+            <materialref id="wing_mat" />
+
+            <children>
+                <noderef id="wing1" />
+                <noderef id="wing2" />
+                <noderef id="wing3" />
+            </children>
+        </node>
+
+        <node id="wing1">
+            <transforms>
+                <translate value3="-5.5 4 1.5" />
+                <rotate value3="130 60 70" />
+                <scale value3="1.5 -1.5 1.5" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <nurbs degree_u="3" degree_v="3" parts_u="20" parts_v="20" distance="0.0">
+                        <controlpoint xx="-1.2758" yy="-2.5203" zz="0.9852"  />
+                        <controlpoint xx="-2.2897" yy="0.9523"  zz="2.3512"  />
+                        <controlpoint xx="-3.0957" yy="6.3607"  zz="2.9120"  />
+                        <controlpoint xx="-3.2126" yy="9.9603"  zz="4.3519"  />
+                        <controlpoint xx="-0.5578" yy="-4.8913" zz="0.0601"  />
+                        <controlpoint xx="-2.7713" yy="-0.1966" zz="-0.8488" />
+                        <controlpoint xx="-1.7211" yy="3.4121"  zz="-0.2213" />
+                        <controlpoint xx="-3.1240" yy="6.5628"  zz="2.0518"  />
+                        <controlpoint xx="2.8108"  yy="-7.6872" zz="-0.4349" />
+                        <controlpoint xx="0.2965"  yy="-0.6134" zz="-4.4907" />
+                        <controlpoint xx="-0.3242" yy="1.2193"  zz="-2.1766" />
+                        <controlpoint xx="-0.0675" yy="3.9890"  zz="-1.1933" />
+                        <controlpoint xx="5.0313"  yy="-10.3062" zz="1.2286"  />
+                        <controlpoint xx="4.9119"  yy="-5.1232" zz="-1.0744" />
+                        <controlpoint xx="3.4809"  yy="-1.8227" zz="-1.9425" />
+                        <controlpoint xx="1.9083"  yy="0.7044"  zz="-1.5584" />
+                    </nurbs>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="wing2">
+            <transforms>
+                <translate value3="2 3 -4" />
+                <rotate value3="20 -70 0" />
+              <!--   <translate value3="2 1 -4" />
+                <rotate value3="0 -70 0" /> -->
+                <scale value3="1.5 1.5 1.5" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <nurbs degree_u="3" degree_v="3" parts_u="20" parts_v="20" distance="0.0">
+                        <controlpoint xx="-1.1494" yy="-1.5851" zz="1.2141"  />
+                        <controlpoint xx="-1.5256" yy="1.3561"  zz="5.2032"  />
+                        <controlpoint xx="0.8236"  yy="3.1451"  zz="7.7160"  />
+                        <controlpoint xx="6.6181"  yy="5.7389"  zz="9.5986"  />
+                        <controlpoint xx="-0.8311" yy="-3.6106" zz="-2.0995" />
+                        <controlpoint xx="-5.0471" yy="-0.2053" zz="0.4774"  />
+                        <controlpoint xx="-6.4216" yy="2.5082"  zz="1.7293"  />
+                        <controlpoint xx="-0.6430" yy="6.2720"  zz="6.3720"  />
+                        <controlpoint xx="3.7806"  yy="-6.4627" zz="-5.3821" />
+                        <controlpoint xx="-2.3246" yy="-2.4696" zz="-6.3075" />
+                        <controlpoint xx="-3.1079" yy="1.5182"  zz="-2.5834" />
+                        <controlpoint xx="-3.0448" yy="4.6470"  zz="0.4060"  />
+                        <controlpoint xx="8.7264"  yy="-8.8557" zz="-2.6637" />
+                        <controlpoint xx="4.2584"  yy="-3.7857" zz="-6.3287" />
+                        <controlpoint xx="0.5303"  yy="-0.0390" zz="-4.6147" />
+                        <controlpoint xx="-0.6424" yy="1.8283"  zz="-2.7370" />
+                    </nurbs>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="wing3">
+            <transforms>
+                <translate value3="-2 -1.5 -2" />
+                <rotate value3="10 50 -60" />
+                <scale value3="-1.5 1.5 1.5" />
+            </transforms>
+
+            <children>
+                <primitive>
+                    <nurbs degree_u="3" degree_v="3" parts_u="20" parts_v="20" distance="0.0">
+                        <controlpoint xx="-2.5470" yy="-0.2074" zz="0.5653"  />
+                        <controlpoint xx="-3.7551" yy="6.3649"  zz="0.8504"  />
+                        <controlpoint xx="-1.6181" yy="8.6676"  zz="3.2143"  />
+                        <controlpoint xx="1.7159"  yy="10.7445" zz="6.2096"  />
+                        <controlpoint xx="-0.6283" yy="-7.3843" zz="-0.0490" />
+                        <controlpoint xx="-4.8459" yy="-2.1468" zz="-2.6073" />
+                        <controlpoint xx="-5.4007" yy="6.4238"  zz="-2.8205" />
+                        <controlpoint xx="-0.8705" yy="10.1962" zz="0.3999"  />
+                        <controlpoint xx="3.2352"  yy="-9.3462" zz="3.4584"  />
+                        <controlpoint xx="2.2501"  yy="-8.8585" zz="-3.6633" />
+                        <controlpoint xx="-1.9363" yy="0.0110"  zz="-8.1808" />
+                        <controlpoint xx="0.1168"  yy="5.1553"  zz="-2.5112" />
+                        <controlpoint xx="4.3804"  yy="-9.3026" zz="7.4060"  />
+                        <controlpoint xx="4.9680"  yy="-8.0387" zz="2.5405"  />
+                        <controlpoint xx="3.5947"  yy="-3.8478" zz="-2.2111" />
+                        <controlpoint xx="1.3407"  yy="1.5689"  zz="-2.6013" />
+                    </nurbs>
+                </primitive>
+            </children>
+        </node>
+
+        <node id="stanchion" castshadows="true" receiveshadows="true">
+            <children>
+                <noderef id="belt" />
+                <noderef id="stanchion_pole" />
+            </children>
+        </node>
+
+
+        <node id="belt">
+            <transforms>
+                <translate value3="0 3.75 0" />
+            </transforms>
+
+            <materialref id="belt_mat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="-6 -0.2" xy2="39 0.2" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="stanchion_pole">
+            <transforms>
+                <translate value3="-6 2.25 0" />
+                <scale value3="1.25 1.5 1.25" />
+            </transforms>
+
+            <materialref id="stanchion_mat" />
+
+            <children>
+                <primitive>
+                    <cylinder base="0.2" top="0.2" height="3" slices="12" stacks="1" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="stanchions">
+            <transforms>
+                <translate value3="0 -40 0" />
+            </transforms>
+
+            <children>
+                <noderef id="stanchion1" />
+                <noderef id="stanchion2" />
+                <noderef id="stanchion3" />
+                <noderef id="stanchion4" />
+            </children>
+        </node>
+
+        <node id="stanchion1">
+            <transforms>
+                <translate value3="-16.5 0 22.5" />
+                
+            </transforms>
+
+            <children>
+                <noderef id="stanchion" />
+            </children>
+        </node>
+        
+        <node id="stanchion2">
+            <transforms>
+                <translate value3="22.5 0 16.5" />
+                <rotate value3="0 90 0" />
+            </transforms>
+
+            <children>
+                <noderef id="stanchion" />
+            </children>
+        </node>
+
+        <node id="stanchion3">
+            <transforms>
+                <translate value3="16.5 0 -22.5" />
+                <rotate value3="0 180 0" />
+            </transforms>
+
+            <children>
+                <noderef id="stanchion" />
+            </children>
+        </node>
+
+        <node id="stanchion4">
+            <transforms>
+                <translate value3="-22.5 0 -16.5" />
+                <rotate value3="0 270 0" />
+            </transforms>
+
+            <children>
+                <noderef id="stanchion" />
+            </children>
+        </node>
+        
+    </graph>
+</yaf> 
