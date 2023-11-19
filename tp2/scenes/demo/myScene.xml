@@ -807,12 +807,12 @@
 
 
         <lod id="spaceship_lod" castshadows="true" receiveshadows="true">
-            <noderef id="spaceship3" mindist="200" castshadows="true" receiveshadows="true" />
-            <noderef id="spaceship2" mindist="140" castshadows="true" receiveshadows="true" />
-            <noderef id="spaceship" mindist="20" castshadows="true" receiveshadows="true" />
+            <noderef id="spaceship3" mindist="200"  />
+            <noderef id="spaceship2" mindist="140" />
+            <noderef id="spaceship" mindist="20" />
         </lod>
 
-        <node id="spaceship">
+        <node id="spaceship" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="60 5 20" />
             </transforms>
@@ -888,7 +888,7 @@
 
         </node>
 
-        <node id="spaceship2">
+        <node id="spaceship2" castshadows="true" receiveshadows="true" >
             <transforms>
                 <translate value3="60 4 20" />
             </transforms>
@@ -900,7 +900,7 @@
         </node>
 
 
-        <node id="spaceship3">
+        <node id="spaceship3" castshadows="true" receiveshadows="true" >
             <transforms>
                 <translate value3="60 4 20" />
             </transforms>

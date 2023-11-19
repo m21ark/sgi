@@ -24,11 +24,11 @@ class MyContents {
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
 
-   //this.sceneDir = "scenes/demo/";
-   //this.reader.open(this.sceneDir + "myScene.xml");
+    this.sceneDir = "scenes/demo/";
+    this.reader.open(this.sceneDir + "myScene.xml");
 
-    this.sceneDir = "scenes/imported/museum/";
-    this.reader.open(this.sceneDir + "museum.xml");
+    // this.sceneDir = "scenes/imported/museum/";
+    // this.reader.open(this.sceneDir + "museum.xml");
   }
 
   init() {
@@ -60,7 +60,7 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() {}
+  update() { }
   loadMipmap(parentTexture, level, path) {
     // load texture. On loaded call the function to create the mipmap for the specified level
     new THREE.TextureLoader().load(
@@ -87,10 +87,10 @@ class MyContents {
       function (err) {
         console.error(
           "Unable to load the image " +
-            path +
-            " as mipmap level " +
-            level +
-            ".",
+          path +
+          " as mipmap level " +
+          level +
+          ".",
           err
         );
       }
@@ -725,21 +725,44 @@ class MyContents {
 
   loadLod(node, parentNode, parentMaterial, parentTexture) {
     let lod = new THREE.LOD();
-    parentNode.add(lod); 
+    parentNode.add(lod);
+
+    this.setMatrixTransform(node);
+
+    lod.castShadow = true; // parser does not support shadows for lod
+    lod.receiveShadow = true;
+    parentNode.castShadow = true;
+    parentNode.receiveShadow = true;
 
     node.children.forEach((child) => {
-      let group2 = new THREE.Group();
+      let group = new THREE.Group();
 
-      child.node.group = group2;
+      child.node.group = group;
+
+      if (child.castshadows || node.castShadows || parentNode.castShadow) {
+        parentNode.castShadow = true;
+        child.castShadows = true;
+        group.castShadow = true;
+      }
+      if (
+        child.receiveshadows ||
+        node.receiveShadows ||
+        parentNode.receiveShadow
+      ) {
+        parentNode.receiveShadow = true;
+        child.receiveShadows = true;
+        group.receiveShadow = true;
+      }
+
 
       this.transverseAndInheritValues(
         child.node,
-        group2,
+        group,
         parentMaterial,
         parentTexture
       );
 
-      lod.addLevel(group2, child.mindist);
+      lod.addLevel(group, child.mindist);
     });
     return;
   }
@@ -840,7 +863,7 @@ class MyContents {
     this.app.scene.add(this.rootScene);
   }
 
-  endFunc() {}
+  endFunc() { }
 }
 
 export { MyContents };
