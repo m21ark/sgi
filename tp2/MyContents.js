@@ -907,6 +907,12 @@ class MyContents {
 
   toggleLights() {
     console.log(this.lightsOn);
+
+    for (let key in this.lights) {
+      let light = this.lights[key];
+      if (this.lightsOn) light.intensity = 200;
+      else light.intensity = 0;
+    }
   }
 
   toggleShadows() {
