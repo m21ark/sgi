@@ -23,7 +23,6 @@ class MyContents {
     // GUI variables
     this.useLightHelpers = false;
     this.lightsOn = true;
-    this.useShadows = true;
     this.showHelpers = false;
 
     this.useTextures = true;
@@ -950,16 +949,6 @@ class MyContents {
       let light = this.lights[key];
       if (this.lightsOn) light.intensity = 200;
       else light.intensity = 0;
-    }
-  }
-
-  toggleShadows() {
-    console.log(this.useShadows);
-    // TODO: nem todas as luzes têm shadow para ligar de volta
-    for (let key in this.lights) {
-      let light = this.lights[key];
-      light.castShadow = this.useShadows;
-      light.receiveShadow = this.useShadows;
     }
   }
 

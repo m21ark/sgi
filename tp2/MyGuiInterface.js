@@ -39,36 +39,21 @@ class MyGuiInterface {
       });
 
     lightsFolder
-      .add(this.contents, "useShadows", true)
-      .name("useShadows")
-      .onChange(() => {
-        this.contents.toggleShadows();
-      });
-
-    lightsFolder
       .add(this.contents, "showHelpers", true)
       .name("showHelpers")
       .onChange(() => {
         this.contents.toggleLightHelpers();
       });
 
-    // shadow biass slinder
-    lightsFolder
-      .add(this.contents, "shadowBias", -0.1, 0.1, 0.001)
-      .name("shadowBias")
-      .onChange(() => {
-        this.contents.modifyShadowBias();
-      });
-
     const materialsFolder = this.datgui.addFolder("Materials");
     materialsFolder.open();
 
-       materialsFolder
+    materialsFolder
       .add(this.contents, "useTextures", true)
       .name("useTextures")
       .onChange(() => {
         this.contents.toggleTextures();
-      }); 
+      });
 
     materialsFolder
       .add(this.contents, "useBumpMaps", true)
@@ -79,20 +64,27 @@ class MyGuiInterface {
 
     // ===================================================================
 
-    const wireframeFolder = this.datgui.addFolder("Wireframes");
-    wireframeFolder.close();
-    const materialIds = Object.keys(this.contents.materials);
+    const shadowsFolder = this.datgui.addFolder("Shadows");
+    shadowsFolder.close();
+    const lightsIDs = Object.keys(this.contents.lights);
 
-    for (let materialId of materialIds) {
-      wireframeFolder
-        .add(this.contents.materials[materialId], "wireframe", true)
-        .name(materialId)
+    shadowsFolder
+      .add(this.contents, "shadowBias", -0.1, 0.1, 0.001)
+      .name("shadowBias")
+      .onChange(() => {
+        this.contents.modifyShadowBias();
+      });
+
+    for (let lightID of lightsIDs) {
+      if (lightID.includes("_helper")) continue;
+
+      shadowsFolder
+        .add(this.contents.lights[lightID], "castShadow", true)
+        .name(lightID)
         .onChange(() => {
-          this.contents.toggleWireframeMode(materialId);
+          this.contents.toggleLightShadow(lightID);
         });
     }
-
-   
   }
 }
 
