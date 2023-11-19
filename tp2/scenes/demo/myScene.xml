@@ -29,7 +29,7 @@
         <texture id="floorTexN" filepath="textures/floorN.jpg" />
 
         <texture id="desertFloorTex" filepath="textures/desertFloor.jpg" />
-        <!--- <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" /> -->
+        <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" /> 
 
         <texture id="garageTex" filepath="textures/garage.jpg" />
         <texture id="garageTexN" filepath="textures/garageN.jpg" />
@@ -337,12 +337,12 @@ T
                         center="0 0 0"
                         emissive="0 0 0 0"
                         intensity="1"
-                        left="textures/skybox/left.png"
-                        right="textures/skybox/right.png"
-                        front="textures/skybox/front.png"
-                        back="textures/skybox/back.png"
-                        up="textures/skybox/top.png"
-                        down="textures/skybox/bottom.png" />
+                        left="textures/stars.jpg"
+                        right="textures/stars.jpg"
+                        front="textures/stars.jpg"
+                        back="textures/stars.jpg"
+                        up="textures/stars.jpg"
+                        down="textures/stars.jpg" />
                 </primitive>
             </children>
         </node>

@@ -24,11 +24,11 @@ class MyContents {
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
 
-   //this.sceneDir = "scenes/demo/";
-   //this.reader.open(this.sceneDir + "myScene.xml");
+   this.sceneDir = "scenes/demo/";
+   this.reader.open(this.sceneDir + "myScene.xml");
 
-    this.sceneDir = "scenes/imported/museum/";
-    this.reader.open(this.sceneDir + "museum.xml");
+/*     this.sceneDir = "scenes/imported/museum/";
+    this.reader.open(this.sceneDir + "museum.xml"); */
   }
 
   init() {
