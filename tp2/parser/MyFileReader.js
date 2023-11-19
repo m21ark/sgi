@@ -69,11 +69,11 @@ class MyFileReader {
         // HTTP status code  ( 200 => OK )
 
         let reader = this.reader;
-        console.info(
+ /*        console.info(
           "------------------ " +
             reader.xmlfilename +
             " file read. begin parsing ------------------"
-        );
+        ); */
 
         let parser = new window.DOMParser();
         reader.xmlDoc = parser.parseFromString(this.response, "text/xml");

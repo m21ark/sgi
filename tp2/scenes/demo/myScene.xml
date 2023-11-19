@@ -4,6 +4,18 @@
 
     <fog color="0 0 0 0" near="0.0" far="250.0" />
 
+<!--     <skybox
+        size="180 180 180"
+        center="0 0 0"
+        emissive="0 0 0 0"
+        intensity="1"
+        left="textures/stars.jpg"
+        right="textures/stars.jpg"
+        front="textures/stars.jpg"
+        back="textures/stars.jpg"
+        up="textures/stars.jpg"
+        down="textures/stars.jpg" /> -->
+
     <cameras initial="cam1">
         <perspective id="cam1"
             angle="60"
@@ -29,7 +41,7 @@
         <texture id="floorTexN" filepath="textures/floorN.jpg" />
 
         <texture id="desertFloorTex" filepath="textures/desertFloor.jpg" />
-        <!--- <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" /> -->
+        <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" />
 
         <texture id="garageTex" filepath="textures/garage.jpg" />
         <texture id="garageTexN" filepath="textures/garageN.jpg" />
@@ -242,10 +254,7 @@
             specular="0.5 0.5 0.5 1.0"
             shininess="300"
             twosided="true"
-        />
-
-
-        <material id="doorHandleMat"
+        /> T <material id="doorHandleMat"
             emissive="0.0 0.0 0.0 1.0"
             color="0.7 0.7 0.7 1.0"
             specular="0.9 0.9 0.9 1.0"
@@ -304,7 +313,7 @@
                 <noderef id="globe_holo" />
                 <noderef id="garage" />
                 <lodref id="spaceship_lod" />
-                <noderef id="spaceBox" />
+                          <noderef id="spaceBox" /> 
 
                 <noderef id="dockingStation" />
                 <noderef id="chargingLine" />
@@ -337,12 +346,12 @@
                         center="0 0 0"
                         emissive="0 0 0 0"
                         intensity="1"
-                        left="textures/skybox/left.png"
-                        right="textures/skybox/right.png"
-                        front="textures/skybox/front.png"
-                        back="textures/skybox/back.png"
-                        up="textures/skybox/top.png"
-                        down="textures/skybox/bottom.png" />
+                        left="textures/stars.jpg"
+                        right="textures/stars.jpg"
+                        front="textures/stars.jpg"
+                        back="textures/stars.jpg"
+                        up="textures/stars.jpg"
+                        down="textures/stars.jpg" />
                 </primitive>
             </children>
         </node>
@@ -890,7 +899,7 @@
 
         <node id="spaceship2" castshadows="true" receiveshadows="true" >
             <transforms>
-                <translate value3="60 4 20" />
+                <translate value3="60 5 20" />
             </transforms>
 
             <children>
@@ -902,7 +911,7 @@
 
         <node id="spaceship3" castshadows="true" receiveshadows="true" >
             <transforms>
-                <translate value3="60 4 20" />
+                <translate value3="60 5 20" />
             </transforms>
 
 

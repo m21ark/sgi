@@ -20,6 +20,8 @@ class MyContents {
     this.cameras = [];
     this.camerasNames = [];
 
+    this.skyboxV2 = null;
+
     this.useLightHelpers = false;
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
@@ -27,8 +29,8 @@ class MyContents {
     this.sceneDir = "scenes/demo/";
     this.reader.open(this.sceneDir + "myScene.xml");
 
-    // this.sceneDir = "scenes/imported/museum/";
-    // this.reader.open(this.sceneDir + "museum.xml");
+    /*     this.sceneDir = "scenes/imported/museum/";
+    this.reader.open(this.sceneDir + "museum.xml"); */
   }
 
   init() {
@@ -42,7 +44,6 @@ class MyContents {
 
   onSceneLoaded(data) {
     this.onAfterSceneLoadedAndBeforeRender(data);
-    this.endFunc();
   }
 
   onAfterSceneLoadedAndBeforeRender(data) {
@@ -55,6 +56,8 @@ class MyContents {
     this.setTextures(data.textures);
     this.setMaterials(data.materials);
     this.setCameras(data.cameras, data.activeCameraId);
+    this.setSkybox(data.skyboxes);
+
 
     // Start the traversal from the root node
     this.transverseFromRoot(data);
@@ -157,7 +160,6 @@ class MyContents {
     const texture = this.textureNode.get(textureObj);
 
     if (texture.mipmap0 != null) {
-      console.log(texture);
       clonedTexture.generateMipmaps = false;
 
       this.loadMipmap(clonedTexture, 0, this.sceneDir + texture.mipmap0);
@@ -180,6 +182,12 @@ class MyContents {
     }
 
     return clonedTexture;
+  }
+
+  setSkybox(skybox){
+    let skyboxInfo = skybox.default
+    this.skyboxV2 = this.createSkybox(skyboxInfo);
+    this.app.scene.add(this.skyboxV2);
   }
 
   setMaterials(materials) {
@@ -220,7 +228,7 @@ class MyContents {
           1 / material.texlength_s,
           1 / material.texlength_t
         );
-      } else console.log("ERROR: texture not found");
+      }
 
       this.materials[key] = materialObj;
     }
@@ -280,7 +288,6 @@ class MyContents {
       camera.far
     );
     cam.position.set(...camera.location);
-    console.log(new THREE.Vector3(...camera.target));
     cam.lookAt(new THREE.Vector3(...camera.target));
     this.cameras[camera.id] = cam;
   }
@@ -446,7 +453,6 @@ class MyContents {
 
           break;
         case "polygon":
-          console.log(material);
           if (material != null) {
             material.vertexColors = true;
             material.needsUpdate = true;
@@ -859,11 +865,9 @@ class MyContents {
     this.rootScene.name = "rootScene";
     // this.rootScene.castShadow = true;
     this.transverseAndInheritValues(rootNode, this.rootScene);
-    console.log(this.rootScene);
+
     this.app.scene.add(this.rootScene);
   }
-
-  endFunc() { }
 }
 
 export { MyContents };
