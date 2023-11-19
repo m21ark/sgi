@@ -41,7 +41,7 @@
         <texture id="floorTexN" filepath="textures/floorN.jpg" />
 
         <texture id="desertFloorTex" filepath="textures/desertFloor.jpg" />
-        <!--- <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" /> -->
+        <texture id="desertFloorTexN" filepath="textures/desertFloorN.jpg" />
 
         <texture id="garageTex" filepath="textures/garage.jpg" />
         <texture id="garageTexN" filepath="textures/garageN.jpg" />
@@ -87,8 +87,8 @@
             specular="0 0 0 0"
             shininess="0"
             textureref="ventTex"
-            texlength_s="1"
-            texlength_t="1" />
+            texlength_s="10"
+            texlength_t="5" />
 
         <material id="wallMat"
             emissive="0.0 0.0 0.0 1"
@@ -96,8 +96,8 @@
             specular="0 0 0 0"
             shininess="0"
             textureref="metalTex"
-            texlength_s="1"
-            texlength_t="1" />
+            texlength_s="80"
+            texlength_t="20" />
 
 
         <material id="holoMat1"
@@ -106,8 +106,8 @@
             specular="0.3 0.3 0.3 0"
             shininess="100"
             textureref="holoTex1"
-            texlength_s="1"
-            texlength_t="1"
+            texlength_s="15"
+            texlength_t="6"
             twosided="true" />
 
 
@@ -117,8 +117,8 @@
             specular="0.3 0.3 0.3 0"
             shininess="100"
             textureref="holoTex2"
-            texlength_s="1"
-            texlength_t="1"
+            texlength_s="15"
+            texlength_t="6"
             twosided="true" />
 
         <material id="floorMat"
@@ -126,6 +126,8 @@
             color="0.10 0.10 0.10 1.0"
             specular="0 0 0 0"
             shininess="0"
+            texlength_s = "80"
+            texlength_t = "40"
             textureref="floorTex"
             bumpref="floorTexN"
             twosided="true" />
@@ -204,8 +206,8 @@
             specular="0.0 0.0 0.04 1.0"
             shininess="30"
             textureref="moving_stars"
-            texlength_s="1"
-            texlength_t="1"
+            texlength_s="20"
+            texlength_t="10"
             twosided="true" />
 
         <material id="borderMat"
@@ -262,6 +264,8 @@
             color="0.7 0.7 0.7 1.0"
             specular="0.9 0.9 0.9 1.0"
             shininess="200"
+            texlength_s="6"
+            texlength_t="2"
             textureref="passwordVideo"
         />
 
@@ -287,6 +291,8 @@
             color="1 1 1 1.0"
             specular="0 0 0 1.0"
             shininess="0"
+            texlength_s="5"
+            texlength_t="1.5"
             textureref="licencePlateTex"
         />
 

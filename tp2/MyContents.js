@@ -261,8 +261,8 @@ class MyContents {
 
       if (materialObj.map != null) {
         materialObj.map.repeat.set(
-          1 / material.texlength_s,
-          1 / material.texlength_t
+          material.texlength_s,
+          material.texlength_t
         );
       }
 
@@ -348,6 +348,31 @@ class MyContents {
       fog.near,
       fog.far
     );
+  }
+
+  duplicateMaterial(material, width, height) {
+
+
+    let materialObj = material.clone();
+
+    if (materialObj.map != null) {
+
+      let lenS = material.map.repeat.x, lenT = material.map.repeat.y;
+
+      console.log("AQUI")
+      console.log(lenS, lenT)
+      console.log(width / lenS, height / lenT)
+      console.log(width, height)
+
+      materialObj.map.repeat.set(
+        width / lenS,
+        height / lenT
+      );
+    }
+
+    materialObj.map.needsUpdate = true;
+
+    return materialObj;
   }
 
   setPrimitive(obj, material, texture, father) {
@@ -518,7 +543,12 @@ class MyContents {
 
     defaultMaterial.vertexColors = true;
 
-    let mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
+    let mesh;
+    if (obj.subtype != "rectangle") {
+      mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
+    } else {
+      mesh = new THREE.Mesh(geometry, this.duplicateMaterial(material, Math.abs(rep.xy1[0] - rep.xy2[0]), Math.abs(rep.xy1[1] - rep.xy2[1])) ?? defaultMaterial);
+    }
 
     // make sure the object casts and receives shadows
     if (father.castShadow) mesh.castShadow = true;
