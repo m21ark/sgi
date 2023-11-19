@@ -68,7 +68,7 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() {}
+  update() { }
   loadMipmap(parentTexture, level, path) {
     // load texture. On loaded call the function to create the mipmap for the specified level
     new THREE.TextureLoader().load(
@@ -95,10 +95,10 @@ class MyContents {
       function (err) {
         console.error(
           "Unable to load the image " +
-            path +
-            " as mipmap level " +
-            level +
-            ".",
+          path +
+          " as mipmap level " +
+          level +
+          ".",
           err
         );
       }
@@ -196,6 +196,8 @@ class MyContents {
     // while still ensuring that length_s and length_t are correctly set ... as those are not passed by ref
     const clonedTexture = textureObj.clone();
     const texture = this.textureNode.get(textureObj);
+    
+    this.textureNode.set(clonedTexture, texture);
 
     if (texture.mipmap0 != null) {
       clonedTexture.generateMipmaps = false;
@@ -359,12 +361,20 @@ class MyContents {
 
     if (materialObj.map != null) {
 
+      materialObj.map = this.cloneTextureNode(material.map);
+
       let lenS = material.map.repeat.x, lenT = material.map.repeat.y;
 
       materialObj.map.repeat.set(
         width / lenS,
         height / lenT
       );
+
+      if (materialObj.bumpMap != null)
+        materialObj.bumpMap.repeat.set(
+          width / lenS,
+          height / lenT
+        );
     }
 
     materialObj.map.needsUpdate = true;
