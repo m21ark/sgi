@@ -243,7 +243,7 @@
             shininess="300"
             twosided="true"
         />
-
+T
 
         <material id="doorHandleMat"
             emissive="0.0 0.0 0.0 1.0"
