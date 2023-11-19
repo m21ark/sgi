@@ -126,7 +126,7 @@
             color="0.10 0.10 0.10 1.0"
             specular="0 0 0 0"
             shininess="0"
-            texlength_s = "80"
+            texlength_s = "40"
             texlength_t = "40"
             textureref="floorTex"
             bumpref="floorTexN"

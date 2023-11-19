@@ -68,7 +68,7 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() { }
+  update() {}
   loadMipmap(parentTexture, level, path) {
     // load texture. On loaded call the function to create the mipmap for the specified level
     new THREE.TextureLoader().load(
@@ -95,10 +95,10 @@ class MyContents {
       function (err) {
         console.error(
           "Unable to load the image " +
-          path +
-          " as mipmap level " +
-          level +
-          ".",
+            path +
+            " as mipmap level " +
+            level +
+            ".",
           err
         );
       }
@@ -196,7 +196,7 @@ class MyContents {
     // while still ensuring that length_s and length_t are correctly set ... as those are not passed by ref
     const clonedTexture = textureObj.clone();
     const texture = this.textureNode.get(textureObj);
-    
+
     this.textureNode.set(clonedTexture, texture);
 
     if (texture.mipmap0 != null) {
@@ -264,10 +264,7 @@ class MyContents {
       }
 
       if (materialObj.map != null) {
-        materialObj.map.repeat.set(
-          material.texlength_s,
-          material.texlength_t
-        );
+        materialObj.map.repeat.set(material.texlength_s, material.texlength_t);
       }
 
       this.materials[key] = materialObj;
@@ -355,26 +352,25 @@ class MyContents {
   }
 
   duplicateMaterial(material, width, height) {
-
-
     let materialObj = material.clone();
 
     if (materialObj.map != null) {
-
       materialObj.map = this.cloneTextureNode(material.map);
 
-      let lenS = material.map.repeat.x, lenT = material.map.repeat.y;
+      let lenS = material.map.repeat.x,
+        lenT = material.map.repeat.y;
 
-      materialObj.map.repeat.set(
-        width / lenS,
-        height / lenT
-      );
+      materialObj.map.repeat.set(width / lenS, height / lenT);
 
-      if (materialObj.bumpMap != null)
-        materialObj.bumpMap.repeat.set(
-          width / lenS,
-          height / lenT
-        );
+      if (materialObj.bumpMap != null) {
+        materialObj.bumpMap.repeat.set(width / lenS, height / lenT);
+
+        materialObj.bumpMap.wrapS = THREE.RepeatWrapping;
+        materialObj.bumpMap.wrapT = THREE.RepeatWrapping;
+      }
+
+      materialObj.map.wrapS = THREE.RepeatWrapping;
+      materialObj.map.wrapT = THREE.RepeatWrapping;
     }
 
     materialObj.map.needsUpdate = true;
@@ -556,7 +552,14 @@ class MyContents {
     if (obj.subtype != "rectangle") {
       mesh = new THREE.Mesh(geometry, material ?? defaultMaterial);
     } else {
-      mesh = new THREE.Mesh(geometry, this.duplicateMaterial(material, Math.abs(rep.xy1[0] - rep.xy2[0]), Math.abs(rep.xy1[1] - rep.xy2[1])) ?? defaultMaterial);
+      mesh = new THREE.Mesh(
+        geometry,
+        this.duplicateMaterial(
+          material,
+          Math.abs(rep.xy1[0] - rep.xy2[0]),
+          Math.abs(rep.xy1[1] - rep.xy2[1])
+        ) ?? defaultMaterial
+      );
     }
 
     // make sure the object casts and receives shadows
