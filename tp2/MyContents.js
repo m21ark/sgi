@@ -20,7 +20,11 @@ class MyContents {
     this.cameras = [];
     this.camerasNames = [];
 
+    // GUI variables
     this.useLightHelpers = false;
+    this.lightsOn = true;
+    this.useShadows = true;
+    this.showHelpers = false;
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
 
@@ -215,7 +219,6 @@ class MyContents {
   }
 
   setSkybox(skybox) {
-    console.log(skybox.default)
     let skyboxInfo = skybox.default;
     this.skyboxV2 = this.createSkybox(skyboxInfo);
     this.app.scene.add(this.skyboxV2);
@@ -897,6 +900,20 @@ class MyContents {
     this.transverseAndInheritValues(rootNode, this.rootScene);
 
     this.app.scene.add(this.rootScene);
+  }
+
+  // =======================================
+
+  toggleLights() {
+    console.log(this.lightsOn);
+  }
+
+  toggleShadows() {
+    console.log(this.useShadows);
+  }
+
+  toggleLightHelpers() {
+    console.log(this.showHelpers);
   }
 }
 
