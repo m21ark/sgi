@@ -479,7 +479,7 @@ class MySceneData {
   }
 
   onLoadFinished(app, contents) {
-    console.info(
+/*     console.info(
       "------------------ consolidating data structures ------------------"
     );
 
@@ -492,7 +492,7 @@ class MySceneData {
     console.debug("consolidating camera...");
     // TODO: check active camera not null and exists
 
-    // TODO: continue consolidation checks
+    // TODO: continue consolidation checks */
   }
 
   getLOD(id) {

@@ -14,7 +14,7 @@ contents.init();
 // hooks the contents object in the application object
 app.setContents(contents);
 
-console.log(contents);
+
 let gui = new MyGuiInterface(app);
 gui.setContents(contents);
 app.setGui(gui);
