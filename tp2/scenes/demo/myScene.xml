@@ -40,6 +40,7 @@
         <texture id="moving_stars" filepath="textures/moving_stars.jpg" />
         <texture id="ceilTex" filepath="textures/ceil.jpg" />
         <texture id="licencePlateTex" filepath="textures/plate.jpg" />
+        <texture id="ventTex" filepath="textures/vent.jpg" />
 
         <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true" />
         <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true" />
@@ -57,6 +58,15 @@
     </textures>
 
     <materials>
+
+        <material id="ventMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.5 0.5 0.5 1.0"
+            specular="0 0 0 0"
+            shininess="0"
+            textureref="ventTex"
+            texlength_s="1"
+            texlength_t="1" />
 
         <material id="wallMat"
             emissive="0.0 0.0 0.0 1"
@@ -94,8 +104,6 @@
             color="0.10 0.10 0.10 1.0"
             specular="0 0 0 0"
             shininess="0"
-            texlength_s="1"
-            texlength_t="1"
             textureref="floorTex"
             bumpref="floorTexN"
             twosided="true" />
@@ -1314,6 +1322,7 @@
                 <noderef id="wall5" />
                 <noderef id="wall6" />
                 <noderef id="wall7" />
+                <noderef id="ventWall" />
 
                 <noderef id="door1" />
                 <noderef id="door1_handle" />
@@ -1323,6 +1332,22 @@
                 <noderef id="ceilBedroom" />
             </children>
         </node>
+
+        <node id="ventWall">
+            <transforms>
+                <translate value3="0.1 14 78" />
+                <rotate value3="0.0 90 0.0" />
+            </transforms>
+
+            <materialref id="ventMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="10 5" />
+                </primitive>
+            </children>
+        </node>
+
 
         <node id="wall1">
             <transforms>
