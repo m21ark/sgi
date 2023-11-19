@@ -23,6 +23,18 @@
             top="5" />
     </cameras>
 
+    <skybox
+    size="180 180 180"
+    center="0 0 0"
+    emissive="0 0 0 0"
+    intensity="1"
+    left="textures/stars.jpg"
+    right="textures/stars.jpg"
+    front="textures/stars.jpg"
+    back="textures/stars.jpg"
+    up="textures/stars.jpg"
+    down="textures/stars.jpg" />
+
 
     <textures>
         <texture id="floorTex" filepath="textures/floor.jpg" />
@@ -304,7 +316,7 @@
                 <noderef id="globe_holo" />
                 <noderef id="garage" />
                 <lodref id="spaceship_lod" />
-                <noderef id="spaceBox" />
+      <!--           <noderef id="spaceBox" /> -->
 
                 <noderef id="dockingStation" />
                 <noderef id="chargingLine" />
@@ -326,7 +338,7 @@
         </node>
  -->
 
-        <node id="spaceBox">
+<!--         <node id="spaceBox">
             <transforms>
                 <translate value3="25 0 25" />
             </transforms>
@@ -337,15 +349,15 @@
                         center="0 0 0"
                         emissive="0 0 0 0"
                         intensity="1"
-                        left="textures/skybox/left.png"
-                        right="textures/skybox/right.png"
-                        front="textures/skybox/front.png"
-                        back="textures/skybox/back.png"
-                        up="textures/skybox/top.png"
-                        down="textures/skybox/bottom.png" />
+                        left="textures/stars.jpg"
+                        right="textures/stars.jpg"
+                        front="textures/stars.jpg"
+                        back="textures/stars.jpg"
+                        up="textures/stars.jpg"
+                        down="textures/stars.jpg" />
                 </primitive>
             </children>
-        </node>
+        </node> -->
 
         <node id="neonLine">
 
