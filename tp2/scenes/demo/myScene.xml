@@ -316,7 +316,7 @@
                 <noderef id="globe_holo" />
                 <noderef id="garage" />
                 <lodref id="spaceship_lod" />
-                <!--           <noderef id="spaceBox" /> -->
+
 
                 <noderef id="dockingStation" />
                 <noderef id="chargingLine" />
@@ -329,35 +329,6 @@
             </children>
         </node>
 
-        <!--         <node id="energyStatue">
-            <translate value3="50 0 0" />
-
-            <children>
-                <lodref id="statue_lod" />
-            </children>
-        </node>
- -->
-
-        <!--         <node id="spaceBox">
-            <transforms>
-                <translate value3="25 0 25" />
-            </transforms>
-            <children>
-                <primitive>
-                    <skybox
-                        size="180 180 180"
-                        center="0 0 0"
-                        emissive="0 0 0 0"
-                        intensity="1"
-                        left="textures/stars.jpg"
-                        right="textures/stars.jpg"
-                        front="textures/stars.jpg"
-                        back="textures/stars.jpg"
-                        up="textures/stars.jpg"
-                        down="textures/stars.jpg" />
-                </primitive>
-            </children>
-        </node> -->
 
         <node id="neonLine">
 

@@ -20,8 +20,6 @@ class MyContents {
     this.cameras = [];
     this.camerasNames = [];
 
-    this.skyboxV2 = null;
-
     this.useLightHelpers = false;
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
@@ -217,6 +215,7 @@ class MyContents {
   }
 
   setSkybox(skybox) {
+    console.log(skybox.default)
     let skyboxInfo = skybox.default;
     this.skyboxV2 = this.createSkybox(skyboxInfo);
     this.app.scene.add(this.skyboxV2);
