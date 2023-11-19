@@ -24,16 +24,16 @@
     </cameras>
 
     <skybox
-    size="180 180 180"
-    center="0 0 0"
-    emissive="0 0 0 0"
-    intensity="1"
-    left="textures/stars.jpg"
-    right="textures/stars.jpg"
-    front="textures/stars.jpg"
-    back="textures/stars.jpg"
-    up="textures/stars.jpg"
-    down="textures/stars.jpg" />
+        size="180 180 180"
+        center="0 0 0"
+        emissive="0 0 0 0"
+        intensity="100"
+        left="textures/stars.jpg"
+        right="textures/stars.jpg"
+        front="textures/stars.jpg"
+        back="textures/stars.jpg"
+        up="textures/stars.jpg"
+        down="textures/stars.jpg" />
 
 
     <textures>
@@ -322,7 +322,7 @@
                 <noderef id="globe_holo" />
                 <noderef id="garage" />
                 <lodref id="spaceship_lod" />
-      <!--           <noderef id="spaceBox" /> -->
+
 
                 <noderef id="dockingStation" />
                 <noderef id="chargingLine" />
@@ -335,35 +335,6 @@
             </children>
         </node>
 
-        <!--         <node id="energyStatue">
-            <translate value3="50 0 0" />
-
-            <children>
-                <lodref id="statue_lod" />
-            </children>
-        </node>
- -->
-
-<!--         <node id="spaceBox">
-            <transforms>
-                <translate value3="25 0 25" />
-            </transforms>
-            <children>
-                <primitive>
-                    <skybox
-                        size="180 180 180"
-                        center="0 0 0"
-                        emissive="0 0 0 0"
-                        intensity="1"
-                        left="textures/stars.jpg"
-                        right="textures/stars.jpg"
-                        front="textures/stars.jpg"
-                        back="textures/stars.jpg"
-                        up="textures/stars.jpg"
-                        down="textures/stars.jpg" />
-                </primitive>
-            </children>
-        </node> -->
 
         <node id="neonLine">
 
@@ -825,7 +796,7 @@
 
 
         <lod id="spaceship_lod" castshadows="true" receiveshadows="true">
-            <noderef id="spaceship3" mindist="200"  />
+            <noderef id="spaceship3" mindist="200" />
             <noderef id="spaceship2" mindist="140" />
             <noderef id="spaceship" mindist="20" />
         </lod>
@@ -906,7 +877,7 @@
 
         </node>
 
-        <node id="spaceship2" castshadows="true" receiveshadows="true" >
+        <node id="spaceship2" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="60 4 20" />
             </transforms>
@@ -918,7 +889,7 @@
         </node>
 
 
-        <node id="spaceship3" castshadows="true" receiveshadows="true" >
+        <node id="spaceship3" castshadows="true" receiveshadows="true">
             <transforms>
                 <translate value3="60 4 20" />
             </transforms>
@@ -1301,8 +1272,8 @@
                     distance="7"
                     decay="0.75"
                     castshadow="true"
-                    position="19 14 19"
-                    target="19 0 19"
+                    position="20 14 20"
+                    target="20 0 20"
                     penumbra="1.0"
                     angle="7"
                 />
@@ -1314,7 +1285,7 @@
                     distance="15"
                     decay="1.5"
                     castshadow="false"
-                    position="19 9 19"
+                    position="20 9 20"
                 />
 
                 <pointlight id="garageLight" enabled="true"
@@ -1323,7 +1294,7 @@
                     distance="35"
                     decay="1"
                     castshadow="false"
-                    position="60 15 20"
+                    position="60 17 20"
                 />
 
 
@@ -1333,7 +1304,7 @@
                     distance="35"
                     decay="1"
                     castshadow="false"
-                    position="20 15 60"
+                    position="20 17 60"
                 />
 
 
