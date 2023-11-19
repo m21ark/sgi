@@ -62,7 +62,7 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() { }
+  update() {}
   loadMipmap(parentTexture, level, path) {
     // load texture. On loaded call the function to create the mipmap for the specified level
     new THREE.TextureLoader().load(
@@ -89,10 +89,10 @@ class MyContents {
       function (err) {
         console.error(
           "Unable to load the image " +
-          path +
-          " as mipmap level " +
-          level +
-          ".",
+            path +
+            " as mipmap level " +
+            level +
+            ".",
           err
         );
       }
@@ -117,11 +117,15 @@ class MyContents {
 
         textureObj = new THREE.VideoTexture(video);
 
+        textureObj.format = THREE.RGBAFormat;
+
+        this.textures[key] = textureObj;
+      } else {
         switch (texture.magFilter) {
           case "NearestFilter":
             textureObj.magFilter = THREE.NearestFilter;
             break;
-          case "Linear Filter":
+          case "LinearFilter":
             textureObj.magFilter = THREE.LinearFilter;
             break;
           default:
@@ -132,7 +136,7 @@ class MyContents {
           case "NearestFilter":
             textureObj.minFilter = THREE.NearestFilter;
             break;
-          case "Linear Filter":
+          case "LinearFilter":
             textureObj.minFilter = THREE.LinearFilter;
             break;
           case "LinearMipMapLinearFilter":
@@ -150,14 +154,6 @@ class MyContents {
           default:
             textureObj.minFilter = THREE.LinearMipMapLinearFilter;
         }
-
-        // TODO: SEE THIS
-        textureObj.magFilter = THREE.NearestFilter;
-        textureObj.minFilter = THREE.NearestFilter;
-
-        textureObj.format = THREE.RGBAFormat;
-
-        this.textures[key] = textureObj;
       }
 
       if (texture.mipmap0 != null) {
@@ -795,7 +791,6 @@ class MyContents {
         child.receiveShadows = true;
         group.receiveShadow = true;
       }
-
 
       this.transverseAndInheritValues(
         child.node,
