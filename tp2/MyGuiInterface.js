@@ -92,6 +92,18 @@ class MyGuiInterface {
         });
     }
 
+    // add a control to enable the control points contents from showing
+    const controlPointsFolder = this.datgui.addFolder("Control Points");
+    controlPointsFolder.open();
+    controlPointsFolder
+      .add(this.contents, "showControlPoints", false)
+      .name("showControlPoints")
+      .onChange(() => {
+        this.contents.toggleControlPoints();
+      });
+
+    
+
    
   }
 }
