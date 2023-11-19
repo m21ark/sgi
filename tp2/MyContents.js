@@ -24,6 +24,8 @@ class MyContents {
     this.useLightHelpers = false;
     this.lightsOn = true;
     this.showHelpers = false;
+    this.showControlPoints = false;
+    this.controlPoints = [];
 
     this.useTextures = true;
     this.useBumpMaps = true;
@@ -512,7 +514,9 @@ class MyContents {
                 controlpoints[u * (degree_v + 1) + v].yy,
                 controlpoints[u * (degree_v + 1) + v].zz
               );
-              //father.add(controlPointMesh);
+              controlPointMesh.visible = false;
+              this.controlPoints.push(controlPointMesh);
+              father.add(controlPointMesh);
             }
           }
 
@@ -967,6 +971,14 @@ class MyContents {
         : null;
 
       material.needsUpdate = true;
+    }
+  }
+
+  toggleControlPoints() {
+    for (let key in this.controlPoints) {
+      let controlPoint = this.controlPoints[key];
+      controlPoint.visible  = this.showControlPoints;
+      
     }
   }
 
