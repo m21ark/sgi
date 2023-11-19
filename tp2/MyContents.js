@@ -58,7 +58,6 @@ class MyContents {
     this.setCameras(data.cameras, data.activeCameraId);
     this.setSkybox(data.skyboxes);
 
-
     // Start the traversal from the root node
     this.transverseFromRoot(data);
   }
@@ -117,8 +116,45 @@ class MyContents {
         video.autoplay = true;
 
         textureObj = new THREE.VideoTexture(video);
-        textureObj.minFilter = THREE.LinearFilter;
-        textureObj.magFilter = THREE.LinearFilter;
+
+        switch (texture.magFilter) {
+          case "NearestFilter":
+            textureObj.magFilter = THREE.NearestFilter;
+            break;
+          case "Linear Filter":
+            textureObj.magFilter = THREE.LinearFilter;
+            break;
+          default:
+            textureObj.magFilter = THREE.LinearFilter;
+        }
+
+        switch (texture.minFilter) {
+          case "NearestFilter":
+            textureObj.minFilter = THREE.NearestFilter;
+            break;
+          case "Linear Filter":
+            textureObj.minFilter = THREE.LinearFilter;
+            break;
+          case "LinearMipMapLinearFilter":
+            textureObj.minFilter = THREE.LinearMipMapLinearFilter;
+            break;
+          case "LinearMipMapNearestFilter":
+            textureObj.minFilter = THREE.LinearMipMapNearestFilter;
+            break;
+          case "NearestMipMapLinearFilter":
+            textureObj.minFilter = THREE.NearestMipMapLinearFilter;
+            break;
+          case "NearestMipMapNearestFilter":
+            textureObj.minFilter = THREE.NearestMipMapNearestFilter;
+            break;
+          default:
+            textureObj.minFilter = THREE.LinearMipMapLinearFilter;
+        }
+
+        // TODO: SEE THIS
+        textureObj.magFilter = THREE.NearestFilter;
+        textureObj.minFilter = THREE.NearestFilter;
+
         textureObj.format = THREE.RGBAFormat;
 
         this.textures[key] = textureObj;
@@ -184,8 +220,8 @@ class MyContents {
     return clonedTexture;
   }
 
-  setSkybox(skybox){
-    let skyboxInfo = skybox.default
+  setSkybox(skybox) {
+    let skyboxInfo = skybox.default;
     this.skyboxV2 = this.createSkybox(skyboxInfo);
     this.app.scene.add(this.skyboxV2);
   }
