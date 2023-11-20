@@ -436,15 +436,15 @@ class MyContents {
           break;
         case "triangle":
           geometry = new MyTriangle(
-            obj.xyz1[0],
-            obj.xyz1[1],
-            obj.xyz1[2],
-            obj.xyz2[0],
-            obj.xyz2[1],
-            obj.xyz2[2],
-            obj.xyz3[0],
-            obj.xyz3[1],
-            obj.xyz3[2]
+            rep.xyz1[0],
+            rep.xyz1[1],
+            rep.xyz1[2],
+            rep.xyz2[0],
+            rep.xyz2[1],
+            rep.xyz2[2],
+            rep.xyz3[0],
+            rep.xyz3[1],
+            rep.xyz3[2]
           );
           break;
         case "model3d":
@@ -977,8 +977,7 @@ class MyContents {
   toggleControlPoints() {
     for (let key in this.controlPoints) {
       let controlPoint = this.controlPoints[key];
-      controlPoint.visible  = this.showControlPoints;
-      
+      controlPoint.visible = this.showControlPoints;
     }
   }
 

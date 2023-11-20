@@ -52,7 +52,7 @@ class MyTriangle extends THREE.BufferGeometry {
       ...this.p3.toArray(), //2
     ]);
 
-    const indices = [0, 1, 2];
+    const indices = [0, 1, 2, 2, 1, 0];
 
     const normals = [
       ...normal.toArray(),

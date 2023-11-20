@@ -126,8 +126,8 @@
             color="0.10 0.10 0.10 1.0"
             specular="0 0 0 0"
             shininess="0"
-            texlength_s = "40"
-            texlength_t = "40"
+            texlength_s="40"
+            texlength_t="40"
             textureref="floorTex"
             bumpref="floorTexN"
             twosided="true" />
@@ -341,15 +341,29 @@
 
                 <noderef id="roomFurniture" />
 
+                <noderef id="Mytriangle" />
+
 
             </children>
         </node>
 
+        <node id="Mytriangle">
+            <transforms>
+                <translate value3="0 0 40.1" />
+            </transforms>
+
+            <materialref id="blueNeonMat" />
+
+            <children>
+                <primitive>
+                    <triangle xyz1="0 0 0" xyz2="0 5 0" xyz3="5 0 0" />
+                </primitive>
+            </children>
+        </node>
 
         <node id="neonLine">
 
             <materialref id="blueNeonMat" />
-
 
             <children>
                 <noderef id="neonLine1" />
