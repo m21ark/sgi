@@ -53,6 +53,10 @@ class MyContents {
     this.reader.open(this.sceneDir + "museum.xml"); */
   }
 
+  /**
+   * Initializes the component.
+   * Creates and attaches the axis to the scene if it doesn't exist.
+   */
   init() {
     // create once
     if (this.axis === null) {
@@ -62,10 +66,18 @@ class MyContents {
     }
   }
 
+  /**
+   * Callback function called when the scene is loaded.
+   * @param {any} data - The data passed to the callback function.
+   */
   onSceneLoaded(data) {
     this.onAfterSceneLoadedAndBeforeRender(data);
   }
 
+  /**
+   * Executes after the scene is loaded and before rendering.
+   * @param {object} data - The data object containing various options, fog, textures, materials, cameras, and skyboxes.
+   */
   onAfterSceneLoadedAndBeforeRender(data) {
     /*   Object.keys(obj).forEach((key) => {
         console.log(key, obj[key]);
@@ -82,6 +94,9 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
+  /**
+   * Updates the content.
+   */
   update() {}
 
   // ===================================== LOADERS =====================================
@@ -464,10 +479,9 @@ class MyContents {
     );
 
     const loader = new THREE.TextureLoader();
-
     let emissive = new THREE.Color(rep.emissive);
 
-    // TODO: Textures are not in the correct order
+    // setting up the materials for the skybox (one for each side)
     let skyboxMaterials = [
       new THREE.MeshPhongMaterial({
         map: loader.load(this.sceneDir + rep.left),
@@ -775,7 +789,7 @@ class MyContents {
     this.app.scene.add(this.rootScene);
   }
 
-  // =======================================
+  // ============================= GUI =============================
 
   /**
    * Toggles the lights on or off.
@@ -846,6 +860,11 @@ class MyContents {
     }
   }
 
+  /**
+   * Sets the active camera for the application.
+   * 
+   * @param {string} cameraId - The ID of the camera to set as active.
+   */
   setActiveCamera(cameraId) {
     this.app.activeCamera = this.cameras[cameraId];
     this.app.controls.object = this.cameras[cameraId];
