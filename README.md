@@ -26,7 +26,19 @@
 -----
 
 ### [TP2 - ...](tp2)
-- (items briefly describing main strong points)
+- The scene is about a space home.
+
+#### Main room
+![view](tp2/screenshots/main_room.png)
+
+#### living room
+![view](tp2/screenshots/living_room.png)
+
+#### Lod example
+![view](tp2/screenshots/lod.png)
+
+#### Statue
+![view](tp2/screenshots/statue.png)
 
 ----
 

@@ -1,61 +1,41 @@
-# sgi-tp2-base
+# SGI 2023/2024 - TP1
 
-The starting point of the second assignment of SGI.
+## Group T04G08
 
-## Getting started
+| Name          | Number    | E-Mail                     |
+| ------------- | --------- | -------------------------- |
+| Marco André   | 202004891 | <up202004891@edu.fe.up.pt> |
+| Ricardo Matos | 202007962 | <up202007962@edu.fe.up.pt> |
 
-Considering a code block (for instance class A.js), to load an xml file (in the defined structure) call:
+---
 
-    let reader = new MyFileReader(app, this, *this.onSceneLoaded*);
-    reader.open("<path to xml file>");
+## Project information
 
-The last argument in the MyFileReader object call is the name of the method that is to be called when the xml file is loaded and parsed.
+### Implemented Features
+- Scene graph hierarchy organization
+- Scene graph material, texture, transformation, shadows inheritance
+- Node duplication to resolve scene tree issues in ThreeJS
+- Utilization of various materials
+- Implementation of LOD (Level of Detail) on two objects (a spaceship with three levels and a statue with two levels)
+- Implementation of a Space Skybox displaying stars
+- Integration of simple textures
+- Implementation of Mip-Map Texture with four different resolutions for a holographic table (including a small mark - for easier assessment)
+- Application of Bump Map textures on the metal floor, garage door, and sand floor
+- Integration of Video texture on a door's code and on the energy orb on the main statue
+- Display of a Wireframe object in a holographic globe projection
+- Implementation of Buffer Geometry
+- Introduction of a GUI for interaction and scene control
 
-Hence, In the same code block (for instance class A.js) add a function method with the following signature:
+## Scene description
 
-    onSceneLoaded(data) {
-        // do something with the data object
-    }
+![view](screenshots/main_room.png)
+![view](screenshots/living_room.png)
+![view](screenshots/lod.png)
+![view](screenshots/statue.png)
 
-This method is called once the xml file is loaded and parsed successfully. This method single input argument, _data_, is an object containing the entire scene data object. This document can be traversed according to the rules defined in the section on MySceneData class
 
-## MyFileServer
+## Special features
 
-File MyFileServer.js contains the class responsible for the XML parser general functionality. Most of the parsing process is derived from descriptors defined in MySceneData.js. A small part is hardcoded.
-
-> **DO NOT CHANGE MyFileServer.js FILE. IT WILL BE MODIFIED OR REPLACED DURING EVALUATION**
-
-## MySceneData
-
-File MySceneData.js contains a class with metadata description and, in the end of parsing, contains the full set of objects loaded from the xml scene file. This class has several important object attributes:
-
-- options: contains the scene options, from the globals section
-- fog: contains the scene fog options, from the fog section
-- materials: associative array/list with the scene described materials
-- textures: associative array/list with the scene described textures
-- cameras: associative array/list with all the cameras in the scene
-- activeCameraId: the id of the active camera
-- nodes: associative array/list with all the scene nodes.
-- rootId: the id of the root node
-
-NOTES:
-
-1. for each entity type, there are no repeated ids. For instance, if there are two nodes with the same id, the parser will complain and the scene will not be loaded.
-2. For each loaded entity, the parser will check if all the required attributes are present. If not, the parser will complain and the scene will not be loaded.
-3. For each entity, a descriptor defined in the constructor defines the attribute's name, type, requiredness, default value.
-4. **DO NOT CHANGE MySceneData.js IT WILL BE MODIFIED OR REPLACED DURING EVALUATION**
-
-## Custom attributes
-
-Use the custom attribute in the data objects to add further attributes:
-
-    let obj = {
-        id: "some id",
-        type: "some type",
-        custom: {
-            attr1: "value1",
-            attr2: "value2"
-        }
-    }
-
-in the previous object, attr1 and attr2 are custom attributes that were added to the object by the programmer (student), in light its program specific needs.
+- Nurbs used for statue and spaceship for extra geometry detail
+- Fully Implemented YASF (XML) features
+- Creative scene
