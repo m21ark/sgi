@@ -353,6 +353,12 @@ class MyContents {
    * @returns {THREE.Material} - The duplicated material with modified dimensions for repeat.
    */
   duplicateMaterial(material, width, height) {
+    if (material == undefined || material == null)
+      material = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true,
+      });
+
     let materialObj = material.clone();
 
     if (materialObj.map != null) {
@@ -372,9 +378,9 @@ class MyContents {
 
       materialObj.map.wrapS = THREE.RepeatWrapping;
       materialObj.map.wrapT = THREE.RepeatWrapping;
-    }
 
-    materialObj.map.needsUpdate = true;
+      materialObj.map.needsUpdate = true;
+    }
 
     this.materials.push(materialObj);
 
@@ -484,16 +490,6 @@ class MyContents {
     // setting up the materials for the skybox (one for each side)
     let skyboxMaterials = [
       new THREE.MeshPhongMaterial({
-        map: loader.load(this.sceneDir + rep.left),
-        emissive: emissive,
-        side: THREE.BackSide,
-      }),
-      new THREE.MeshPhongMaterial({
-        map: loader.load(this.sceneDir + rep.right),
-        emissive: emissive,
-        side: THREE.BackSide,
-      }),
-      new THREE.MeshPhongMaterial({
         map: loader.load(this.sceneDir + rep.up),
         emissive: emissive,
         side: THREE.BackSide,
@@ -504,12 +500,22 @@ class MyContents {
         side: THREE.BackSide,
       }),
       new THREE.MeshPhongMaterial({
+        map: loader.load(this.sceneDir + rep.back),
+        emissive: emissive,
+        side: THREE.BackSide,
+      }),
+      new THREE.MeshPhongMaterial({
+        map: loader.load(this.sceneDir + rep.left),
+        emissive: emissive,
+        side: THREE.BackSide,
+      }),
+      new THREE.MeshPhongMaterial({
         map: loader.load(this.sceneDir + rep.front),
         emissive: emissive,
         side: THREE.BackSide,
       }),
       new THREE.MeshPhongMaterial({
-        map: loader.load(this.sceneDir + rep.back),
+        map: loader.load(this.sceneDir + rep.right),
         emissive: emissive,
         side: THREE.BackSide,
       }),
@@ -862,7 +868,7 @@ class MyContents {
 
   /**
    * Sets the active camera for the application.
-   * 
+   *
    * @param {string} cameraId - The ID of the camera to set as active.
    */
   setActiveCamera(cameraId) {

@@ -54,6 +54,7 @@
         <texture id="licencePlateTex" filepath="textures/plate.jpg" />
         <texture id="ventTex" filepath="textures/vent.jpg" />
         <texture id="fabricTex" filepath="textures/fabric.jpg" />
+        <texture id="lightBulbTex" filepath="textures/light.jpg" />
 
         <texture id="sphereVideo" filepath="videos/energy_vid.mp4" isVideo="true" />
         <texture id="gridVideo" filepath="videos/grid_vid.mp4" isVideo="true" />
@@ -71,6 +72,17 @@
     </textures>
 
     <materials>
+
+        <material id="lightBulbMat"
+            emissive="0.2 0.4 0.5 1"
+            color="1 1 1 1.0"
+            specular="0.0 0.0 0.0 1.0"
+            shininess="0"
+            textureref="lightBulbTex"
+            texlength_s="5"
+            texlength_t="5"
+        />
+
 
         <material id="fabricMat"
             emissive="0.0 0.0 0.0 1"
@@ -343,6 +355,7 @@
 
                 <noderef id="Mytriangle" />
 
+                <noderef id="lightBulbs" />
 
             </children>
         </node>
@@ -357,6 +370,61 @@
             <children>
                 <primitive>
                     <triangle xyz1="0 0 0" xyz2="0 5 0" xyz3="5 0 0" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="lightBulbs">
+            <transforms>
+                <translate value3="0 19.99 0" />
+                <rotate value3="90 0 0" />
+            </transforms>
+
+            <materialref id="lightBulbMat" />
+
+            <children>
+                <noderef id="lightBulb1" />
+                <noderef id="lightBulb2" />
+                <noderef id="lightBulb3" />
+            </children>
+        </node>
+
+        <node id="lightBulb1">
+            <transforms>
+                <translate value3="17.5 17.5 0" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="5 5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="lightBulb2">
+            <transforms>
+                <translate value3="57.5 17.5 0" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="5 5" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="lightBulb3">
+            <transforms>
+                <translate value3="17.5 57.5 0" />
+            </transforms>
+
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="5 5" />
                 </primitive>
             </children>
         </node>
@@ -1312,23 +1380,26 @@
                     position="20 9 20"
                 />
 
-                <pointlight id="garageLight" enabled="true"
+                <spotlight id="garageLight" enabled="true"
                     color="0.5 0.6 0.8 1"
                     intensity="500"
-                    distance="35"
+                    distance="30"
                     decay="1"
-                    castshadow="false"
-                    position="60 17 20"
+                    castshadow="true"
+                    position="60 19.9 20"
+                    target="60 0 20"
+                    penumbra="1.0"
+                    angle="80"
                 />
 
 
                 <pointlight id="desertLight" enabled="true"
                     color="0.5 0.6 0.8 1"
-                    intensity="500"
-                    distance="35"
+                    intensity="300"
+                    distance="30"
                     decay="1"
                     castshadow="false"
-                    position="20 17 60"
+                    position="20 10 60"
                 />
 
 
@@ -1593,8 +1664,6 @@
             </children>
         </node>
 
-        <!-- ============================================================ -->
-
 
         <node id="roomFurniture" castshadows="true" receiveshadows="true">
 
@@ -1685,9 +1754,6 @@
                 </primitive>
             </children>
         </node>
-
-
-        <!-- ============================================================ -->
 
 
         <node id="spaceTop">
