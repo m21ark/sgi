@@ -1,10 +1,12 @@
 import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
-import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
+import { MyNurbsBuilder } from "./builders/MyNurbsBuilder.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { MyPolygon } from "./MyPolygon.js";
-import { MyTriangle } from "./MyTriangle.js";
+import { MyPolygon } from "./builders/MyPolygon.js";
+import { MyTriangle } from "./builders/MyTriangle.js";
+import { LightBuilder } from "./builders/LightBuilder.js";
+import { ObjectBuilder } from "./builders/ObjectBuilder.js";
 
 /**
  * MyContents.js
@@ -21,6 +23,9 @@ class MyContents {
   constructor(app) {
     this.app = app;
     this.axis = null;
+
+    this.lightBuilder = new LightBuilder(app, this);
+    this.objectBuilder = new ObjectBuilder();
 
     // Variables to store the contents of the scene
     this.materials = [];
@@ -457,135 +462,27 @@ class MyContents {
     if (obj.loaded)
       switch (obj.subtype) {
         case "rectangle":
-          geometry = new THREE.PlaneGeometry(
-            Math.abs(rep.xy1[0] - rep.xy2[0]),
-            Math.abs(rep.xy1[1] - rep.xy2[1]),
-            rep.parts_x,
-            rep.parts_y
-          );
-
-          // ofsset the plane so that it is centered on the origin
-          geometry.translate(
-            (rep.xy1[0] + rep.xy2[0]) / 2,
-            (rep.xy1[1] + rep.xy2[1]) / 2,
-            0
-          );
+          geometry = this.objectBuilder.createRectangle(rep);
           break;
         case "box":
-          geometry = new THREE.BoxGeometry(
-            Math.abs(rep.xyz1[0] - rep.xyz2[0]),
-            Math.abs(rep.xyz1[1] - rep.xyz2[1]),
-            Math.abs(rep.xyz1[2] - rep.xyz2[2]),
-            rep.parts_x,
-            rep.parts_y,
-            rep.parts_z
-          );
-
-          // ofsset the box so that it is centered on the origin
-          geometry.translate(
-            (rep.xyz1[0] + rep.xyz2[0]) / 2,
-            (rep.xyz1[1] + rep.xyz2[1]) / 2,
-            (rep.xyz1[2] + rep.xyz2[2]) / 2
-          );
+          geometry = this.objectBuilder.createBox(rep);
           break;
         case "cylinder":
-          geometry = new THREE.CylinderGeometry(
-            rep.top,
-            rep.base,
-            rep.height,
-            rep.slices,
-            rep.stacks,
-            rep.capsclose,
-            rep.thetastart,
-            rep.tethalenght
-          );
-
+          geometry = this.objectBuilder.createCylinder(rep);
           break;
         case "triangle":
-          geometry = new MyTriangle(
-            rep.xyz1[0],
-            rep.xyz1[1],
-            rep.xyz1[2],
-            rep.xyz2[0],
-            rep.xyz2[1],
-            rep.xyz2[2],
-            rep.xyz3[0],
-            rep.xyz3[1],
-            rep.xyz3[2]
-          );
+          geometry = this.objectBuilder.createTriangle(rep);
           break;
         case "model3d":
           console.log("Model 3D not supported yet");
           break;
         case "sphere":
-          geometry = new THREE.SphereGeometry(
-            rep.radius,
-            rep.slices,
-            rep.stacks,
-            rep.phistart,
-            rep.philength,
-            rep.thetastart,
-            rep.thetalength
-          );
+          geometry = this.objectBuilder.createSphere(rep);
           break;
         case "skybox":
           return this.createSkybox(rep);
         case "nurbs":
-          let degree_u = obj.representations[0].degree_u;
-          let degree_v = obj.representations[0].degree_v;
-          let parts_u = obj.representations[0].parts_u;
-          let parts_v = obj.representations[0].parts_v;
-
-          let controlpoints = obj.representations[0].controlpoints;
-          let controlpoints_cleaned = [];
-
-          for (let u = 0; u <= degree_u; u++) {
-            let u_l = [];
-            for (let v = 0; v <= degree_v; v++) {
-              u_l.push([
-                controlpoints[u * (degree_v + 1) + v].xx,
-                controlpoints[u * (degree_v + 1) + v].yy,
-                controlpoints[u * (degree_v + 1) + v].zz,
-                1,
-              ]);
-            }
-            controlpoints_cleaned.push(u_l);
-          }
-
-          let builder = new MyNurbsBuilder();
-
-          geometry = builder.build(
-            controlpoints_cleaned,
-            degree_u,
-            degree_v,
-            parts_u,
-            parts_v
-          );
-
-          // Create a mesh for each control point and add them to the scene
-          for (let u = 0; u <= degree_u; u++) {
-            for (let v = 0; v <= degree_v; v++) {
-              let hue = (u / degree_u) * 100; // Calculate hue value based on u coordinate
-              let color = new THREE.Color(`hsl(${hue}, 100%, 50%)`); // Create color using HSL model
-
-              let controlPointGeometry = new THREE.SphereGeometry(0.2);
-              let controlPointMaterial = new THREE.MeshBasicMaterial({
-                color: color,
-              });
-              let controlPointMesh = new THREE.Mesh(
-                controlPointGeometry,
-                controlPointMaterial
-              );
-              controlPointMesh.position.set(
-                controlpoints[u * (degree_v + 1) + v].xx,
-                controlpoints[u * (degree_v + 1) + v].yy,
-                controlpoints[u * (degree_v + 1) + v].zz
-              );
-              controlPointMesh.visible = false;
-              this.controlPoints.push(controlPointMesh);
-              father.add(controlPointMesh);
-            }
-          }
+          geometry = this.objectBuilder.createNurbs(rep, this, father);
 
           break;
         case "polygon":
@@ -594,14 +491,7 @@ class MyContents {
             material.needsUpdate = true;
           }
 
-          geometry = MyPolygon.createBufferGeometry(
-            rep.radius,
-            rep.stacks,
-            rep.slices,
-            rep.color_c,
-            rep.color_p
-          );
-
+          geometry = this.objectBuilder.createPolygon(rep);
           break;
 
         default:
@@ -802,127 +692,6 @@ class MyContents {
   }
 
   /**
-   * Creates and sets up a point light in the scene.
-   * 
-   * @param {Object} obj - The configuration object for the point light.
-   * @returns {Array} An array containing the point light and its helper.
-   */
-  setPointLight(obj) {
-    // creation
-    let pointLight = new THREE.PointLight(
-      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
-      obj.intensity,
-      obj.distance,
-      obj.decay
-    );
-
-    if (!obj.enabled) pointLight.intensity = 0;
-
-    // position
-    pointLight.position.set(...obj.position);
-
-    //shadows
-    pointLight.castShadow = obj.castshadow;
-    pointLight.shadow.mapSize.width = obj.shadowmapsize;
-    pointLight.shadow.mapSize.height = obj.shadowmapsize;
-    pointLight.shadow.camera.far = obj.shadowfar;
-
-    pointLight.shadow.bias = this.shadowBias;
-
-    this.lights[obj.id] = pointLight;
-
-    // create helper
-    let pointLightHelper = new THREE.PointLightHelper(pointLight);
-    this.lights[obj.id + "_helper"] = pointLightHelper;
-
-    return [pointLight, pointLightHelper];
-  }
-
-  /**
-   * Sets up a directional light based on the provided object.
-   * 
-   * @param {Object} obj - The object containing the properties for the directional light.
-   * @returns {Array} An array containing the directional light and its helper.
-   */
-  setDirectionalLight(obj) {
-    // creation
-    let directionalLight = new THREE.DirectionalLight(
-      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
-      obj.intensity
-    );
-
-    if (!obj.enabled) directionalLight.intensity = 0;
-
-    // position and target
-    directionalLight.position.set(...obj.position);
-    directionalLight.target.position.set(...[0, 0, 0]);
-    // VER COMO FAZER TARGET? TALVEZ SEJA O PAI
-
-    //shadows
-    directionalLight.castShadow = obj.castshadow;
-    directionalLight.shadow.mapSize.width = obj.shadowmapsize;
-    directionalLight.shadow.mapSize.height = obj.shadowmapsize;
-    directionalLight.shadow.camera.far = obj.shadowfar;
-
-    directionalLight.shadow.camera.left = obj.shadowleft;
-    directionalLight.shadow.camera.right = obj.shadowright;
-    directionalLight.shadow.camera.top = obj.shadowtop;
-    directionalLight.shadow.camera.bottom = obj.shadowbottom;
-
-    directionalLight.shadow.bias = this.shadowBias;
-
-    this.lights[obj.id] = directionalLight;
-
-    // create helper
-    let directionalLightHelper = new THREE.DirectionalLightHelper(
-      directionalLight
-    );
-    this.lights[obj.id + "_helper"] = directionalLightHelper;
-
-    return [directionalLight, directionalLightHelper];
-  }
-
-  /**
-   * Sets up a spotlight with the provided parameters.
-   * 
-   * @param {Object} obj - The object containing spotlight properties.
-   * @returns {Array} An array containing the spotlight and its helper.
-   */
-  setSpotlight(obj) {
-    // creation
-    let spotLight = new THREE.SpotLight(
-      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
-      obj.intensity,
-      obj.distance,
-      this.toRadians(obj.angle),
-      obj.penumbra,
-      obj.decay
-    );
-
-    if (!obj.enabled) spotLight.intensity = 0;
-
-    // position and target
-    spotLight.position.set(...obj.position);
-    spotLight.target.position.set(...obj.target);
-
-    //shadows
-    spotLight.castShadow = obj.castshadow;
-    spotLight.shadow.mapSize.width = obj.shadowmapsize;
-    spotLight.shadow.mapSize.height = obj.shadowmapsize;
-    spotLight.shadow.camera.far = obj.shadowfar;
-
-    spotLight.shadow.bias = this.shadowBias;
-
-    this.lights[obj.id] = spotLight;
-
-    // create helper
-    let spotLightHelper = new THREE.SpotLightHelper(spotLight);
-    this.lights[obj.id + "_helper"] = spotLightHelper;
-
-    return [spotLight, spotLightHelper];
-  }
-
-  /**
    * Loads a Level of Detail (LOD) node into the scene.
    * 
    * @param {THREE.Object3D} node - The LOD node to be loaded.
@@ -1015,13 +784,13 @@ class MyContents {
       let helper = null;
       switch (node.type) {
         case "spotlight":
-          [light, helper] = this.setSpotlight(node);
+          [light, helper] = this.lightBuilder.setSpotlight(node);
           break;
         case "pointlight":
-          [light, helper] = this.setPointLight(node);
+          [light, helper] = this.lightBuilder.setPointLight(node);
           break;
         case "directionallight":
-          [light, helper] = this.setDirectionalLight(node);
+          [light, helper] = this.lightBuilder.setDirectionalLight(node);
           break;
         default:
           console.log("ERROR: light type not supported");
