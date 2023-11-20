@@ -2,12 +2,22 @@ import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
-import { MyGuiInterface } from "./MyGuiInterface.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyPolygon } from "./MyPolygon.js";
 import { MyTriangle } from "./MyTriangle.js";
 
+/**
+ * MyContents.js
+ * 
+ * This module is responsible for managing the contents of the 3D scene.
+ * It provides methods for loading textures, setting materials, creating a skybox, etc.
+ */
 class MyContents {
+  /**
+   * Represents a constructor for the MyContents class.
+   * @constructor
+   * @param {App} app - The application object.
+   */
   constructor(app) {
     this.app = app;
     this.axis = null;
@@ -69,7 +79,14 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() {}
+  update() { }
+  /**
+   * Loads a mipmap texture and creates a mipmap for the specified level.
+   * 
+   * @param {THREE.Texture} parentTexture - The parent texture to set the mipmap image.
+   * @param {number} level - The level of the mipmap.
+   * @param {string} path - The path to the texture image.
+   */
   loadMipmap(parentTexture, level, path) {
     // load texture. On loaded call the function to create the mipmap for the specified level
     new THREE.TextureLoader().load(
@@ -96,10 +113,10 @@ class MyContents {
       function (err) {
         console.error(
           "Unable to load the image " +
-            path +
-            " as mipmap level " +
-            level +
-            ".",
+          path +
+          " as mipmap level " +
+          level +
+          ".",
           err
         );
       }
@@ -108,6 +125,11 @@ class MyContents {
 
   // ===================================== LOADERS =====================================
 
+  /**
+   * Sets the textures for the scene.
+   * 
+   * @param {Object} textures - The textures nodes to be converted to textures.
+   */
   setTextures(textures) {
     let textureLoader = new THREE.TextureLoader();
 
@@ -190,6 +212,12 @@ class MyContents {
     }
   }
 
+  /**
+   * Clones a texture node.
+   * 
+   * @param {Texture} textureObj - The texture object to clone.
+   * @returns {Texture} The cloned texture.
+   */
   cloneTextureNode(textureObj) {
     if (textureObj == null) return null;
 
@@ -225,12 +253,23 @@ class MyContents {
     return clonedTexture;
   }
 
+  /**
+  * 
+  * Sets the skybox for the scene.
+  * 
+  * @param {Object} skybox - The skybox data from the parser node.
+  */
   setSkybox(skybox) {
     let skyboxInfo = skybox.default;
     this.skyboxV2 = this.createSkybox(skyboxInfo);
     this.app.scene.add(this.skyboxV2);
   }
 
+  /**
+   * Sets the materials for the 3D objects based on the provided materials data.
+   * 
+   * @param {Object} materials - The materials data.
+   */
   setMaterials(materials) {
     for (let key in materials) {
       let material = materials[key];
@@ -272,6 +311,11 @@ class MyContents {
     }
   }
 
+  /**
+   * Sets the cameras in the scene and activates the specified camera.
+   * @param {Object} cameras - An object containing the cameras nodes to be added to the scene.
+   * @param {string} activeCameraId - The ID of the camera to be set as the active camera.
+   */
   setCameras(cameras, activeCameraId) {
     for (let key in cameras) {
       let camera = cameras[key];
@@ -290,18 +334,10 @@ class MyContents {
     this.app.activeCamera = this.cameras[activeCameraId];
   }
 
-  setActiveCamera(cameraId) {
-    this.app.activeCamera = this.cameras[cameraId];
-    this.app.controls.object = this.cameras[cameraId];
-    this.app.controls = new OrbitControls(
-      this.app.activeCamera,
-      this.app.renderer.domElement
-    );
-    this.app.controls.enableZoom = true;
-    this.app.controls.update();
-    this.app.activeCameraName = cameraId;
-  }
-
+  /**
+   * Creates a new orthogonal camera and adds it to the cameras collection.
+   * @param {Object} camera - The camera node containing the camera properties.
+   */
   newOrthogonalCamera(camera) {
     const cam = new THREE.OrthographicCamera(
       camera.left,
@@ -317,6 +353,10 @@ class MyContents {
     this.cameras[camera.id] = cam;
   }
 
+  /**
+   * Creates a new perspective camera and adds it to the cameras array.
+   * @param {Object} camera - The camera node containing the camera properties.
+   */
   newPerspectiveCamera(camera) {
     const aspect = window.innerWidth / window.innerHeight;
     const cam = new THREE.PerspectiveCamera(
@@ -330,6 +370,10 @@ class MyContents {
     this.cameras[camera.id] = cam;
   }
 
+  /**
+   * Sets the options for the scene.
+   * @param {Object} options - The options for the scene.
+   */
   setOptions(options) {
     this.app.scene.background = new THREE.Color(
       options.background.r,
@@ -344,6 +388,10 @@ class MyContents {
     );
   }
 
+  /**
+   * Sets the fog for the scene.
+   * @param {Object} fog - The fog node.
+   */
   setFog(fog) {
     this.app.scene.fog = new THREE.Fog(
       new THREE.Color(fog.color.r, fog.color.g, fog.color.b),
@@ -352,6 +400,13 @@ class MyContents {
     );
   }
 
+  /**
+   * Creates a duplicate material with modified dimensions for the objects texlenght_s and texlenght_t.
+   * @param {THREE.Material} material - The original material to be duplicated.
+   * @param {number} width - The new width of the object.
+   * @param {number} height - The new height of the object.
+   * @returns {THREE.Material} - The duplicated material with modified dimensions for repeat.
+   */
   duplicateMaterial(material, width, height) {
     let materialObj = material.clone();
 
@@ -381,6 +436,15 @@ class MyContents {
     return materialObj;
   }
 
+  /**
+   * Creates a THREE.Mesh object based on the given parameters.
+   * 
+   * @param {Object} obj - The object containing the representation and subtype information.
+   * @param {THREE.Material} material - The material to be applied to the mesh.
+   * @param {THREE.Texture} texture - The texture to be applied to the material.
+   * @param {THREE.Object3D} father - The parent object to which the mesh will be added.
+   * @returns {THREE.Mesh} The created mesh object.
+   */
   setPrimitive(obj, material, texture, father) {
     if (!obj.loaded) return; // to do: how to deal with unloaded objects?
 
@@ -572,6 +636,11 @@ class MyContents {
     return mesh;
   }
 
+  /**
+   * Creates a skybox mesh based on the provided representation object.
+   * @param {Object} rep - The representation object containing the skybox properties.
+   * @returns {THREE.Mesh} The created skybox mesh.
+   */
   createSkybox(rep) {
     let skyboxGeometry = new THREE.BoxGeometry(
       rep.size[0],
@@ -618,18 +687,26 @@ class MyContents {
     ];
 
     const mesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
-    // mesh.castShadow = true;
-    // mesh.receiveShadow = true;
 
     mesh.position.set(rep.center[0], rep.center[1], rep.center[2]);
 
     return mesh;
   }
 
+  /**
+   * Converts an angle from degrees to radians.
+   * @param {number} angle - The angle in degrees.
+   * @returns {number} The angle in radians.
+   */
   toRadians(angle) {
     return angle * (Math.PI / 180);
   }
 
+  /**
+   * Converts a 3D vector from degrees to radians.
+   * @param {number[]} Vector3 - The 3D vector to be converted.
+   * @returns {THREE.Vector3} - The converted 3D vector in radians.
+   */
   toRadians_3dVector(Vector3) {
     return new THREE.Vector3(
       this.toRadians(Vector3[0]),
@@ -638,10 +715,24 @@ class MyContents {
     );
   }
 
+  /**
+   * Sums two vectors and returns a new vector.
+   * @param {THREE.Vector3} vec1 - The first vector.
+   * @param {THREE.Vector3} vec2 - The second vector.
+   * @returns {THREE.Vector3} The sum of the two vectors.
+   */
   sum_position(vec1, vec2) {
     return new THREE.Vector3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
   }
 
+  /**
+   * Applies a matrix transformation to the given object's group.
+   * The transformation is defined by the object's transformations array.
+   * Each transformation can be a translation, rotation, or scale.
+   * The accumulated transformation is applied to each child object in the group.
+   *
+   * @param {Object} obj - The object containing the group and transformations.
+   */
   setMatrixTransform(obj) {
     if (obj.group == null || obj.transformations == null) {
       return;
@@ -707,6 +798,12 @@ class MyContents {
     obj.group.applyMatrix4(transformationMatrix);
   }
 
+  /**
+   * Creates and sets up a point light in the scene.
+   * 
+   * @param {Object} obj - The configuration object for the point light.
+   * @returns {Array} An array containing the point light and its helper.
+   */
   setPointLight(obj) {
     // creation
     let pointLight = new THREE.PointLight(
@@ -738,6 +835,12 @@ class MyContents {
     return [pointLight, pointLightHelper];
   }
 
+  /**
+   * Sets up a directional light based on the provided object.
+   * 
+   * @param {Object} obj - The object containing the properties for the directional light.
+   * @returns {Array} An array containing the directional light and its helper.
+   */
   setDirectionalLight(obj) {
     // creation
     let directionalLight = new THREE.DirectionalLight(
@@ -776,6 +879,12 @@ class MyContents {
     return [directionalLight, directionalLightHelper];
   }
 
+  /**
+   * Sets up a spotlight with the provided parameters.
+   * 
+   * @param {Object} obj - The object containing spotlight properties.
+   * @returns {Array} An array containing the spotlight and its helper.
+   */
   setSpotlight(obj) {
     // creation
     let spotLight = new THREE.SpotLight(
@@ -810,6 +919,15 @@ class MyContents {
     return [spotLight, spotLightHelper];
   }
 
+  /**
+   * Loads a Level of Detail (LOD) node into the scene.
+   * 
+   * @param {THREE.Object3D} node - The LOD node to be loaded.
+   * @param {THREE.Object3D} parentNode - The parent node to which the LOD node will be added.
+   * @param {THREE.Material} parentMaterial - The material to be inherited by the LOD node's children.
+   * @param {THREE.Texture} parentTexture - The texture to be inherited by the LOD node's children.
+   * @returns {void}
+   */
   loadLod(node, parentNode, parentMaterial, parentTexture) {
     let lod = new THREE.LOD();
     parentNode.add(lod);
@@ -855,6 +973,18 @@ class MyContents {
 
   // ===================================== END LOADERS =====================================
 
+  /**
+   * Traverses the node hierarchy, inheriting values from the parent node and performing necessary transformations.
+   * If a node is a leaf node, it creates a primitive and adds it to the parent node.
+   * If a node is a light node, it creates the corresponding light object and adds it to the parent node.
+   * If a node has children, it creates a group and recursively calls itself for each child node.
+   * 
+   * @param {Object} node - The current node being processed.
+   * @param {Object} parentNode - The parent node of the current node.
+   * @param {Object} parentMaterial - The material inherited from the parent node.
+   * @param {Object} parentTexture - The texture inherited from the parent node.
+   * @returns {void}
+   */
   transverseAndInheritValues(node, parentNode, parentMaterial, parentTexture) {
     let this_material = parentMaterial;
 
@@ -938,6 +1068,11 @@ class MyContents {
   }
 
   // Method to start traversal from the root node
+  /**
+   * Transverses the data from the root node and adds the scene to the app.
+   * 
+   * @param {object} data - The data object containing the nodes and rootId.
+   */
   transverseFromRoot(data) {
     const rootNode = data.nodes[data.rootId];
     this.rootScene = new THREE.Group();
@@ -948,6 +1083,9 @@ class MyContents {
 
   // =======================================
 
+  /**
+   * Toggles the lights on or off.
+   */
   toggleLights() {
     for (let key in this.lights) {
       let light = this.lights[key];
@@ -956,6 +1094,9 @@ class MyContents {
     }
   }
 
+  /**
+   * Toggles the visibility of light helpers in the scene.
+   */
   toggleLightHelpers() {
     for (let key in this.lights) {
       if (this.showHelpers) this.app.scene.add(this.lights[key + "_helper"]);
@@ -963,6 +1104,9 @@ class MyContents {
     }
   }
 
+  /**
+   * Toggles the usage of bump maps for all materials.
+   */
   toggleBumpMaps() {
     for (let key in this.materials) {
       let material = this.materials[key];
@@ -974,6 +1118,9 @@ class MyContents {
     }
   }
 
+  /**
+   * Toggles the visibility of control points.
+   */
   toggleControlPoints() {
     for (let key in this.controlPoints) {
       let controlPoint = this.controlPoints[key];
@@ -981,6 +1128,9 @@ class MyContents {
     }
   }
 
+  /**
+   * Toggles the textures for all materials.
+   */
   toggleTextures() {
     for (let key in this.materials) {
       let material = this.materials[key];
@@ -992,6 +1142,9 @@ class MyContents {
     }
   }
 
+  /**
+   * Modifies the shadow bias for all lights in the scene.
+   */
   modifyShadowBias() {
     for (let key in this.lights) {
       let light = this.lights[key];
