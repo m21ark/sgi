@@ -1,133 +1,129 @@
 import * as THREE from "three";
 
 export class LightBuilder {
-    constructor(app, contents) {
-        this.app = app;
-        this.contents = contents
-    }
+  constructor(app, contents) {
+    this.app = app;
+    this.contents = contents;
+  }
 
+  /**
+   * Creates and sets up a point light in the scene.
+   *
+   * @param {Object} obj - The configuration object for the point light.
+   * @returns {Array} An array containing the point light and its helper.
+   */
+  setPointLight(obj) {
+    // creation
+    let pointLight = new THREE.PointLight(
+      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      obj.intensity,
+      obj.distance,
+      obj.decay
+    );
 
-    /**
-      * Creates and sets up a point light in the scene.
-      * 
-      * @param {Object} obj - The configuration object for the point light.
-      * @returns {Array} An array containing the point light and its helper.
-      */
-    setPointLight(obj) {
-        // creation
-        let pointLight = new THREE.PointLight(
-            new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
-            obj.intensity,
-            obj.distance,
-            obj.decay
-        );
+    if (!obj.enabled) pointLight.intensity = 0;
 
-        if (!obj.enabled) pointLight.intensity = 0;
+    // position
+    pointLight.position.set(...obj.position);
 
-        // position
-        pointLight.position.set(...obj.position);
+    //shadows
+    pointLight.castShadow = obj.castshadow;
+    pointLight.shadow.mapSize.width = obj.shadowmapsize;
+    pointLight.shadow.mapSize.height = obj.shadowmapsize;
+    pointLight.shadow.camera.far = obj.shadowfar;
 
-        //shadows
-        pointLight.castShadow = obj.castshadow;
-        pointLight.shadow.mapSize.width = obj.shadowmapsize;
-        pointLight.shadow.mapSize.height = obj.shadowmapsize;
-        pointLight.shadow.camera.far = obj.shadowfar;
+    pointLight.shadow.bias = this.contents.shadowBias;
 
-        pointLight.shadow.bias = this.contents.shadowBias;
+    this.contents.lights[obj.id] = pointLight;
 
-        this.contents.lights[obj.id] = pointLight;
+    // create helper
+    let pointLightHelper = new THREE.PointLightHelper(pointLight);
+    this.contents.lights[obj.id + "_helper"] = pointLightHelper;
 
-        // create helper
-        let pointLightHelper = new THREE.PointLightHelper(pointLight);
-        this.contents.lights[obj.id + "_helper"] = pointLightHelper;
+    return [pointLight, pointLightHelper];
+  }
 
-        return [pointLight, pointLightHelper];
-    }
+  /**
+   * Sets up a directional light based on the provided object.
+   *
+   * @param {Object} obj - The object containing the properties for the directional light.
+   * @returns {Array} An array containing the directional light and its helper.
+   */
+  setDirectionalLight(obj) {
+    // creation
+    let directionalLight = new THREE.DirectionalLight(
+      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      obj.intensity
+    );
 
-    /**
-     * Sets up a directional light based on the provided object.
-     * 
-     * @param {Object} obj - The object containing the properties for the directional light.
-     * @returns {Array} An array containing the directional light and its helper.
-     */
-    setDirectionalLight(obj) {
-        // creation
-        let directionalLight = new THREE.DirectionalLight(
-            new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
-            obj.intensity
-        );
+    if (!obj.enabled) directionalLight.intensity = 0;
 
-        if (!obj.enabled) directionalLight.intensity = 0;
+    // position and target
+    directionalLight.position.set(...obj.position);
+    directionalLight.target.position.set(...[0, 0, 0]);
+    // no target defined
 
-        // position and target
-        directionalLight.position.set(...obj.position);
-        directionalLight.target.position.set(...[0, 0, 0]);
-        // VER COMO FAZER TARGET? TALVEZ SEJA O PAI
+    //shadows
+    directionalLight.castShadow = obj.castshadow;
+    directionalLight.shadow.mapSize.width = obj.shadowmapsize;
+    directionalLight.shadow.mapSize.height = obj.shadowmapsize;
+    directionalLight.shadow.camera.far = obj.shadowfar;
 
-        //shadows
-        directionalLight.castShadow = obj.castshadow;
-        directionalLight.shadow.mapSize.width = obj.shadowmapsize;
-        directionalLight.shadow.mapSize.height = obj.shadowmapsize;
-        directionalLight.shadow.camera.far = obj.shadowfar;
+    directionalLight.shadow.camera.left = obj.shadowleft;
+    directionalLight.shadow.camera.right = obj.shadowright;
+    directionalLight.shadow.camera.top = obj.shadowtop;
+    directionalLight.shadow.camera.bottom = obj.shadowbottom;
 
-        directionalLight.shadow.camera.left = obj.shadowleft;
-        directionalLight.shadow.camera.right = obj.shadowright;
-        directionalLight.shadow.camera.top = obj.shadowtop;
-        directionalLight.shadow.camera.bottom = obj.shadowbottom;
+    directionalLight.shadow.bias = this.contents.shadowBias;
 
-        directionalLight.shadow.bias = this.contents.shadowBias;
+    this.contents.lights[obj.id] = directionalLight;
 
-        this.contents.lights[obj.id] = directionalLight;
+    // create helper
+    let directionalLightHelper = new THREE.DirectionalLightHelper(
+      directionalLight
+    );
+    this.contents.lights[obj.id + "_helper"] = directionalLightHelper;
 
-        // create helper
-        let directionalLightHelper = new THREE.DirectionalLightHelper(
-            directionalLight
-        );
-        this.contents.lights[obj.id + "_helper"] = directionalLightHelper;
+    return [directionalLight, directionalLightHelper];
+  }
 
-        return [directionalLight, directionalLightHelper];
-    }
+  /**
+   * Sets up a spotlight with the provided parameters.
+   *
+   * @param {Object} obj - The object containing spotlight properties.
+   * @returns {Array} An array containing the spotlight and its helper.
+   */
+  setSpotlight(obj) {
+    // creation
+    let spotLight = new THREE.SpotLight(
+      new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
+      obj.intensity,
+      obj.distance,
+      this.contents.toRadians(obj.angle),
+      obj.penumbra,
+      obj.decay
+    );
 
-    /**
-     * Sets up a spotlight with the provided parameters.
-     * 
-     * @param {Object} obj - The object containing spotlight properties.
-     * @returns {Array} An array containing the spotlight and its helper.
-     */
-    setSpotlight(obj) {
-        // creation
-        let spotLight = new THREE.SpotLight(
-            new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
-            obj.intensity,
-            obj.distance,
-            this.contents.toRadians(obj.angle),
-            obj.penumbra,
-            obj.decay
-        );
+    if (!obj.enabled) spotLight.intensity = 0;
 
-        if (!obj.enabled) spotLight.intensity = 0;
+    // position and target
+    spotLight.position.set(...obj.position);
+    spotLight.target.position.set(...obj.target);
 
-        // position and target
-        spotLight.position.set(...obj.position);
-        spotLight.target.position.set(...obj.target);
+    //shadows
+    spotLight.castShadow = obj.castshadow;
+    spotLight.shadow.mapSize.width = obj.shadowmapsize;
+    spotLight.shadow.mapSize.height = obj.shadowmapsize;
+    spotLight.shadow.camera.far = obj.shadowfar;
 
-        //shadows
-        spotLight.castShadow = obj.castshadow;
-        spotLight.shadow.mapSize.width = obj.shadowmapsize;
-        spotLight.shadow.mapSize.height = obj.shadowmapsize;
-        spotLight.shadow.camera.far = obj.shadowfar;
+    spotLight.shadow.bias = this.contents.shadowBias;
 
-        spotLight.shadow.bias = this.contents.shadowBias;
+    this.contents.lights[obj.id] = spotLight;
 
-        this.contents.lights[obj.id] = spotLight;
+    // create helper
+    let spotLightHelper = new THREE.SpotLightHelper(spotLight);
+    this.contents.lights[obj.id + "_helper"] = spotLightHelper;
 
-        // create helper
-        let spotLightHelper = new THREE.SpotLightHelper(spotLight);
-        this.contents.lights[obj.id + "_helper"] = spotLightHelper;
-
-        return [spotLight, spotLightHelper];
-    }
-
-
-
+    return [spotLight, spotLightHelper];
+  }
 }

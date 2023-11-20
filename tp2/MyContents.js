@@ -8,7 +8,7 @@ import { MipMapLoader } from "./builders/MipMapLoader.js";
 
 /**
  * MyContents.js
- * 
+ *
  * This module is responsible for managing the contents of the 3D scene.
  * It provides methods for loading textures, setting materials, creating a skybox, etc.
  */
@@ -82,13 +82,13 @@ class MyContents {
     this.transverseFromRoot(data);
   }
 
-  update() { }
+  update() {}
 
   // ===================================== LOADERS =====================================
 
   /**
    * Sets the textures for the scene.
-   * 
+   *
    * @param {Object} textures - The textures nodes to be converted to textures.
    */
   setTextures(textures) {
@@ -146,7 +146,11 @@ class MyContents {
         }
       }
 
-      textureObj = MipMapLoader.createMipMap(textureObj, this.sceneDir, texture)
+      textureObj = MipMapLoader.createMipMap(
+        textureObj,
+        this.sceneDir,
+        texture
+      );
 
       this.textures[key] = textureObj;
       this.textureNode.set(textureObj, texture);
@@ -155,7 +159,7 @@ class MyContents {
 
   /**
    * Clones a texture node.
-   * 
+   *
    * @param {Texture} textureObj - The texture object to clone.
    * @returns {Texture} The cloned texture.
    */
@@ -169,17 +173,21 @@ class MyContents {
 
     this.textureNode.set(clonedTexture, texture);
 
-    clonedTexture = MipMapLoader.createMipMap(clonedTexture, this.sceneDir, texture);
+    clonedTexture = MipMapLoader.createMipMap(
+      clonedTexture,
+      this.sceneDir,
+      texture
+    );
 
     return clonedTexture;
   }
 
   /**
-  * 
-  * Sets the skybox for the scene.
-  * 
-  * @param {Object} skybox - The skybox data from the parser node.
-  */
+   *
+   * Sets the skybox for the scene.
+   *
+   * @param {Object} skybox - The skybox data from the parser node.
+   */
   setSkybox(skybox) {
     let skyboxInfo = skybox.default;
     this.skyboxV2 = this.createSkybox(skyboxInfo);
@@ -188,7 +196,7 @@ class MyContents {
 
   /**
    * Sets the materials for the 3D objects based on the provided materials data.
-   * 
+   *
    * @param {Object} materials - The materials data.
    */
   setMaterials(materials) {
@@ -360,7 +368,7 @@ class MyContents {
 
   /**
    * Creates a THREE.Mesh object based on the given parameters.
-   * 
+   *
    * @param {Object} obj - The object containing the representation and subtype information.
    * @param {THREE.Material} material - The material to be applied to the mesh.
    * @param {THREE.Texture} texture - The texture to be applied to the material.
@@ -607,7 +615,7 @@ class MyContents {
 
   /**
    * Loads a Level of Detail (LOD) node into the scene.
-   * 
+   *
    * @param {THREE.Object3D} node - The LOD node to be loaded.
    * @param {THREE.Object3D} parentNode - The parent node to which the LOD node will be added.
    * @param {THREE.Material} parentMaterial - The material to be inherited by the LOD node's children.
@@ -664,7 +672,7 @@ class MyContents {
    * If a node is a leaf node, it creates a primitive and adds it to the parent node.
    * If a node is a light node, it creates the corresponding light object and adds it to the parent node.
    * If a node has children, it creates a group and recursively calls itself for each child node.
-   * 
+   *
    * @param {Object} node - The current node being processed.
    * @param {Object} parentNode - The parent node of the current node.
    * @param {Object} parentMaterial - The material inherited from the parent node.
@@ -756,7 +764,7 @@ class MyContents {
   // Method to start traversal from the root node
   /**
    * Transverses the data from the root node and adds the scene to the app.
-   * 
+   *
    * @param {object} data - The data object containing the nodes and rootId.
    */
   transverseFromRoot(data) {
@@ -850,7 +858,6 @@ class MyContents {
     this.app.controls.update();
     this.app.activeCameraName = cameraId;
   }
-
 }
 
 export { MyContents };

@@ -12,6 +12,21 @@ import * as THREE from "three";
  * @param aft - aft texture coordinate
  */
 class MyTriangle extends THREE.BufferGeometry {
+  /**
+   * Represents a triangle in 3D space.
+   * @constructor
+   * @param {number} x1 - The x-coordinate of the first vertex.
+   * @param {number} y1 - The y-coordinate of the first vertex.
+   * @param {number} z1 - The z-coordinate of the first vertex.
+   * @param {number} x2 - The x-coordinate of the second vertex.
+   * @param {number} y2 - The y-coordinate of the second vertex.
+   * @param {number} z2 - The z-coordinate of the second vertex.
+   * @param {number} x3 - The x-coordinate of the third vertex.
+   * @param {number} y3 - The y-coordinate of the third vertex.
+   * @param {number} z3 - The z-coordinate of the third vertex.
+   * @param {number} [afs=1] - The texture's horizontal scale factor.
+   * @param {number} [aft=1] - The texture's vertical scale factor.
+   */
   constructor(x1, y1, z1, x2, y2, z2, x3, y3, z3, afs = 1, aft = 1) {
     super();
 
@@ -21,6 +36,9 @@ class MyTriangle extends THREE.BufferGeometry {
     this.initBuffers();
   }
 
+  /**
+   * Initializes the buffers for the triangle.
+   */
   initBuffers() {
     //CALCULATING NORMALS
     var vectorAx = this.p2.x - this.p1.x;
@@ -46,14 +64,17 @@ class MyTriangle extends THREE.BufferGeometry {
     let cos_ac = (a * a - b * b + c * c) / (2 * a * c);
     let sin_ac = Math.sqrt(1 - cos_ac * cos_ac);
 
+    // build vertices
     const vertices = new Float32Array([
       ...this.p1.toArray(), //0
       ...this.p2.toArray(), //1
       ...this.p3.toArray(), //2
     ]);
 
+    // counter-clockwise reference of vertices for face normal (shows both sides)
     const indices = [0, 1, 2, 2, 1, 0];
 
+    // build normals
     const normals = [
       ...normal.toArray(),
       ...normal.toArray(),
@@ -62,6 +83,7 @@ class MyTriangle extends THREE.BufferGeometry {
 
     const uvs = [0, 0, 1, 0, 1 * cos_ac, 1 * sin_ac];
 
+    // build geometry and set attributes
     this.setIndex(indices);
     this.setAttribute(
       "position",
