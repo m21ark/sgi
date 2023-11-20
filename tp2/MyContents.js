@@ -1,12 +1,10 @@
 import * as THREE from "three";
 import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
-import { MyNurbsBuilder } from "./builders/MyNurbsBuilder.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { MyPolygon } from "./builders/MyPolygon.js";
-import { MyTriangle } from "./builders/MyTriangle.js";
 import { LightBuilder } from "./builders/LightBuilder.js";
 import { ObjectBuilder } from "./builders/ObjectBuilder.js";
+import { MipMapLoader } from "./builders/MipMapLoader.js";
 
 /**
  * MyContents.js
@@ -85,48 +83,6 @@ class MyContents {
   }
 
   update() { }
-  /**
-   * Loads a mipmap texture and creates a mipmap for the specified level.
-   * 
-   * @param {THREE.Texture} parentTexture - The parent texture to set the mipmap image.
-   * @param {number} level - The level of the mipmap.
-   * @param {string} path - The path to the texture image.
-   */
-  loadMipmap(parentTexture, level, path) {
-    // load texture. On loaded call the function to create the mipmap for the specified level
-    new THREE.TextureLoader().load(
-      path,
-      function (
-        mipmapTexture // onLoad callback
-      ) {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        ctx.scale(1, 1);
-
-        // const fontSize = 48
-        const img = mipmapTexture.image;
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        // first draw the image
-        ctx.drawImage(img, 0, 0);
-
-        // set the mipmap image in the parent texture in the appropriate level
-        parentTexture.mipmaps[level] = canvas;
-      },
-      undefined, // onProgress callback currently not supported
-      function (err) {
-        console.error(
-          "Unable to load the image " +
-          path +
-          " as mipmap level " +
-          level +
-          ".",
-          err
-        );
-      }
-    );
-  }
 
   // ===================================== LOADERS =====================================
 
@@ -190,27 +146,7 @@ class MyContents {
         }
       }
 
-      if (texture.mipmap0 != null) {
-        textureObj.generateMipmaps = false;
-
-        this.loadMipmap(textureObj, 0, this.sceneDir + texture.mipmap0);
-        if (texture.mipmap1)
-          this.loadMipmap(textureObj, 1, this.sceneDir + texture.mipmap1);
-        if (texture.mipmap2)
-          this.loadMipmap(textureObj, 2, this.sceneDir + texture.mipmap2);
-        if (texture.mipmap3)
-          this.loadMipmap(textureObj, 3, this.sceneDir + texture.mipmap3);
-        if (texture.mipmap4)
-          this.loadMipmap(textureObj, 4, this.sceneDir + texture.mipmap4);
-        if (texture.mipmap5)
-          this.loadMipmap(textureObj, 5, this.sceneDir + texture.mipmap5);
-        if (texture.mipmap6)
-          this.loadMipmap(textureObj, 6, this.sceneDir + texture.mipmap6);
-        if (texture.mipmap7)
-          this.loadMipmap(textureObj, 7, this.sceneDir + texture.mipmap7);
-
-        textureObj.needsUpdate = true;
-      }
+      textureObj = MipMapLoader.createMipMap(textureObj, this.sceneDir, texture)
 
       this.textures[key] = textureObj;
       this.textureNode.set(textureObj, texture);
@@ -228,32 +164,12 @@ class MyContents {
 
     // this is not a deepcopy ... it allows to efficiently share the same texture between different objects
     // while still ensuring that length_s and length_t are correctly set ... as those are not passed by ref
-    const clonedTexture = textureObj.clone();
+    let clonedTexture = textureObj.clone();
     const texture = this.textureNode.get(textureObj);
 
     this.textureNode.set(clonedTexture, texture);
 
-    if (texture.mipmap0 != null) {
-      clonedTexture.generateMipmaps = false;
-
-      this.loadMipmap(clonedTexture, 0, this.sceneDir + texture.mipmap0);
-      if (texture.mipmap1)
-        this.loadMipmap(clonedTexture, 1, this.sceneDir + texture.mipmap1);
-      if (texture.mipmap2)
-        this.loadMipmap(clonedTexture, 2, this.sceneDir + texture.mipmap2);
-      if (texture.mipmap3)
-        this.loadMipmap(clonedTexture, 3, this.sceneDir + texture.mipmap3);
-      if (texture.mipmap4)
-        this.loadMipmap(clonedTexture, 4, this.sceneDir + texture.mipmap4);
-      if (texture.mipmap5)
-        this.loadMipmap(clonedTexture, 5, this.sceneDir + texture.mipmap5);
-      if (texture.mipmap6)
-        this.loadMipmap(clonedTexture, 6, this.sceneDir + texture.mipmap6);
-      if (texture.mipmap7)
-        this.loadMipmap(clonedTexture, 7, this.sceneDir + texture.mipmap7);
-
-      clonedTexture.needsUpdate = true;
-    }
+    clonedTexture = MipMapLoader.createMipMap(clonedTexture, this.sceneDir, texture);
 
     return clonedTexture;
   }
@@ -353,7 +269,6 @@ class MyContents {
       camera.far
     );
     cam.up = new THREE.Vector3(0, 1, 0);
-    //cam.lookAt(new THREE.Vector3(...camera.target));
     cam.target = new THREE.Vector3(...camera.target);
     cam.position.set(...camera.location);
     this.cameras[camera.id] = cam;
@@ -372,7 +287,6 @@ class MyContents {
       camera.far
     );
     cam.position.set(...camera.location);
-    //cam.lookAt(new THREE.Vector3(...camera.target));
     cam.target = new THREE.Vector3(...camera.target);
 
     this.cameras[camera.id] = cam;
