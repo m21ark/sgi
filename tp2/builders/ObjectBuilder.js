@@ -3,10 +3,16 @@ import { MyTriangle } from "./MyTriangle.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 import { MyPolygon } from "./MyPolygon.js";
 
+// defines how objects should be created
 export class ObjectBuilder {
     constructor() {
     }
 
+    /**
+     * Create a rectangle geometry.
+     * @param {Object} rep - The representation object.
+     * @returns {THREE.PlaneGeometry} The created rectangle geometry.
+     */
     createRectangle(rep) {
         let geometry = new THREE.PlaneGeometry(
             Math.abs(rep.xy1[0] - rep.xy2[0]),
@@ -25,6 +31,11 @@ export class ObjectBuilder {
         return geometry;
     }
 
+    /**
+     * Create a box geometry.
+     * @param {Object} rep - The representation object.
+     * @returns {THREE.BoxGeometry} The created box geometry.
+     */
     createBox(rep) {
         let geometry = new THREE.BoxGeometry(
             Math.abs(rep.xyz1[0] - rep.xyz2[0]),
@@ -45,6 +56,11 @@ export class ObjectBuilder {
         return geometry;
     }
 
+    /**
+     * Create a cylinder geometry.
+     * @param {Object} rep - The representation object.
+     * @returns {THREE.CylinderGeometry} The created cylinder geometry.
+     */
     createCylinder(rep) {
         let geometry = new THREE.CylinderGeometry(
             rep.top,
@@ -60,6 +76,11 @@ export class ObjectBuilder {
         return geometry;
     }
 
+     /**
+     * Create a triangle geometry.
+     * @param {Object} rep - The representation object.
+     * @returns {MyTriangle} The created triangle geometry.
+     */
     createTriangle(rep) {
         let geometry = new MyTriangle(
             rep.xyz1[0],
@@ -76,6 +97,11 @@ export class ObjectBuilder {
         return geometry;
     }
 
+    /**
+     * Create a sphere geometry.
+     * @param {Object} rep - The representation object.
+     * @returns {THREE.SphereGeometry} The created sphere geometry.
+     */
     createSphere(rep) {
         let geometry = new THREE.SphereGeometry(
             rep.radius,
@@ -90,6 +116,13 @@ export class ObjectBuilder {
         return geometry;
     }
 
+    /**
+     * Create a NURBS geometry.
+     * @param {Object} rep - The representation object.
+     * @param {Object} contents - The contents object.
+     * @param {Object} father - The father object.
+     * @returns {THREE.Geometry} The created NURBS geometry.
+     */
     createNurbs(rep, contents, father) {
         let degree_u = rep.degree_u;
         let degree_v = rep.degree_v;
@@ -149,6 +182,11 @@ export class ObjectBuilder {
         return geometry;
     }
 
+    /**
+     * Create a polygon geometry.
+     * @param {Object} rep - The representation object.
+     * @returns {THREE.BufferGeometry} The created polygon geometry.
+     */
     createPolygon(rep) {
         let geometry = MyPolygon.createBufferGeometry(
             rep.radius,
