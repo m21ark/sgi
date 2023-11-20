@@ -348,7 +348,8 @@ class MyContents {
       camera.far
     );
     cam.up = new THREE.Vector3(0, 1, 0);
-    cam.lookAt(new THREE.Vector3(...camera.target));
+    //cam.lookAt(new THREE.Vector3(...camera.target));
+    cam.target = new THREE.Vector3(...camera.target);
     cam.position.set(...camera.location);
     this.cameras[camera.id] = cam;
   }
@@ -366,7 +367,9 @@ class MyContents {
       camera.far
     );
     cam.position.set(...camera.location);
-    cam.lookAt(new THREE.Vector3(...camera.target));
+    //cam.lookAt(new THREE.Vector3(...camera.target));
+    cam.target = new THREE.Vector3(...camera.target);
+
     this.cameras[camera.id] = cam;
   }
 
@@ -1152,7 +1155,19 @@ class MyContents {
     }
   }
 
-  // pontos auxiliares nurbs
+  setActiveCamera(cameraId) {
+    this.app.activeCamera = this.cameras[cameraId];
+    this.app.controls.object = this.cameras[cameraId];
+    this.app.controls = new OrbitControls(
+      this.app.activeCamera,
+      this.app.renderer.domElement
+    );
+    this.app.controls.target = this.app.activeCamera.target;
+    this.app.controls.enableZoom = true;
+    this.app.controls.update();
+    this.app.activeCameraName = cameraId;
+  }
+
 }
 
 export { MyContents };

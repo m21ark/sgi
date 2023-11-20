@@ -156,6 +156,7 @@ class MyApp {
           this.activeCamera,
           this.renderer.domElement
         );
+        this.controls.target = this.activeCamera.target;
         this.controls.enableZoom = true;
         this.controls.update();
       } else {
