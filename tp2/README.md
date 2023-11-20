@@ -38,4 +38,3 @@
 
 - Nurbs used for statue and spaceship for extra geometry detail
 - Fully Implemented YASF (XML) features
-- Creative scene
