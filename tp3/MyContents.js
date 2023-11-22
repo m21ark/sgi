@@ -5,6 +5,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { LightBuilder } from "./builders/LightBuilder.js";
 import { ObjectBuilder } from "./builders/ObjectBuilder.js";
 import { MipMapLoader } from "./builders/MipMapLoader.js";
+import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 /**
  * MyContents.js
@@ -70,6 +71,11 @@ class MyContents {
     this.addPlayer();
     this.addListeners();
     this.animate();
+
+    // ============== START MENU ====================
+
+    const textDraw = new TextSpriteDraw();
+    textDraw.write(this.app.scene, 0, 5, "Back here", 15, "0xff00ff");
   }
 
   /**
