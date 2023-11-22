@@ -38,11 +38,12 @@
 
     <textures>
 
+        <texture id="greenTileTex" filepath="textures/grass.png" />
+        <texture id="greyTileTex" filepath="textures/asphalt.jpg" />
 
     </textures>
 
     <materials>
-
 
         <material id="greenTileMat"
             emissive="0 0 0 1"
@@ -50,8 +51,10 @@
             specular="0.0 0.0 0.0 1.0"
             shininess="0"
             twosided="true"
+            textureref="greenTileTex"
+            texlength_s="5"
+            texlength_t="5"
         />
-
 
         <material id="redTileMat"
             emissive="0 0 0 1"
@@ -59,6 +62,8 @@
             specular="0.0 0.0 0.0 1.0"
             shininess="0"
             twosided="true"
+            texlength_s="5"
+            texlength_t="5"
         />
 
         <material id="greyTileMat"
@@ -67,8 +72,10 @@
             specular="0.0 0.0 0.0 1.0"
             shininess="0"
             twosided="true"
+            textureref="greyTileTex"
+            texlength_s="5"
+            texlength_t="5"
         />
-
 
     </materials>
 
