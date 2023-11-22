@@ -64,6 +64,12 @@ class MyContents {
       this.axis = new MyAxis(this);
       this.app.scene.add(this.axis);
     }
+
+    // ============== Player ====================
+
+    this.addPlayer();
+    this.addListeners();
+    this.animate();
   }
 
   /**
@@ -883,6 +889,130 @@ class MyContents {
     this.app.controls.enableZoom = true;
     this.app.controls.update();
     this.app.activeCameraName = cameraId;
+  }
+
+  // ============== First Person View ====================
+
+  keyboard = {};
+  player = null;
+
+  /*
+   * Adds a player to the scene that can move around
+   */
+  addPlayer() {
+    const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1); // Customize size as needed
+    const playerMaterial = new THREE.MeshBasicMaterial({
+      color: 0x5fff70,
+    }); // Customize color as needed
+    this.player = new THREE.Mesh(playerGeometry, playerMaterial);
+
+    this.player.position.set(0, 5, 0);
+    this.app.scene.add(this.player);
+  }
+
+  /*
+   * Adds listeners to the scene that allow the player to move around
+   */
+  addListeners() {
+    window.addEventListener("keydown", (event) => {
+      this.keyboard[event.key.toLowerCase()] = true;
+    });
+
+    window.addEventListener("keyup", (event) => {
+      this.keyboard[event.key.toLowerCase()] = false;
+    });
+  }
+
+  /*
+   * Animates the player
+   */
+  animate() {
+    const playerSpeed = 0.25;
+    const rotationSpeed = 0.05;
+
+    const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
+
+    // Rotate the player's direction based on their current rotation
+    playerDirection.applyAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      this.player.rotation.y
+    );
+
+    // Calculate the movement vector based on the player's direction
+    const moveVector = new THREE.Vector3();
+    if (this.keyboard["w"]) moveVector.sub(playerDirection);
+    if (this.keyboard["s"]) moveVector.add(playerDirection);
+    if (this.keyboard["a"]) {
+      const leftDirection = new THREE.Vector3(1, 0, 0);
+      leftDirection.applyAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        this.player.rotation.y
+      );
+      moveVector.add(leftDirection);
+    }
+    if (this.keyboard["d"]) {
+      const rightDirection = new THREE.Vector3(-1, 0, 0);
+      rightDirection.applyAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        this.player.rotation.y
+      );
+      moveVector.add(rightDirection);
+    }
+
+    // MOVE UP AND DOWN
+    if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
+    if (this.keyboard["shift"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
+
+    // Normalize the move vector and apply playerSpeed
+    moveVector.normalize().multiplyScalar(playerSpeed);
+
+    // Update player position
+    this.player.position.add(moveVector);
+
+    // Vertical rotation
+    if (this.keyboard["arrowleft"]) {
+      this.player.rotation.x = 0;
+      this.player.rotation.y += rotationSpeed;
+    }
+    if (this.keyboard["arrowright"]) {
+      this.player.rotation.x = 0;
+      this.player.rotation.y -= rotationSpeed;
+    }
+
+    if (this.keyboard["r"]) {
+      // reset rotation
+      this.player.rotation.x = 0;
+      this.player.rotation.y = 0;
+      this.player.rotation.z = 0;
+      this.keyboard["r"] = false;
+    }
+
+    // Update the camera position if the player is in first person view
+    if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
+
+    requestAnimationFrame(() => {
+      this.animate();
+    });
+  }
+
+  /**
+   * Updates the camera position to be relative to the player's position and rotation (first person view)
+   */
+  updatePlayerCamera() {
+    const playerPosition = this.player.position.clone();
+    const cameraPosition = this.app.activeCamera.position;
+
+    // Calculate a position relative to the player's rotation
+    const relativeCameraOffset = new THREE.Vector3(0, 1, -4); // Adjust the offset as needed
+    const cameraOffset = relativeCameraOffset.applyQuaternion(
+      this.player.quaternion
+    );
+
+    // Set the camera's position to be relative to the player's position
+    cameraPosition.copy(playerPosition).add(cameraOffset);
+
+    // Make the camera look at the player's position
+    this.app.activeCamera.lookAt(playerPosition);
   }
 }
 

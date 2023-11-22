@@ -3,10 +3,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyContents } from "./MyContents.js";
 import { MyGuiInterface } from "./MyGuiInterface.js";
 import Stats from "three/addons/libs/stats.module.js";
+import { MyFirstPersonControls } from "./MyFirstPersonControls.js";
 
-/**
- * This class contains the application object
- */
 class MyApp {
   /**
    * the constructor
@@ -27,7 +25,7 @@ class MyApp {
     this.controls = null;
     this.gui = null;
     this.axis = null;
-    this.contents == null;
+    this.contents = null;
   }
   /**
    * initializes the application
@@ -35,7 +33,7 @@ class MyApp {
   init() {
     // Create an empty scene
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xacacac);
+    this.scene.background = new THREE.Color(0xc0c0c0);
 
     this.stats = new Stats();
     this.stats.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -45,11 +43,12 @@ class MyApp {
     this.setActiveCamera("Perspective");
 
     // Create a renderer with Antialiasing
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setClearColor("#000000");
+    this.renderer.autoClear = false;
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // search for other alternatives
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // Configure renderer size
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -66,11 +65,14 @@ class MyApp {
    */
   initCameras() {
     const aspect = window.innerWidth / window.innerHeight;
+    const perspective = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+    perspective.position.set(18, 6, 0);
+    this.cameras["Perspective"] = perspective;
 
-    // Create a basic perspective camera
-    const perspective1 = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-    perspective1.position.set(10, 10, 3);
-    this.cameras["Perspective"] = perspective1;
+    const person1 = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+    person1.position.set(18, 8, 0);
+    person1.lookAt(new THREE.Vector3(0, 0, 0));
+    this.cameras["FirstPerson"] = person1;
 
     // defines the frustum size for the orthographic cameras
     const left = (-this.frustumSize / 2) * aspect;
@@ -81,7 +83,7 @@ class MyApp {
     const far = this.frustumSize;
 
     // create a left view orthographic camera
-    const orthoLeft = new THREE.OrthographicCamera(
+    const orthoBack = new THREE.OrthographicCamera(
       left,
       right,
       top,
@@ -89,26 +91,12 @@ class MyApp {
       near,
       far
     );
-    orthoLeft.up = new THREE.Vector3(0, 1, 0);
-    orthoLeft.position.set(-this.frustumSize / 4, 0, 0);
-    orthoLeft.lookAt(new THREE.Vector3(0, 0, 0));
-    this.cameras["Left"] = orthoLeft;
+    orthoBack.up = new THREE.Vector3(0, 1, 0);
+    orthoBack.position.set(-this.frustumSize / 4, 0, 0);
+    orthoBack.lookAt(new THREE.Vector3(0, 0, 0));
+    this.cameras["OrthoBack"] = orthoBack;
 
-    // create a top view orthographic camera
-    const orthoTop = new THREE.OrthographicCamera(
-      left,
-      right,
-      top,
-      bottom,
-      near,
-      far
-    );
-    orthoTop.up = new THREE.Vector3(0, 0, 1);
-    orthoTop.position.set(0, this.frustumSize / 4, 0);
-    orthoTop.lookAt(new THREE.Vector3(0, 0, 0));
-    this.cameras["Top"] = orthoTop;
-
-    // create a front view orthographic camera
+    // create a right view orthographic camera
     const orthoFront = new THREE.OrthographicCamera(
       left,
       right,
@@ -118,9 +106,9 @@ class MyApp {
       far
     );
     orthoFront.up = new THREE.Vector3(0, 1, 0);
-    orthoFront.position.set(0, 0, this.frustumSize / 4);
+    orthoFront.position.set(this.frustumSize / 4, 0, 0);
     orthoFront.lookAt(new THREE.Vector3(0, 0, 0));
-    this.cameras["Front"] = orthoFront;
+    this.cameras["OrthoFront"] = orthoFront;
   }
 
   /**
@@ -142,7 +130,7 @@ class MyApp {
     // camera changed?
     if (this.lastCameraName !== this.activeCameraName) {
       this.lastCameraName = this.activeCameraName;
-      // this.activeCamera = this.cameras[this.activeCameraName];
+      this.activeCamera = this.cameras[this.activeCameraName];
       document.getElementById("camera").innerHTML = this.activeCameraName;
 
       // call on resize to update the camera aspect ratio
@@ -150,18 +138,21 @@ class MyApp {
       this.onResize();
 
       // are the controls yet?
-      if (this.controls === null) {
-        // Orbit controls allow the camera to orbit around a target.
+
+      if (this.activeCameraName === "FirstPerson") {
+        this.controls = new MyFirstPersonControls(
+          this.activeCamera,
+          this.renderer.domElement
+        );
+      } else {
         this.controls = new OrbitControls(
           this.activeCamera,
           this.renderer.domElement
         );
-        this.controls.target = this.activeCamera.target;
-        this.controls.enableZoom = true;
-        this.controls.update();
-      } else {
-        this.controls.object = this.activeCamera;
       }
+
+      this.controls.enableZoom = true;
+      this.controls.update();
     }
   }
 
@@ -195,7 +186,6 @@ class MyApp {
    */
   render() {
     this.stats.begin();
-
     this.updateCameraIfRequired();
 
     // update the animation if contents were provided
