@@ -58,22 +58,39 @@
 
         <node id="scene">
             <children>
+                <noderef id="lights" />
+
                 <noderef id="square" />
+
+            </children>
+        </node>
+
+        <node id="lights">
+            <children>
+
+
+                <spotlight id="light1" enabled="true"
+                    color="1.0 1.0 1.0 1"
+                    intensity="100.0"
+                    distance="40"
+                    decay="0.75"
+                    castshadow="false"
+                    position="19 19 19"
+                    target="0 0 0"
+                    penumbra="1"
+                    angle="30"
+                />
 
             </children>
         </node>
 
         <node id="square">
 
-            <transforms>
-                <rotate value3="90 0 0" />
-            </transforms>
-
             <materialref id="room" />
 
             <children>
                 <primitive>
-                    <rectangle xy1="0 0" xy2="20 20" />
+                    <model3d filepath="objs/porshe/scene.gltf" />
                 </primitive>
             </children>
         </node>

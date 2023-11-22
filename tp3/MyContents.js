@@ -417,7 +417,7 @@ class MyContents {
           geometry = this.objectBuilder.createTriangle(rep);
           break;
         case "model3d":
-          console.log("Model 3D not supported yet");
+          this.objectBuilder.create3dModel(rep, this.sceneDir, obj.group);
           break;
         case "sphere":
           geometry = this.objectBuilder.createSphere(rep);
@@ -717,7 +717,8 @@ class MyContents {
         parentTexture,
         parentNode
       );
-      parentNode.add(primitiveMesh);
+      if (primitiveMesh != null)
+        parentNode.add(primitiveMesh);
       return;
     } else if (
       ["spotlight", "pointlight", "directionallight"].includes(node.type)

@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { MyTriangle } from "./MyTriangle.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 import { MyPolygon } from "./MyPolygon.js";
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 // defines how objects should be created
 export class ObjectBuilder {
@@ -197,4 +198,29 @@ export class ObjectBuilder {
 
     return geometry;
   }
+
+  /**
+   * Create a 3D model geometry.
+   * @param {Object} rep - The representation object.
+   * @returns {THREE.BufferGeometry} The created 3D model geometry.
+   */
+  async create3dModel(rep, dir, group) {
+    const loader = new GLTFLoader();
+
+    return new Promise((resolve, reject) => {
+      loader.load(
+        dir + rep.filepath,
+        (gltf) => {
+          const model = gltf.scene.children[0];
+          group.add(model); // Add the model to the group
+          resolve(model.geometry);
+        },
+        undefined,
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+  
 }
