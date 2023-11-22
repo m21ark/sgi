@@ -723,8 +723,7 @@ class MyContents {
         parentTexture,
         parentNode
       );
-      if (primitiveMesh != null)
-        parentNode.add(primitiveMesh);
+      if (primitiveMesh != null) parentNode.add(primitiveMesh);
       return;
     } else if (
       ["spotlight", "pointlight", "directionallight"].includes(node.type)

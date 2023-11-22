@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { MyTriangle } from "./MyTriangle.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 import { MyPolygon } from "./MyPolygon.js";
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 // defines how objects should be created
 export class ObjectBuilder {
@@ -222,5 +222,4 @@ export class ObjectBuilder {
       );
     });
   }
-  
 }
