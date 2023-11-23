@@ -21,7 +21,43 @@
   </head>
 
   <body>
-    <div id="canvas"></div>
+    <div id="canvas">
+      <div id="menu_main" style="background-color: #add8e6; padding: 1em; position: absolute; display: none;">
+        <h1>Car Mania</h1>
+        <p>Made by Mark and Richard</p>
+
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 0.2em;
+            align-items: center;
+          "
+        >
+          <label for="playerName">Player Name:</label>
+          <input type="text" id="playerName" name="playerName" required />
+
+          <label for="difficulty">Difficulty:</label>
+          <select id="difficulty" name="difficulty">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+
+          <label for="track">Track:</label>
+          <select id="track" name="track">
+            <!-- Add your track options here -->
+            <option value="track1">Track 1</option>
+            <option value="track2">Track 2</option>
+            <option value="track3">Track 3</option>
+          </select>
+
+          <button type="button">Start</button>
+        </div>
+      </div>
+    </div>
     <div id="camera"></div>
 
     
