@@ -3,6 +3,9 @@ import { MyTriangle } from "./MyTriangle.js";
 import { MyNurbsBuilder } from "./MyNurbsBuilder.js";
 import { MyPolygon } from "./MyPolygon.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { ColladaLoader } from "three/addons/loaders/ColladaLoader.js";
+import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
 
 // defines how objects should be created
 export class ObjectBuilder {
@@ -205,21 +208,74 @@ export class ObjectBuilder {
    * @returns {THREE.BufferGeometry} The created 3D model geometry.
    */
   async create3dModel(rep, dir, group) {
-    const loader = new GLTFLoader();
+    //check if last 3 dir chars are glb, gltf or obj
 
-    return new Promise((resolve, reject) => {
-      loader.load(
-        dir + rep.filepath,
-        (gltf) => {
-          const model = gltf.scene.children[0];
-          group.add(model); // Add the model to the group
-          resolve(model.geometry);
-        },
-        undefined,
-        (error) => {
-          reject(error);
-        }
+    const supportedFormats = ["glb", "gltf", "obj", "dae"];
+    const fileExtension = rep.filepath.slice(-3);
+    if (!supportedFormats.includes(fileExtension))
+      throw new Error(
+        "Invalid file format: '" + fileExtension + "'" + " on " + rep.filepath
       );
-    });
+
+    if (fileExtension === "obj") {
+      const loader = new OBJLoader();
+      const mtlLoader = new MTLLoader();
+
+      return new Promise((resolve, reject) => {
+        mtlLoader.load(
+          dir + rep.filepath.replace(/\.obj$/, ".mtl"),
+          (materials) => {
+            materials.preload();
+            loader.setMaterials(materials);
+            loader.load(
+              dir + rep.filepath,
+              (obj) => {
+                const model = obj;
+                group.add(model);
+                resolve(model.geometry);
+              },
+              undefined,
+              (error) => {
+                reject(error);
+              }
+            );
+          }
+        );
+      });
+    } else if (fileExtension == "glb" || fileExtension == "gltf") {
+      const loader = new GLTFLoader();
+
+      return new Promise((resolve, reject) => {
+        loader.load(
+          dir + rep.filepath,
+          (gltf) => {
+            const model = gltf.scene.children[0];
+            group.add(model); // Add the model to the group
+            resolve(model.geometry);
+          },
+          undefined,
+          (error) => {
+            reject(error);
+          }
+        );
+      });
+    } else if (fileExtension == "dae") {
+      const loader = new ColladaLoader();
+
+      return new Promise((resolve, reject) => {
+        loader.load(
+          dir + rep.filepath,
+          (collada) => {
+            const model = collada.scene.children[0];
+            group.add(model); // Add the model to the group
+            resolve(model.geometry);
+          },
+          undefined,
+          (error) => {
+            reject(error);
+          }
+        );
+      });
+    }
   }
 }

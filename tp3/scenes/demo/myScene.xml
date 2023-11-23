@@ -104,6 +104,11 @@
                 <noderef id="track" />
                 <noderef id="finishLine" />
 
+                <noderef id="kart_1" />
+                <noderef id="kart_2" />
+
+                <noderef id="powerup" />
+
             </children>
         </node>
 
@@ -128,9 +133,9 @@
         </node>
 
 
-        <node id="car" custom="player">
+        <!--         <node id="car">
             <transforms>
-                <scale value3="0.02 0.02 0.02"/>
+                <scale value3="0.02 0.02 0.02" />
             </transforms>
             <children>
                 <primitive>
@@ -138,6 +143,42 @@
                 </primitive>
             </children>
         </node>
+ -->
+        <node id="kart_1">
+            <transforms>
+                <translate value3="0 2 0" />
+            </transforms>
+            <children>
+                <primitive>
+                    <model3d filepath="objs/kart_yoshi/kart_yoshi.dae" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="kart_2">
+            <transforms>
+                <translate value3="3 2 0" />
+            </transforms>
+            <children>
+                <primitive>
+                    <model3d filepath="objs/kart_mario/kart_mario.dae" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="powerup">
+            <transforms>
+                <translate value3="6 2 0" />
+                <scale value3="0.01 0.01 0.01" />
+                <rotate value3="90 0 0" />
+            </transforms>
+            <children>
+                <primitive>
+                    <model3d filepath="objs/block/BlockQuestion.obj" />
+                </primitive>
+            </children>
+        </node>
+
 
         <node id="finishLine">
 
