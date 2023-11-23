@@ -1,3 +1,8 @@
+/* - obstaculos:
+    - limitar vel a 70% durante X segundos
+    - adiconar X segundos ao tempo atual
+    - trocar esquerda e direita do ASWD */
+
 export class MyObstacle {
   constructor(
     timeEffect = 5,

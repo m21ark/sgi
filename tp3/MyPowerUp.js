@@ -1,3 +1,9 @@
+/* - powerups:
+    - turbo de 200% vel durante X segundos (deve indicar na HUD o tempo e vel extra)
+    - Redução de X segundos no tempo total de corrida
+    - Invulnerabilidade durante X segundos a colisoes ou ao slowdown da relva
+ */
+
 export class MyPowerUp {
   constructor(
     timeEffect = 5,
