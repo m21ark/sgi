@@ -905,13 +905,14 @@ class MyContents {
    * Adds a player to the scene that can move around
    */
   addPlayer() {
-    const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1); // Customize size as needed
+    const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     const playerMaterial = new THREE.MeshBasicMaterial({
-      color: 0x5fff70,
+      color: 0xffffff,
+      wireframe: true,
     }); // Customize color as needed
     this.player = new THREE.Mesh(playerGeometry, playerMaterial);
-
     this.player.position.set(0, 5, 0);
+
     this.app.scene.add(this.player);
   }
 

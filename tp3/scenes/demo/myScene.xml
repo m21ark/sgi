@@ -100,7 +100,7 @@
             <children>
                 <noderef id="lights" />
 
-                <!--     <noderef id="car" /> -->
+                <noderef id="car" />
                 <noderef id="track" />
                 <noderef id="finishLine" />
 
@@ -128,10 +128,13 @@
         </node>
 
 
-        <node id="car">
+        <node id="car" custom="player">
+            <transforms>
+                <scale value3="0.02 0.02 0.02"/>
+            </transforms>
             <children>
                 <primitive>
-                    <model3d filepath="objs/porshe/scene.gltf" />
+                    <model3d filepath="objs/sport_car/car.glb" />
                 </primitive>
             </children>
         </node>
