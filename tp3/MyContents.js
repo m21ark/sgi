@@ -75,7 +75,7 @@ class MyContents {
     // ============== START MENU ====================
 
     const textDraw = new TextSpriteDraw();
-    textDraw.write(this.app.scene, 0, 5, "Back here", 15, "0xff00ff");
+    textDraw.write(this.app.scene, 0, 5, "Tenho fome", 15, "0xFF0000");
   }
 
   /**
@@ -804,7 +804,6 @@ class MyContents {
     this.rootScene = new THREE.Group();
     this.rootScene.name = "rootScene";
     this.transverseAndInheritValues(rootNode, this.rootScene);
-    console.log(this.rootScene);
     this.app.scene.add(this.rootScene);
   }
 

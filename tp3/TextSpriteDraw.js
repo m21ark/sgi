@@ -2,56 +2,77 @@ import * as THREE from "three";
 
 export class TextSpriteDraw {
   constructor() {
-    this.texture = new THREE.TextureLoader().load("images/font2.png");
+    this.texture = new THREE.TextureLoader().load("images/font3.png");
     this.material = new THREE.MeshBasicMaterial({
       map: this.texture,
-      transparent: true,
+      transparent: false,
     });
-    this.characterWidth = 60; // Assuming each character is 60x60 pixels
-    this.characterHeight = 147; // Assuming each character is 60x60 pixels
-    this.numRows = 6; // Number of rows in the sprite sheet
-    this.numColumns = 16; // Number of columns in the sprite sheet
+    this.numRows = 10;
+    this.numColumns = 10;
+    this.characterWidth = 4096 / this.numColumns;
+    this.characterHeight = 4096 / this.numRows;
     this.characterMap =
-      " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ";
-    // this.characterMap =
-    //  " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"; // Add more characters as needed
+      " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"; // Add more characters as needed
   }
+
+
+
+
 
   write(scene, x, y, text, fontSize = 50, color = 0xffffff) {
     text = text.toString();
-
+  
+    let group = new THREE.Group();
+    group.textContent = text;
+  
     for (let i = 0; i < text.length; i++) {
-      const charIndex = this.characterMap.indexOf(text[i]);
-      if (charIndex !== -1) {
-        const col = charIndex % this.numColumns;
-        const row = Math.floor(charIndex / this.numColumns);
-
-        const charGeometry = new THREE.PlaneGeometry(fontSize, fontSize);
-        const charMesh = new THREE.Mesh(charGeometry, this.material);
-
-        // Set UV coordinates to render the specific character from the sprite sheet
-        const uvOffsetX = col / this.numColumns;
-        const uvOffsetY = 1 - (row + 1) / this.numRows;
-        const uvs = charGeometry.attributes.uv.array;
-        for (let j = 0; j < uvs.length; j += 2) {
-          uvs[j] = uvs[j] / this.numColumns + uvOffsetX;
-          uvs[j + 1] = uvs[j + 1] / this.numRows + uvOffsetY;
-        }
-
-        charMesh.position.set(x + i * fontSize * 0.15, y, 0); // Adjust the multiplier as needed
-
-        // Set scale to make the characters closer horizontally
-        charMesh.scale.set(
-          fontSize / this.characterHeight,
-          fontSize / this.characterWidth,
-          1
-        );
-
-        // Set color
-        charMesh.material.color.setHex(color);
-
-        scene.add(charMesh);
+      let character = text[i];
+  
+      // Check if the character exists in the characterMap.
+      let index = this.characterMap.indexOf(character);
+  
+      if (index === -1) {
+        console.error("Character not found in characterMap: " + character);
+        continue;
       }
+  
+      let sprite = new THREE.Sprite(this.material.clone()); // Clone the material
+  
+      // Set the texture coordinates of the sprite.
+      let column = index % this.numColumns;
+      let row = Math.floor(index / this.numColumns);
+  
+      let left = column / this.numColumns - (this.characterWidth / 4096) * 0.3;
+      let top =
+        1 - (row + 1) / this.numRows + (this.characterWidth / 4096) * 0.15;
+  
+      sprite.material.map = this.material.map.clone(); // Clone the texture map
+      sprite.material.map.repeat.set(1 / this.numColumns, 1 / this.numRows);
+      sprite.material.map.offset.set(left, top);
+  
+      sprite.position.set(x + i * this.characterWidth * 0.037, y, 0);
+      sprite.scale.set(fontSize, fontSize, 1);
+  
+      sprite.material.color.setHex(color);
+      group.add(sprite);
+      console.log(sprite.material.map.repeat); // Should now give different results
     }
+  
+    scene.add(group);
   }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
