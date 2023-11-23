@@ -75,7 +75,7 @@ class MyContents {
     // ============== START MENU ====================
 
     const textDraw = new TextSpriteDraw();
-    textDraw.write(this.app.scene, 0, 5, "Tenho fome", 15, "0xFF0000");
+    textDraw.write(this.app.scene, 0, 5, "Tenho fome", 12, "0xFF0000");
   }
 
   /**
