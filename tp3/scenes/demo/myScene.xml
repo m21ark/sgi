@@ -40,6 +40,8 @@
 
         <texture id="greenTileTex" filepath="textures/grass.png" />
         <texture id="greyTileTex" filepath="textures/asphalt.jpg" />
+        <texture id="finishFlagTex" filepath="textures/finishFlag.jpg" />
+        <texture id="metalTex" filepath="textures/metal.jpg" />
 
     </textures>
 
@@ -56,16 +58,6 @@
             texlength_t="5"
         />
 
-        <material id="redTileMat"
-            emissive="0 0 0 1"
-            color="1 0 0 1"
-            specular="0.0 0.0 0.0 1.0"
-            shininess="0"
-            twosided="true"
-            texlength_s="5"
-            texlength_t="5"
-        />
-
         <material id="greyTileMat"
             emissive="0 0 0 1"
             color="0.6 0.6 0.6 1"
@@ -77,6 +69,29 @@
             texlength_t="5"
         />
 
+        <material id="finishFlagMat"
+            emissive="0 0 0 1"
+            color="1 1 1 1"
+            specular="0.0 0.0 0.0 1.0"
+            shininess="0"
+            twosided="true"
+            textureref="finishFlagTex"
+            texlength_s="5"
+            texlength_t="5"
+        />
+
+
+        <material id="metalMat"
+            emissive="0.0 0.0 0.0 1"
+            color="0.20 0.20 0.20 1.0"
+            specular="0.5 0.5 0.5 1.0"
+            shininess="30"
+            textureref="metalTex"
+            texlength_s="1"
+            texlength_t="1"
+            twosided="true" />
+
+
     </materials>
 
     <graph rootid="scene">
@@ -87,6 +102,7 @@
 
                 <!--     <noderef id="car" /> -->
                 <noderef id="track" />
+                <noderef id="finishLine" />
 
             </children>
         </node>
@@ -120,6 +136,62 @@
             </children>
         </node>
 
+        <node id="finishLine">
+
+            <transforms>
+                <rotate value3="0 90 0" />
+                <translate value3="220 10 25" />
+            </transforms>
+
+
+            <children>
+                <noderef id="endFlag" />
+                <noderef id="endPole1" />
+                <noderef id="endPole2" />
+            </children>
+        </node>
+
+
+        <node id="endFlag">
+
+            <transforms>
+                <scale value3="1 0.7 1" />
+            </transforms>
+
+            <materialref id="finishFlagMat" />
+
+            <children>
+                <primitive>
+                    <rectangle xy1="0 0" xy2="10 5" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="endPole1">
+            <transforms>
+                <translate value3="0 -3 0" />
+            </transforms>
+            <materialref id="metalMat" />
+            <children>
+                <primitive>
+                    <cylinder base="0.2" top="0.2" height="15" slices="10" stacks="10" />
+                </primitive>
+            </children>
+        </node>
+
+
+        <node id="endPole2">
+            <transforms>
+                <translate value3="10 -3 0" />
+            </transforms>
+            <materialref id="metalMat" />
+            <children>
+                <primitive>
+                    <cylinder base="0.2" top="0.2" height="15" slices="10" stacks="10" />
+                </primitive>
+            </children>
+        </node>
+
 
         <node id="track">
 
@@ -130,14 +202,14 @@
 
             <children>
                 <noderef id="track_green" />
-                <noderef id="track_red" />
+                <noderef id="track_finish" />
                 <noderef id="track_grey" />
             </children>
         </node>
 
-        <node id="track_red">
+        <node id="track_finish">
 
-            <materialref id="redTileMat" />
+            <materialref id="finishFlagMat" />
 
 
             <children>

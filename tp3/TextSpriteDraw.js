@@ -57,7 +57,6 @@ export class TextSpriteDraw {
 
       sprite.material.color.setHex(color);
       group.add(sprite);
-      console.log(sprite.material.map.repeat); // Should now give different results
     }
 
     scene.add(group);
