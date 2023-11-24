@@ -47,7 +47,7 @@ class MyContents {
 
     this.reader = new MyFileReader(app, this, this.onSceneLoaded);
 
-    this.sceneDir = "scenes/demo/";
+    this.sceneDir = "scene/";
     this.reader.open(this.sceneDir + "myScene.xml");
 
     /*     this.sceneDir = "scenes/imported/museum/";
