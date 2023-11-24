@@ -3,6 +3,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyContents } from "./MyContents.js";
 import { MyGuiInterface } from "./MyGuiInterface.js";
 import Stats from "three/addons/libs/stats.module.js";
+import { MyHUD } from "./MyHUD.js";
 import { MyFirstPersonControls } from "./MyFirstPersonControls.js";
 
 class MyApp {
@@ -12,6 +13,7 @@ class MyApp {
   constructor() {
     this.scene = null;
     this.stats = null;
+    this.MyHUD = null;
 
     // camera related attributes
     this.activeCamera = null;
@@ -38,6 +40,9 @@ class MyApp {
     this.stats = new Stats();
     this.stats.showPanel(1); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild(this.stats.dom);
+
+    this.MyHUD = new MyHUD();
+    document.body.appendChild(this.MyHUD.getDom());
 
     this.initCameras();
     this.setActiveCamera("Perspective");
@@ -181,6 +186,10 @@ class MyApp {
     this.gui = gui;
   }
 
+  setHUD(hud) {
+    this.MyHUD = hud;
+  }
+
   /**
    * the main render function. Called in a requestAnimationFrame loop
    */
@@ -203,6 +212,7 @@ class MyApp {
     requestAnimationFrame(this.render.bind(this));
 
     this.lastCameraName = this.activeCameraName;
+
     this.stats.end();
   }
 }

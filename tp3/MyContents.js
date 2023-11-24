@@ -933,6 +933,8 @@ class MyContents {
    * Animates the player
    */
   animate() {
+    this.app.MyHUD.setCords(...this.player.position);
+    this.app.MyHUD.tickTime();
     const playerSpeed = 0.25;
     const rotationSpeed = 0.05;
 
