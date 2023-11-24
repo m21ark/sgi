@@ -14,21 +14,28 @@ class MyHUD {
     this.speedBarElement = document.createElement("div"); // New speed bar element
 
     // Set initial values
-    this.positionElement.innerHTML = "Position: 0/0";
-    this.lapsElement.innerHTML = "Laps: 0/0";
     this.timeElement.innerHTML = "Time: 0.00 s";
     this.cordsElement.innerHTML = "X: 0.00 Y: 0.00 Z: 0.00";
     this.powerupTimeElement.innerHTML = "Powerup Time: 0.00 s";
     this.statusElement.innerHTML = "N/A";
 
+    // Set initial values with 3D bold style
+    this.positionElement.innerHTML =
+      "<span class='cool3d-text'>Position: 0/0</span> ";
+    this.lapsElement.innerHTML = "<span class='cool3d-text'>Laps: 0/0</span>";
+
+    // Apply 3D bold style using CSS
+    this.positionElement.style.fontWeight = "bold";
+    this.lapsElement.style.fontWeight = "bold";
+
     // Append elements to the HUD
     this.domElement.appendChild(this.positionElement);
     this.domElement.appendChild(this.lapsElement);
     this.domElement.appendChild(this.timeElement);
-    this.domElement.appendChild(this.cordsElement);
     this.domElement.appendChild(this.powerupTimeElement);
     this.domElement.appendChild(this.statusElement);
-    this.domElement.appendChild(this.speedBarElement); // Append the speed bar
+    this.domElement.appendChild(this.speedBarElement);
+    this.domElement.appendChild(this.cordsElement);
 
     // Additional styles for the speed bar
     this.speedBarElement.id = "speedBar_speed";
@@ -83,11 +90,11 @@ class MyHUD {
   }
 
   setPosition(pos, total) {
-    this.positionElement.innerHTML = `Position: ${pos}/${total}`;
+    this.positionElement.children[0].innerHTML = `Position: ${pos}/${total}`;
   }
 
   setLaps(laps, total) {
-    this.lapsElement.innerHTML = `Laps: ${laps}/${total}`;
+    this.lapsElement.children[0].innerHTML = `Laps: ${laps}/${total}`;
   }
 
   setPowerupTime(time) {

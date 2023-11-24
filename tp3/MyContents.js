@@ -66,7 +66,10 @@ class MyContents {
       this.app.scene.add(this.axis);
     }
 
+    // TEMPORARIAMENTE AQUI
     this.app.MyHUD.setStatus("PLAY");
+    this.app.MyHUD.setLaps(2, 5);
+    this.app.MyHUD.setPosition(1, 5);
 
     // ============== Player ====================
 
@@ -91,7 +94,7 @@ class MyContents {
     /*   Object.keys(obj).forEach((key) => {
         console.log(key, obj[key]);
       }) */
-    /*     
+
     this.setOptions(data.options);
     this.setFog(data.fog);
     this.setTextures(data.textures);
@@ -104,7 +107,6 @@ class MyContents {
 
     const textDraw = new TextSpriteDraw();
     textDraw.write(this.app.scene, 0, 5, "Tenho fome", 12, "0xFF0000");
-    */
   }
 
   /**
