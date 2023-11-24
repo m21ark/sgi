@@ -19,7 +19,7 @@ class MyHUD {
     this.timeElement.innerHTML = "Time: 0.00 s";
     this.cordsElement.innerHTML = "X: 0.00 Y: 0.00 Z: 0.00";
     this.powerupTimeElement.innerHTML = "Powerup Time: 0.00 s";
-    this.statusElement.innerHTML = "PAUSED";
+    this.statusElement.innerHTML = "N/A";
 
     // Append elements to the HUD
     this.domElement.appendChild(this.positionElement);
@@ -97,7 +97,36 @@ class MyHUD {
   }
 
   setStatus(status) {
-    this.statusElement.innerHTML = status;
+    // Create the play and pause icons
+    const playIcon = document.createElement("i");
+    playIcon.className = "fa fa-play";
+    playIcon.style.marginRight = "5px"; // Add some spacing between the icon and text
+
+    const pauseIcon = document.createElement("i");
+    pauseIcon.className = "fa fa-pause";
+    pauseIcon.style.marginRight = "5px"; // Add some spacing between the icon and text
+
+    // Clear existing content
+    this.statusElement.innerHTML = "";
+
+    // Create a container for the icon and text
+    const statusContainer = document.createElement("div");
+    statusContainer.style.display = "flex";
+    statusContainer.style.alignItems = "center";
+
+    // Better UI if swapped
+    const icon = status === "PLAY" ? pauseIcon : playIcon;
+
+    // Create the text element
+    const span = document.createElement("span");
+
+    // Append the icon and text to the container
+    span.appendChild(icon);
+
+    statusContainer.appendChild(span);
+
+    // Append the container to the status element
+    this.statusElement.appendChild(statusContainer);
   }
 }
 

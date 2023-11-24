@@ -66,6 +66,8 @@ class MyContents {
       this.app.scene.add(this.axis);
     }
 
+    this.app.MyHUD.setStatus("PLAY");
+
     // ============== Player ====================
 
     this.addPlayer();
