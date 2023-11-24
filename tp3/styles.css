@@ -33,3 +33,41 @@ iframe {
   border: 0;
   overflow: hidden; /* Hide any content that exceeds the iframe size */
 }
+
+.lil-gui.autoPlace {
+  top: 90%;
+  bottom: 0;
+}
+
+#MyHud {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: black;
+  font-size: 20px;
+  background-color: aliceblue;
+  padding: 0.4em;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+}
+
+#speedContainer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+#speedBar {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #00ff00 0%, #ff0000 100%);
+  clip-path: polygon(50% 0%, 0 0, 50% 50%, 100% 0);
+}
+
+.hudElement {
+  margin-top: 10px;
+}

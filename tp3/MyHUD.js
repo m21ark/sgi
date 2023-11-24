@@ -1,15 +1,10 @@
 class MyHUD {
   constructor() {
+    // Create main HUD element
     this.domElement = document.createElement("div");
-    this.domElement.id = "hud";
-    this.domElement.style.position = "absolute";
-    this.domElement.style.top = "60px";
-    this.domElement.style.left = "5px";
-    this.domElement.style.color = "black";
-    this.domElement.style.fontFamily = "Arial, Helvetica, sans-serif";
-    this.domElement.style.fontSize = "16px";
+    this.domElement.id = "MyHud";
 
-    // Create elements for speed and time
+    // Create sub elements
     this.speedElement = document.createElement("div");
     this.timeElement = document.createElement("div");
     this.cordsElement = document.createElement("div");
@@ -17,6 +12,7 @@ class MyHUD {
     this.lapsElement = document.createElement("div");
     this.powerupTimeElement = document.createElement("div");
     this.statusElement = document.createElement("div");
+    this.speedBarElement = document.createElement("div"); // New speed bar element
 
     // Set initial values
     this.speedElement.innerHTML = "Speed: 0.00 m/s";
@@ -27,7 +23,7 @@ class MyHUD {
     this.powerupTimeElement.innerHTML = "Powerup Time: 0.00 s";
     this.statusElement.innerHTML = "PAUSED";
 
-    // Append speed and time elements to the HUD
+    // Append elements to the HUD
     this.domElement.appendChild(this.speedElement);
     this.domElement.appendChild(this.positionElement);
     this.domElement.appendChild(this.lapsElement);
@@ -35,14 +31,28 @@ class MyHUD {
     this.domElement.appendChild(this.cordsElement);
     this.domElement.appendChild(this.powerupTimeElement);
     this.domElement.appendChild(this.statusElement);
+    this.domElement.appendChild(this.speedBarElement); // Append the speed bar
+
+    // Additional styles for the speed bar
+    this.speedBarElement.style.width = "100px";
+    this.speedBarElement.style.height = "100px";
+    this.speedBarElement.style.borderRadius = "50%";
+    this.speedBarElement.style.border = "5px solid #ccc"; // Change the color of the border
+    this.speedBarElement.style.position = "relative";
   }
 
   getDom() {
     return this.domElement;
   }
 
-  setSpeed(speed) {
-    this.speedElement.innerHTML = `Speed: ${speed.toFixed(2)} m/s`;
+  setSpeed(speed, max_speed = 200) {
+    // Update the speed text
+    this.speedElement.innerHTML = "Speed: " + speed.toFixed(2) + " m/s";
+
+    // Update the speed bar
+    const normalizedSpeed = Math.min(speed / max_speed, 1);
+    const rotationDegrees = normalizedSpeed * 360;
+    this.speedBarElement.style.background = `conic-gradient(from 0deg, #00ff00 0%, #ff0000 ${rotationDegrees}deg, #ccc ${rotationDegrees}deg, #ccc 360deg)`;
   }
 
   setTime(time) {

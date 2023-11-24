@@ -71,11 +71,6 @@ class MyContents {
     this.addPlayer();
     this.addListeners();
     this.animate();
-
-    // ============== START MENU ====================
-
-    const textDraw = new TextSpriteDraw();
-    textDraw.write(this.app.scene, 0, 5, "Tenho fome", 12, "0xFF0000");
   }
 
   /**
@@ -94,7 +89,7 @@ class MyContents {
     /*   Object.keys(obj).forEach((key) => {
         console.log(key, obj[key]);
       }) */
-
+    /*     
     this.setOptions(data.options);
     this.setFog(data.fog);
     this.setTextures(data.textures);
@@ -104,6 +99,10 @@ class MyContents {
 
     // Start the traversal from the root node
     this.transverseFromRoot(data);
+
+    const textDraw = new TextSpriteDraw();
+    textDraw.write(this.app.scene, 0, 5, "Tenho fome", 12, "0xFF0000");
+    */
   }
 
   /**
@@ -935,6 +934,7 @@ class MyContents {
   animate() {
     this.app.MyHUD.setCords(...this.player.position);
     this.app.MyHUD.tickTime();
+    this.app.MyHUD.setSpeed(this.player.position.x);
     const playerSpeed = 0.25;
     const rotationSpeed = 0.05;
 
