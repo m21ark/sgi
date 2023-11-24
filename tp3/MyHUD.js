@@ -5,7 +5,6 @@ class MyHUD {
     this.domElement.id = "MyHud";
 
     // Create sub elements
-    this.speedElement = document.createElement("div");
     this.timeElement = document.createElement("div");
     this.cordsElement = document.createElement("div");
     this.positionElement = document.createElement("div");
@@ -15,7 +14,6 @@ class MyHUD {
     this.speedBarElement = document.createElement("div"); // New speed bar element
 
     // Set initial values
-    this.speedElement.innerHTML = "Speed: 0.00 m/s";
     this.positionElement.innerHTML = "Position: 0/0";
     this.lapsElement.innerHTML = "Laps: 0/0";
     this.timeElement.innerHTML = "Time: 0.00 s";
@@ -24,7 +22,6 @@ class MyHUD {
     this.statusElement.innerHTML = "PAUSED";
 
     // Append elements to the HUD
-    this.domElement.appendChild(this.speedElement);
     this.domElement.appendChild(this.positionElement);
     this.domElement.appendChild(this.lapsElement);
     this.domElement.appendChild(this.timeElement);
@@ -34,6 +31,7 @@ class MyHUD {
     this.domElement.appendChild(this.speedBarElement); // Append the speed bar
 
     // Additional styles for the speed bar
+    this.speedBarElement.id = "speedBar_speed";
     this.speedBarElement.style.width = "100px";
     this.speedBarElement.style.height = "100px";
     this.speedBarElement.style.borderRadius = "50%";
@@ -46,13 +44,25 @@ class MyHUD {
   }
 
   setSpeed(speed, max_speed = 200) {
-    // Update the speed text
-    this.speedElement.innerHTML = "Speed: " + speed.toFixed(2) + " m/s";
+    if (speed < 0) speed = 0;
+    if (speed > max_speed) speed = max_speed;
 
-    // Update the speed bar
+    // Update the speed bar with a circular crown gradient
     const normalizedSpeed = Math.min(speed / max_speed, 1);
     const rotationDegrees = normalizedSpeed * 360;
-    this.speedBarElement.style.background = `conic-gradient(from 0deg, #00ff00 0%, #ff0000 ${rotationDegrees}deg, #ccc ${rotationDegrees}deg, #ccc 360deg)`;
+
+    const gradient = `conic-gradient(from 0deg, #00ff00 0%, #ff0000 ${rotationDegrees}deg, #ccc ${rotationDegrees}deg, #ccc 360deg)`;
+
+    this.speedBarElement.style.background = gradient;
+
+    // Display the speed number in the middle of the circle
+    this.speedBarElement.innerHTML = speed.toFixed(2);
+    this.speedBarElement.style.display = "flex";
+    this.speedBarElement.style.alignItems = "center";
+    this.speedBarElement.style.justifyContent = "center";
+    this.speedBarElement.style.fontSize = "20px";
+    this.speedBarElement.style.fontWeight = "bold";
+    this.speedBarElement.style.color = "#000"; // Adjust the color of the speed number
   }
 
   setTime(time) {

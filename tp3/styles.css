@@ -68,6 +68,10 @@ iframe {
   clip-path: polygon(50% 0%, 0 0, 50% 50%, 100% 0);
 }
 
+#speedBar_speed {
+  text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white;
+}
+
 .hudElement {
   margin-top: 10px;
 }
