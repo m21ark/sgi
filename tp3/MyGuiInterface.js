@@ -30,6 +30,8 @@ class MyGuiInterface {
       .add(this.app, "activeCameraName", ["Perspective", "FirstPerson"])
       .name("active camera");
 
+    // ===================================================================
+
     const moveCarFolder = this.datgui.addFolder("Movement");
     moveCarFolder.open();
 
@@ -45,6 +47,25 @@ class MyGuiInterface {
       .name("showAIKeyPoints")
       .onChange(() => {
         this.contents.toogleShowAIKeyPoints();
+      });
+
+    // ===================================================================
+
+    const lightsFolder = this.datgui.addFolder("Lights");
+    lightsFolder.open();
+
+    lightsFolder
+      .add(this.contents, "lightsOn", true)
+      .name("lightsOn")
+      .onChange(() => {
+        this.contents.toggleLights();
+      });
+
+    lightsFolder
+      .add(this.contents, "showHelpers", true)
+      .name("showHelpers")
+      .onChange(() => {
+        this.contents.toggleLightHelpers();
       });
   }
 }

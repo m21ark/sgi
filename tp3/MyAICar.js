@@ -64,7 +64,7 @@ export class MyAICar {
     return this.keyPoints;
   }
 
-  moveAICar(speed = 0.2) {
+  moveAICar(speed = 0.5) {
     if (this.currentKeyPointIndex === this.keyPoints.length) return;
 
     if (this.aiCar !== undefined)
@@ -72,10 +72,9 @@ export class MyAICar {
         const targetPoint = new THREE.Vector3(
           ...this.keyPoints[this.currentKeyPointIndex]
         );
+        
         const distance = this.aiCar.position.distanceTo(targetPoint);
-
-        // Adjust this threshold as needed to determine when the car reaches a point
-        const threshold = 0.1;
+        const threshold = 0.3; // if speed is too high, threshold should be higher
 
         if (distance > threshold) {
           // Move towards the target point

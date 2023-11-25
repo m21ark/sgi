@@ -144,7 +144,7 @@ class MyContents {
     this.transverseFromRoot(data);
 
     const textDraw = new TextSpriteDraw();
-    textDraw.write(this.app.scene, 0, 5, "Tenho fome", 12, "0xFF0000");
+    textDraw.write(this.app.scene, 0, 5, 2, "Tenho fome", 12, "0xFF0000");
   }
 
   /**
@@ -542,32 +542,31 @@ class MyContents {
 
     // setting up the materials for the skybox (one for each side)
     let skyboxMaterials = [
-      new THREE.MeshPhongMaterial({
+      new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.up),
-        emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshPhongMaterial({
+      new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.down),
         emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshPhongMaterial({
+      new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.back),
         emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshPhongMaterial({
+      new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.left),
         emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshPhongMaterial({
+      new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.front),
         emissive: emissive,
         side: THREE.BackSide,
       }),
-      new THREE.MeshPhongMaterial({
+      new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.right),
         emissive: emissive,
         side: THREE.BackSide,
@@ -1073,14 +1072,13 @@ class MyContents {
     this.app.activeCamera.lookAt(playerPosition);
   }
 
-  toogleShowAIKeyPoints(){
-   let keypoints = this.AICar.getAICarKeyPointsGroup().children
+  toogleShowAIKeyPoints() {
+    let keypoints = this.AICar.getAICarKeyPointsGroup().children;
 
-   // display or hide keypoints
+    // display or hide keypoints
     keypoints.forEach((keypoint) => {
       keypoint.visible = this.showAIKeyPoints;
     });
-
   }
 }
 

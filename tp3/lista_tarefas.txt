@@ -15,9 +15,6 @@ Lista de tarefas:
 - Menu de pausa
 - Menu final de corrida
 
-
-- Movimento automatico da AI por pontos pre definidos (o carro faz um percurso linear entre pontos)
-
 - Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
 
 - Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar 

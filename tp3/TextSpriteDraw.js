@@ -15,7 +15,7 @@ export class TextSpriteDraw {
       " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"; // Add more characters as needed
   }
 
-  write(scene, x, y, text, fontSize = 12, color = 0xffffff) {
+  write(scene, x, y, z, text, fontSize = 12, color = 0xffffff) {
     text = text.toString();
 
     let group = new THREE.Group();
@@ -51,7 +51,7 @@ export class TextSpriteDraw {
       sprite.position.set(
         x + i * this.characterWidth * fontSize * 0.0025,
         y,
-        0
+        z
       );
       sprite.scale.set(fontSize, fontSize, 1);
 
