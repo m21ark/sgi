@@ -78,10 +78,8 @@ class MyContents {
     // ============== GRID TRACK ====================
 
     this.gridParser = new GridParser();
-    this.gridGroup = await this.gridParser.buildGridGroup(2);
-    console.log(this.gridGroup);
+    this.gridGroup = await this.gridParser.buildGridGroup(1);
     this.app.scene.add(this.gridGroup);
-
     // ============== Player ====================
 
     this.addPlayer();
@@ -984,7 +982,7 @@ class MyContents {
     this.app.MyHUD.setCords(...this.player.position);
     this.app.MyHUD.tickTime();
     this.app.MyHUD.setSpeed(this.player.position.x * 10);
-    const playerSpeed = 0.25;
+    const playerSpeed = 0.5;
     const rotationSpeed = 0.05;
 
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction

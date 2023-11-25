@@ -41,7 +41,7 @@ export class ObjectBuilder {
    * @param {number} z - The z-coordinate of the tile.
    * @returns {THREE.PlaneGeometry} The created tile geometry.
    */
-  createTileGeometry(xy1, xy2, z) {
+  createTileGeometry(xy1, xy2, z = 0) {
     return this.createRectangle(
       { xy1: xy1, xy2: xy2, parts_x: 1, parts_y: 1 },
       z
@@ -221,7 +221,7 @@ export class ObjectBuilder {
    * @param {Object} rep - The representation object.
    * @returns {THREE.BufferGeometry} The created 3D model geometry.
    */
-  async create3dModel(rep, dir, group) {
+  async create3dModel(rep, dir = "", group) {
     //check if last 3 dir chars are glb, gltf or obj
 
     const supportedFormats = ["glb", "gltf", "obj", "dae"];

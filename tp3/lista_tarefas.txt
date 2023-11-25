@@ -23,7 +23,7 @@ Lista de tarefas:
 
 - escolher diferentes tracks
 
-- fazer um parser para ler os ficheiros de track com a meta, powerups e obstaculos in place e que faça display deles e guarde info das posicoes para depois serem usadas
+- por a meta a dar no sitio certo em cada track!
 
 MAIS TARDE:
 

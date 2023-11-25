@@ -19,7 +19,7 @@ export class GridParser {
     this.greyTileMat = new THREE.MeshPhongMaterial({
       map: this.greyTileTex,
       side: THREE.DoubleSide,
-      color: 0xA0A0A0,
+      color: 0xa0a0a0,
     });
     this.endFlagMat = new THREE.MeshPhongMaterial({
       map: this.endFlagTex,
@@ -35,6 +35,10 @@ export class GridParser {
     });
 
     this.objBuilder = new ObjectBuilder();
+
+    // Meshes for powerups and obstacles Items
+    this.powerupItem = new THREE.Group();
+    this.obstacleItem = new THREE.Group();
   }
 
   async buildGridGroup(track_number) {
@@ -43,6 +47,22 @@ export class GridParser {
     const rows = csv.trim().split("\n");
 
     const group = new THREE.Group();
+
+    // define the meshes for powerups and obstacles
+    this.powerupMesh = await this.objBuilder.create3dModel(
+      {
+        filepath: "objs/block/BlockQuestion.obj",
+      },
+      "scene/",
+      this.powerupItem
+    );
+    this.obstacleMesh = await this.objBuilder.create3dModel(
+      {
+        filepath: "objs/box/ItmPowderBox.obj",
+      },
+      "scene/",
+      this.obstacleItem
+    );
 
     for (let i = 0; i < rows.length; i++) {
       const columns = rows[i].split(",");
@@ -54,6 +74,7 @@ export class GridParser {
         const xy2 = [5 * (i + 1), 5 * (j + 1)];
 
         let obj = null;
+        let extraObj = null;
         let geo = this.objBuilder.createTileGeometry(xy1, xy2);
 
         switch (value) {
@@ -68,9 +89,11 @@ export class GridParser {
             break;
           case 3:
             obj = new THREE.Mesh(geo, this.greyTileMat);
+            extraObj = this.createPowerup(xy1, xy2);
             break;
           case 4:
             obj = new THREE.Mesh(geo, this.greyTileMat);
+            extraObj = this.createObstacle(xy1, xy2);
             break;
           default:
             console.error("Invalid value in CSV");
@@ -78,12 +101,32 @@ export class GridParser {
         }
 
         group.add(obj);
+        if (extraObj) group.add(extraObj);
       }
     }
 
     group.rotateX(Math.PI / 2);
 
     return group;
+  }
+
+  createPowerup(xy1, xy2) {
+    const item = this.powerupItem.clone();
+    const x = (xy1[0] + xy2[0]) / 2;
+    const y = (xy1[1] + xy2[1]) / 2;
+    item.position.set(x, y, -0.15);
+    item.scale.set(0.025, 0.025, 0.025);
+    return item;
+  }
+
+  createObstacle(xy1, xy2) {
+    const item = this.obstacleItem.clone();
+    const x = (xy1[0] + xy2[0]) / 2;
+    const y = (xy1[1] + xy2[1]) / 2;
+    item.position.set(x, y, -1.4);
+    item.rotateX(-Math.PI / 2);
+    item.scale.set(0.2, 0.2, 0.2);
+    return item;
   }
 
   async readCSV(csvPath) {
