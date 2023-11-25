@@ -38,19 +38,33 @@ export class MyAICar {
     // add a small translucid blue spehere to each key point
     const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
     const sphereMaterial = new THREE.MeshBasicMaterial({
-      color: 0x0000ff,
+      color: 0x00aaff,
       transparent: true,
       opacity: 0.5,
     });
+
+    this.KeyPointsgroup = new THREE.Group();
+    this.KeyPointsgroup.name = "AI_KeyPoints";
+
     this.keyPoints.forEach((keyPoint) => {
       const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
       sphere.position.set(...keyPoint);
-      secne.add(sphere);
+      sphere.visible = false;
+      this.KeyPointsgroup.add(sphere);
     });
-    
+
+    secne.add(this.KeyPointsgroup);
   }
 
-  moveAICar(speed=0.2) {
+  getAICarKeyPointsGroup() {
+    return this.KeyPointsgroup;
+  }
+
+  getAICarKeyPoints() {
+    return this.keyPoints;
+  }
+
+  moveAICar(speed = 0.2) {
     if (this.currentKeyPointIndex === this.keyPoints.length) return;
 
     if (this.aiCar !== undefined)
