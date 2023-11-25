@@ -29,6 +29,16 @@ class MyGuiInterface {
     cameraFolder
       .add(this.app, "activeCameraName", ["Perspective", "FirstPerson"])
       .name("active camera");
+
+    const moveCarFolder = this.datgui.addFolder("Movement");
+    moveCarFolder.open();
+
+    moveCarFolder
+      .add(this.contents, "moveCar", false)
+      .name("moveCar")
+      .onChange(() => {
+        this.contents.toggleMoveCar();
+      });
   }
 }
 

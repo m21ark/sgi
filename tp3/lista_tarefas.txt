@@ -8,32 +8,31 @@ Classes obrigatorias:
 - Myreader (instancia as anteriores na pos certa)
 
 
-
-
 Lista de tarefas:
 
+- Menu Inicial 
 - Menu escolha de carro (nosso e da AI)
-- Pagina Inicial
-- Menu final de corrida
-- HUD --> menu com velocidade, posicao atual, tempo atual, numero de voltas, tempo para efeito de powerup/obstaculo passar, estado (play/pause)
 - Menu de pausa
+- Menu final de corrida
+
 
 - Movimento automatico da AI por pontos pre definidos (o carro faz um percurso linear entre pontos)
 
-- Controlo do carro e mecanica de vel maxima e redução quando fora da pista
+- Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
+
+- Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar 
 
 - arranjar spriteSheet ascii
 
 - escolher diferentes tracks
 
+- fazer um parser para ler os ficheiros de track com a meta, powerups e obstaculos in place e que faça display deles e guarde info das posicoes para depois serem usadas
 
 MAIS TARDE:
 
 NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 
-- Implementação de colisões com powerups, obstaculos, relva e inimigo
-
-- Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar
+- Implementação de colisões com powerups, obstaculos, relva (redução de vel quando fora da pista) e inimigo
 
 - animações por keyframes
 

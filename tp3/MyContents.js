@@ -6,6 +6,7 @@ import { LightBuilder } from "./builders/LightBuilder.js";
 import { ObjectBuilder } from "./builders/ObjectBuilder.js";
 import { MipMapLoader } from "./builders/MipMapLoader.js";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
+import { MyAICar } from "./MyAICar.js";
 
 /**
  * MyContents.js
@@ -40,6 +41,7 @@ class MyContents {
     this.showHelpers = false;
     this.showControlPoints = false;
     this.controlPoints = [];
+    this.moveCar = false;
 
     this.useTextures = true;
     this.useBumpMaps = true;
@@ -76,6 +78,22 @@ class MyContents {
     this.addPlayer();
     this.addListeners();
     this.animate();
+
+    // =============== AI CAR =====================
+
+    this.AICar = new MyAICar(this.getTrackPoints());
+    this.AICar.addAICar(this.app.scene);
+  }
+
+  getTrackPoints() {
+    // Temporary placement until track parser with key points is implemented
+    return [
+      [220, 2, 20],
+      [220, 2, 40],
+      [180, 2, 40],
+      [180, 2, 20],
+      [220, 2, 20],
+    ];
   }
 
   /**
@@ -914,7 +932,7 @@ class MyContents {
       wireframe: true,
     }); // Customize color as needed
     this.player = new THREE.Mesh(playerGeometry, playerMaterial);
-    this.player.position.set(0, 5, 0);
+    this.player.position.set(200, 8, 0);
 
     this.app.scene.add(this.player);
   }
@@ -1002,9 +1020,17 @@ class MyContents {
     // Update the camera position if the player is in first person view
     if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
 
+    // =============== AI CAR =====================
+
+    if (this.AICar != undefined && this.moveCar) this.AICar.moveAICar();
+
     requestAnimationFrame(() => {
       this.animate();
     });
+  }
+
+  toogleMoveCar() {
+    this.moveCar = !this.moveCar;
   }
 
   /**
