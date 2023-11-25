@@ -78,7 +78,7 @@ class MyContents {
     // ============== GRID TRACK ====================
 
     this.gridParser = new GridParser();
-    this.gridGroup = await this.gridParser.buildGridGroup(1);
+    this.gridGroup = await this.gridParser.buildGridGroup(2);
     this.app.scene.add(this.gridGroup);
     // ============== Player ====================
 
@@ -88,7 +88,7 @@ class MyContents {
 
     // =============== AI CAR =====================
 
-    this.AICar = new MyAICar(this.getTrackPoints());
+    this.AICar = new MyAICar(this.gridParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
   }
 

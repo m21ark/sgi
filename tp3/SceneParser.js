@@ -107,7 +107,38 @@ export class GridParser {
 
     group.rotateX(Math.PI / 2);
 
+    //  ===================================================================
+
+    const grid = rows.map((line) => line.split(",").map(Number));
+    // FIND grid start coord
+    let startCoord = null;
+
+    for (let i = 0; i < grid.length; i++) {
+      const line = grid[i];
+      for (let j = 0; j < line.length; j++) {
+        const value = line[j];
+        if (value === 2) {
+          startCoord = { x: i, y: j };
+          break;
+        }
+      }
+      if (startCoord) break;
+    }
+
+    console.log(startCoord);
+
+    this.keyPath = this.bfs(grid, startCoord);
+
     return group;
+  }
+
+  getKeyPath() {
+    let path = [];
+    this.keyPath.forEach((coord) => {
+      path.push([coord.y * 5, 2, coord.x * 5]);
+    });
+    path.push(path[0]); // TODO: SIMPLIFY PATH TO NOT HAVE REDUNDANT POINTS
+    return path;
   }
 
   createPowerup(xy1, xy2) {
@@ -127,6 +158,88 @@ export class GridParser {
     item.rotateX(-Math.PI / 2);
     item.scale.set(0.2, 0.2, 0.2);
     return item;
+  }
+
+  bfs(grid, startCoord) {
+    startCoord = { x: startCoord.y, y: startCoord.x };
+    let queue = [{ coord: startCoord, path: [] }];
+    const visited = new Set();
+
+    let finishFound = false;
+    let isFirst = true;
+
+    while (queue.length > 0) {
+      const { coord, path } = queue.shift();
+      const { x, y } = coord;
+
+      if (visited.has(`${x},${y}`)) continue;
+
+      visited.add(`${x},${y}`);
+
+      if (grid[y][x] === 2) {
+        if (finishFound) return path;
+        else finishFound = true;
+      }
+
+      const neighbors = this.getNeighbors(grid, coord);
+      for (const neighbor of neighbors) {
+        if (isFirst) {
+          neighbors.forEach((n) => {
+            n.type = grid[n.y][n.x];
+          });
+
+          /*       console.log(neighbors); */
+        }
+        queue.push({ coord: neighbor, path: [...path, neighbor] });
+      }
+
+      if (isFirst) {
+        // add to visited all tiles of type 2
+
+        const finishTiles = neighbors.filter((n) => n.type === 2);
+        finishTiles.forEach((n) => {
+          visited.add(`${n.x},${n.y}`);
+        });
+
+        /*        console.log("queue after removing finish");
+        console.log(queue);
+ */
+        isFirst = false;
+      }
+    }
+
+    return null; // No path found
+  }
+
+  getNeighbors(grid, { x, y }) {
+    const neighbors = [];
+
+    // Define possible moves (up, down, left, right)
+    const moves = [
+      { dx: 0, dy: -1 }, // Up
+      { dx: 0, dy: 1 }, // Down
+      { dx: -1, dy: 0 }, // Left
+      { dx: 1, dy: 0 }, // Right
+    ];
+
+    for (const move of moves) {
+      const newX = x + move.dx;
+      const newY = y + move.dy;
+
+      /*       console.log(newX, newY, grid[newY][newX]); */
+
+      if (
+        newX >= 0 &&
+        newX < grid[0].length &&
+        newY >= 0 &&
+        newY < grid.length &&
+        grid[newY][newX] !== 0 // Check if it's not a wall
+      ) {
+        neighbors.push({ x: newX, y: newY });
+      }
+    }
+
+    return neighbors;
   }
 
   async readCSV(csvPath) {
