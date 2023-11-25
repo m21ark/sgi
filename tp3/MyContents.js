@@ -78,7 +78,7 @@ class MyContents {
     // ============== GRID TRACK ====================
 
     this.gridParser = new GridParser();
-    this.gridGroup = await this.gridParser.buildGridGroup(2);
+    this.gridGroup = await this.gridParser.buildGridGroup(1);
     this.app.scene.add(this.gridGroup);
     // ============== Player ====================
 
@@ -90,36 +90,6 @@ class MyContents {
 
     this.AICar = new MyAICar(this.gridParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
-  }
-
-  getTrackPoints() {
-    // Temporary placement until track parser with key points is implemented
-    return [
-      [220, 2, 20],
-      [235, 2, 20],
-      [240, 2, 100],
-      [210, 2, 115],
-      [185, 2, 115],
-      [170, 2, 125],
-      [170, 2, 155],
-      [180, 2, 160],
-      [180, 2, 190],
-      [145, 2, 220],
-      [80, 2, 220],
-      [50, 2, 210],
-      [40, 2, 200],
-      [40, 2, 185],
-      [70, 2, 155],
-      [70, 2, 130],
-      [40, 2, 120],
-      [40, 2, 75],
-      [60, 2, 20],
-      [90, 2, 20],
-      [115, 2, 45],
-      [145, 2, 40],
-      [170, 2, 20],
-      [220, 2, 20],
-    ];
   }
 
   /**

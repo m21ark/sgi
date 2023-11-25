@@ -132,12 +132,31 @@ export class GridParser {
     return group;
   }
 
-  getKeyPath() {
+  getKeyPath(simplify = true) {
     let path = [];
     this.keyPath.forEach((coord) => {
       path.push([coord.y * 5, 2, coord.x * 5]);
     });
-    path.push(path[0]); // TODO: SIMPLIFY PATH TO NOT HAVE REDUNDANT POINTS
+
+    if (simplify) {
+      // if 2 adjacent points only differ in one axis
+      // remove the second one (excluding the first and last points)
+      for (let i = 1; i < path.length - 1; i++) {
+        const p1 = path[i - 1];
+        const p2 = path[i];
+        const p3 = path[i + 1];
+
+        if (
+          (p1[0] === p2[0] && p2[0] === p3[0]) ||
+          (p1[2] === p2[2] && p2[2] === p3[2])
+        ) {
+          path.splice(i, 1);
+          i--;
+        }
+      }
+    }
+
+    path.push(path[0]);
     return path;
   }
 
