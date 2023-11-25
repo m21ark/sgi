@@ -47,28 +47,6 @@
 
     <materials>
 
-        <material id="greenTileMat"
-            emissive="0 0 0 1"
-            color="0 1 0 1"
-            specular="0.0 0.0 0.0 1.0"
-            shininess="0"
-            twosided="true"
-            textureref="greenTileTex"
-            texlength_s="5"
-            texlength_t="5"
-        />
-
-        <material id="greyTileMat"
-            emissive="0 0 0 1"
-            color="0.6 0.6 0.6 1"
-            specular="0.0 0.0 0.0 1.0"
-            shininess="0"
-            twosided="true"
-            textureref="greyTileTex"
-            texlength_s="5"
-            texlength_t="5"
-        />
-
         <material id="finishFlagMat"
             emissive="0 0 0 1"
             color="1 1 1 1"
@@ -100,8 +78,6 @@
             <children>
                 <noderef id="lights" />
 
-                <noderef id="car" />
-                <noderef id="track" />
                 <noderef id="finishLine" />
 
                 <noderef id="kart_1" />
@@ -133,7 +109,7 @@
                 <spotlight id="sun" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="15.0"
-                    distance="225"
+                    distance="255"
                     decay="0.1"
                     castshadow="false"
                     position="125 124 125"
@@ -147,17 +123,6 @@
         </node>
 
 
-        <!--         <node id="car">
-            <transforms>
-                <scale value3="0.02 0.02 0.02" />
-            </transforms>
-            <children>
-                <primitive>
-                    <model3d filepath="objs/sport_car/car.glb" />
-                </primitive>
-            </children>
-        </node>
- -->
         <node id="kart_1">
             <transforms>
                 <translate value3="3 2 5" />
@@ -263,20 +228,6 @@
             </children>
         </node>
 
-
-        <node id="track">
-
-            <transforms>
-                <rotate value3="90 0 0" />
-            </transforms>
-
-
-            <children>
-                <noderef id="track_green" />
-                <noderef id="track_finish" />
-                <noderef id="track_grey" />
-            </children>
-        </node>
 
         <node id="track_finish">
 

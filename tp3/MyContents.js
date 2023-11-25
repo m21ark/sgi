@@ -7,6 +7,7 @@ import { ObjectBuilder } from "./builders/ObjectBuilder.js";
 import { MipMapLoader } from "./builders/MipMapLoader.js";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { MyAICar } from "./MyAICar.js";
+import { GridParser } from "./SceneParser.js";
 
 /**
  * MyContents.js
@@ -61,7 +62,7 @@ class MyContents {
    * Initializes the component.
    * Creates and attaches the axis to the scene if it doesn't exist.
    */
-  init() {
+  async init() {
     // create once
     if (this.axis === null) {
       // create and attach the axis to the scene
@@ -73,6 +74,13 @@ class MyContents {
     this.app.MyHUD.setStatus("PLAY");
     this.app.MyHUD.setLaps(2, 5);
     this.app.MyHUD.setPosition(1, 5);
+
+    // ============== GRID TRACK ====================
+
+    this.gridParser = new GridParser();
+    this.gridGroup = await this.gridParser.buildGridGroup(2);
+    console.log(this.gridGroup);
+    this.app.scene.add(this.gridGroup);
 
     // ============== Player ====================
 

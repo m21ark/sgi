@@ -16,7 +16,7 @@ export class ObjectBuilder {
    * @param {Object} rep - The representation object.
    * @returns {THREE.PlaneGeometry} The created rectangle geometry.
    */
-  createRectangle(rep) {
+  createRectangle(rep, z = 0) {
     let geometry = new THREE.PlaneGeometry(
       Math.abs(rep.xy1[0] - rep.xy2[0]),
       Math.abs(rep.xy1[1] - rep.xy2[1]),
@@ -28,10 +28,24 @@ export class ObjectBuilder {
     geometry.translate(
       (rep.xy1[0] + rep.xy2[0]) / 2,
       (rep.xy1[1] + rep.xy2[1]) / 2,
-      0
+      z
     );
 
     return geometry;
+  }
+
+  /**
+   * Creates a tile geometry with the given coordinates and texture.
+   * @param {Array<number>} xy1 - The first coordinate of the tile.
+   * @param {Array<number>} xy2 - The second coordinate of the tile.
+   * @param {number} z - The z-coordinate of the tile.
+   * @returns {THREE.PlaneGeometry} The created tile geometry.
+   */
+  createTileGeometry(xy1, xy2, z) {
+    return this.createRectangle(
+      { xy1: xy1, xy2: xy2, parts_x: 1, parts_y: 1 },
+      z
+    );
   }
 
   /**
