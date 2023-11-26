@@ -9,6 +9,7 @@ export class GridParser {
     this.greyTileTex = loader.load("scene/textures/asphalt.jpg");
     this.endFlagTex = loader.load("scene/textures/finishFlag.jpg");
     this.metalTex = loader.load("scene/textures/metal.jpg");
+    this.sideSquareTex = loader.load("scene/textures/sideSquare.jpg");
 
     // Materials
     this.greenTileMat = new THREE.MeshPhongMaterial({
@@ -32,6 +33,12 @@ export class GridParser {
       color: 0x060606,
       shininess: 100,
       specular: 0xaaaaaa,
+    });
+
+    this.sideSquareMat = new THREE.MeshPhongMaterial({
+      map: this.sideSquareTex,
+      side: THREE.DoubleSide,
+      color: 0xffffff,
     });
 
     this.objBuilder = new ObjectBuilder();
@@ -94,6 +101,9 @@ export class GridParser {
           case 4:
             obj = new THREE.Mesh(geo, this.greyTileMat);
             extraObj = this.createObstacle(xy1, xy2);
+            break;
+          case 5:
+            obj = new THREE.Mesh(geo, this.sideSquareMat);
             break;
           default:
             console.error("Invalid value in CSV");
@@ -195,10 +205,12 @@ export class GridParser {
 
       visited.add(`${x},${y}`);
 
-      if (grid[y][x] === 2) {
+      let tileType = grid[y][x];
+
+      if (tileType === 2) {
         if (finishFound) return path;
         else finishFound = true;
-      }
+      } else if (tileType == 5) continue;
 
       const neighbors = this.getNeighbors(grid, coord);
       for (const neighbor of neighbors) {
