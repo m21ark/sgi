@@ -95,9 +95,18 @@ class MyContents {
     // =============== MENUS =====================
 
     let mainMenuGen = new MyMenu("Main Menu");
+    mainMenuGen.addButton("Start", () => {
+      console.log("Start");
+      this.app.MyHUD.setStatus("PLAY");
+    });
+    mainMenuGen.addButton("Pause", () => {
+      console.log("Pause");
+      this.app.MyHUD.setStatus("PAUSE");
+    });
     let mainMenu = mainMenuGen.getMenu();
 
-    mainMenuGen.setCamera(this.app);
+    //mainMenuGen.setCamera(this.app);
+    // this.app.setActiveCamera("FirstPerson");
 
     this.app.scene.add(mainMenu);
   }
@@ -937,7 +946,8 @@ class MyContents {
       wireframe: true,
     }); // Customize color as needed
     this.player = new THREE.Mesh(playerGeometry, playerMaterial);
-    this.player.position.set(200, 8, 0);
+    // this.player.position.set(-100, 40, -120);
+    this.player.position.set(200, 10, 10);
 
     this.app.scene.add(this.player);
   }

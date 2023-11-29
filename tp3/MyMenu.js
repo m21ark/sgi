@@ -3,25 +3,24 @@ import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 export class MyMenu {
-  constructor(title, x = 0) {
+  constructor(title, x = -100) {
     this.title = title;
     this.buttons = [];
     this.textWriter = new TextSpriteDraw();
 
     this.x = x;
-    this.y = 0;
-    this.z = -1;
 
-    // recommended to be lower <= 50 (because of frustrum size)
-    this.width = 50;
+    // height recommended to be lower <= 50 (because of frustrum size)
+    this.width = 70;
     this.height = 50;
 
     this.btnCount = 0;
   }
 
   addButton(text, onClick) {
-    this.buttons.push({ btnCount, text, onClick });
-    btnCount++;
+    const cnt = this.btnCount;
+    this.buttons.push({ cnt, text, onClick });
+    this.btnCount++;
   }
 
   setTitle(title) {
@@ -31,7 +30,7 @@ export class MyMenu {
   getMenu() {
     let group = new THREE.Group();
 
-    this.setButtonsOnMenu();
+    this.setButtonsOnMenu(group);
 
     // create a menuBackground geometry for the menu
     let geometry = new THREE.PlaneGeometry(this.width, this.height);
@@ -44,42 +43,60 @@ export class MyMenu {
     // create a mesh
     let menuBackground = new THREE.Mesh(geometry, material);
 
+    let fsize = 18;
+    let midWidth = this.textWriter.getWidth(this.title, fsize);
+
     this.textWriter.write(
       menuBackground,
-      0,
-      0,
+      -midWidth / 20, // Centered in width todo: isto ta mal
+      this.height / 2 - 5, // Adjust the vertical position as needed
       0.1,
-      "Main Menu",
-      12,
+      this.title, // Use the title property
+      fsize,
       "0xFF0000"
     );
 
     // add the mesh to the group
     group.add(menuBackground);
+    this.setButtonsOnMenu(group);
 
-    // apply translation with this.x, this.y and this.z
     group.translateX(this.x);
-    group.translateY(this.y);
-    group.translateZ(this.z);
-
     group.rotateY(Math.PI);
 
     return group;
   }
 
-  setButtonsOnMenu() {
-    // Display buttons
+  setButtonsOnMenu(group) {
+    const buttonWidth = 0.3 * this.width;
+    const verticalSpacing = 0.1 * this.height;
+    const btnHeight = 0.1 * this.height;
+
+    let offsetY = this.height / 2 - verticalSpacing - 0.25 * this.height;
+
     this.buttons.forEach((button) => {
-      /* 
-      // Add click event listener
-      buttonMesh.userData.onClick = button.onClick;
-      buttonMesh.on("click", () => {
-        if (buttonMesh.userData.onClick) {
-          buttonMesh.userData.onClick();
-        }
+      let buttonGeometry = new THREE.PlaneGeometry(buttonWidth, btnHeight);
+      let buttonMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00ff00,
       });
 
-      group.add(buttonMesh); */
+      let buttonMesh = new THREE.Mesh(buttonGeometry, buttonMaterial);
+
+      buttonMesh.position.set(0, offsetY, 0.1);
+      buttonMesh.scale.set(1, 1, 1);
+
+      this.textWriter.write(
+        group,
+        -3,
+        offsetY,
+        0.2,
+        button.text,
+        18,
+        "0x0000FF"
+      );
+
+      group.add(buttonMesh);
+
+      offsetY -= verticalSpacing + btnHeight;
     });
   }
 

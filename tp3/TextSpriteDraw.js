@@ -15,6 +15,14 @@ export class TextSpriteDraw {
       " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"; // Add more characters as needed
   }
 
+  getWidth(text, fontSize = 12) {
+    return text.length * this.characterWidth * fontSize * 0.0025;
+  }
+
+  getHeight(fontSize = 12) {
+    return this.characterHeight * fontSize * 0.0025;
+  }
+
   write(scene, x, y, z, text, fontSize = 12, color = 0xffffff) {
     text = text.toString();
 

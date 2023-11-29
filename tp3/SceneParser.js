@@ -166,8 +166,6 @@ export class GridParser {
     this.lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
   }
 
-
-
   makeCatmullCurve(group) {
     this.segments = 100;
     this.width = 2;
@@ -179,14 +177,17 @@ export class GridParser {
 
     let pathOfTrack = this.getKeyPath(false);
 
-    console.log(pathOfTrack);
+    //    console.log(pathOfTrack);
     for (let i = 0; i < pathOfTrack.length - 2; i++) {
-      this.path = new THREE.CatmullRomCurve3(pathOfTrack.slice(i,i+3).map((pos) => new THREE.Vector3(pos[0], 0, pos[2])));
-  
+      this.path = new THREE.CatmullRomCurve3(
+        pathOfTrack
+          .slice(i, i + 3)
+          .map((pos) => new THREE.Vector3(pos[0], 0, pos[2]))
+      );
+
       this.createCurveMaterialsTextures();
       this.createCurveObjects(group);
     }
-
   }
 
   /**
