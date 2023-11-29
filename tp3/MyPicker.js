@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export class MyPicker {
-  constructor(menu) {
+  constructor() {
     this.raycaster = new THREE.Raycaster();
     this.raycaster.near = 1;
     this.raycaster.far = 1000;
@@ -9,8 +9,9 @@ export class MyPicker {
     this.pointer = new THREE.Vector2();
     this.intersectedObj = null;
     this.pickingColor = "0xFFFFFF";
-    this.menu = menu;
-    this.app = menu.app;
+
+    this.menu = null;
+    this.app = null;
 
     this.availableLayers = ["none", 1, 2, 3, 4, 5, 6, 7, 8];
     this.selectedLayer = this.availableLayers[1];
@@ -21,6 +22,16 @@ export class MyPicker {
     document.addEventListener("pointerdown", this.onPointerDown.bind(this));
 
     this.updateSelectedLayer();
+  }
+
+  setActiveMenu(menu) {
+    this.menu = menu;
+    this.app = menu.app;
+  }
+
+  clearMenu() {
+    this.menu = null;
+    this.app = null;
   }
 
   setActiveLayer(layer) {
@@ -82,6 +93,8 @@ export class MyPicker {
   }
 
   onPointerMove(event) {
+    if (!this.menu) return;
+
     // 1. set the mouse position with a coordinate system where the center
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -97,6 +110,8 @@ export class MyPicker {
   }
 
   onPointerDown(event) {
+    if (!this.menu) return;
+
     // 1. set the mouse position with a coordinate system where the center
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;

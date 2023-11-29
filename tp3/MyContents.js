@@ -9,6 +9,7 @@ import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { MyAICar } from "./MyAICar.js";
 import { GridParser } from "./SceneParser.js";
 import { MyMenu } from "./MyMenu.js";
+import { MyPicker } from "./MyPicker.js";
 
 /**
  * MyContents.js
@@ -94,21 +95,66 @@ class MyContents {
 
     // =============== MENUS =====================
 
-    let mainMenuGen = new MyMenu(this.app, "Main Menu");
-    mainMenuGen.addButton("Start", () => {
-      console.log("Clicked Start");
-      this.app.MyHUD.setStatus("PLAY");
+    this.picker = new MyPicker();
+
+    // _____________________ MENU 1 _____________________
+
+    let mainMenuGen = new MyMenu(this.app, "Main Menu", -50);
+    mainMenuGen.addButton("Play", () => {
+      console.log("Clicked Play");
     });
-    mainMenuGen.addButton("Pause", () => {
-      console.log("Clicked Pause");
-      this.app.MyHUD.setStatus("PAUSE");
+    mainMenuGen.addButton("Settings", () => {
+      console.log("Clicked Settings");
+      pauseMenuGen.setCamera(this.app); // TEMPORARY
     });
     let mainMenu = mainMenuGen.getMenu();
+
+    // _____________________ MENU 2 _____________________
+
+    let pauseMenuGen = new MyMenu(this.app, "Pause Menu", -130);
+    pauseMenuGen.addButton("Resume", () => {
+      console.log("Clicked Resume");
+      this.app.MyHUD.setStatus("PLAY");
+    });
+    pauseMenuGen.addButton("Exit", () => {
+      console.log("Clicked Exit");
+      this.app.MyHUD.setStatus("EXIT");
+      endMenuGen.setCamera(this.app); // TEMPORARY
+    });
+    let pauseMenu = pauseMenuGen.getMenu();
+
+    // _____________________ MENU 3 _____________________
+
+    let endMenuGen = new MyMenu(this.app, "End Menu", -210);
+    endMenuGen.addButton("Restart", () => {
+      console.log("Clicked Restart");
+    });
+    endMenuGen.addButton("Exit", () => {
+      console.log("Clicked Exit");
+      carSelectingMenuGen.setCamera(this.app); // TEMPORARY
+    });
+    let endMenu = endMenuGen.getMenu();
+
+    // _____________________ MENU 4 _____________________
+
+    let carSelectingMenuGen = new MyMenu(this.app, "Car Select", -290);
+    carSelectingMenuGen.addButton("Car 1", () => {
+      console.log("Clicked Car 1");
+    });
+    carSelectingMenuGen.addButton("Car 2", () => {
+      console.log("Clicked Car 2");
+      mainMenuGen.setCamera(this.app); // TEMPORARY
+    });
+
+    let carSelectingMenu = carSelectingMenuGen.getMenu();
 
     // mainMenuGen.setCamera(this.app);
     // this.app.setActiveCamera("FirstPerson");
 
     this.app.scene.add(mainMenu);
+    this.app.scene.add(pauseMenu);
+    this.app.scene.add(endMenu);
+    this.app.scene.add(carSelectingMenu);
   }
 
   /**

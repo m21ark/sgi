@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
-import { MyPicker } from "./MyPicker.js";
 
 export class MyMenu {
   constructor(app, title, x = -100) {
@@ -16,9 +15,8 @@ export class MyMenu {
 
     this.btnCount = 0;
 
+    this.picker = app.contents.picker;
     this.app = app;
-
-    this.picker = new MyPicker(this);
   }
 
   addButton(text, onClick) {
@@ -128,6 +126,8 @@ export class MyMenu {
 
     app.cameras["MenuCamera"] = cam;
     app.setActiveCamera("MenuCamera");
+
+    this.picker.setActiveMenu(this);
   }
 
   handleButtonClick(buttonIndex) {
