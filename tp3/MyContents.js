@@ -8,6 +8,7 @@ import { MipMapLoader } from "./builders/MipMapLoader.js";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { MyAICar } from "./MyAICar.js";
 import { GridParser } from "./SceneParser.js";
+import { MyMenu } from "./MyMenu.js";
 
 /**
  * MyContents.js
@@ -90,6 +91,20 @@ class MyContents {
 
     this.AICar = new MyAICar(this.gridParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
+
+    // =============== MENUS =====================
+
+    let mainMenuGen = new MyMenu("Main Menu");
+    let mainMenu = mainMenuGen.getMenu();
+
+    let {cam, ctrls} = mainMenuGen.getCamera(this.app.renderer);
+
+    //set new camera and controls
+    // this.app.cameras["NOVA"] = cam;
+    // this.app.setActiveCamera('OrthoRight')
+
+    
+    this.app.scene.add(mainMenu);
   }
 
   /**

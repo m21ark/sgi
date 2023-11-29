@@ -114,6 +114,34 @@ class MyApp {
     orthoFront.position.set(this.frustumSize / 4, 0, 0);
     orthoFront.lookAt(new THREE.Vector3(0, 0, 0));
     this.cameras["OrthoFront"] = orthoFront;
+
+    // create a back view orthographic camera
+    const orthoLeft = new THREE.OrthographicCamera(
+      left,
+      right,
+      top,
+      bottom,
+      near,
+      far
+    );
+    orthoLeft.up = new THREE.Vector3(0, 1, 0);
+    orthoLeft.position.set(0, 0, this.frustumSize / 4);
+    orthoLeft.lookAt(new THREE.Vector3(0, 0, 0));
+    this.cameras["OrthoLeft"] = orthoLeft;
+
+    // create a front view orthographic camera
+    const orthoRight = new THREE.OrthographicCamera(
+      left,
+      right,
+      top,
+      bottom,
+      near,
+      far
+    );
+    orthoRight.up = new THREE.Vector3(0, 1, 0);
+    orthoRight.position.set(0, 0, -this.frustumSize / 4);
+    orthoRight.lookAt(new THREE.Vector3(0, 0, 0));
+    this.cameras["OrthoRight"] = orthoRight;
   }
 
   /**
