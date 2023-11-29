@@ -3,15 +3,16 @@ import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 export class MyMenu {
-  constructor(title, x = 0, y = 10, z = -1) {
+  constructor(title, x = 0) {
     this.title = title;
     this.buttons = [];
     this.textWriter = new TextSpriteDraw();
 
     this.x = x;
-    this.y = y;
-    this.z = z;
+    this.y = 0;
+    this.z = -1;
 
+    // recommended to be lower <= 50 (because of frustrum size)
     this.width = 50;
     this.height = 50;
 
@@ -82,41 +83,18 @@ export class MyMenu {
     });
   }
 
-  getCamera(renderer) {
-    // Create an orthographic camera
-    const camera = new THREE.OrthographicCamera(
-      -renderer.domElement.clientWidth / 2,
-      renderer.domElement.clientWidth / 2,
-      renderer.domElement.clientHeight / 2,
-      -renderer.domElement.clientHeight / 2,
-      0.1,
-      1000
-    );
+  setCamera(app) {
+    let cam = app.cameras["MenuCamera"];
 
-    // Set the camera position to be centered on the plane
-    camera.position.set(this.x, this.y, this.z + 10);
+    // Set camera position to center of the menu
+    cam.position.set(this.x, this.height / 2 - this.height / 2, -1);
 
-    // Create OrbitControls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableRotate = false; // Enable rotation
+    // Set camera's look-at target to the center of the menu
+    cam.lookAt(new THREE.Vector3(this.x, this.height / 2 - this.height / 2, 0));
 
-    // Set controls to focus on the menu
-    controls.target.set(this.x, this.y, this.z);
+    console.log(cam.position);
 
-    // Set controls to be centered on the menu
-    controls.maxPolarAngle = Math.PI / 2;
-    controls.minPolarAngle = Math.PI / 2;
-    controls.enableZoom = false; // Disable zooming for orthographic camera
-
-    // Update controls in animation loop
-    function animate() {
-      controls.update();
-      requestAnimationFrame(animate);
-    }
-
-    // Start animation loop
-    animate();
-
-    return { camera, controls };
+    app.cameras["MenuCamera"] = cam;
+    app.setActiveCamera("MenuCamera");
   }
 }

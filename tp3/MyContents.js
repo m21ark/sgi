@@ -97,13 +97,8 @@ class MyContents {
     let mainMenuGen = new MyMenu("Main Menu");
     let mainMenu = mainMenuGen.getMenu();
 
-    let {cam, ctrls} = mainMenuGen.getCamera(this.app.renderer);
+    mainMenuGen.setCamera(this.app);
 
-    //set new camera and controls
-    // this.app.cameras["NOVA"] = cam;
-    // this.app.setActiveCamera('OrthoRight')
-
-    
     this.app.scene.add(mainMenu);
   }
 
