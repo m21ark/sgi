@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { MyPicker } from "./MyPicker.js";
 
 export class MyMenu {
-  constructor(title, x = -100) {
+  constructor(app, title, x = -100) {
     this.title = title;
     this.buttons = [];
     this.textWriter = new TextSpriteDraw();
@@ -15,6 +15,10 @@ export class MyMenu {
     this.height = 50;
 
     this.btnCount = 0;
+
+    this.app = app;
+
+    this.picker = new MyPicker(this);
   }
 
   addButton(text, onClick) {
@@ -30,8 +34,6 @@ export class MyMenu {
   getMenu() {
     let group = new THREE.Group();
 
-    this.setButtonsOnMenu(group);
-
     // create a menuBackground geometry for the menu
     let geometry = new THREE.PlaneGeometry(this.width, this.height);
 
@@ -43,6 +45,8 @@ export class MyMenu {
     // create a mesh
     let menuBackground = new THREE.Mesh(geometry, material);
 
+    menuBackground.translateZ(-0.1);
+
     let fsize = 18;
     let midWidth = this.textWriter.getWidth(this.title, fsize);
 
@@ -50,15 +54,20 @@ export class MyMenu {
       menuBackground,
       -midWidth / 20, // Centered in width todo: isto ta mal
       this.height / 2 - 5, // Adjust the vertical position as needed
-      0.1,
+      0,
       this.title, // Use the title property
       fsize,
       "0xFF0000"
     );
 
+    /*      menuBackground = this.picker.setObjLayers(
+      menuBackground,
+      "main_menu_background"
+    );  */
+
     // add the mesh to the group
     group.add(menuBackground);
-    this.setButtonsOnMenu(group);
+    group.add(this.getButtonOnMenu());
 
     group.translateX(this.x);
     group.rotateY(Math.PI);
@@ -66,7 +75,9 @@ export class MyMenu {
     return group;
   }
 
-  setButtonsOnMenu(group) {
+  getButtonOnMenu() {
+    let group = new THREE.Group();
+
     const buttonWidth = 0.3 * this.width;
     const verticalSpacing = 0.1 * this.height;
     const btnHeight = 0.1 * this.height;
@@ -74,15 +85,14 @@ export class MyMenu {
     let offsetY = this.height / 2 - verticalSpacing - 0.25 * this.height;
 
     this.buttons.forEach((button) => {
-      let buttonGeometry = new THREE.PlaneGeometry(buttonWidth, btnHeight);
-      let buttonMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ff00,
+      let geometry = new THREE.PlaneGeometry(buttonWidth, btnHeight);
+      let material = new THREE.MeshBasicMaterial({
+        color: 0xffbbcc,
       });
 
-      let buttonMesh = new THREE.Mesh(buttonGeometry, buttonMaterial);
+      let buttonMesh = new THREE.Mesh(geometry, material);
 
-      buttonMesh.position.set(0, offsetY, 0.1);
-      buttonMesh.scale.set(1, 1, 1);
+      buttonMesh.position.set(0, offsetY, -0.1);
 
       this.textWriter.write(
         group,
@@ -94,10 +104,17 @@ export class MyMenu {
         "0x0000FF"
       );
 
+      buttonMesh = this.picker.setObjLayers(
+        buttonMesh,
+        "main_menu_btn_" + button.cnt
+      );
+
       group.add(buttonMesh);
 
       offsetY -= verticalSpacing + btnHeight;
     });
+
+    return group;
   }
 
   setCamera(app) {
@@ -109,9 +126,14 @@ export class MyMenu {
     // Set camera's look-at target to the center of the menu
     cam.lookAt(new THREE.Vector3(this.x, this.height / 2 - this.height / 2, 0));
 
-    console.log(cam.position);
-
     app.cameras["MenuCamera"] = cam;
     app.setActiveCamera("MenuCamera");
+  }
+
+  handleButtonClick(buttonIndex) {
+    const button = this.buttons.find((btn) => btn.cnt === buttonIndex);
+    if (button && button.onClick) {
+      button.onClick();
+    }
   }
 }

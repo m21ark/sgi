@@ -94,18 +94,18 @@ class MyContents {
 
     // =============== MENUS =====================
 
-    let mainMenuGen = new MyMenu("Main Menu");
+    let mainMenuGen = new MyMenu(this.app, "Main Menu");
     mainMenuGen.addButton("Start", () => {
-      console.log("Start");
+      console.log("Clicked Start");
       this.app.MyHUD.setStatus("PLAY");
     });
     mainMenuGen.addButton("Pause", () => {
-      console.log("Pause");
+      console.log("Clicked Pause");
       this.app.MyHUD.setStatus("PAUSE");
     });
     let mainMenu = mainMenuGen.getMenu();
 
-    //mainMenuGen.setCamera(this.app);
+    // mainMenuGen.setCamera(this.app);
     // this.app.setActiveCamera("FirstPerson");
 
     this.app.scene.add(mainMenu);

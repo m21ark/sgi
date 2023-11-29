@@ -135,7 +135,7 @@ export class GridParser {
       if (startCoord) break;
     }
 
-    console.log(startCoord);
+    // console.log(startCoord);
 
     this.keyPath = this.bfs(grid, startCoord);
 
@@ -148,13 +148,13 @@ export class GridParser {
    * Create materials for the curve elements: the mesh, the line and the wireframe
    */
   createCurveMaterialsTextures() {
-    const texture = new THREE.TextureLoader().load("./images/uvmapping.jpg");
-    texture.wrapS = THREE.RepeatWrapping;
+    // const texture = new THREE.TextureLoader().load("./images/uvmapping.jpg");
+    // texture.wrapS = THREE.RepeatWrapping;
 
-    this.material = new THREE.MeshBasicMaterial({ map: texture });
-    this.material.map.repeat.set(3, 3);
+    this.material = new THREE.MeshBasicMaterial(/* { map: texture } */);
+    /*     this.material.map.repeat.set(3, 3);
     this.material.map.wrapS = THREE.RepeatWrapping;
-    this.material.map.wrapT = THREE.RepeatWrapping;
+    this.material.map.wrapT = THREE.RepeatWrapping; */
 
     this.wireframeMaterial = new THREE.MeshBasicMaterial({
       color: 0x0000ff,
