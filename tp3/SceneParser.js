@@ -89,7 +89,7 @@ export class GridParser {
             obj = new THREE.Mesh(geo, this.greenTileMat);
             break;
           case 1:
-            obj = new THREE.Mesh(geo, this.greyTileMat);
+            obj = new THREE.Mesh(geo, this.greenTileMat);
             break;
           case 2:
             obj = new THREE.Mesh(geo, this.endFlagMat);
@@ -103,7 +103,7 @@ export class GridParser {
             extraObj = this.createObstacle(xy1, xy2);
             break;
           case 5:
-            obj = new THREE.Mesh(geo, this.sideSquareMat);
+            obj = new THREE.Mesh(geo, this.greenTileMat);
             break;
           default:
             console.error("Invalid value in CSV");
@@ -139,7 +139,89 @@ export class GridParser {
 
     this.keyPath = this.bfs(grid, startCoord);
 
+    this.makeCatmullCurve(group);
+
     return group;
+  }
+
+  /**
+   * Create materials for the curve elements: the mesh, the line and the wireframe
+   */
+  createCurveMaterialsTextures() {
+    const texture = new THREE.TextureLoader().load("./images/uvmapping.jpg");
+    texture.wrapS = THREE.RepeatWrapping;
+
+    this.material = new THREE.MeshBasicMaterial({ map: texture });
+    this.material.map.repeat.set(3, 3);
+    this.material.map.wrapS = THREE.RepeatWrapping;
+    this.material.map.wrapT = THREE.RepeatWrapping;
+
+    this.wireframeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x0000ff,
+      opacity: 0.3,
+      wireframe: true,
+      transparent: true,
+    });
+
+    this.lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+  }
+
+
+
+  makeCatmullCurve(group) {
+    this.segments = 100;
+    this.width = 2;
+    this.textureRepeat = 1;
+    this.showWireframe = true;
+    this.showMesh = true;
+    this.showLine = true;
+    this.closedCurve = false;
+
+    let pathOfTrack = this.getKeyPath(false);
+
+    console.log(pathOfTrack);
+    for (let i = 0; i < pathOfTrack.length - 2; i++) {
+      this.path = new THREE.CatmullRomCurve3(pathOfTrack.slice(i,i+3).map((pos) => new THREE.Vector3(pos[0], 0, pos[2])));
+  
+      this.createCurveMaterialsTextures();
+      this.createCurveObjects(group);
+    }
+
+  }
+
+  /**
+   * Creates the mesh, the line and the wireframe used to visualize the curve
+   */
+  createCurveObjects(group) {
+    let geometry = new THREE.TubeGeometry(
+      this.path,
+      this.segments,
+      this.width,
+      3,
+      this.closedCurve
+    );
+    this.mesh = new THREE.Mesh(geometry, this.material);
+    this.wireframe = new THREE.Mesh(geometry, this.wireframeMaterial);
+
+    let points = this.path.getPoints(this.segments);
+    let bGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+    // Create the final object to add to the scene
+    this.line = new THREE.Line(bGeometry, this.lineMaterial);
+
+    this.curve = new THREE.Group();
+
+    this.mesh.visible = this.showMesh;
+    this.wireframe.visible = this.showWireframe;
+    this.line.visible = this.showLine;
+
+    this.curve.add(this.mesh);
+    this.curve.add(this.wireframe);
+    this.curve.add(this.line);
+
+    this.curve.rotateX(-Math.PI / 2);
+    this.curve.scale.set(1, 0.2, 1);
+    group.add(this.curve);
   }
 
   getKeyPath(simplify = true) {
