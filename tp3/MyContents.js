@@ -10,6 +10,7 @@ import { MyAICar } from "./MyAICar.js";
 import { GridParser } from "./SceneParser.js";
 import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
+import { MyBillboard } from "./MyBillboard.js";
 
 /**
  * MyContents.js
@@ -92,6 +93,18 @@ class MyContents {
 
     this.AICar = new MyAICar(this.gridParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
+
+    // =============== BILLBOARD =====================
+
+    this.billboard = new MyBillboard([
+      "assets/tree1.png",
+      "assets/tree2.png",
+      "assets/tree3.png",
+    ]);
+
+    this.billboard.position.set(200, 3.5, 30);
+
+    this.app.scene.add(this.billboard);
 
     // =============== MENUS =====================
 
@@ -1088,6 +1101,10 @@ class MyContents {
     requestAnimationFrame(() => {
       this.animate();
     });
+
+    // =============== BILLBOARD =====================
+    if (this.billboard) 
+      this.billboard.lookAt(this.app.activeCamera.position);
   }
 
   toogleMoveCar() {
