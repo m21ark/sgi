@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { ObjectBuilder } from "./builders/ObjectBuilder.js";
+import { MyBillboard } from "./MyBillboard.js";
 
 export class GridParser {
   constructor() {
@@ -46,6 +47,8 @@ export class GridParser {
     // Meshes for powerups and obstacles Items
     this.powerupItem = new THREE.Group();
     this.obstacleItem = new THREE.Group();
+
+    this.trees = [];
   }
 
   async buildGridGroup(track_number) {
@@ -85,32 +88,37 @@ export class GridParser {
         let geo = this.objBuilder.createTileGeometry(xy1, xy2);
 
         switch (value) {
-          case 0:
+          case 0: // grass
             obj = new THREE.Mesh(geo, this.greenTileMat);
             break;
-          case 1:
+          case 1: // grass (it was originally the pixelated gray path)
             obj = new THREE.Mesh(geo, this.greenTileMat);
             break;
-          case 2:
+          case 2: // white/black flag
             obj = new THREE.Mesh(geo, this.endFlagMat);
             break;
-          case 3:
+          case 3: // powerup
             obj = new THREE.Mesh(geo, this.greyTileMat);
             extraObj = this.createPowerup(xy1, xy2);
             break;
-          case 4:
+          case 4: // obstacle
             obj = new THREE.Mesh(geo, this.greyTileMat);
             extraObj = this.createObstacle(xy1, xy2);
             break;
-          case 5:
+          case 5: // grass
             obj = new THREE.Mesh(geo, this.greenTileMat);
+            break;
+          case 6: // BILLBOARD TREE
+            obj = this.createTree(xy1, xy2);
+            this.trees.push(obj);
+            extraObj = new THREE.Mesh(geo, this.greenTileMat);
             break;
           default:
             console.error("Invalid value in CSV");
             break;
         }
 
-        group.add(obj);
+        if (obj) group.add(obj);
         if (extraObj) group.add(extraObj);
       }
     }
@@ -142,6 +150,27 @@ export class GridParser {
     this.makeCatmullCurve(group);
 
     return group;
+  }
+
+  getTrees() {
+    return this.trees;
+  }
+
+  createTree(xy1, xy2) {
+    const x = (xy1[0] + xy2[0]) / 2;
+    const y = (xy1[1] + xy2[1]) / 2;
+
+    let tree = new MyBillboard([
+      "assets/tree1.png",
+      "assets/tree2.png",
+      "assets/tree3.png",
+    ]);
+
+    tree.position.set(x, y, -3.5);
+
+    tree.rotateX(-Math.PI / 2);
+
+    return tree;
   }
 
   /**

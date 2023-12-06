@@ -24,8 +24,8 @@ class MyBillboard extends THREE.Object3D {
     this.add(billboardMesh);
   }
 
-  rotate(camera) {
-    // this.billboardMesh.lookAt(camera.position);
+  update(cam) {
+    this.billboardMesh.lookAt(cam);
   }
 }
 

@@ -8,53 +8,27 @@ Classes obrigatorias:
 - Myreader (instancia as anteriores na pos certa)
 
 
-Lista de tarefas:
+MARCO:
+
+- Menu final de corrida ter info de tempo, pos final, metricas de powerups apanhados etc
+- escolher diferentes tracks no menu inicial e isso refletir se na pista
+- por a meta (poles e flags) a dar no sitio certo em cada track!
+
+RICARDO:
+
+- arranjar spriteSheet ascii
+- fazer track usando catmull
+- Implementação de colisões com powerups, obstaculos, relva (redução de vel quando fora da pista) e inimigo
+- Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
+- Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar 
+
+
+LATER:
 
 - Menu Inicial 
 - Menu escolha de carro (nosso e da AI)
-- Menu de pausa
-- Menu final de corrida
-
-- Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
-
-- Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar 
-
-- arranjar spriteSheet ascii
-
-- escolher diferentes tracks
-
-- por a meta a dar no sitio certo em cada track!
-
-MAIS TARDE:
-
-NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
-
-- Implementação de colisões com powerups, obstaculos, relva (redução de vel quando fora da pista) e inimigo
-
+- NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - animações por keyframes
-
-- shaders
-
-- sistema de particulas
-
 - nivel de dificuldade 
-
-
-- fazer track usando catmull
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
+- sistema de particulas
+- shaders
