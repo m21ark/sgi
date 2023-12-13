@@ -177,10 +177,16 @@ export class GridParser {
    * Create materials for the curve elements: the mesh, the line and the wireframe
    */
   createCurveMaterialsTextures() {
-    // const texture = new THREE.TextureLoader().load("./images/uvmapping.jpg");
-    // texture.wrapS = THREE.RepeatWrapping;
+    const texture = new THREE.TextureLoader().load("./assets/Road-texture.jpg");
+    texture.wrapS = THREE.RepeatWrapping;
 
-    this.material = new THREE.MeshBasicMaterial(/* { map: texture } */);
+    this.material = new THREE.MeshPhongMaterial({
+      map: texture,
+      side: THREE.DoubleSide,
+      color: 0xffffff,
+      shininess: 100,
+      specular: 0xaaaaaa,
+    });
     /*     this.material.map.repeat.set(3, 3);
     this.material.map.wrapS = THREE.RepeatWrapping;
     this.material.map.wrapT = THREE.RepeatWrapping; */
@@ -197,7 +203,7 @@ export class GridParser {
 
   makeCatmullCurve(group) {
     this.segments = 100;
-    this.width = 2;
+    this.width = 3;
     this.textureRepeat = 1;
     this.showWireframe = true;
     this.showMesh = true;
@@ -205,6 +211,7 @@ export class GridParser {
     this.closedCurve = false;
 
     let pathOfTrack = this.getKeyPath(false);
+    
 
     //    console.log(pathOfTrack);
     for (let i = 0; i < pathOfTrack.length - 2; i++) {
@@ -217,6 +224,14 @@ export class GridParser {
       this.createCurveMaterialsTextures();
       this.createCurveObjects(group);
     }
+
+    // this.path = new THREE.CatmullRomCurve3(
+    //   pathOfTrack.map((pos) => new THREE.Vector3(pos[0], 0, pos[2]))
+    // )
+
+
+    // this.createCurveMaterialsTextures();
+    // this.createCurveObjects(group);
   }
 
   /**
@@ -227,7 +242,7 @@ export class GridParser {
       this.path,
       this.segments,
       this.width,
-      3,
+      8,
       this.closedCurve
     );
     this.mesh = new THREE.Mesh(geometry, this.material);
@@ -246,11 +261,11 @@ export class GridParser {
     this.line.visible = this.showLine;
 
     this.curve.add(this.mesh);
-    this.curve.add(this.wireframe);
+    //this.curve.add(this.wireframe);
     this.curve.add(this.line);
 
     this.curve.rotateX(-Math.PI / 2);
-    this.curve.scale.set(1, 0.2, 1);
+    this.curve.scale.set(1, -0.2, 1);
     group.add(this.curve);
   }
 
