@@ -10,6 +10,7 @@ import { MyAICar } from "./MyAICar.js";
 import { GridParser } from "./SceneParser.js";
 import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
+import { MyCar } from "./MyCar.js";
 
 /**
  * MyContents.js
@@ -513,7 +514,12 @@ class MyContents {
           geometry = this.objectBuilder.createTriangle(rep);
           break;
         case "model3d":
-          this.objectBuilder.create3dModel(rep, this.sceneDir, obj.group);
+          if (!rep.filepath.includes("kart")) 
+            this.objectBuilder.create3dModel(rep, this.sceneDir, obj.group);
+          else{
+            this.objectBuilder.create3dModel(rep, this.sceneDir, MyCar.availableCars);
+          }
+
           break;
         case "sphere":
           geometry = this.objectBuilder.createSphere(rep);
@@ -993,10 +999,11 @@ class MyContents {
       color: 0xffffff,
       wireframe: true,
     }); // Customize color as needed
-    this.player = new THREE.Mesh(playerGeometry, playerMaterial);
+    // this.player = new THREE.Mesh(playerGeometry, playerMaterial);
+    this.player = new MyCar();
     // this.player.position.set(-100, 40, -120);
-    this.player.position.set(200, 10, 10);
-
+    this.player.position.set(200, 0.5, 10);
+    this.player.rotation.x = 0.0;
     this.app.scene.add(this.player);
   }
 
@@ -1064,17 +1071,14 @@ class MyContents {
 
     // Vertical rotation
     if (this.keyboard["arrowleft"]) {
-      this.player.rotation.x = 0;
       this.player.rotation.y += rotationSpeed;
     }
     if (this.keyboard["arrowright"]) {
-      this.player.rotation.x = 0;
       this.player.rotation.y -= rotationSpeed;
     }
 
     if (this.keyboard["r"]) {
       // reset rotation
-      this.player.rotation.x = 0;
       this.player.rotation.y = 0;
       this.player.rotation.z = 0;
       this.keyboard["r"] = false;
@@ -1111,7 +1115,7 @@ class MyContents {
     const cameraPosition = this.app.activeCamera.position;
 
     // Calculate a position relative to the player's rotation
-    const relativeCameraOffset = new THREE.Vector3(0, 1, -4); // Adjust the offset as needed
+    const relativeCameraOffset = new THREE.Vector3(0, 2, -4); // Adjust the offset as needed
     const cameraOffset = relativeCameraOffset.applyQuaternion(
       this.player.quaternion
     );
