@@ -1,5 +1,8 @@
-export class MyCar {
-  constructor(maxVel = 5, velInc = 0.1) {
+import * as THREE from "three";
+
+export class MyCar extends THREE.Object3D {
+  constructor(maxVel = 5, velInc = 0.1, carUsed = 0) {
+    super()
     // VELOCITY
     this.maxVel = maxVel;
     this.velInc = velInc;
@@ -24,6 +27,8 @@ export class MyCar {
     this.obstacleTimeOut = -1;
     this.obstacle = null;
     this.switchedControls = false;
+
+    this.add(MyCar.availableCars.children[carUsed].clone());
   }
 
   hasPowerUpEffect() {
@@ -96,7 +101,7 @@ export class MyCar {
   }
 
   hitPowerUp(powerup) {
-    if (this.hasPowerUpEffect) return;
+    if (this.hasPowerUpEffect()) return;
     this.powerup = powerup;
     let conf = powerup.getParams();
 
@@ -108,7 +113,7 @@ export class MyCar {
   }
 
   hitObstacle(obstacle) {
-    if (this.hasObstacleEffect) return;
+    if (this.hasObstacleEffect()) return;
     this.obstacle = obstacle;
     let conf = powerup.getParams();
 
@@ -119,6 +124,8 @@ export class MyCar {
     this.switchedControls = conf.get("changeControls");
   }
 }
+
+MyCar.availableCars = new THREE.Group();
 
 // ============== TYPES ==============
 /*

@@ -246,6 +246,7 @@ export class ObjectBuilder {
               (obj) => {
                 const model = obj;
                 group.add(model);
+                
                 resolve(model.geometry);
               },
               undefined,
