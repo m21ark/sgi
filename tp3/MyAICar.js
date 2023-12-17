@@ -27,7 +27,7 @@ export class MyAICar {
 
     this.aiCar = MyCar.availableCars.children[0].clone();
     let position = [... this.locateFlagStart()];
-    this.aiCar.position.set(position[0], position[1] + 0.05, position[2]);
+    this.aiCar.position.set(position[0], position[1], position[2]);
     this.aiCar.rotation.y = -Math.PI / 2;
     secne.add(this.aiCar);
 

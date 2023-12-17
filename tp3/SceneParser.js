@@ -254,7 +254,7 @@ export class GridParser {
 
     this.pathPoints = curve.getPoints(100);
 
-    const catmullTrack = new CatmullTrack(curve, 7, 1, 7, 8);
+    const catmullTrack = new CatmullTrack(curve, 7, 0.1, 7, 8);
     
     this.createCurveMaterialsTextures();
 
