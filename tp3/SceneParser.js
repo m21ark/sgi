@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { ObjectBuilder } from "./builders/ObjectBuilder.js";
 import { MyBillboard } from "./MyBillboard.js";
+import { CatmullTrack } from "./tracks/CatmullTrack.js";
 
 export class GridParser {
   constructor() {
@@ -183,6 +184,7 @@ export class GridParser {
     this.material = new THREE.MeshPhongMaterial({
       map: texture,
       side: THREE.DoubleSide,
+      vertexColors: THREE.VertexColors,
       color: 0xffffff,
       shininess: 100,
       specular: 0xaaaaaa,
@@ -202,72 +204,25 @@ export class GridParser {
   }
 
   makeCatmullCurve(group) {
-    this.segments = 100;
-    this.width = 3;
-    this.textureRepeat = 1;
-    this.showWireframe = true;
-    this.showMesh = true;
-    this.showLine = true;
-    this.closedCurve = false;
+    const curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-10, 0, 10),
+      new THREE.Vector3(-5, 0, 5),
+      new THREE.Vector3(0, 0, 10),
+    ]);
 
-    let pathOfTrack = this.getKeyPath(false);
+    const catmullTrack = new CatmullTrack(curve, 1, 1, 7, 5);
     
+    this.createCurveMaterialsTextures();
 
-    //    console.log(pathOfTrack);
-    for (let i = 0; i < pathOfTrack.length - 2; i++) {
-      this.path = new THREE.CatmullRomCurve3(
-        pathOfTrack
-          .slice(i, i + 3)
-          .map((pos) => new THREE.Vector3(pos[0], 0, pos[2]))
-      );
-
-      this.createCurveMaterialsTextures();
-      this.createCurveObjects(group);
-    }
-
-    // this.path = new THREE.CatmullRomCurve3(
-    //   pathOfTrack.map((pos) => new THREE.Vector3(pos[0], 0, pos[2]))
-    // )
+    const mesh = new THREE.Mesh(catmullTrack.geometry, this.material);
 
 
-    // this.createCurveMaterialsTextures();
-    // this.createCurveObjects(group);
+    mesh.rotateX(-Math.PI / 2);
+    mesh.scale.set(1, 1, 1);
+    group.add(mesh);
   }
 
-  /**
-   * Creates the mesh, the line and the wireframe used to visualize the curve
-   */
-  createCurveObjects(group) {
-    let geometry = new THREE.TubeGeometry(
-      this.path,
-      this.segments,
-      this.width,
-      8,
-      this.closedCurve
-    );
-    this.mesh = new THREE.Mesh(geometry, this.material);
-    this.wireframe = new THREE.Mesh(geometry, this.wireframeMaterial);
-
-    let points = this.path.getPoints(this.segments);
-    let bGeometry = new THREE.BufferGeometry().setFromPoints(points);
-
-    // Create the final object to add to the scene
-    this.line = new THREE.Line(bGeometry, this.lineMaterial);
-
-    this.curve = new THREE.Group();
-
-    this.mesh.visible = this.showMesh;
-    this.wireframe.visible = this.showWireframe;
-    this.line.visible = this.showLine;
-
-    this.curve.add(this.mesh);
-    //this.curve.add(this.wireframe);
-    this.curve.add(this.line);
-
-    this.curve.rotateX(-Math.PI / 2);
-    this.curve.scale.set(1, -0.2, 1);
-    group.add(this.curve);
-  }
+  
 
   getKeyPath(simplify = true) {
     let path = [];
