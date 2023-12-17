@@ -93,8 +93,8 @@ class MyContents {
 
     // =============== AI CAR =====================
 
-    //this.AICar = new MyAICar(this.gridParser.getKeyPath());
-    //this.AICar.addAICar(this.app.scene);
+    this.AICar = new MyAICar(this.gridParser.getKeyPath());
+    this.AICar.addAICar(this.app.scene);
 
     // =============== MENUS =====================
 

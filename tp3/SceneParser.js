@@ -87,15 +87,16 @@ export class GridParser {
       points.push(new THREE.Vector3(point.x, 0, point.z));
     });
 
+
     this.makeCatmullCurve(group, points);
 
     // ================ GRASS =================
     // create a big square around the track
-    const square = new THREE.PlaneGeometry(300, 300);
+    const square = new THREE.PlaneGeometry(260, 260);
     const squareMesh = new THREE.Mesh(square, this.greenTileMat);
     squareMesh.rotateX(-Math.PI / 2);
 
-    squareMesh.position.set(150, 0, 150);
+    squareMesh.position.set(130, 0, 130);
     group.add(squareMesh);
 
     // ================ OBSTACLES =================
@@ -251,7 +252,9 @@ export class GridParser {
   makeCatmullCurve(group, points) {
     const curve = new THREE.CatmullRomCurve3(points);
 
-    const catmullTrack = new CatmullTrack(curve, 1, 1, 7, 5);
+    this.pathPoints = curve.getPoints(100);
+
+    const catmullTrack = new CatmullTrack(curve, 7, 1, 7, 8);
     
     this.createCurveMaterialsTextures();
 
@@ -264,32 +267,12 @@ export class GridParser {
 
   
 
-  getKeyPath(simplify = true) {
-    let path = [];
-    this.keyPath.forEach((coord) => {
-      path.push([coord.y * 5, 2, coord.x * 5]);
-    });
-
-    if (simplify) {
-      // if 2 adjacent points only differ in one axis
-      // remove the second one (excluding the first and last points)
-      for (let i = 1; i < path.length - 1; i++) {
-        const p1 = path[i - 1];
-        const p2 = path[i];
-        const p3 = path[i + 1];
-
-        if (
-          (p1[0] === p2[0] && p2[0] === p3[0]) ||
-          (p1[2] === p2[2] && p2[2] === p3[2])
-        ) {
-          path.splice(i, 1);
-          i--;
-        }
-      }
+  getKeyPath() {
+    let path = [...this.pathPoints] ;
+    for (let i = 0; i < path.length; i++) {
+      path[i].y += 0.47;
     }
-
-    path.push(path[0]);
-    return path;
+    return this.pathPoints;
   }
 
   createPowerup(x, y) {

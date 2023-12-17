@@ -127,15 +127,3 @@ export class MyCar extends THREE.Object3D {
 
 MyCar.availableCars = new THREE.Group();
 
-// ============== TYPES ==============
-/*
-
-let p1 = MyPowerUp(timeEffect=1, timeBoost = -5)
-let p2 = MyPowerUp(velMultiplyer = 2)
-let p3 = MyPowerUp(invulnerable=true)
-
-let o1 = MyObstacle(timeEffect=1, timeBoost = 5)
-let o2 = MyObstacle(velMultiplyer = 0.7)
-let o3 = MyObstacle(switchedControls=true)
-
-*/

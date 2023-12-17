@@ -23,16 +23,12 @@ export class MyAICar {
   }
 
   addAICar(secne) {
-    // create box to be car
-    const geometry = new THREE.BoxGeometry(1, 3, 1);
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xffff00,
-      specular: 0x111111,
-      shininess: 30,
-    });
-    this.aiCar = new THREE.Mesh(geometry, material);
-    this.aiCar.position.set(...this.locateFlagStart());
-    this.aiCar.rotation.set(0, 0, 0);
+
+
+    this.aiCar = MyCar.availableCars.children[0].clone();
+    let position = [... this.locateFlagStart()];
+    this.aiCar.position.set(position[0], position[1] + 0.05, position[2]);
+    this.aiCar.rotation.y = -Math.PI / 2;
     secne.add(this.aiCar);
 
     // add a small translucid blue spehere to each key point
