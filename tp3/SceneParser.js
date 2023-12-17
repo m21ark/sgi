@@ -52,10 +52,15 @@ export class GridParser {
     this.trees = [];
   }
 
+  async readJSON(filePath) {
+    const response = await fetch(filePath);
+    const data = await response.json();
+    return data;
+  }
+
   async buildGridGroup(track_number) {
-    const csvPath = "tracks/track_" + track_number + ".csv";
-    const csv = await this.readCSV(csvPath);
-    const rows = csv.trim().split("\n");
+    const csvPath = "tracks/track_" + track_number + ".json";
+    const json = await this.readJSON(csvPath);
 
     const group = new THREE.Group();
 
@@ -75,80 +80,115 @@ export class GridParser {
       this.obstacleItem
     );
 
-    for (let i = 0; i < rows.length; i++) {
-      const columns = rows[i].split(",");
+    // ================ CURVE =================
+    // catmull curve from the json
+    const points = [];
+    json.track.forEach((point) => {
+      points.push(new THREE.Vector3(point.x, 0, point.z));
+    });
 
-      for (let j = 0; j < columns.length; j++) {
-        const value = parseInt(columns[j]);
+    this.makeCatmullCurve(group, points);
 
-        const xy1 = [5 * i, 5 * j];
-        const xy2 = [5 * (i + 1), 5 * (j + 1)];
+    // ================ GRASS =================
+    // create a big square around the track
+    const square = new THREE.PlaneGeometry(300, 300);
+    const squareMesh = new THREE.Mesh(square, this.greenTileMat);
+    squareMesh.rotateX(-Math.PI / 2);
 
-        let obj = null;
-        let extraObj = null;
-        let geo = this.objBuilder.createTileGeometry(xy1, xy2);
+    squareMesh.position.set(150, 0, 150);
+    group.add(squareMesh);
 
-        switch (value) {
-          case 0: // grass
-            obj = new THREE.Mesh(geo, this.greenTileMat);
-            break;
-          case 1: // grass (it was originally the pixelated gray path)
-            obj = new THREE.Mesh(geo, this.greenTileMat);
-            break;
-          case 2: // white/black flag
-            obj = new THREE.Mesh(geo, this.endFlagMat);
-            break;
-          case 3: // powerup
-            obj = new THREE.Mesh(geo, this.greyTileMat);
-            extraObj = this.createPowerup(xy1, xy2);
-            break;
-          case 4: // obstacle
-            obj = new THREE.Mesh(geo, this.greyTileMat);
-            extraObj = this.createObstacle(xy1, xy2);
-            break;
-          case 5: // grass
-            obj = new THREE.Mesh(geo, this.greenTileMat);
-            break;
-          case 6: // BILLBOARD TREE
-            obj = this.createTree(xy1, xy2);
-            this.trees.push(obj);
-            extraObj = new THREE.Mesh(geo, this.greenTileMat);
-            break;
-          default:
-            console.error("Invalid value in CSV");
-            break;
-        }
+    // ================ OBSTACLES =================
 
-        if (obj) group.add(obj);
-        if (extraObj) group.add(extraObj);
-      }
-    }
+    json.obstacles.forEach((obstacle) => {
+      console.log(obstacle);
+      console.log(obstacle.x);
+      const obstacleMesh = this.createObstacle(obstacle.x, obstacle.z);
+      group.add(obstacleMesh);
+    });
 
-    group.rotateX(Math.PI / 2);
+    // ================ POWERUPS =================
+
+    json.powerups.forEach((powerup) => {
+      const powerupMesh = this.createPowerup(powerup.x, powerup.z);
+      group.add(powerupMesh);
+    });
+
+
+
+
+
+
+    // for (let i = 0; i < rows.length; i++) {
+    //   const columns = rows[i].split(",");
+
+    //   for (let j = 0; j < columns.length; j++) {
+    //     const value = parseInt(columns[j]);
+
+    //     const xy1 = [5 * i, 5 * j];
+    //     const xy2 = [5 * (i + 1), 5 * (j + 1)];
+
+    //     let obj = null;
+    //     let extraObj = null;
+    //     let geo = this.objBuilder.createTileGeometry(xy1, xy2);
+
+    //     switch (value) {
+    //       case 0: // grass
+    //         obj = new THREE.Mesh(geo, this.greenTileMat);
+    //         break;
+    //       case 1: // grass (it was originally the pixelated gray path)
+    //         obj = new THREE.Mesh(geo, this.greenTileMat);
+    //         break;
+    //       case 2: // white/black flag
+    //         obj = new THREE.Mesh(geo, this.endFlagMat);
+    //         break;
+    //       case 3: // powerup
+    //         obj = new THREE.Mesh(geo, this.greyTileMat);
+    //         extraObj = this.createPowerup(xy1, xy2);
+    //         break;
+    //       case 4: // obstacle
+    //         obj = new THREE.Mesh(geo, this.greyTileMat);
+    //         extraObj = this.createObstacle(xy1, xy2);
+    //         break;
+    //       case 5: // grass
+    //         obj = new THREE.Mesh(geo, this.greenTileMat);
+    //         break;
+    //       case 6: // BILLBOARD TREE
+    //         obj = this.createTree(xy1, xy2);
+    //         this.trees.push(obj);
+    //         extraObj = new THREE.Mesh(geo, this.greenTileMat);
+    //         break;
+    //       default:
+    //         console.error("Invalid value in CSV");
+    //         break;
+    //     }
+
+    //     if (obj) group.add(obj);
+    //     if (extraObj) group.add(extraObj);
+    //   }
+    // }
 
     //  ===================================================================
 
-    const grid = rows.map((line) => line.split(",").map(Number));
+    //const grid = rows.map((line) => line.split(",").map(Number));
     // FIND grid start coord
-    let startCoord = null;
-
-    for (let i = 0; i < grid.length; i++) {
-      const line = grid[i];
-      for (let j = 0; j < line.length; j++) {
-        const value = line[j];
-        if (value === 2) {
-          startCoord = { x: i, y: j };
-          break;
-        }
-      }
-      if (startCoord) break;
-    }
+    // let startCoord = null;
+// 
+    // for (let i = 0; i < grid.length; i++) {
+    //   const line = grid[i];
+    //   for (let j = 0; j < line.length; j++) {
+    //     const value = line[j];
+    //     if (value === 2) {
+    //       startCoord = { x: i, y: j };
+    //       break;
+    //     }
+    //   }
+    //   if (startCoord) break;
+    // }
 
     // console.log(startCoord);
 
-    this.keyPath = this.bfs(grid, startCoord);
-
-    this.makeCatmullCurve(group);
+    //this.keyPath = this.bfs(grid, startCoord);
 
     return group;
   }
@@ -203,12 +243,8 @@ export class GridParser {
     this.lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
   }
 
-  makeCatmullCurve(group) {
-    const curve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-10, 0, 10),
-      new THREE.Vector3(-5, 0, 5),
-      new THREE.Vector3(0, 0, 10),
-    ]);
+  makeCatmullCurve(group, points) {
+    const curve = new THREE.CatmullRomCurve3(points);
 
     const catmullTrack = new CatmullTrack(curve, 1, 1, 7, 5);
     
@@ -217,7 +253,6 @@ export class GridParser {
     const mesh = new THREE.Mesh(catmullTrack.geometry, this.material);
 
 
-    mesh.rotateX(-Math.PI / 2);
     mesh.scale.set(1, 1, 1);
     group.add(mesh);
   }
@@ -252,21 +287,17 @@ export class GridParser {
     return path;
   }
 
-  createPowerup(xy1, xy2) {
+  createPowerup(x, y) {
     const item = this.powerupItem.clone();
-    const x = (xy1[0] + xy2[0]) / 2;
-    const y = (xy1[1] + xy2[1]) / 2;
-    item.position.set(x, y, -0.15);
+    item.position.set(x, 0.15, y);
+    item.rotateX(Math.PI / 2);
     item.scale.set(0.025, 0.025, 0.025);
     return item;
   }
 
-  createObstacle(xy1, xy2) {
+  createObstacle(x, y) {
     const item = this.obstacleItem.clone();
-    const x = (xy1[0] + xy2[0]) / 2;
-    const y = (xy1[1] + xy2[1]) / 2;
-    item.position.set(x, y, -1.4);
-    item.rotateX(-Math.PI / 2);
+    item.position.set(x, 1.4, y);
     item.scale.set(0.2, 0.2, 0.2);
     return item;
   }
