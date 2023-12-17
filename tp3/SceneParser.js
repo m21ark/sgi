@@ -227,14 +227,13 @@ export class GridParser {
     const texture = new THREE.TextureLoader().load("./assets/Road-texture.jpg");
     texture.wrapS = THREE.RepeatWrapping;
 
-    this.material = new THREE.MeshPhongMaterial({
+    this.material = new THREE.MeshBasicMaterial({
       map: texture,
-      side: THREE.DoubleSide,
-      vertexColors: THREE.VertexColors,
+
       color: 0xffffff,
-      shininess: 100,
-      specular: 0xaaaaaa,
+
     });
+   
     /*     this.material.map.repeat.set(3, 3);
     this.material.map.wrapS = THREE.RepeatWrapping;
     this.material.map.wrapT = THREE.RepeatWrapping; */
@@ -257,6 +256,9 @@ export class GridParser {
     const catmullTrack = new CatmullTrack(curve, 7, 0.1, 7, 8);
     
     this.createCurveMaterialsTextures();
+
+    this.material.vertexColors = true;
+    this.material.needsUpdate = true;
 
     const mesh = new THREE.Mesh(catmullTrack.geometry, this.material);
 
