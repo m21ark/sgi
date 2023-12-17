@@ -114,6 +114,15 @@ export class GridParser {
       group.add(powerupMesh);
     });
 
+    // ================ TREES =================
+
+    json.trees.forEach((tree) => {
+      const treeMesh = this.createTree(tree.x, tree.z);
+      this.trees.push(treeMesh);
+      group.add(treeMesh);
+    });
+
+
 
 
 
@@ -197,9 +206,7 @@ export class GridParser {
     return this.trees;
   }
 
-  createTree(xy1, xy2) {
-    const x = (xy1[0] + xy2[0]) / 2;
-    const y = (xy1[1] + xy2[1]) / 2;
+  createTree(x, y) {
 
     let tree = new MyBillboard([
       "assets/tree1.png",
@@ -207,9 +214,7 @@ export class GridParser {
       "assets/tree3.png",
     ]);
 
-    tree.position.set(x, y, -3.5);
-
-    tree.rotateX(-Math.PI / 2);
+    tree.position.set(x, 3.5, y);
 
     return tree;
   }
