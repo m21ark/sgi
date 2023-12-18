@@ -194,7 +194,9 @@ class MyContents {
   /**
    * Updates the content.
    */
-  update() {}
+  update() {
+    if (this.AICar != undefined) this.AICar.update();
+   }
 
   // ===================================== LOADERS =====================================
 
@@ -514,9 +516,9 @@ class MyContents {
           geometry = this.objectBuilder.createTriangle(rep);
           break;
         case "model3d":
-          if (!rep.filepath.includes("kart")) 
+          if (!rep.filepath.includes("kart"))
             this.objectBuilder.create3dModel(rep, this.sceneDir, obj.group);
-          else{
+          else {
             this.objectBuilder.create3dModel(rep, this.sceneDir, MyCar.availableCars);
           }
 
@@ -1089,7 +1091,10 @@ class MyContents {
 
     // =============== AI CAR =====================
 
-    if (this.AICar != undefined && this.moveCar) this.AICar.moveAICar();
+    if (this.AICar != undefined && this.moveCar) {
+      this.moveCar = false;
+      this.AICar.moveAICar();
+    }
 
     requestAnimationFrame(() => {
       this.animate();
@@ -1103,7 +1108,8 @@ class MyContents {
       });
   }
 
-  toogleMoveCar() {
+  toggleMoveCar() {
+    console.log("toggleMoveCar");
     this.moveCar = !this.moveCar;
   }
 

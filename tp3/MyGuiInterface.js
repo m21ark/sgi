@@ -37,10 +37,7 @@ class MyGuiInterface {
 
     moveCarFolder
       .add(this.contents, "moveCar", false)
-      .name("moveCar")
-      .onChange(() => {
-        this.contents.toggleMoveCar();
-      });
+      .name("moveCar");
 
     moveCarFolder
       .add(this.contents, "showAIKeyPoints", false)
