@@ -69,7 +69,7 @@ export class MyAICar {
       this.mixer.update(delta);
   }
 
-  moveAICar() {
+  moveAICar(speed = 0.35, laps = 2) {
     if (this.currentKeyPointIndex === this.keyPoints.length) return;
     
     if (this.aiCar !== undefined)
@@ -78,17 +78,19 @@ export class MyAICar {
 
         // using keyframes ... use the path points to make a animation for the car ... you should make a rotation of the car, that rotates the car based on the angle of the last position and the angle of the next position
 
-        
-        
         let flat_keypoints = [];
-        this.keyPoints.forEach((keyPoint) => {
-          flat_keypoints.push(...keyPoint);
-        });
-        
-        console.log(flat_keypoints);
-        const indeces = this.keyPoints.map((_, i) => i);
+        for (let i = 0; i < laps; i++)
+          this.keyPoints.forEach((keyPoint) => {
+            flat_keypoints.push(...keyPoint);
+          });
 
-        console.log(indeces);
+
+        const indeces = this.keyPoints.map((_, i) => i * speed);
+        
+        for (let i = 0; i < laps; i++)
+          for (let j = 0; j < this.indeces; j++)
+            indeces.push(indeces[j]);
+
 
         const positionKF = new THREE.VectorKeyframeTrack('.position', indeces,
           flat_keypoints,
