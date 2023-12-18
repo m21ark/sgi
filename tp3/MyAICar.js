@@ -7,6 +7,7 @@ export class MyAICar {
 
     // Key points for the AI to follow
     this.keyPoints = keyPoints;
+    this.keyPoints.push(this.keyPoints[0]);
     this.currentKeyPointIndex = 0;
 
     this.clock = new THREE.Clock()
@@ -71,50 +72,57 @@ export class MyAICar {
 
   moveAICar(speed = 0.35, laps = 2) {
     if (this.currentKeyPointIndex === this.keyPoints.length) return;
-    
+
     if (this.aiCar !== undefined)
-    
-    if (this.aiCar.position !== undefined) {
+
+      if (this.aiCar.position !== undefined) {
 
         // using keyframes ... use the path points to make a animation for the car ... you should make a rotation of the car, that rotates the car based on the angle of the last position and the angle of the next position
 
         let flat_keypoints = [];
-        for (let i = 0; i < laps; i++)
+        for (let i = 0; i < laps; i++) {
           this.keyPoints.forEach((keyPoint) => {
             flat_keypoints.push(...keyPoint);
           });
+        }
 
-
-        const indeces = this.keyPoints.map((_, i) => i * speed);
         
-        for (let i = 0; i < laps; i++)
-          for (let j = 0; j < this.indeces; j++)
-            indeces.push(indeces[j]);
+        const indices = this.keyPoints.map((_, i) => i * speed);
+        
 
+        let rotationKeyframes = [];
+        for (let i = 0; i < laps; i++) {
+          this.keyPoints.forEach((keyPoint, index) => {
+            let nextKeyPoint = this.keyPoints[index + 1];
+            if (nextKeyPoint === undefined) nextKeyPoint = this.keyPoints[0];
 
-        const positionKF = new THREE.VectorKeyframeTrack('.position', indeces,
-          flat_keypoints,
-          THREE.InterpolateSmooth
-        )
-
-        const rotationKF = new THREE.VectorKeyframeTrack('.rotation', indeces,
-          [... this.keyPoints].map((keyPoint, i) => {
-            const nextKeyPoint = this.keyPoints[i + 1];
-            if (nextKeyPoint === undefined) return keyPoint;
             const direction = new THREE.Vector3(...nextKeyPoint).sub(new THREE.Vector3(...keyPoint)).normalize();
             const angle = Math.atan2(direction.x, direction.z);
-            return [0, angle, 0];
-          }),
+            const quaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+            rotationKeyframes.push(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+          });
+        }
+        
+        const rotationKF = new THREE.QuaternionKeyframeTrack('.quaternion', indices,
+          rotationKeyframes,
+        );
+
+        const positionKF = new THREE.VectorKeyframeTrack('.position', indices,
+          flat_keypoints,
           THREE.InterpolateSmooth
-        )
+        );
 
         const clip = new THREE.AnimationClip('positionAnimation', 100, [positionKF]);
+
+        const rotationClip = new THREE.AnimationClip('rotationAnimation', 100, [rotationKF]);
 
         this.mixer = new THREE.AnimationMixer(this.aiCar);
 
         const action = this.mixer.clipAction(clip);
-
         action.play();
+
+        const rotationAction = this.mixer.clipAction(rotationClip);
+        rotationAction.play();
       }
   }
 }
