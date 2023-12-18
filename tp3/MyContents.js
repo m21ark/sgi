@@ -84,7 +84,7 @@ class MyContents {
     this.gridGroup = await this.gridParser.buildGridGroup(1);
     this.app.scene.add(this.gridGroup);
     this.trees = this.gridParser.getTrees();
-
+    this.hitabbleObjs = this.gridParser.getHitabbleObjs();
     // ============== Player ====================
 
     this.addPlayer();
@@ -191,11 +191,30 @@ class MyContents {
     textDraw.write(this.app.scene, 0, 5, 2, "Tenho fome", 12, "0xFF0000");
   }
 
+  checkCollision(carBB, hitabbleObjs) {
+
+    for (const hitabble of hitabbleObjs) {
+      if (carBB.intersectsBox(hitabble)) {
+        console.log("COLLISION");
+        return true;
+      }
+    }
+  }
+
   /**
    * Updates the content.
    */
   update() {
     if (this.AICar != undefined) this.AICar.update();
+
+    // print player prototype 
+
+    if (this.player != null && this.player.carBB != null && this.hitabbleObjs != null) {
+
+      this.player.carBB.copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0])).applyMatrix4(this.player.matrixWorld);
+
+      this.checkCollision(this.player.carBB, this.hitabbleObjs);
+    } 
    }
 
   // ===================================== LOADERS =====================================

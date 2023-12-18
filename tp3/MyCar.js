@@ -29,6 +29,9 @@ export class MyCar extends THREE.Object3D {
     this.switchedControls = false;
 
     this.add(MyCar.availableCars.children[carUsed].clone());
+
+    this.carBB = new THREE.Box3().setFromObject(this); // bounding box
+    
   }
 
   hasPowerUpEffect() {
