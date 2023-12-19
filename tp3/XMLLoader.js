@@ -2,37 +2,18 @@ import * as THREE from "three";
 import { LightBuilder } from "./builders/LightBuilder.js";
 import { ObjectBuilder } from "./builders/ObjectBuilder.js";
 import { MipMapLoader } from "./builders/MipMapLoader.js";
-import { MyFileReader } from "./parser/MyFileReader.js";
 import { MyCar } from "./MyCar.js";
 
 export class XMLLoader {
   constructor(contents) {
     this.app = contents.app;
-
-    this.lightBuilder = new LightBuilder(this.app, this);
+    this.lightBuilder = new LightBuilder(this.app, contents);
     this.objectBuilder = new ObjectBuilder();
-
-    // Variables to store the contents of the scene
     this.materials = [];
-    this.lights = [];
     this.textures = [];
     this.textureNode = new Map();
     this.cameras = [];
-    this.camerasNames = [];
-
-    // GUI variables
     this.useLightHelpers = false;
-    this.lightsOn = true;
-    this.showHelpers = false;
-    this.showControlPoints = false;
-    this.controlPoints = [];
-    this.moveCar = false;
-    this.showAIKeyPoints = false;
-
-    this.useTextures = true;
-    this.useBumpMaps = true;
-    this.shadowBias = 0;
-
     this.sceneDir = "scene/";
   }
 
@@ -410,9 +391,8 @@ export class XMLLoader {
         default:
           console.log("ERROR: light type not supported");
       }
-
-      parentNode.add(light);
-      if (this.useLightHelpers) parentNode.add(helper);
+      if (light) parentNode.add(light);
+      // if (this.useLightHelpers) parentNode.add(helper);
       return;
     }
     // go down the tree if node has children
@@ -607,7 +587,6 @@ export class XMLLoader {
       }
 
       this.app.scene.add(this.cameras[camera.id]);
-      this.camerasNames.push(camera.id);
     }
     this.app.activeCamera = this.cameras[activeCameraId];
   }

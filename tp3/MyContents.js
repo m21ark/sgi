@@ -1,11 +1,6 @@
 import * as THREE from "three";
-import { MyAxis } from "./MyAxis.js";
 import { MyFileReader } from "./parser/MyFileReader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { LightBuilder } from "./builders/LightBuilder.js";
-import { ObjectBuilder } from "./builders/ObjectBuilder.js";
-import { MipMapLoader } from "./builders/MipMapLoader.js";
-import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { MyAICar } from "./MyAICar.js";
 import { GridParser } from "./SceneParser.js";
 import { MenuController } from "./MenuController.js";
@@ -28,30 +23,20 @@ export class MyContents {
    */
   constructor(app) {
     this.app = app;
-
-    this.lightBuilder = new LightBuilder(app, this);
-    this.objectBuilder = new ObjectBuilder();
-
-    // Variables to store the contents of the scene
-    this.materials = [];
-    this.lights = [];
-    this.textures = [];
-    this.textureNode = new Map();
     this.cameras = [];
-    this.camerasNames = [];
+    this.lights = [];
 
-    // GUI variables
-    this.lightsOn = true;
-    this.showHelpers = false;
     this.showControlPoints = false;
     this.controlPoints = [];
     this.moveCar = false;
     this.showAIKeyPoints = false;
 
+    // XML LOADER
     this.reader = new MyFileReader(app, this, this.loadXMLScene);
     this.sceneDir = "scene/";
     this.reader.open(this.sceneDir + "myScene.xml");
 
+    // MENU CONTROLLER
     this.menuController = new MenuController(app);
     // this.menuController.gotoMenu("main");
   }
@@ -61,7 +46,9 @@ export class MyContents {
    * Creates and attaches the axis to the scene if it doesn't exist.
    */
   async init() {
-    // TEMPORARIAMENTE AQUI
+    // ============== HUD =================
+
+    // Temporary
     this.app.MyHUD.setStatus("PLAY");
     this.app.MyHUD.setLaps(2, 5);
     this.app.MyHUD.setPosition(1, 5);
@@ -124,21 +111,6 @@ export class MyContents {
         .applyMatrix4(this.player.matrixWorld);
 
       this.checkCollision(this.player.carBB, this.hitabbleObjs);
-    }
-  }
-
-  toggleLights() {
-    for (let key in this.lights) {
-      let light = this.lights[key];
-      if (this.lightsOn) light.intensity = 200;
-      else light.intensity = 0;
-    }
-  }
-
-  toggleLightHelpers() {
-    for (let key in this.lights) {
-      if (this.showHelpers) this.app.scene.add(this.lights[key + "_helper"]);
-      else this.app.scene.remove(this.lights[key + "_helper"]);
     }
   }
 
