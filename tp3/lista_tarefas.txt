@@ -16,14 +16,14 @@ MARCO:
 - nivel de dificuldade 
 
 RICARDO:
-
-- arranjar spriteSheet ascii
 - Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
 - Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar 
 - shaders
 - Implementação de colisões com powerups, obstaculos, relva (redução de vel quando fora da pista) e inimigo
 - Menu Inicial 
 - Menu escolha de carro (nosso e da AI)
+
+- arranjar spriteSheet ascii
 
 LATER:
 
