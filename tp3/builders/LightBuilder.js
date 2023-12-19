@@ -87,6 +87,10 @@ export class LightBuilder {
     return [directionalLight, directionalLightHelper];
   }
 
+  toRadians(angle) {
+    return angle * (Math.PI / 180);
+  }
+
   /**
    * Sets up a spotlight with the provided parameters.
    *
@@ -99,7 +103,7 @@ export class LightBuilder {
       new THREE.Color(obj.color.r, obj.color.g, obj.color.b),
       obj.intensity,
       obj.distance,
-      this.contents.toRadians(obj.angle),
+      this.toRadians(obj.angle),
       obj.penumbra,
       obj.decay
     );

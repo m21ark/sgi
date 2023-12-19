@@ -35,34 +35,13 @@ class MyGuiInterface {
     const moveCarFolder = this.datgui.addFolder("Movement");
     moveCarFolder.open();
 
-    moveCarFolder
-      .add(this.contents, "moveCar", false)
-      .name("moveCar");
+    moveCarFolder.add(this.contents, "moveCar", false).name("moveCar");
 
     moveCarFolder
       .add(this.contents, "showAIKeyPoints", false)
       .name("showAIKeyPoints")
       .onChange(() => {
         this.contents.toogleShowAIKeyPoints();
-      });
-
-    // ===================================================================
-
-    const lightsFolder = this.datgui.addFolder("Lights");
-    lightsFolder.open();
-
-    lightsFolder
-      .add(this.contents, "lightsOn", true)
-      .name("lightsOn")
-      .onChange(() => {
-        this.contents.toggleLights();
-      });
-
-    lightsFolder
-      .add(this.contents, "showHelpers", true)
-      .name("showHelpers")
-      .onChange(() => {
-        this.contents.toggleLightHelpers();
       });
   }
 }
