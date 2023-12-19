@@ -5,9 +5,7 @@ export class Garage {
 
     static openGarage() {
         // search for the object named "door" in the objectModel
-        console.log(Garage.objectModel);
         const door = Garage.objectModel.getObjectByName("Door");
-        console.log(door);
 
 
         // open the door using animation rotation
@@ -28,7 +26,7 @@ export class Garage {
 
             Garage.mixer.stopAllAction(); // Stop the animation mixer to prevent further updates
             door.rotateZ(angle);
-            Garage.closeGarage(door);
+            //Garage.closeGarage(door);
         });
 
         action.play();

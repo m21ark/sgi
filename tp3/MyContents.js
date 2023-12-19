@@ -59,7 +59,7 @@ class MyContents {
     this.reader.open(this.sceneDir + "myScene.xml");
 
     this.menuController = new MenuController(app);
-    // this.menuController.gotoMenu("main");
+    this.menuController.gotoMenu("carSelect");
   }
 
   /**
@@ -80,10 +80,10 @@ class MyContents {
     this.app.MyHUD.setPosition(1, 5);
 
     // ============== TV =================
-    
+
     this.tv = new Television(this.app.scene, this.app.activeCamera, this.app.renderer);
 
-    
+
 
     // ============== GRID TRACK ====================
 

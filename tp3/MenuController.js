@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
+import { Garage } from "./Garage.js";
 
 class MenuController {
   constructor(app) {
@@ -37,6 +38,28 @@ class MenuController {
           "Camera option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
+    }
+
+
+    if (menu == "carSelect") {
+      this.app.MyHUD.setVisible(false);
+      this.app.setActiveCamera("Garage");
+      this.app.cameras["Garage"].position.set(130, 6, 120);
+      const checkGarageLoaded = setInterval(() => {
+        if (Garage.objectModel.children.length > 0) {
+          clearInterval(checkGarageLoaded);
+          console.log(Garage.objectModel.children);
+          Garage.openGarage();
+        }
+      }, 100);
+      // temporary solution
+      const garage = new THREE.PerspectiveCamera(75, 0.2, 0.1, 1000);
+      garage.position.set(160, 6, 120);
+      garage.lookAt(new THREE.Vector3(120, 6, 120));
+      this.app.cameras["Garage"] = garage;
+
+      console.log (this.app.cameras["Garage"].position);
+      return;
     }
 
     if (this.currentMenu) {
@@ -87,6 +110,7 @@ class MenuController {
   }
 
   loadMenuCarSelect() {
+
     this.carSelectingMenu = new MyMenu(this.app, "Car Select", -400);
     this.carSelectingMenu.addButton("Car 1", () => {
       console.log("Clicked Car 1");
