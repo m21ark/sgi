@@ -58,7 +58,7 @@ class MyContents {
     this.reader.open(this.sceneDir + "myScene.xml");
 
     this.menuController = new MenuController(app);
-
+    // this.menuController.gotoMenu("main");
   }
 
   /**

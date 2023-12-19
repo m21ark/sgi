@@ -51,7 +51,7 @@ export class MyMenu {
       menuBackground,
       -midWidth / 20, // Centered in width todo: isto ta mal
       this.height / 2 - 5, // Adjust the vertical position as needed
-      0.2,
+      0,
       this.title, // Use the title property
       fsize,
       "0xFF0000"
@@ -89,7 +89,7 @@ export class MyMenu {
 
       let buttonMesh = new THREE.Mesh(geometry, material);
 
-      buttonMesh.position.set(0, offsetY, 0.1);
+      buttonMesh.position.set(0, offsetY, -0.1);
 
       this.textWriter.write(
         group,
