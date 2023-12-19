@@ -13,10 +13,10 @@ export class Garage {
     );
     const keyFrameAnim = new THREE.QuaternionKeyframeTrack(
       ".quaternion",
-      [0, 10],
+      [0, 5],
       [0, 0, 0, 0, quaternion.x, quaternion.y, quaternion.z, quaternion.w] // pass the quaternion values as keyframes
     );
-    const keyFrameClip = new THREE.AnimationClip("Door", 10, [keyFrameAnim]);
+    const keyFrameClip = new THREE.AnimationClip("Door", 5, [keyFrameAnim]);
     Garage.mixer = new THREE.AnimationMixer(door);
 
     const action = Garage.mixer.clipAction(keyFrameClip);
@@ -39,10 +39,10 @@ export class Garage {
     );
     const keyFrameAnim = new THREE.QuaternionKeyframeTrack(
       ".quaternion",
-      [0, 10],
+      [0, 5],
       [quaternion.x, quaternion.y, quaternion.z, quaternion.w, 0, 0, 0, 0] // pass the quaternion values as keyframes
     );
-    const keyFrameClip = new THREE.AnimationClip("Door", 10, [keyFrameAnim]);
+    const keyFrameClip = new THREE.AnimationClip("Door", 5, [keyFrameAnim]);
     Garage.mixer = new THREE.AnimationMixer(door);
     const action = Garage.mixer.clipAction(keyFrameClip);
     // Add an event listener for the end of the animation

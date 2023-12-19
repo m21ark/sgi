@@ -71,7 +71,7 @@ export class MenuController {
   }
 
   loadMenuMain() {
-    this.mainMenu = new MyMenu(this.app, "Main Menu", -100, "left", 1.2, "assets/car.png");
+    this.mainMenu = new MyMenu(this.app, "Main Menu", -100, "center", 1.2);
     this.mainMenu.addButton("Play", () => {
       this.gotoMenu("mapSelect");
     });
@@ -107,7 +107,14 @@ export class MenuController {
   }
 
   loadMenuMapSelect() {
-    this.MapSelectingMenu = new MyMenu(this.app, "Select Map", -500);
+    this.MapSelectingMenu = new MyMenu(
+      this.app,
+      "Select Map",
+      -500,
+      "left",
+      0.8,
+      "assets/track.jpg"
+    );
     this.MapSelectingMenu.addButton("Map 1", () => {
       this.map = 1;
       this.gotoMenu("dificultySelect");

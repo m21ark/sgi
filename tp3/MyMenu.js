@@ -94,18 +94,20 @@ export class MyMenu {
 
     if (this.sideImage) {
       let geometry = new THREE.PlaneGeometry(
-        0.45 * this.width,
-        0.3 * this.width
+        0.4 * this.width,
+        0.4 * this.width
       );
-      
+
+      let tex = new THREE.TextureLoader().load(this.sideImage);
+
       let material = new THREE.MeshPhongMaterial({
-        map: new THREE.TextureLoader().load(this.sideImage),
+        map: tex,
         transparent: true,
       });
       let sideImageMesh = new THREE.Mesh(geometry, material);
       sideImageMesh.position.set(
-        this.width / 2 - buttonWidth / 1.3,
-        -this.height / 2 + (buttonWidth / 2) * this.buttons.length,
+        this.width / 2 - buttonWidth + 5,
+        -this.height / 2 + buttonWidth / 2 + 8,
         -0.1
       );
       group.add(sideImageMesh);
