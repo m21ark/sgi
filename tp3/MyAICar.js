@@ -1,7 +1,7 @@
 import { MyCar } from "./MyCar.js";
 import * as THREE from "three";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
-
+import { Garage } from "./Garage.js";
 export class MyAICar {
   constructor(keyPoints = [[0, 0, 0]]) {
     this.aiCar = undefined;
@@ -82,6 +82,7 @@ export class MyAICar {
     if (this.aiCar !== undefined)
 
       if (this.aiCar.position !== undefined) {
+        Garage.openGarage();
 
         // using keyframes ... use the path points to make a animation for the car ... you should make a rotation of the car, that rotates the car based on the angle of the last position and the angle of the next position
 

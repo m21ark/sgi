@@ -11,6 +11,7 @@ import { GridParser } from "./SceneParser.js";
 import { MenuController } from "./MenuController.js";
 import { MyCar } from "./MyCar.js";
 import { Television } from "./Television.js";
+import { Garage } from "./Garage.js";
 
 /**
  * MyContents.js
@@ -158,7 +159,7 @@ class MyContents {
    */
   update() {
     if (this.AICar != undefined) this.AICar.update();
-
+    Garage.update();
     this.tv.updateRenderTarget(this.app.activeCamera);
     // print player prototype 
 

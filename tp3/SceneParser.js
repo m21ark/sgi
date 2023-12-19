@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { ObjectBuilder } from "./builders/ObjectBuilder.js";
 import { MyBillboard } from "./MyBillboard.js";
 import { CatmullTrack } from "./tracks/CatmullTrack.js";
+import { Garage } from "./Garage.js";
 
 export class GridParser {
   constructor() {
@@ -81,17 +82,18 @@ export class GridParser {
       "scene/",
       this.obstacleItem
     );
-    let newGroup = new THREE.Group();
+  
     this.garage = await this.objBuilder.create3dModel(
       {
         filepath: "objs/garage/smallgarage.obj",
       },
       "scene/",
-      newGroup
+      Garage.objectModel
     );
-    newGroup.scale.set(0.05, 0.05, 0.05);
-    newGroup.position.set(120, 0.1, 120);
-    group.add(newGroup);
+    Garage.objectModel.scale.set(0.05, 0.05, 0.05);
+    Garage.objectModel.position.set(120, 0.1, 120);
+    
+    group.add(Garage.objectModel);
 
     // ================ CURVE =================
     // catmull curve from the json
