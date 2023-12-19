@@ -129,11 +129,6 @@ export class GridParser {
       group.add(treeMesh);
     });
 
-
-
-
-
-
     return group;
   }
 
@@ -166,15 +161,16 @@ export class GridParser {
     texture.wrapS = THREE.RepeatWrapping;
 
     this.material = new THREE.MeshBasicMaterial({
-      map: texture,
-
-      color: 0xffffff,
-
+      // map: texture,
+      side: THREE.DoubleSide,
+      color: 0x1b1b19,
+      // emissive: 0xdddddd,
+      // wireframe:  true
     });
-   
-    /*     this.material.map.repeat.set(3, 3);
-    this.material.map.wrapS = THREE.RepeatWrapping;
-    this.material.map.wrapT = THREE.RepeatWrapping; */
+
+    // this.material.map.repeat.set(3, 3);
+    // this.material.map.wrapS = THREE.RepeatWrapping;
+    // this.material.map.wrapT = THREE.RepeatWrapping;
 
     this.wireframeMaterial = new THREE.MeshBasicMaterial({
       color: 0x0000ff,
@@ -187,11 +183,12 @@ export class GridParser {
   }
 
   makeCatmullCurve(group, points) {
+    // points.push(points[0]);
     const curve = new THREE.CatmullRomCurve3(points);
 
     this.pathPoints = curve.getPoints(100);
 
-    const catmullTrack = new CatmullTrack(curve, 7, 0.1, 7, 8);
+    const catmullTrack = new CatmullTrack(curve, 7, 0.1, 7, 16);
     
     this.createCurveMaterialsTextures();
 

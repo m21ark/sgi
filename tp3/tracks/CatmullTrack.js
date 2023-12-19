@@ -75,12 +75,11 @@ export class CatmullTrack {
             const v = 0.5;
 
             const uvArray = [
-                u, v,
-                u + 1 / (this.segments - 1), v,
-                u + 1 / (this.segments - 1), v + 1,
-                u, v + 1,
+                0.0, 0.0,
+                1.0, 0.0,
+                1.0, 1.0,
+                0.0, 1.0
             ];
-
             // uv.push(...uvArray);
             for (let j = 0; j < 6; j++) {
                 uv.push(...uvArray);
@@ -88,7 +87,7 @@ export class CatmullTrack {
 
             // Set color for each vertex
             color.setHSL(u, 1.0, 0.5);
-            for (let i = 0; i < 8; i++) colors.push(1.0, 1.0, 1.0);
+            for (let i = 0; i < 8; i++) colors.push(0.8, 0.8, 0.8);
         }
 
         const verticesFloat32Array = new Float32Array(vertices);

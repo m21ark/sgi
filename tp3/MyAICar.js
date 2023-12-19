@@ -79,6 +79,7 @@ export class MyAICar {
 
         // using keyframes ... use the path points to make a animation for the car ... you should make a rotation of the car, that rotates the car based on the angle of the last position and the angle of the next position
 
+
         let flat_keypoints = [];
         for (let i = 0; i < laps; i++) {
           this.keyPoints.forEach((keyPoint) => {
@@ -87,14 +88,16 @@ export class MyAICar {
         }
 
         
-        const indices = this.keyPoints.map((_, i) => i * speed);
+        const indices = this.keyPoints.map((_, i) => {
+          return i * speed
+        });
         
 
         let rotationKeyframes = [];
         for (let i = 0; i < laps; i++) {
           this.keyPoints.forEach((keyPoint, index) => {
             let nextKeyPoint = this.keyPoints[index + 1];
-            if (nextKeyPoint === undefined) nextKeyPoint = this.keyPoints[0];
+            if (nextKeyPoint === undefined) nextKeyPoint = this.keyPoints[1];
 
             const direction = new THREE.Vector3(...nextKeyPoint).sub(new THREE.Vector3(...keyPoint)).normalize();
             const angle = Math.atan2(direction.x, direction.z);
