@@ -81,6 +81,17 @@ export class GridParser {
       "scene/",
       this.obstacleItem
     );
+    let newGroup = new THREE.Group();
+    this.garage = await this.objBuilder.create3dModel(
+      {
+        filepath: "objs/garage/smallgarage.obj",
+      },
+      "scene/",
+      newGroup
+    );
+    newGroup.scale.set(0.05, 0.05, 0.05);
+    newGroup.position.set(120, 0.1, 120);
+    group.add(newGroup);
 
     // ================ CURVE =================
     // catmull curve from the json
@@ -189,7 +200,7 @@ export class GridParser {
     this.pathPoints = curve.getPoints(100);
 
     const catmullTrack = new CatmullTrack(curve, 7, 0.1, 7, 16);
-    
+
     this.createCurveMaterialsTextures();
 
     this.material.vertexColors = true;
@@ -202,10 +213,10 @@ export class GridParser {
     group.add(mesh);
   }
 
-  
+
 
   getKeyPath() {
-    let path = [...this.pathPoints] ;
+    let path = [...this.pathPoints];
     for (let i = 0; i < path.length; i++) {
       path[i].y += 0.47;
     }
@@ -227,112 +238,4 @@ export class GridParser {
     return item;
   }
 
-  bfs(grid, startCoord) {
-    startCoord = { x: startCoord.y, y: startCoord.x };
-    let queue = [{ coord: startCoord, path: [] }];
-    const visited = new Set();
-
-    let finishFound = false;
-    let isFirst = true;
-
-    while (queue.length > 0) {
-      const { coord, path } = queue.shift();
-      const { x, y } = coord;
-
-      if (visited.has(`${x},${y}`)) continue;
-
-      visited.add(`${x},${y}`);
-
-      let tileType = grid[y][x];
-
-      if (tileType === 2) {
-        if (finishFound) return path;
-        else finishFound = true;
-      } else if (tileType == 5) continue;
-
-      const neighbors = this.getNeighbors(grid, coord);
-      for (const neighbor of neighbors) {
-        if (isFirst) {
-          neighbors.forEach((n) => {
-            n.type = grid[n.y][n.x];
-          });
-
-          /*       console.log(neighbors); */
-        }
-        queue.push({ coord: neighbor, path: [...path, neighbor] });
-      }
-
-      if (isFirst) {
-        // add to visited all tiles of type 2
-
-        const finishTiles = neighbors.filter((n) => n.type === 2);
-        finishTiles.forEach((n) => {
-          visited.add(`${n.x},${n.y}`);
-        });
-
-        /*        console.log("queue after removing finish");
-        console.log(queue);
- */
-        isFirst = false;
-      }
-    }
-
-    return null; // No path found
-  }
-
-  getNeighbors(grid, { x, y }) {
-    const neighbors = [];
-
-    // Define possible moves (up, down, left, right)
-    const moves = [
-      { dx: 0, dy: -1 }, // Up
-      { dx: 0, dy: 1 }, // Down
-      { dx: -1, dy: 0 }, // Left
-      { dx: 1, dy: 0 }, // Right
-    ];
-
-    for (const move of moves) {
-      const newX = x + move.dx;
-      const newY = y + move.dy;
-
-      /*       console.log(newX, newY, grid[newY][newX]); */
-
-      if (
-        newX >= 0 &&
-        newX < grid[0].length &&
-        newY >= 0 &&
-        newY < grid.length &&
-        grid[newY][newX] !== 0 // Check if it's not a wall
-      ) {
-        neighbors.push({ x: newX, y: newY });
-      }
-    }
-
-    return neighbors;
-  }
-
-  async readCSV(csvPath) {
-    try {
-      const parsedData = await this.fetchCSV(csvPath);
-      return parsedData;
-    } catch (error) {
-      console.error(error);
-      throw error; // Propagate the error
-    }
-  }
-
-  async fetchCSV(url) {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Failed to load CSV file");
-      }
-
-      const csvData = await response.text();
-      return csvData;
-    } catch (error) {
-      console.error(error);
-      throw error; // Propagate the error
-    }
-  }
 }
