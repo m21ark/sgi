@@ -76,7 +76,7 @@ export class MyMenu {
   getButtonOnMenu() {
     let group = new THREE.Group();
 
-    const buttonWidth = 0.3 * this.width;
+    const buttonWidth = 0.35 * this.width;
     const verticalSpacing = 0.07 * this.height;
     const btnHeight = 0.1 * this.height;
 
@@ -99,7 +99,7 @@ export class MyMenu {
 
       this.textWriter.write(
         group,
-        -midWidth / 2 + 1,
+        -midWidth / 2 + 2,
         offsetY,
         0.2,
         button.text,
