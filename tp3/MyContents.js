@@ -26,7 +26,6 @@ class MyContents {
    */
   constructor(app) {
     this.app = app;
-    this.axis = null;
 
     this.lightBuilder = new LightBuilder(app, this);
     this.objectBuilder = new ObjectBuilder();
@@ -66,23 +65,18 @@ class MyContents {
    * Creates and attaches the axis to the scene if it doesn't exist.
    */
   async init() {
-    // create once
-    if (this.axis === null) {
-      // create and attach the axis to the scene
-      this.axis = new MyAxis(this);
-      this.app.scene.add(this.axis);
-    }
-
     // TEMPORARIAMENTE AQUI
     this.app.MyHUD.setStatus("PLAY");
     this.app.MyHUD.setLaps(2, 5);
     this.app.MyHUD.setPosition(1, 5);
 
     // ============== TV =================
-    
-    this.tv = new Television(this.app.scene, this.app.activeCamera, this.app.renderer);
 
-    
+    this.tv = new Television(
+      this.app.scene,
+      this.app.activeCamera,
+      this.app.renderer
+    );
 
     // ============== GRID TRACK ====================
 
@@ -91,6 +85,7 @@ class MyContents {
     this.app.scene.add(this.gridGroup);
     this.trees = this.gridParser.getTrees();
     this.hitabbleObjs = this.gridParser.getHitabbleObjs();
+
     // ============== Player ====================
 
     this.addPlayer();
@@ -101,16 +96,6 @@ class MyContents {
 
     this.AICar = new MyAICar(this.gridParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
-
-    // flooting name
-
-    let spritey = TextSpriteDraw.makeTextSprite(" DKKDEKDEKEDKDEK ", {
-      fontsize: 44,
-      textColor: { r: 255, g: 255, b: 255, a: 1.0 },
-    });
-    spritey.position.set(5, -5, -5);
-
-    this.app.scene.add(spritey);
   }
 
   /**
@@ -139,9 +124,6 @@ class MyContents {
 
     // Start the traversal from the root node
     this.transverseFromRoot(data);
-
-    const textDraw = new TextSpriteDraw();
-    textDraw.write(this.app.scene, 0, 5, 2, "Tenho fome", 12, "0xFF0000");
   }
 
   checkCollision(carBB, hitabbleObjs) {
@@ -160,7 +142,7 @@ class MyContents {
     if (this.AICar != undefined) this.AICar.update();
 
     this.tv.updateRenderTarget(this.app.activeCamera);
-    // print player prototype 
+    // print player prototype
 
     if (
       this.player != null &&

@@ -23,8 +23,6 @@ RICARDO:
 - Menu Inicial 
 - Menu escolha de carro (nosso e da AI)
 
-- arranjar spriteSheet ascii
-
 LATER:
 
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)

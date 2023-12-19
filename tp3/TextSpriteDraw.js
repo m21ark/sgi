@@ -5,14 +5,14 @@ export class TextSpriteDraw {
     this.texture = new THREE.TextureLoader().load("assets/font.png");
     this.material = new THREE.MeshBasicMaterial({
       map: this.texture,
-      transparent: false,
+      transparent: true,
     });
     this.numRows = 10;
     this.numColumns = 10;
     this.characterWidth = 500 / this.numColumns;
     this.characterHeight = 500 / this.numRows;
     this.characterMap =
-      " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"; // Add more characters as needed
+      " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
   }
 
   static makeTextSprite(message, parameters) {
@@ -81,11 +81,11 @@ export class TextSpriteDraw {
   }
 
   getWidth(text, fontSize = 12) {
-    return text.length * this.characterWidth * fontSize * 0.0025;
+    return text.length * this.characterWidth * (fontSize / 10) * 0.015;
   }
 
   getHeight(fontSize = 12) {
-    return this.characterHeight * fontSize * 0.0025;
+    return this.characterHeight * (fontSize / 10) * 0.015;
   }
 
   write(scene, x, y, z, text, fontSize = 12, color = 0xffffff) {
