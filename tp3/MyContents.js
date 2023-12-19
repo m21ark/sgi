@@ -35,10 +35,6 @@ export class MyContents {
     this.reader = new MyFileReader(app, this, this.loadXMLScene);
     this.sceneDir = "scene/";
     this.reader.open(this.sceneDir + "myScene.xml");
-
-    // MENU CONTROLLER
-    this.menuController = new MenuController(app);
-    // this.menuController.gotoMenu("main");
   }
 
   /**
@@ -57,7 +53,7 @@ export class MyContents {
 
     this.tv = new Television(
       this.app.scene,
-      this.app.activeCamera,
+      this.app.cameras["FirstPerson"],
       this.app.renderer
     );
 
@@ -79,6 +75,11 @@ export class MyContents {
 
     this.AICar = new MyAICar(this.gridParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
+
+    // =============== MENU CONTROLLER =====================
+
+    this.menuController = new MenuController(this.app);
+    // this.menuController.gotoMenu("main");
   }
 
   loadXMLScene(data) {
