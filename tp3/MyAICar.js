@@ -74,9 +74,51 @@ export class MyAICar {
     const delta = this.clock.getDelta()
     if (this.mixer !== undefined)
       this.mixer.update(delta);
+
+    if (this.mixer2 !== undefined)
+      this.mixer2.update(delta);
   }
 
-  moveAICar(speed = 0.35, laps = 2) {
+  tyreAnimation(laps, speed) {
+  
+    const tyres = this.aiCar.children[0].children[2]; // Assuming the tires are at index 2, adjust if needed
+
+    let flat_keypoints = [];
+    for (let i = 0; i < laps; i++) {
+      this.keyPoints.forEach((keyPoint) => {
+        flat_keypoints.push(...keyPoint);
+      });
+    }
+
+    const indices = this.keyPoints.map((_, i) => {
+      return i * speed;
+    });
+
+    let steeringKeyframes = [];
+    for (let i = 0; i < laps; i++) {
+      this.keyPoints.forEach((keyPoint, index) => {
+        let nextKeyPoint = this.keyPoints[index + 1];
+
+        if (nextKeyPoint === undefined) nextKeyPoint = this.keyPoints[0];
+
+        const direction = new THREE.Vector3(...nextKeyPoint).sub(new THREE.Vector3(...keyPoint)).normalize();
+
+        const steeringAngle = Math.atan2(direction.x, direction.z) * 0.10;
+        const steeringQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), steeringAngle);
+        steeringKeyframes.push(steeringQuaternion.x, steeringQuaternion.y, steeringQuaternion.z, steeringQuaternion.w);
+      });
+    }
+
+
+    const steeringKF = new THREE.QuaternionKeyframeTrack('.quaternion', indices, steeringKeyframes);
+
+    const rotationClip = new THREE.AnimationClip('tyreAnim', 100, [steeringKF]);
+    this.mixer2 = new THREE.AnimationMixer(tyres);
+    const action = this.mixer2.clipAction(rotationClip);
+    action.play();
+  }
+
+  moveAICar(speed = 0.6, laps = 2) {
     if (this.currentKeyPointIndex === this.keyPoints.length) return;
 
     if (this.aiCar !== undefined)
@@ -133,6 +175,8 @@ export class MyAICar {
 
         const rotationAction = this.mixer.clipAction(rotationClip);
         rotationAction.play();
+
+        this.tyreAnimation(laps, speed);
       }
   }
 }
