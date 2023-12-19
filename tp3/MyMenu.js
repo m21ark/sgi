@@ -35,16 +35,17 @@ export class MyMenu {
     let geometry = new THREE.PlaneGeometry(this.width, this.height);
 
     // create a material
-    let material = new THREE.MeshBasicMaterial({
+    let backgroundMat = new THREE.MeshBasicMaterial({
       color: 0xaabbcc,
+      map: new THREE.TextureLoader().load("assets/menu.jpg"),
     });
 
     // create a mesh
-    let menuBackground = new THREE.Mesh(geometry, material);
+    let menuBackground = new THREE.Mesh(geometry, backgroundMat);
 
     menuBackground.translateZ(-0.1);
 
-    let fsize = 30;
+    let fsize = 40;
     let midWidth = this.textWriter.getWidth(this.title, fsize);
 
     this.textWriter.write(
@@ -54,7 +55,7 @@ export class MyMenu {
       0,
       this.title, // Use the title property
       fsize,
-      "0xFF0000"
+      "0xFFFfff"
     );
 
     /*      menuBackground = this.picker.setObjLayers(
@@ -84,14 +85,15 @@ export class MyMenu {
     this.buttons.forEach((button) => {
       let geometry = new THREE.PlaneGeometry(buttonWidth, btnHeight);
       let material = new THREE.MeshBasicMaterial({
-        color: 0xffbbcc,
+        color: 0xaaaaaa,
+        map: new THREE.TextureLoader().load("assets/button.jpg"),
       });
 
       let buttonMesh = new THREE.Mesh(geometry, material);
 
       buttonMesh.position.set(0, offsetY, -0.1);
 
-      let fsize = 18;
+      let fsize = 24;
 
       let midWidth = this.textWriter.getWidth(button.text, fsize);
 
@@ -102,7 +104,7 @@ export class MyMenu {
         0.2,
         button.text,
         fsize,
-        "0x0000FF"
+        "0x222222"
       );
 
       buttonMesh = this.picker.setObjLayers(
