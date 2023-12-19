@@ -14,8 +14,7 @@ export class MyMenu {
     this.height = 50;
 
     this.btnCount = 0;
-
-    this.picker = app.contents.picker;
+    this.picker = app.picker;
     this.app = app;
   }
 

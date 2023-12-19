@@ -141,6 +141,7 @@ class MyApp {
         );
       } else if (this.activeCameraName === "MenuCamera") {
         // skip controls for the menu camera
+        return;
       } else {
         this.controls = new OrbitControls(
           this.activeCamera,
@@ -195,7 +196,7 @@ class MyApp {
     }
 
     // required if controls.enableDamping or controls.autoRotate are set to true
-    this.controls.update();
+    if (this.controls) this.controls.update();
 
     // render the scene
     this.renderer.render(this.scene, this.activeCamera);

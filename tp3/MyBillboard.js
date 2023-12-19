@@ -13,7 +13,6 @@ class MyBillboard extends THREE.Object3D {
     const billboardGeometry = new THREE.PlaneGeometry(4, 7);
     const billboardMaterial = new THREE.MeshBasicMaterial({
       map: texture,
-      color: 0xffffff,
       transparent: true,
       side: THREE.DoubleSide,
     });
