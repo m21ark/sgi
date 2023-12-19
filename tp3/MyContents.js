@@ -35,7 +35,6 @@ export class MyContents {
     this.reader = new MyFileReader(app, this, this.loadXMLScene);
     this.sceneDir = "scene/";
     this.reader.open(this.sceneDir + "myScene.xml");
-
   }
 
   /**

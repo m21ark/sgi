@@ -8,7 +8,8 @@ export class MyPicker {
 
     this.pointer = new THREE.Vector2();
     this.intersectedObj = null;
-    this.pickingColor = "0xFFFFFF";
+    this.pickingHoverColor = "0xFFFFFF";
+    this.pickingClickColor = "0xFFFF00";
 
     this.menu = null;
     this.app = null;
@@ -20,6 +21,7 @@ export class MyPicker {
 
     document.addEventListener("pointermove", this.onPointerMove.bind(this));
     document.addEventListener("pointerdown", this.onPointerDown.bind(this));
+    document.addEventListener("pointerup", this.restoreTargetColor.bind(this));
 
     this.updateSelectedLayer();
   }
@@ -54,34 +56,28 @@ export class MyPicker {
     return obj;
   }
 
-  changeColorOfFirstPickedObj(obj) {
-    if (this.lastPickedObj != obj) {
-      if (this.lastPickedObj)
-        this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
-      this.lastPickedObj = obj;
-      this.lastPickedObj.currentHex =
-        this.lastPickedObj.material.color.getHex();
-      this.lastPickedObj.material.color.setHex(this.pickingColor);
-    }
+  changeTargetColor(obj, color) {
+    if (this.lastPickedObj)
+      this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
+    this.lastPickedObj = obj;
+    this.lastPickedObj.currentHex = this.lastPickedObj.material.color.getHex();
+    this.lastPickedObj.material.color.setHex(color);
   }
 
-  restoreColorOfFirstPickedObj() {
+  restoreTargetColor() {
     if (this.lastPickedObj)
       this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
     this.lastPickedObj = null;
   }
 
-  pickingHelper(intersects) {
-    // Helper to visualize the intersected object
+  pickingHelper(intersects, colorChange) {
     if (intersects.length > 0) {
       const obj = intersects[0].object;
       if (this.notPickableObjIds.includes(obj.name)) {
-        this.restoreColorOfFirstPickedObj();
+        this.restoreTargetColor();
         console.log("Object is marked as not to be picked !");
-      } else this.changeColorOfFirstPickedObj(obj);
-    } else {
-      this.restoreColorOfFirstPickedObj();
-    }
+      } else this.changeTargetColor(obj, colorChange);
+    } else this.restoreTargetColor();
   }
 
   updateSelectedLayer() {
@@ -106,7 +102,7 @@ export class MyPicker {
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
 
     // 4. picking helper (change color of first intersected object)
-    this.pickingHelper(intersects);
+    this.pickingHelper(intersects, this.pickingHoverColor);
   }
 
   onPointerDown(event) {
@@ -121,6 +117,9 @@ export class MyPicker {
 
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
+
+    // 4. picking helper (change color of first intersected object)
+    this.pickingHelper(intersects, this.pickingClickColor);
 
     // indicate the object name that is being picked
     if (intersects.length > 0) {

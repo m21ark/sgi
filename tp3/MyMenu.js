@@ -49,7 +49,7 @@ export class MyMenu {
 
     this.textWriter.write(
       menuBackground,
-      -midWidth / 20, // Centered in width todo: isto ta mal
+      -midWidth / 2 + 2, // Centered in width
       this.height / 2 - 5, // Adjust the vertical position as needed
       0,
       this.title, // Use the title property
@@ -91,13 +91,17 @@ export class MyMenu {
 
       buttonMesh.position.set(0, offsetY, -0.1);
 
+      let fsize = 18;
+
+      let midWidth = this.textWriter.getWidth(button.text, fsize);
+
       this.textWriter.write(
         group,
-        -3,
+        -midWidth / 2 + 1,
         offsetY,
         0.2,
         button.text,
-        18,
+        fsize,
         "0x0000FF"
       );
 
