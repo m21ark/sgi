@@ -135,18 +135,30 @@ export class MenuController {
       "Select Dificulty",
       -600
     );
-    this.dificultySelectingMenu.addButton("Easy", () => {
-      this.difficulty = 1;
-      this.gotoMenu("dropObstacles");
-    });
-    this.dificultySelectingMenu.addButton("Medium", () => {
-      this.difficulty = 2;
-      this.gotoMenu("dropObstacles");
-    });
-    this.dificultySelectingMenu.addButton("Hard", () => {
-      this.difficulty = 3;
-      this.gotoMenu("dropObstacles");
-    });
+    this.dificultySelectingMenu.addButton(
+      "Easy",
+      () => {
+        this.difficulty = 1;
+        this.gotoMenu("dropObstacles");
+      },
+      0x00cc00
+    );
+    this.dificultySelectingMenu.addButton(
+      "Medium",
+      () => {
+        this.difficulty = 2;
+        this.gotoMenu("dropObstacles");
+      },
+      0xcccc00
+    );
+    this.dificultySelectingMenu.addButton(
+      "Hard",
+      () => {
+        this.difficulty = 3;
+        this.gotoMenu("dropObstacles");
+      },
+      0xff9900
+    );
 
     this.dificultySelectingMenu.addButton("Go back", () => {
       this.gotoMenu("mapSelect");

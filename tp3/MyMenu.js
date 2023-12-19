@@ -18,9 +18,9 @@ export class MyMenu {
     this.app = app;
   }
 
-  addButton(text, onClick) {
+  addButton(text, onClick, color = null) {
     const cnt = this.btnCount;
-    this.buttons.push({ cnt, text, onClick });
+    this.buttons.push({ cnt, text, onClick, color: color });
     this.btnCount++;
   }
 
@@ -85,7 +85,7 @@ export class MyMenu {
     this.buttons.forEach((button) => {
       let geometry = new THREE.PlaneGeometry(buttonWidth, btnHeight);
       let material = new THREE.MeshBasicMaterial({
-        color: 0xaaaaaa,
+        color: button.color ? button.color : 0xaaaaaa,
         map: new THREE.TextureLoader().load("assets/button.jpg"),
       });
 
