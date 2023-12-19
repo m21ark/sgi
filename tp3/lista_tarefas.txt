@@ -14,7 +14,6 @@ MARCO:
 - escolher diferentes tracks no menu inicial e isso refletir se na pista
 - por a meta (poles e flags) a dar no sitio certo em cada track!
 - nivel de dificuldade 
-- clock de tempo de corrida com ThreeJS
 
 RICARDO:
 - Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla

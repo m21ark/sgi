@@ -1,5 +1,10 @@
+import * as THREE from "three";
+
 class MyHUD {
   constructor() {
+    // Create a clock to measure time
+    this.clock = new THREE.Clock();
+
     // Create main HUD element
     this.domElement = document.createElement("div");
     this.domElement.id = "MyHud";
@@ -77,10 +82,9 @@ class MyHUD {
   }
 
   tickTime() {
-    let time = parseFloat(this.timeElement.innerHTML.split(" ")[1]) + 0.01;
-    time = Math.round(time * 100) / 100;
+    const elapsedTime = this.clock.getElapsedTime();
+    let time = Math.round(elapsedTime * 10) / 10;
     this.timeElement.innerHTML = `Time: ${time} s`;
-    // TODO: time is currently not being counted correctly
   }
 
   setCords(x, y, z) {
@@ -134,6 +138,10 @@ class MyHUD {
 
     // Append the container to the status element
     this.statusElement.appendChild(statusContainer);
+  }
+
+  setVisible(visible) {
+    this.domElement.style.display = visible ? "block" : "none";
   }
 }
 

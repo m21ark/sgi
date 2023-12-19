@@ -8,8 +8,7 @@ import { MipMapLoader } from "./builders/MipMapLoader.js";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { MyAICar } from "./MyAICar.js";
 import { GridParser } from "./SceneParser.js";
-import { MyMenu } from "./MyMenu.js";
-import { MyPicker } from "./MyPicker.js";
+import { MenuController } from "./MenuController.js";
 import { MyCar } from "./MyCar.js";
 import { Television } from "./Television.js";
 
@@ -58,8 +57,8 @@ class MyContents {
     this.sceneDir = "scene/";
     this.reader.open(this.sceneDir + "myScene.xml");
 
-    /*     this.sceneDir = "scenes/imported/museum/";
-    this.reader.open(this.sceneDir + "museum.xml"); */
+    this.menuController = new MenuController(app);
+
   }
 
   /**
@@ -99,74 +98,15 @@ class MyContents {
     this.AICar = new MyAICar(this.gridParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
 
-    // =============== MENUS =====================
+    // flooting name
 
-    this.picker = new MyPicker();
-
-    var spritey = TextSpriteDraw.makeTextSprite(" DKKDEKDEKEDKDEK ",
-      { fontsize: 44, textColor: { r: 255, g: 255, b: 255, a: 1.0 } });
+    let spritey = TextSpriteDraw.makeTextSprite(" DKKDEKDEKEDKDEK ", {
+      fontsize: 44,
+      textColor: { r: 255, g: 255, b: 255, a: 1.0 },
+    });
     spritey.position.set(5, -5, -5);
 
     this.app.scene.add(spritey);
-
-    // _____________________ MENU 1 _____________________
-
-    let mainMenuGen = new MyMenu(this.app, "Main Menu", -50);
-    mainMenuGen.addButton("Play", () => {
-      console.log("Clicked Play");
-    });
-    mainMenuGen.addButton("Settings", () => {
-      console.log("Clicked Settings");
-      pauseMenuGen.setCamera(this.app); // TEMPORARY
-    });
-    let mainMenu = mainMenuGen.getMenu();
-
-    // _____________________ MENU 2 _____________________
-
-    let pauseMenuGen = new MyMenu(this.app, "Pause Menu", -130);
-    pauseMenuGen.addButton("Resume", () => {
-      console.log("Clicked Resume");
-      this.app.MyHUD.setStatus("PLAY");
-    });
-    pauseMenuGen.addButton("Exit", () => {
-      console.log("Clicked Exit");
-      this.app.MyHUD.setStatus("EXIT");
-      endMenuGen.setCamera(this.app); // TEMPORARY
-    });
-    let pauseMenu = pauseMenuGen.getMenu();
-
-    // _____________________ MENU 3 _____________________
-
-    let endMenuGen = new MyMenu(this.app, "End Menu", -210);
-    endMenuGen.addButton("Restart", () => {
-      console.log("Clicked Restart");
-    });
-    endMenuGen.addButton("Exit", () => {
-      console.log("Clicked Exit");
-      carSelectingMenuGen.setCamera(this.app); // TEMPORARY
-    });
-    let endMenu = endMenuGen.getMenu();
-
-    // _____________________ MENU 4 _____________________
-
-    let carSelectingMenuGen = new MyMenu(this.app, "Car Select", -290);
-    carSelectingMenuGen.addButton("Car 1", () => {
-      console.log("Clicked Car 1");
-    });
-    carSelectingMenuGen.addButton("Car 2", () => {
-      console.log("Clicked Car 2");
-      mainMenuGen.setCamera(this.app); // TEMPORARY
-    });
-
-    let carSelectingMenu = carSelectingMenuGen.getMenu();
-
-    // mainMenuGen.setCamera(this.app);
-    // this.app.setActiveCamera("FirstPerson");
-
-    this.app.scene.add(mainMenu);
-    this.app.scene.add(pauseMenu);
-    this.app.scene.add(endMenu);
-    this.app.scene.add(carSelectingMenu);
   }
 
   /**
@@ -201,7 +141,6 @@ class MyContents {
   }
 
   checkCollision(carBB, hitabbleObjs) {
-
     for (const hitabble of hitabbleObjs) {
       if (carBB.intersectsBox(hitabble)) {
         console.log("COLLISION");
@@ -218,9 +157,14 @@ class MyContents {
     this.tv.updateRenderTarget();
     // print player prototype 
 
-    if (this.player != null && this.player.carBB != null && this.hitabbleObjs != null) {
-
-      this.player.carBB.copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0])).applyMatrix4(this.player.matrixWorld);
+    if (
+      this.player != null &&
+      this.player.carBB != null &&
+      this.hitabbleObjs != null
+    ) {
+      this.player.carBB
+        .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
+        .applyMatrix4(this.player.matrixWorld);
 
       this.checkCollision(this.player.carBB, this.hitabbleObjs);
     }
@@ -547,7 +491,11 @@ class MyContents {
           if (!rep.filepath.includes("kart"))
             this.objectBuilder.create3dModel(rep, this.sceneDir, obj.group);
           else {
-            this.objectBuilder.create3dModel(rep, this.sceneDir, MyCar.availableCars);
+            this.objectBuilder.create3dModel(
+              rep,
+              this.sceneDir,
+              MyCar.availableCars
+            );
           }
 
           break;
@@ -627,27 +575,22 @@ class MyContents {
       }),
       new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.down),
-        emissive: emissive,
         side: THREE.BackSide,
       }),
       new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.back),
-        emissive: emissive,
         side: THREE.BackSide,
       }),
       new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.left),
-        emissive: emissive,
         side: THREE.BackSide,
       }),
       new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.front),
-        emissive: emissive,
         side: THREE.BackSide,
       }),
       new THREE.MeshBasicMaterial({
         map: loader.load(this.sceneDir + rep.right),
-        emissive: emissive,
         side: THREE.BackSide,
       }),
     ];
