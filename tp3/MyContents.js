@@ -79,7 +79,7 @@ export class MyContents {
     // =============== MENU CONTROLLER =====================
 
     this.menuController = new MenuController(this.app);
-    this.menuController.gotoMenu("dificultySelect");
+    this.menuController.gotoMenu("main");
   }
 
   loadXMLScene(data) {

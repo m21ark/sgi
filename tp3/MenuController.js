@@ -3,18 +3,31 @@ import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
 import { Garage } from "./Garage.js";
 
-class MenuController {
+export class MenuController {
   constructor(app) {
     app.picker = new MyPicker(app);
     this.app = app;
     this.currentMenu = null;
 
+    // load menus
     this.loadMenuMain();
     this.loadMenuPause();
     this.loadMenuEnd();
-    this.loadMenuCarSelect();
     this.loadMenuMapSelect();
     this.loadMenuDificultySelect();
+    this.loadDropObstaclesMenu();
+
+    // store menus options
+    this.difficulty = null;
+    this.map = null;
+  }
+
+  getDifficulty() {
+    return this.difficulty;
+  }
+
+  getMap() {
+    return this.map;
   }
 
   gotoMenu(menu) {
@@ -28,45 +41,27 @@ class MenuController {
       case "end":
         this.currentMenu = this.endMenu;
         break;
-      case "carSelect":
-        this.currentMenu = this.carSelectingMenu;
-        break;
       case "mapSelect":
         this.currentMenu = this.MapSelectingMenu;
         break;
       case "dificultySelect":
         this.currentMenu = this.dificultySelectingMenu;
         break;
+      case "dropObstacles":
+        this.currentMenu = this.dropObstaclesMenu;
+        break;
       case "game":
         this.currentMenu = null;
         this.app.setActiveCamera("FirstPerson");
+      case "carSelect":
+        this.garageLoad();
+        return;
       default:
         this.currentMenu = null;
         console.log(
           "Camera option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
-    }
-
-    if (menu == "carSelect") {
-      this.app.MyHUD.setVisible(false);
-      this.app.setActiveCamera("Garage");
-      this.app.cameras["Garage"].position.set(130, 6, 120);
-      const checkGarageLoaded = setInterval(() => {
-        if (Garage.objectModel.children.length > 0) {
-          clearInterval(checkGarageLoaded);
-          console.log(Garage.objectModel.children);
-          Garage.openGarage();
-        }
-      }, 100);
-      // temporary solution
-      const garage = new THREE.PerspectiveCamera(75, 0.2, 0.1, 1000);
-      garage.position.set(160, 6, 120);
-      garage.lookAt(new THREE.Vector3(120, 6, 120));
-      this.app.cameras["Garage"] = garage;
-
-      console.log(this.app.cameras["Garage"].position);
-      return;
     }
 
     if (this.currentMenu) {
@@ -78,7 +73,7 @@ class MenuController {
   loadMenuMain() {
     this.mainMenu = new MyMenu(this.app, "Main Menu", -100);
     this.mainMenu.addButton("Play", () => {
-      console.log("Clicked Play");
+      this.gotoMenu("mapSelect");
     });
     this.mainMenu.addButton("Exit", () => {
       window.history.go(-1);
@@ -103,40 +98,27 @@ class MenuController {
 
   loadMenuEnd() {
     this.endMenu = new MyMenu(this.app, "End Menu", -300);
-    this.endMenu.addButton("Restart", () => {
-      console.log("Clicked Restart");
-    });
-    this.endMenu.addButton("Exit", () => {
-      console.log("Clicked Exit");
+    this.endMenu.addButton("Go home", () => {
+      this.gotoMenu("main");
     });
 
     // add menu to scene
     this.app.scene.add(this.endMenu.getMenu());
   }
 
-  loadMenuCarSelect() {
-    this.carSelectingMenu = new MyMenu(this.app, "Car Select", -400);
-    this.carSelectingMenu.addButton("Car 1", () => {
-      console.log("Clicked Car 1");
-    });
-    this.carSelectingMenu.addButton("Car 2", () => {
-      console.log("Clicked Car 2");
-    });
-
-    // add menu to scene
-    this.app.scene.add(this.carSelectingMenu.getMenu());
-  }
-
   loadMenuMapSelect() {
     this.MapSelectingMenu = new MyMenu(this.app, "Select Map", -500);
     this.MapSelectingMenu.addButton("Map 1", () => {
-      console.log("Map 1");
+      this.map = 1;
+      this.gotoMenu("dificultySelect");
     });
     this.MapSelectingMenu.addButton("Map 2", () => {
-      console.log("Map 2");
+      this.map = 2;
+      this.gotoMenu("dificultySelect");
     });
     this.MapSelectingMenu.addButton("Map 3", () => {
-      console.log("Map 3");
+      this.map = 3;
+      this.gotoMenu("dificultySelect");
     });
 
     this.MapSelectingMenu.addButton("Go back", () => {
@@ -154,13 +136,16 @@ class MenuController {
       -600
     );
     this.dificultySelectingMenu.addButton("Easy", () => {
-      console.log("Easy");
+      this.difficulty = 1;
+      this.gotoMenu("dropObstacles");
     });
     this.dificultySelectingMenu.addButton("Medium", () => {
-      console.log("Medium");
+      this.difficulty = 2;
+      this.gotoMenu("dropObstacles");
     });
     this.dificultySelectingMenu.addButton("Hard", () => {
-      console.log("Hard");
+      this.difficulty = 3;
+      this.gotoMenu("dropObstacles");
     });
 
     this.dificultySelectingMenu.addButton("Go back", () => {
@@ -170,6 +155,44 @@ class MenuController {
     // add menu to scene
     this.app.scene.add(this.dificultySelectingMenu.getMenu());
   }
-}
 
-export { MenuController };
+  loadDropObstaclesMenu() {
+    this.dropObstaclesMenu = new MyMenu(this.app, "Drop Obstacles: TODO", -700);
+    this.dropObstaclesMenu.addButton("Open Garage", () => {
+      this.gotoMenu("carSelect");
+    });
+    this.dropObstaclesMenu.addButton("Go back", () => {
+      this.gotoMenu("dificultySelect");
+    });
+
+    // add menu to scene
+    this.app.scene.add(this.dropObstaclesMenu.getMenu());
+  }
+
+  garageLoad() {
+    this.app.MyHUD.setVisible(false);
+    this.app.setActiveCamera("Garage");
+    this.app.cameras["Garage"].position.set(130, 6, 120);
+    const checkGarageLoaded = setInterval(() => {
+      if (Garage.objectModel.children.length > 0) {
+        clearInterval(checkGarageLoaded);
+        console.log(Garage.objectModel.children);
+        Garage.openGarage();
+      }
+    }, 100);
+    // temporary solution
+    const garage = new THREE.PerspectiveCamera(75, 0.2, 0.1, 1000);
+    garage.position.set(160, 6, 120);
+    garage.lookAt(new THREE.Vector3(120, 6, 120));
+    this.app.cameras["Garage"] = garage;
+
+    console.log(this.app.cameras["Garage"].position);
+
+    console.log(
+      "Garage loaded with difficulty: " +
+        this.difficulty +
+        " and map: " +
+        this.map
+    );
+  }
+}
