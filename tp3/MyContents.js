@@ -11,6 +11,7 @@ import { GridParser } from "./SceneParser.js";
 import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
 import { MyCar } from "./MyCar.js";
+import { Television } from "./Television.js";
 
 /**
  * MyContents.js
@@ -77,6 +78,8 @@ class MyContents {
     this.app.MyHUD.setStatus("PLAY");
     this.app.MyHUD.setLaps(2, 5);
     this.app.MyHUD.setPosition(1, 5);
+
+    this.tv = new Television(this.app.scene, this.app.activeCamera, this.app.renderer);
 
     // ============== GRID TRACK ====================
 
@@ -212,7 +215,7 @@ class MyContents {
    */
   update() {
     if (this.AICar != undefined) this.AICar.update();
-
+    this.tv.updateRenderTarget();
     // print player prototype 
 
     if (this.player != null && this.player.carBB != null && this.hitabbleObjs != null) {
