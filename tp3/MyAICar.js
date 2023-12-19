@@ -1,5 +1,6 @@
 import { MyCar } from "./MyCar.js";
 import * as THREE from "three";
+import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 export class MyAICar {
   constructor(keyPoints = [[0, 0, 0]]) {
@@ -28,8 +29,13 @@ export class MyAICar {
 
   addAICar(scene) {
 
+    this.aiCar = new THREE.Group();
+    this.aiCar.add(MyCar.availableCars.children[0].clone());
+    var spritey = TextSpriteDraw.makeTextSprite(" AI Car ",
+      { fontsize: 20, textColor: { r: 255, g: 255, b: 255, a: 1.0 } });
+    spritey.position.set(-2, 0.5, -1);
 
-    this.aiCar = MyCar.availableCars.children[0].clone();
+    this.aiCar.add(spritey);
     let position = [... this.locateFlagStart()];
     this.aiCar.position.set(position[0], position[1], position[2]);
     this.aiCar.rotation.y = -Math.PI / 2;
@@ -87,11 +93,11 @@ export class MyAICar {
           });
         }
 
-        
+
         const indices = this.keyPoints.map((_, i) => {
           return i * speed
         });
-        
+
 
         let rotationKeyframes = [];
         for (let i = 0; i < laps; i++) {
@@ -105,7 +111,7 @@ export class MyAICar {
             rotationKeyframes.push(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
           });
         }
-        
+
         const rotationKF = new THREE.QuaternionKeyframeTrack('.quaternion', indices,
           rotationKeyframes,
         );

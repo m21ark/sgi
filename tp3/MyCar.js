@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 export class MyCar extends THREE.Object3D {
   constructor(maxVel = 5, velInc = 0.1, carUsed = 0) {
@@ -31,7 +32,11 @@ export class MyCar extends THREE.Object3D {
     this.add(MyCar.availableCars.children[carUsed].clone());
 
     this.carBB = new THREE.Box3().setFromObject(this); // bounding box
-    
+    var spritey = TextSpriteDraw.makeTextSprite(" YOU ",
+      { fontsize: 20, textColor: { r: 255, g: 255, b: 255, a: 1.0 } });
+    spritey.position.set(-2, 0.5, -1);
+
+    this.add(spritey);
   }
 
   hasPowerUpEffect() {
