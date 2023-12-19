@@ -12,6 +12,7 @@ import { MenuController } from "./MenuController.js";
 import { MyCar } from "./MyCar.js";
 import { Television } from "./Television.js";
 import { XMLLoader } from "./XMLLoader.js";
+import { Garage } from "./Garage.js";
 
 /**
  * MyContents.js
@@ -110,8 +111,8 @@ export class MyContents {
   update() {
     if (this.AICar != undefined) this.AICar.update();
 
-    // this gives a ton of warnings
-    this.tv.updateRenderTarget(this.app.activeCamera);
+    Garage.update();
+    this.tv.updateRenderTarget(this.app.activeCamera); // TODO: this gives a ton of warnings
 
     if (
       this.player != null &&
