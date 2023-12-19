@@ -154,7 +154,8 @@ class MyContents {
    */
   update() {
     if (this.AICar != undefined) this.AICar.update();
-    this.tv.updateRenderTarget();
+
+    this.tv.updateRenderTarget(this.app.activeCamera);
     // print player prototype 
 
     if (
