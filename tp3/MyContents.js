@@ -78,7 +78,11 @@ class MyContents {
     this.app.MyHUD.setLaps(2, 5);
     this.app.MyHUD.setPosition(1, 5);
 
+    // ============== TV =================
+    
     this.tv = new Television(this.app.scene, this.app.activeCamera, this.app.renderer);
+
+    
 
     // ============== GRID TRACK ====================
 
