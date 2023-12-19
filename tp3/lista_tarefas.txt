@@ -18,13 +18,15 @@ MARCO:
 RICARDO:
 
 - arranjar spriteSheet ascii
-- fazer track usando catmull
+
 - Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
 - Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar 
 - shaders
 
 - Implementação de colisões com powerups, obstaculos, relva (redução de vel quando fora da pista) e inimigo
 
+
+- fazer track usando catmull
 - animações por keyframes
 
 

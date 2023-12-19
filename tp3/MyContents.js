@@ -100,6 +100,12 @@ class MyContents {
 
     this.picker = new MyPicker();
 
+    var spritey = TextSpriteDraw.makeTextSprite(" DKKDEKDEKEDKDEK ",
+      { fontsize: 44, textColor: { r: 255, g: 255, b: 255, a: 1.0 } });
+    spritey.position.set(5, -5, -5);
+
+    this.app.scene.add(spritey);
+
     // _____________________ MENU 1 _____________________
 
     let mainMenuGen = new MyMenu(this.app, "Main Menu", -50);
@@ -214,8 +220,8 @@ class MyContents {
       this.player.carBB.copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0])).applyMatrix4(this.player.matrixWorld);
 
       this.checkCollision(this.player.carBB, this.hitabbleObjs);
-    } 
-   }
+    }
+  }
 
   // ===================================== LOADERS =====================================
 
