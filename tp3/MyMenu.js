@@ -76,7 +76,7 @@ export class MyMenu {
     let group = new THREE.Group();
 
     const buttonWidth = 0.3 * this.width;
-    const verticalSpacing = 0.1 * this.height;
+    const verticalSpacing = 0.07 * this.height;
     const btnHeight = 0.1 * this.height;
 
     let offsetY = this.height / 2 - verticalSpacing - 0.25 * this.height;

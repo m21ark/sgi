@@ -13,6 +13,8 @@ class MenuController {
     this.loadMenuPause();
     this.loadMenuEnd();
     this.loadMenuCarSelect();
+    this.loadMenuMapSelect();
+    this.loadMenuDificultySelect();
   }
 
   gotoMenu(menu) {
@@ -29,6 +31,12 @@ class MenuController {
       case "carSelect":
         this.currentMenu = this.carSelectingMenu;
         break;
+      case "mapSelect":
+        this.currentMenu = this.MapSelectingMenu;
+        break;
+      case "dificultySelect":
+        this.currentMenu = this.dificultySelectingMenu;
+        break;
       case "game":
         this.currentMenu = null;
         this.app.setActiveCamera("FirstPerson");
@@ -39,7 +47,6 @@ class MenuController {
         );
         this.app.setActiveCamera("Perspective");
     }
-
 
     if (menu == "carSelect") {
       this.app.MyHUD.setVisible(false);
@@ -58,7 +65,7 @@ class MenuController {
       garage.lookAt(new THREE.Vector3(120, 6, 120));
       this.app.cameras["Garage"] = garage;
 
-      console.log (this.app.cameras["Garage"].position);
+      console.log(this.app.cameras["Garage"].position);
       return;
     }
 
@@ -73,8 +80,8 @@ class MenuController {
     this.mainMenu.addButton("Play", () => {
       console.log("Clicked Play");
     });
-    this.mainMenu.addButton("Settings", () => {
-      console.log("Clicked Settings");
+    this.mainMenu.addButton("Exit", () => {
+      window.history.go(-1);
     });
 
     // add menu to scene
@@ -85,11 +92,9 @@ class MenuController {
     this.pauseMenu = new MyMenu(this.app, "Pause Menu", -200);
     this.pauseMenu.addButton("Resume", () => {
       console.log("Clicked Resume");
-      this.app.MyHUD.setStatus("PLAY");
     });
     this.pauseMenu.addButton("Exit", () => {
       console.log("Clicked Exit");
-      this.app.MyHUD.setStatus("EXIT");
     });
 
     // add menu to scene
@@ -110,7 +115,6 @@ class MenuController {
   }
 
   loadMenuCarSelect() {
-
     this.carSelectingMenu = new MyMenu(this.app, "Car Select", -400);
     this.carSelectingMenu.addButton("Car 1", () => {
       console.log("Clicked Car 1");
@@ -121,6 +125,50 @@ class MenuController {
 
     // add menu to scene
     this.app.scene.add(this.carSelectingMenu.getMenu());
+  }
+
+  loadMenuMapSelect() {
+    this.MapSelectingMenu = new MyMenu(this.app, "Select Map", -500);
+    this.MapSelectingMenu.addButton("Map 1", () => {
+      console.log("Map 1");
+    });
+    this.MapSelectingMenu.addButton("Map 2", () => {
+      console.log("Map 2");
+    });
+    this.MapSelectingMenu.addButton("Map 3", () => {
+      console.log("Map 3");
+    });
+
+    this.MapSelectingMenu.addButton("Go back", () => {
+      this.gotoMenu("main");
+    });
+
+    // add menu to scene
+    this.app.scene.add(this.MapSelectingMenu.getMenu());
+  }
+
+  loadMenuDificultySelect() {
+    this.dificultySelectingMenu = new MyMenu(
+      this.app,
+      "Select Dificulty",
+      -600
+    );
+    this.dificultySelectingMenu.addButton("Easy", () => {
+      console.log("Easy");
+    });
+    this.dificultySelectingMenu.addButton("Medium", () => {
+      console.log("Medium");
+    });
+    this.dificultySelectingMenu.addButton("Hard", () => {
+      console.log("Hard");
+    });
+
+    this.dificultySelectingMenu.addButton("Go back", () => {
+      this.gotoMenu("mapSelect");
+    });
+
+    // add menu to scene
+    this.app.scene.add(this.dificultySelectingMenu.getMenu());
   }
 }
 
