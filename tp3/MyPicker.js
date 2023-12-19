@@ -122,8 +122,6 @@ export class MyPicker {
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
 
-    console.log("Clicked ", this.raycaster);
-
     // indicate the object name that is being picked
     if (intersects.length > 0) {
       const obj = intersects[0].object;
