@@ -71,7 +71,7 @@ export class MenuController {
   }
 
   loadMenuMain() {
-    this.mainMenu = new MyMenu(this.app, "Main Menu", -100);
+    this.mainMenu = new MyMenu(this.app, "Main Menu", -100, "left", 1.2, "assets/car.png");
     this.mainMenu.addButton("Play", () => {
       this.gotoMenu("mapSelect");
     });

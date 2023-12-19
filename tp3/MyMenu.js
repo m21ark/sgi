@@ -2,12 +2,22 @@ import * as THREE from "three";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 export class MyMenu {
-  constructor(app, title, x = -100) {
+  constructor(
+    app,
+    title,
+    x = -100,
+    btnPos = "center",
+    btnSpacing = 0.8,
+    sideImage = null
+  ) {
     this.title = title;
     this.buttons = [];
     this.textWriter = new TextSpriteDraw();
 
     this.x = x;
+    this.btnPos = btnPos;
+    this.btnSpacing = btnSpacing;
+    this.sideImage = sideImage;
 
     // height recommended to be lower <= 50 (because of frustrum size)
     this.width = 70;
@@ -77,10 +87,29 @@ export class MyMenu {
     let group = new THREE.Group();
 
     const buttonWidth = 0.35 * this.width;
-    const verticalSpacing = 0.07 * this.height;
+    const verticalSpacing = (this.btnSpacing / 10) * this.height;
     const btnHeight = 0.1 * this.height;
 
     let offsetY = this.height / 2 - verticalSpacing - 0.25 * this.height;
+
+    if (this.sideImage) {
+      let geometry = new THREE.PlaneGeometry(
+        0.45 * this.width,
+        0.3 * this.width
+      );
+      
+      let material = new THREE.MeshPhongMaterial({
+        map: new THREE.TextureLoader().load(this.sideImage),
+        transparent: true,
+      });
+      let sideImageMesh = new THREE.Mesh(geometry, material);
+      sideImageMesh.position.set(
+        this.width / 2 - buttonWidth / 1.3,
+        -this.height / 2 + (buttonWidth / 2) * this.buttons.length,
+        -0.1
+      );
+      group.add(sideImageMesh);
+    }
 
     this.buttons.forEach((button) => {
       let geometry = new THREE.PlaneGeometry(buttonWidth, btnHeight);
@@ -90,22 +119,36 @@ export class MyMenu {
       });
 
       let buttonMesh = new THREE.Mesh(geometry, material);
-
-      buttonMesh.position.set(0, offsetY, -0.1);
-
       let fsize = 24;
-
       let midWidth = this.textWriter.getWidth(button.text, fsize);
 
-      this.textWriter.write(
-        group,
-        -midWidth / 2 + 2,
-        offsetY,
-        0.2,
-        button.text,
-        fsize,
-        "0x222222"
-      );
+      if (this.btnPos === "center") {
+        buttonMesh.position.set(0, offsetY, -0.1);
+        this.textWriter.write(
+          group,
+          -midWidth / 2 + 2,
+          offsetY,
+          0.2,
+          button.text,
+          fsize,
+          "0x222222"
+        );
+      } else if (this.btnPos === "left") {
+        buttonMesh.position.set(
+          -this.width / 2 + 5 + buttonWidth / 2 + 2,
+          offsetY,
+          -0.1
+        );
+        this.textWriter.write(
+          group,
+          -midWidth / 2 - 2 - buttonWidth / 2,
+          offsetY,
+          0.2,
+          button.text,
+          fsize,
+          "0x222222"
+        );
+      }
 
       buttonMesh = this.picker.setObjLayers(
         buttonMesh,
