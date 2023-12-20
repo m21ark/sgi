@@ -93,10 +93,10 @@ export class MyContents {
     this.AICar = new MyAICar(this.sceneParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
 
-    this.placeFlag();
+    this.placeFlag(this.sceneParser.getKeyPath()[0]);
   }
 
-  placeFlag() {
+  placeFlag(pos) {
     this.endFlagMat = new THREE.MeshPhongMaterial({
       map: new THREE.TextureLoader().load("assets/finishFlag.jpg"),
       side: THREE.DoubleSide,
@@ -122,8 +122,8 @@ export class MyContents {
     endLine.add(pole2);
     endLine.add(flag);
 
-    // TODO: this should be set in the json file for the track
-    endLine.position.set(10, 10, 10);
+    endLine.rotation.y = Math.PI / 2;
+    endLine.position.set(pos.x, 11, pos.z + 5);
     endLine.name = "endLine";
 
     this.app.scene.add(endLine);
