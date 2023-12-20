@@ -46,6 +46,13 @@ class MyGuiInterface {
       .onChange(() => {
         this.contents.toogleShowAIKeyPoints();
       });
+
+    moveCarFolder
+      .add(this.contents, "showFireworks", false)
+      .name("showFireworks")
+      .onChange(() => {
+        this.contents.toggleFireWorks();
+      });
   }
 }
 

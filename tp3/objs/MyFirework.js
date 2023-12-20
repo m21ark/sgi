@@ -1,9 +1,43 @@
 import * as THREE from "three";
 
-class MyFirework {
-  constructor(app, scene) {
+export class MyFireworks {
+  constructor(app, pos) {
     this.app = app;
-    this.scene = scene;
+    this.fireworks = [];
+    this.pos = pos;
+  }
+
+  setPos(pos) {
+    this.pos = pos;
+  }
+
+  reset() {
+    this.fireworks = [];
+
+    // remove all scene children with name "firework"
+    this.app.scene.children.forEach((child) => {
+      if (child.name === "firework") {
+        console.log("removing");
+        this.app.scene.remove(child);
+      } else console.log("skipping: ", child.name);
+    });
+  }
+
+  update(prob = 0.2) {
+    if (Math.random() < prob)
+      this.fireworks.push(new MyFirework(this.app, this.pos));
+    for (let i = 0; i < this.fireworks.length; i++) {
+      if (this.fireworks[i].done) this.fireworks.splice(i, 1);
+      else this.fireworks[i].update();
+    }
+  }
+}
+
+class MyFirework {
+  constructor(app, pos) {
+    this.app = app;
+    this.scene = app.scene;
+    this.pos = pos;
 
     this.done = false;
     this.dest = [];
@@ -23,7 +57,7 @@ class MyFirework {
       depthTest: false,
     });
 
-    this.height = 20;
+    this.height = 16;
     this.speed = 60;
 
     this.launch();
@@ -48,11 +82,13 @@ class MyFirework {
   launch() {
     let colors = this.getRandomVibrantColor();
 
-    let x = THREE.MathUtils.randFloat(-5, 5);
-    let y = THREE.MathUtils.randFloat(this.height * 0.9, this.height * 1.1);
-    let z = THREE.MathUtils.randFloat(-5, 5);
+    let x = THREE.MathUtils.randFloat(-5, 5) + this.pos.x;
+    let y =
+      THREE.MathUtils.randFloat(this.height * 0.9, this.height * 1.1) +
+      this.pos.y;
+    let z = THREE.MathUtils.randFloat(-5, 5) + this.pos.z;
     this.dest.push(x, y, z);
-    let vertices = [0, 0, 0];
+    let vertices = [this.pos.x, this.pos.y, this.pos.z];
 
     this.geometry = new THREE.BufferGeometry();
     this.geometry.setAttribute(
@@ -64,8 +100,7 @@ class MyFirework {
       new THREE.BufferAttribute(new Float32Array(colors), 3)
     );
     this.points = new THREE.Points(this.geometry, this.material);
-    this.points.castShadow = true;
-    this.points.receiveShadow = true;
+    this.points.name = "firework";
     this.app.scene.add(this.points);
   }
 
@@ -113,6 +148,7 @@ class MyFirework {
     );
 
     const explosionPoints = new THREE.Points(explosionGeometry, this.material);
+    explosionPoints.name = "firework";
     this.app.scene.add(explosionPoints);
 
     // Dispose of the geometry and material separately
@@ -135,6 +171,7 @@ class MyFirework {
    */
   reset() {
     this.app.scene.remove(this.points);
+    console.log("removing exploded points");
     this.dest = [];
     this.vertices = null;
     this.colors = null;
@@ -184,9 +221,11 @@ class MyFirework {
         // Update the positions of exploded particles based on their velocities
         for (let i = 1; i < count; i++) {
           const index = i - 1; // Adjust the index to match explosionVelocities array
-          verts[i * 3] += this.explosionVelocities[index].x / this.speed;
-          verts[i * 3 + 1] += this.explosionVelocities[index].y / this.speed;
-          verts[i * 3 + 2] += this.explosionVelocities[index].z / this.speed;
+          verts[i * 3] += this.explosionVelocities[index].x / this.speed / 2;
+          verts[i * 3 + 1] +=
+            this.explosionVelocities[index].y / this.speed / 2;
+          verts[i * 3 + 2] +=
+            this.explosionVelocities[index].z / this.speed / 2;
         }
 
         // Create a new Float32Array with the updated positions
@@ -212,5 +251,3 @@ class MyFirework {
     }
   }
 }
-
-export { MyFirework };

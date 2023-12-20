@@ -9,6 +9,7 @@ import { Television } from "./objs/Television.js";
 import { XMLLoader } from "./utils/XMLLoader.js";
 import { Garage } from "./objs/Garage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
+import { MyFireworks } from "./objs/MyFirework.js";
 
 /**
  * MyContents.js
@@ -31,6 +32,7 @@ export class MyContents {
     this.controlPoints = [];
     this.moveCar = false;
     this.showAIKeyPoints = false;
+    this.showFireworks = false;
 
     // XML LOADER
     this.reader = new MyFileReader(app, this, this.loadXMLScene);
@@ -93,7 +95,14 @@ export class MyContents {
     this.AICar = new MyAICar(this.sceneParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
 
+    // End flag set
     this.placeFlag(this.sceneParser.getKeyPath()[0]);
+
+    // Firework set
+    this.fireworks = new MyFireworks(
+      this.app,
+      this.sceneParser.getKeyPath()[0]
+    );
   }
 
   placeFlag(pos) {
@@ -205,6 +214,12 @@ export class MyContents {
         tree.update(this.app.activeCamera.position);
       });
 
+    // =============== FIREWORKS =====================
+
+    if (this.showFireworks) this.fireworks.update();
+
+    // console.log(this.app.scene.children);
+
     requestAnimationFrame(() => {
       this.animate();
     });
@@ -219,5 +234,10 @@ export class MyContents {
     keypoints.forEach((keypoint) => {
       keypoint.visible = this.showAIKeyPoints;
     });
+  }
+
+  toggleFireWorks() {
+    // inversion of boolean happens on GUI Interface
+    if (!this.showFireworks) this.fireworks.reset();
   }
 }
