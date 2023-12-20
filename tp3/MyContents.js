@@ -85,7 +85,16 @@ export class MyContents {
     if (this.app.MyHUD.isPaused()) return;
 
     this.app.MyHUD.setPauseStatus(true);
+    this.AICar.stopAnimation();
     this.menuController.gotoMenu("pause");
+  }
+
+  unpauseGame() {
+    if (this.app.activeCameraName !== "FirstPerson") return;
+    if (!this.app.MyHUD.isPaused()) return;
+
+    this.app.MyHUD.setPauseStatus(false);
+    this.AICar.resumeAnimation();
   }
 
   removePreviousInstances() {

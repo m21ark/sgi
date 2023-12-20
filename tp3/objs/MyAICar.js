@@ -27,6 +27,20 @@ export class MyAICar {
     this.aiCar = car;
   }
 
+  resumeAnimation() {
+    if (this.mixer) {
+      this.mixer.timeScale = 1;
+      this.mixer2.timeScale = 1;
+    }
+  }
+
+  stopAnimation() {
+    if (this.mixer) {
+      this.mixer.timeScale = 0;
+      this.mixer2.timeScale = 0;
+    }
+  }
+
   addAICar(scene) {
     this.aiCar = new THREE.Group();
     let car = MyCar.availableCars.children[0].clone();
@@ -76,7 +90,6 @@ export class MyAICar {
   update() {
     const delta = this.clock.getDelta();
     if (this.mixer !== undefined) this.mixer.update(delta);
-
     if (this.mixer2 !== undefined) this.mixer2.update(delta);
   }
 
@@ -139,7 +152,6 @@ export class MyAICar {
 
     if (this.aiCar !== undefined)
       if (this.aiCar.position !== undefined) {
-
         // using keyframes ... use the path points to make a animation for the car ... you should make a rotation of the car, that rotates the car based on the angle of the last position and the angle of the next position
 
         let flat_keypoints = [];

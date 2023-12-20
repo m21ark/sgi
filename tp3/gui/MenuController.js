@@ -54,8 +54,8 @@ export class MenuController {
         break;
       case "game":
         this.currentMenu = null;
-        this.app.MyHUD.setPauseStatus(false);
         this.app.setActiveCamera("FirstPerson");
+        this.app.contents.unpauseGame();
         break;
       case "carSelect":
         this.garageLoad();
@@ -63,7 +63,9 @@ export class MenuController {
       default:
         this.currentMenu = null;
         console.log(
-          "Camera option not found. Using default perspective camera"
+          "Camera '" +
+            menu +
+            "' option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
     }
@@ -208,7 +210,7 @@ export class MenuController {
     // remove old menu
     let oldMenu = this.app.scene.getObjectByName("endMenu");
     this.app.scene.remove(oldMenu);
-    
+
     this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
     this.endMenu.updateText(`Your final time was ${time}s`, 1);
     let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
