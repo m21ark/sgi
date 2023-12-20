@@ -178,38 +178,26 @@ export class XMLLoader {
     );
 
     const loader = new THREE.TextureLoader();
-    let emissive = new THREE.Color(rep.emissive);
 
-    // setting up the materials for the skybox (one for each side)
-    let skyboxMaterials = [
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.up),
-        side: THREE.BackSide,
-      }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.down),
-        side: THREE.BackSide,
-      }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.back),
-        side: THREE.BackSide,
-      }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.left),
-        side: THREE.BackSide,
-      }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.front),
-        side: THREE.BackSide,
-      }),
-      new THREE.MeshBasicMaterial({
-        map: loader.load(this.sceneDir + rep.right),
-        side: THREE.BackSide,
-      }),
-    ];
+    // add all textures to the texture array
+    let textures = [];
+    textures.push(loader.load(this.sceneDir + rep.up));
+    textures.push(loader.load(this.sceneDir + rep.down));
+    textures.push(loader.load(this.sceneDir + rep.back));
+    textures.push(loader.load(this.sceneDir + rep.left));
+    textures.push(loader.load(this.sceneDir + rep.front));
+    textures.push(loader.load(this.sceneDir + rep.right));
 
-    const mesh = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
+    // create the material array
+    const materialArray = [];
+    for (let i = 0; i < 6; i++) {
+      materialArray.push(
+        new THREE.MeshBasicMaterial({ map: textures[i], side: THREE.BackSide })
+      );
+    }
 
+    // create the skybox
+    const mesh = new THREE.Mesh(skyboxGeometry, materialArray);
     mesh.position.set(rep.center[0], rep.center[1], rep.center[2]);
 
     return mesh;

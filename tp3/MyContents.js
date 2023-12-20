@@ -11,18 +11,7 @@ import { Garage } from "./objs/Garage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 import { MyFireworks } from "./objs/MyFirework.js";
 
-/**
- * MyContents.js
- *
- * This module is responsible for managing the contents of the 3D scene.
- * It provides methods for loading textures, setting materials, creating a skybox, etc.
- */
 export class MyContents {
-  /**
-   * Represents a constructor for the MyContents class.
-   * @constructor
-   * @param {App} app - The application object.
-   */
   constructor(app) {
     this.app = app;
     this.cameras = [];
