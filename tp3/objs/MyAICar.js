@@ -29,7 +29,9 @@ export class MyAICar {
 
   addAICar(scene) {
     this.aiCar = new THREE.Group();
-    this.aiCar.add(MyCar.availableCars.children[0].clone());
+    let car = MyCar.availableCars.children[0].clone();
+    this.aiBB = new THREE.Box3().setFromObject(car);
+    this.aiCar.add(car);
     var spritey = TextSpriteDraw.makeTextSprite(" AI Car ", {
       fontsize: 20,
       textColor: { r: 255, g: 255, b: 255, a: 1.0 },
