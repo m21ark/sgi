@@ -197,6 +197,20 @@ export class MyContents {
     this.app.activeCameraName = cameraId;
   }
 
+  mapDificultyToSpeed(difficulty) {
+    console.log("mapDificultyToSpeed", difficulty);
+    switch (difficulty) {
+      case 1:
+        return 0.9;
+      case 2:
+        return 0.60;
+      case 3:
+        return 0.55;
+      default:
+        return 1;
+    } 
+  }
+
   animate() {
     // =============== HUD =====================
 
@@ -210,7 +224,7 @@ export class MyContents {
 
     if (this.AICar != undefined && this.moveCar) {
       this.moveCar = false;
-      this.AICar.moveAICar();
+      this.AICar.moveAICar(this.mapDificultyToSpeed(this.menuController.getDifficulty()));
     }
 
     // =============== CAMERAS UPDATE =====================

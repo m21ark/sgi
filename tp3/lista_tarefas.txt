@@ -15,7 +15,6 @@ RICARDO:
 - Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
 - Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar 
 - Implementação de colisões com powerups, obstaculos, relva (redução de vel quando fora da pista) e inimigo
-- nivel de dificuldade refletir na velocidade da AI (usar menuController.getDifficulty() para saber o nivel de dificuldade)
 
 LATER:
 
