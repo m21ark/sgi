@@ -23,6 +23,8 @@ export class MyContents {
     this.showAIKeyPoints = false;
     this.showFireworks = false;
 
+    this.hasGameStarted = false;
+
     // XML LOADER
     this.reader = new MyFileReader(app, this, this.loadXMLScene);
     this.sceneDir = "scene/";
@@ -38,7 +40,7 @@ export class MyContents {
 
     // Temporary
     this.app.MyHUD.setPauseStatus(true);
-    this.app.MyHUD.setLaps(2, 5);
+    this.app.MyHUD.setLaps(1, 3);
     this.app.MyHUD.setPosition(1, 2);
 
     // ============== TV =================
@@ -244,7 +246,7 @@ export class MyContents {
   }
 
   async startCountdown() {
-    console.log("Starting countdown");
+    this.app.MyHUD.setVisible(false);
     let duration = 6;
     const countdownElement = document.createElement("div");
     countdownElement.id = "CountDown";
@@ -267,7 +269,10 @@ export class MyContents {
   }
 
   startGame() {
-    // TODO: INCLUDE HERE ALL THE THINGS THAT SHOULD START WHEN THE GAME STARTS (AFTER COUNTDOWN ENDS)
+    this.hasGameStarted = true;
+    this.app.MyHUD.setVisible(true);
+    this.app.MyHUD.setPauseStatus(false);
+    this.moveCar = true;
   }
 
   animate() {

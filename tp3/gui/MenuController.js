@@ -55,7 +55,8 @@ export class MenuController {
       case "game":
         this.currentMenu = null;
         this.app.setActiveCamera("FirstPerson");
-        this.app.contents.unpauseGame();
+        if (this.app.contents.hasGameStarted) this.app.contents.unpauseGame();
+        else this.app.contents.startCountdown();
         break;
       case "carSelect":
         this.garageLoad();
