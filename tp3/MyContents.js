@@ -48,9 +48,9 @@ export class MyContents {
     // ============== HUD =================
 
     // Temporary
-    this.app.MyHUD.setStatus("PLAY");
+    this.app.MyHUD.setPauseStatus(true);
     this.app.MyHUD.setLaps(2, 5);
-    this.app.MyHUD.setPosition(1, 5);
+    this.app.MyHUD.setPosition(1, 2);
 
     // ============== TV =================
 
@@ -80,8 +80,11 @@ export class MyContents {
   }
 
   pauseGame() {
+    // Only pause if the player is in game and not already paused
     if (this.app.activeCameraName !== "FirstPerson") return;
-    // TODO: parar o resto das cenas
+    if (this.app.MyHUD.isPaused()) return;
+
+    this.app.MyHUD.setPauseStatus(true);
     this.menuController.gotoMenu("pause");
   }
 
@@ -230,7 +233,6 @@ export class MyContents {
   }
 
   mapDificultyToSpeed(difficulty) {
-    console.log("mapDificultyToSpeed", difficulty);
     switch (difficulty) {
       case 1:
         return 0.9;
@@ -244,40 +246,35 @@ export class MyContents {
   }
 
   animate() {
-    // =============== HUD =====================
-
-    if (this.playerCam) {
-      this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
-      this.app.MyHUD.tickTime();
-      this.app.MyHUD.setSpeed(this.playerCam.getPlayer().position.x * 10);
-    }
-
-    // =============== AI CAR =====================
-
-    if (this.AICar != undefined && this.moveCar) {
-      this.moveCar = false;
-      this.AICar.moveAICar(
-        this.mapDificultyToSpeed(this.menuController.getDifficulty())
-      );
-    }
-
-    // =============== CAMERAS UPDATE =====================
-
+    // UPDATE CAMERAS
     if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
     if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
-    // =============== TREE BILLBOARD UPDATE =====================
+    if (!this.app.MyHUD.isPaused()) {
+      // HUD UPDATE
+      if (this.playerCam) {
+        this.app.MyHUD.setCords(...this.debugCam.getPlayer().position);
+        this.app.MyHUD.setSpeed(this.playerCam.getPlayer().position.x);
+        this.app.MyHUD.tickTime();
+      }
 
-    if (this.trees)
-      this.trees.forEach((tree) => {
-        tree.update(this.app.activeCamera.position);
-      });
+      // AI CAR UPDATE
+      if (this.AICar != undefined && this.moveCar) {
+        this.moveCar = false;
+        this.AICar.moveAICar(
+          this.mapDificultyToSpeed(this.menuController.getDifficulty())
+        );
+      }
 
-    // =============== FIREWORKS =====================
+      // TREE UPDATE
+      if (this.trees)
+        this.trees.forEach((tree) => {
+          tree.update(this.app.activeCamera.position);
+        });
 
-    if (this.showFireworks) this.fireworks.update();
-
-    // console.log(this.app.scene.children);
+      // FIREWORKS UPDATE
+      if (this.showFireworks) this.fireworks.update();
+    }
 
     requestAnimationFrame(() => {
       this.animate();

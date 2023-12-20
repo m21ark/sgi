@@ -54,6 +54,7 @@ export class MenuController {
         break;
       case "game":
         this.currentMenu = null;
+        this.app.MyHUD.setPauseStatus(false);
         this.app.setActiveCamera("FirstPerson");
         break;
       case "carSelect":
@@ -94,11 +95,9 @@ export class MenuController {
   loadMenuPause() {
     this.pauseMenu = new MyMenu(this.app, "Pause Menu", -200);
     this.pauseMenu.addButton("Resume", () => {
-      console.log("Clicked Resume");
       this.gotoMenu("game");
     });
     this.pauseMenu.addButton("Exit", () => {
-      console.log("Clicked Exit");
       this.gotoMenu("main");
     });
 
@@ -130,13 +129,14 @@ export class MenuController {
       "left",
       0.8
     );
-    this.MapSelectingMenu.addButton("Next", () => {
-      this.map = (this.map + 1) % this.availableMaps;
-      this.displayMap(group);
-    });
+
     this.MapSelectingMenu.addButton("Select", async () => {
       await this.app.contents.loadTrack(this.map + 1); // TODO: this doesnt work if there is a map already loaded
       this.gotoMenu("dificultySelect");
+    });
+    this.MapSelectingMenu.addButton("Next", () => {
+      this.map = (this.map + 1) % this.availableMaps;
+      this.displayMap(group);
     });
     this.MapSelectingMenu.addButton("Go back", async () => {
       this.gotoMenu("main");
@@ -208,9 +208,7 @@ export class MenuController {
     // remove old menu
     let oldMenu = this.app.scene.getObjectByName("endMenu");
     this.app.scene.remove(oldMenu);
-
-    console.log(this.app.scene.children);
-
+    
     this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
     this.endMenu.updateText(`Your final time was ${time}s`, 1);
     let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
@@ -241,7 +239,6 @@ export class MenuController {
     const checkGarageLoaded = setInterval(() => {
       if (Garage.objectModel.children.length > 0) {
         clearInterval(checkGarageLoaded);
-        console.log(Garage.objectModel.children);
         Garage.openGarage();
       }
     }, 100);
@@ -250,15 +247,6 @@ export class MenuController {
     garage.position.set(160, 6, 120);
     garage.lookAt(new THREE.Vector3(120, 6, 120));
     this.app.cameras["Garage"] = garage;
-
-    console.log(this.app.cameras["Garage"].position);
-
-    console.log(
-      "Garage loaded with difficulty: " +
-        this.difficulty +
-        " and map: " +
-        this.map
-    );
   }
 
   // read map on tracks folder and display it in the screen ... only using x and y coordinates and using catmull to print it

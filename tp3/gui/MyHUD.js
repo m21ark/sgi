@@ -1,9 +1,11 @@
 import * as THREE from "three";
 
-class MyHUD {
+export class MyHUD {
   constructor() {
     // Create a clock to measure time
     this.clock = new THREE.Clock();
+    this.isGamePaused = true;
+    this.pauseStartTime = 0;
 
     // Create main HUD element
     this.domElement = document.createElement("div");
@@ -81,7 +83,12 @@ class MyHUD {
     this.timeElement.innerHTML = `Time: ${time.toFixed(2)} s`;
   }
 
+  getTime() {
+    return parseFloat(this.timeElement.innerHTML.split(" ")[1]);
+  }
+
   tickTime() {
+    if (this.isGamePaused) return;
     const elapsedTime = this.clock.getElapsedTime();
     let time = Math.round(elapsedTime * 10) / 10;
     this.timeElement.innerHTML = `Time: ${time} s`;
@@ -107,7 +114,7 @@ class MyHUD {
     else this.powerupTimeElement.innerHTML = "";
   }
 
-  setStatus(status) {
+  _setStatus(status) {
     // Create the play and pause icons
     const playIcon = document.createElement("i");
     playIcon.className = "fa fa-play";
@@ -140,9 +147,37 @@ class MyHUD {
     this.statusElement.appendChild(statusContainer);
   }
 
+  setPauseStatus(status) {
+    if (status) this.pauseGame();
+    else this.unpauseGame();
+  }
+
+  pauseGame() {
+    this._setStatus("PAUSE");
+    if (!this.isGamePaused) {
+      this.pauseStartTime = Date.now();
+      this.isGamePaused = true;
+    }
+  }
+
+  unpauseGame() {
+    this._setStatus("PLAY");
+    if (this.isGamePaused) {
+      const pauseDuration =
+        this.pauseStartTime == 0
+          ? 0
+          : (Date.now() - this.pauseStartTime) / 1000;
+      this.clock.elapsedTime -= pauseDuration;
+      this.isGamePaused = false;
+      this.pauseStartTime = 0;
+    }
+  }
+
+  isPaused() {
+    return this.isGamePaused;
+  }
+
   setVisible(visible) {
     this.domElement.style.display = visible ? "block" : "none";
   }
 }
-
-export { MyHUD };
