@@ -92,6 +92,41 @@ export class MyContents {
     // AI car set
     this.AICar = new MyAICar(this.sceneParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
+
+    this.placeFlag();
+  }
+
+  placeFlag() {
+    this.endFlagMat = new THREE.MeshPhongMaterial({
+      map: new THREE.TextureLoader().load("assets/finishFlag.jpg"),
+      side: THREE.DoubleSide,
+      color: 0xffffff,
+    });
+
+    let endLine = new THREE.Group();
+
+    // Poles
+    let poleGeo = new THREE.CylinderGeometry(0.2, 0.2, 15, 10, 10);
+    let poleMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
+    let pole1 = new THREE.Mesh(poleGeo, poleMat);
+    let pole2 = new THREE.Mesh(poleGeo, poleMat);
+    pole1.position.set(0, -3, 0);
+    pole2.position.set(10, -3, 0);
+
+    // Flag
+    let flagGeo = new THREE.PlaneGeometry(10, 5);
+    let flag = new THREE.Mesh(flagGeo, this.endFlagMat);
+    flag.position.set(5, 5, 0);
+
+    endLine.add(pole1);
+    endLine.add(pole2);
+    endLine.add(flag);
+
+    // TODO: this should be set in the json file for the track
+    endLine.position.set(10, 10, 10);
+    endLine.name = "endLine";
+
+    this.app.scene.add(endLine);
   }
 
   loadXMLScene(data) {
