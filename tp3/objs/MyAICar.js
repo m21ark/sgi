@@ -103,7 +103,7 @@ export class MyAICar {
           .sub(new THREE.Vector3(...keyPoint))
           .normalize();
 
-        const steeringAngle = Math.atan2(direction.x, direction.z) * 0.1;
+        const steeringAngle = Math.atan2(direction.x, direction.z) * 0.08;
         const steeringQuaternion = new THREE.Quaternion().setFromAxisAngle(
           new THREE.Vector3(0, 1, 0),
           steeringAngle

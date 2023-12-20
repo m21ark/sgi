@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 export class MyPicker {
   constructor() {
@@ -57,7 +58,7 @@ export class MyPicker {
   }
 
   changeTargetColor(obj, color) {
-    if (this.lastPickedObj)
+    if (this.lastPickedObj && this.lastPickedObj.material !== undefined)
       this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
     this.lastPickedObj = obj;
     this.lastPickedObj.currentHex = this.lastPickedObj.material.color.getHex();
@@ -70,14 +71,76 @@ export class MyPicker {
     this.lastPickedObj = null;
   }
 
+  changeSpriteColor(obj, color) {
+    if (this.lastPickedObj && this.lastPickedObj.material !== undefined)
+      this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
+    this.lastPickedObj = obj;
+    this.lastPickedObj.currentHex = this.lastPickedObj.material.color.getHex();
+    this.lastPickedObj.material.color.setHex(color);
+  }
+
+  setCarSpriteColor(obj, color, parent) {
+
+    //remove obj from parent and add a new object
+    obj.CAR = parent;
+    parent.remove(obj);
+
+    obj = TextSpriteDraw.makeTextSprite(parent.name,
+      {
+        fontsize: 20, textColor: color,
+        borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+        borderThickness: 6
+      });
+    obj.position.set(4, 0, 0);
+    obj.parent = parent;
+
+    this.lastPickedCar = obj;
+    parent.add(obj);
+  }
+
+  resetLastCarSpriteColor() {
+    if (this.lastPickedCar) {
+      let parent = this.lastPickedCar.parent;
+      parent.remove(this.lastPickedCar);
+      this.lastPickedCar = null;
+      let obj = TextSpriteDraw.makeTextSprite(parent.name,
+        {
+          fontsize: 20, textColor: { r: 255, g: 255, b: 255, a: 1.0 },
+          borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+          borderThickness: 6
+        });
+      obj.position.set(4, 0, 0);
+      obj.parent = parent;
+
+      parent.add(obj);
+    }
+  }
+
   pickingHelper(intersects, colorChange) {
     if (intersects.length > 0) {
-      const obj = intersects[0].object;
+      let obj = intersects[0].object;
+
+      if (this.selectedLayer == 0) {
+        // check the first object that has type Sprite
+        obj = intersects.find((intersect) => intersect.object instanceof THREE.Sprite);
+        if (obj === undefined) return;
+        obj = obj.object;
+        let parent = obj.parent;
+
+        this.resetLastCarSpriteColor();
+        this.setCarSpriteColor(obj, { r: 255, g: 20, b: 20, a: 1.0 }, parent);
+
+        return;
+      }
+
       if (this.notPickableObjIds.includes(obj.name)) {
         this.restoreTargetColor();
         console.log("Object is marked as not to be picked !");
       } else this.changeTargetColor(obj, colorChange);
-    } else this.restoreTargetColor();
+    } else {
+      this.resetLastCarSpriteColor();
+      this.restoreTargetColor();
+    };
   }
 
   updateSelectedLayer() {
@@ -88,16 +151,31 @@ export class MyPicker {
     }
   }
 
+  setSelectedLayer(layer) {
+    this.selectedLayer = layer;
+    this.updateSelectedLayer();
+  }
+
   onPointerMove(event) {
     if (!this.menu) return;
-    if (this.app.activeCameraName !== "MenuCamera") return;
+    if (this.app.activeCameraName !== "MenuCamera"
+      && this.app.activeCameraName !== "Garage") return;
+
+    let cam = this.app.activeCameraName;
+
+    if (this.app.activeCameraName === "Garage") {
+      this.setSelectedLayer(0);
+    }
+    else {
+      this.setSelectedLayer(1);
+    }
 
     // 1. set the mouse position with a coordinate system where the center
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     //2. set the picking ray from the camera position and mouse coordinates
-    this.raycaster.setFromCamera(this.pointer, this.app.cameras["MenuCamera"]);
+    this.raycaster.setFromCamera(this.pointer, this.app.cameras[cam]);
 
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
@@ -108,14 +186,24 @@ export class MyPicker {
 
   onPointerDown(event) {
     if (!this.menu) return;
-    if (this.app.activeCameraName !== "MenuCamera") return;
+    if (this.app.activeCameraName !== "MenuCamera"
+      && this.app.activeCameraName !== "Garage") return;
+
+    if (this.app.activeCameraName === "Garage") {
+      this.setSelectedLayer(0);
+    }
+    else {
+      this.setSelectedLayer(1);
+    }
+
+    let cam = this.app.activeCameraName;
 
     // 1. set the mouse position with a coordinate system where the center
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     //2. set the picking ray from the camera position and mouse coordinates
-    this.raycaster.setFromCamera(this.pointer, this.app.cameras["MenuCamera"]);
+    this.raycaster.setFromCamera(this.pointer, this.app.cameras[cam]);
 
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
@@ -125,7 +213,14 @@ export class MyPicker {
 
     // indicate the object name that is being picked
     if (intersects.length > 0) {
-      const obj = intersects[0].object;
+      let obj = intersects[0].object;
+      if (this.selectedLayer == 0) {
+        obj = intersects.find((intersect) => intersect.object instanceof THREE.Sprite);
+        if (obj == undefined || obj.object == undefined) return;
+        obj = obj.object.CAR;
+        this.app.contents.menuController.selectCar(obj);
+        return;
+      }
       const buttonIndex = parseInt(obj.name.split("_").pop(), 10);
       this.menu.handleButtonClick(buttonIndex);
     }

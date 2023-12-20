@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
 import { Garage } from "../objs/Garage.js";
+import { MyCar } from "../objs/MyCar.js";
 
 export class MenuController {
   constructor(app) {
@@ -53,6 +54,7 @@ export class MenuController {
       case "game":
         this.currentMenu = null;
         this.app.setActiveCamera("FirstPerson");
+        break;
       case "carSelect":
         this.garageLoad();
         return;
@@ -213,6 +215,18 @@ export class MenuController {
 
     // add new menu to scene
     this.app.scene.add(this.endMenu.getMenu());
+  }
+
+  selectCar(car) {
+    Garage.closeGarage();
+
+    let carIndex = MyCar.availableCars.children.findIndex(c => c.name === car.name);
+
+    this.app.contents.playerCam.defineSelfObj(new MyCar(5, 0.1, carIndex));
+
+    Garage.mixer.addEventListener("loop", (e) => {
+      this.gotoMenu("game");
+    });
   }
 
   garageLoad() {

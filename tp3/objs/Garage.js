@@ -24,13 +24,15 @@ export class Garage {
     Garage.mixer.addEventListener("loop", (e) => {
       Garage.mixer.stopAllAction(); // Stop the animation mixer to prevent further updates
       door.rotateZ(angle);
-      //Garage.closeGarage(door);
+      //Garage.closeGarage();
     });
 
     action.play();
   }
 
-  static closeGarage(door) {
+  static closeGarage() {
+    const door = Garage.objectModel.getObjectByName("Door");
+
     // close the door using animation rotation
     const angle = Math.PI / 2; // example angle value
     const quaternion = new THREE.Quaternion().setFromAxisAngle(
