@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 export class MyPicker {
   constructor() {
@@ -70,6 +71,48 @@ export class MyPicker {
     this.lastPickedObj = null;
   }
 
+  changeSpriteColor(obj, color) {
+    if (this.lastPickedObj && this.lastPickedObj.material !== undefined)
+      this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
+    this.lastPickedObj = obj;
+    this.lastPickedObj.currentHex = this.lastPickedObj.material.color.getHex();
+    this.lastPickedObj.material.color.setHex(color);
+  }
+
+  setCarSpriteColor(obj, color, parent) {
+
+    //remove obj from parent and add a new object
+    parent.remove(obj);
+
+    obj = TextSpriteDraw.makeTextSprite(parent.name,
+      {
+        fontsize: 20, textColor: color,
+        borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+        borderThickness: 6
+      });
+    obj.position.set(4, 0, 0);
+
+    this.lastPickedCar = obj;
+    parent.add(obj);
+  }
+
+  resetLastCarSpriteColor() {
+    if (this.lastPickedCar) {
+      let parent = this.lastPickedCar.parent;
+      parent.remove(this.lastPickedCar);
+      this.lastPickedCar = null;
+      let obj = TextSpriteDraw.makeTextSprite(parent.name,
+        {
+          fontsize: 20, textColor: { r: 255, g: 255, b: 255, a: 1.0 },
+          borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+          borderThickness: 6
+        });
+      obj.position.set(4, 0, 0);
+
+      parent.add(obj);
+    }
+  }
+
   pickingHelper(intersects, colorChange) {
     if (intersects.length > 0) {
       let obj = intersects[0].object;
@@ -82,21 +125,23 @@ export class MyPicker {
           i++;
         }
         if (i > intersects.length - 1 || intersects[i] === undefined) return;
-        obj = intersects[i].object.parent;
-        console.log(obj);
-        // if obj material is null define the material
-        if (obj.material === undefined) {
-          obj.material = new THREE.MeshBasicMaterial(
-            { color: 0xFF0000 }
-          );
-        }
+        obj = intersects[i].object;
+        let parent = obj.parent;
+
+        this.resetLastCarSpriteColor();
+        this.setCarSpriteColor(obj, { r: 255, g: 20, b: 20, a: 1.0 }, parent);
+
+        return;
       }
 
       if (this.notPickableObjIds.includes(obj.name)) {
         this.restoreTargetColor();
         console.log("Object is marked as not to be picked !");
       } else this.changeTargetColor(obj, colorChange);
-    } else this.restoreTargetColor();
+    } else {
+      this.resetLastCarSpriteColor();
+      this.restoreTargetColor();
+    };
   }
 
   updateSelectedLayer() {
