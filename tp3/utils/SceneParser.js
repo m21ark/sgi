@@ -9,46 +9,17 @@ import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 export class SceneParser {
   constructor() {
     this.hitabbleObjs = [];
-    // Textures
+
     const loader = new THREE.TextureLoader();
-    this.greenTileTex = loader.load("scene/textures/grass.png");
-    this.greyTileTex = loader.load("scene/textures/asphalt.jpg");
-    this.endFlagTex = loader.load("scene/textures/finishFlag.jpg");
-    this.metalTex = loader.load("scene/textures/metal.jpg");
-    this.sideSquareTex = loader.load("scene/textures/sideSquare.jpg");
+    this.grassTex = loader.load("scene/textures/grass.png");
+    this.grassTex.wrapS = THREE.RepeatWrapping;
+    this.grassTex.wrapT = THREE.RepeatWrapping;
+    this.grassTex.repeat.set(20, 20);
 
-    this.greenTileTex.wrapS = THREE.RepeatWrapping;
-    this.greenTileTex.wrapT = THREE.RepeatWrapping;
-    this.greenTileTex.repeat.set(20, 20);
-
-    // Materials
-    this.greenTileMat = new THREE.MeshPhongMaterial({
-      map: this.greenTileTex,
+    this.grassMat = new THREE.MeshPhongMaterial({
+      map: this.grassTex,
       side: THREE.DoubleSide,
       color: 0x009900,
-    });
-    this.greyTileMat = new THREE.MeshPhongMaterial({
-      map: this.greyTileTex,
-      side: THREE.DoubleSide,
-      color: 0xa0a0a0,
-    });
-    this.endFlagMat = new THREE.MeshPhongMaterial({
-      map: this.endFlagTex,
-      side: THREE.DoubleSide,
-      color: 0xffffff,
-    });
-    this.metalMat = new THREE.MeshPhongMaterial({
-      map: this.metalTex,
-      side: THREE.DoubleSide,
-      color: 0x060606,
-      shininess: 100,
-      specular: 0xaaaaaa,
-    });
-
-    this.sideSquareMat = new THREE.MeshPhongMaterial({
-      map: this.sideSquareTex,
-      side: THREE.DoubleSide,
-      color: 0xffffff,
     });
 
     this.objBuilder = new ObjectBuilder();
@@ -136,7 +107,7 @@ export class SceneParser {
     // ================ GRASS =================
     // create a big square around the track
     const square = new THREE.PlaneGeometry(260, 260);
-    const squareMesh = new THREE.Mesh(square, this.greenTileMat);
+    const squareMesh = new THREE.Mesh(square, this.grassMat);
     squareMesh.rotateX(-Math.PI / 2);
 
     squareMesh.position.set(130, 0, 130);

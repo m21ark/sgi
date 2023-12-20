@@ -9,11 +9,7 @@ Classes obrigatorias:
 
 
 MARCO:
-
-- Menu final de corrida ter info de tempo, pos final, metricas de powerups apanhados etc
-- escolher diferentes tracks no menu inicial e isso refletir se na pista
 - por a meta (poles e flags) a dar no sitio certo em cada track!
-- nivel de dificuldade 
 
 RICARDO:
 - Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
@@ -21,7 +17,11 @@ RICARDO:
 - Implementação de colisões com powerups, obstaculos, relva (redução de vel quando fora da pista) e inimigo
 - Menu Inicial 
 - Menu escolha de carro (nosso e da AI)
+- nivel de dificuldade refletir na velocidade da AI (usar menuController.getDifficulty() para saber o nivel de dificuldade)
 
 LATER:
 
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
+- fazer deteção do numero de voltas e acabar a corrida quando o jogador fizer o numero de voltas necessarias
+- fazer fogo de artificio no fim da corrida
+- escolher pista que queremos jogar

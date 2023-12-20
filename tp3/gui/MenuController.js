@@ -83,13 +83,16 @@ export class MenuController {
     this.app.scene.add(this.mainMenu.getMenu());
   }
 
+  // TODO: see how to make this work with a listener and pause the game
   loadMenuPause() {
     this.pauseMenu = new MyMenu(this.app, "Pause Menu", -200);
     this.pauseMenu.addButton("Resume", () => {
       console.log("Clicked Resume");
+      // this.gotoMenu("game"); // see later how to make this work
     });
     this.pauseMenu.addButton("Exit", () => {
       console.log("Clicked Exit");
+      this.gotoMenu("main");
     });
 
     // add menu to scene
@@ -97,20 +100,26 @@ export class MenuController {
   }
 
   loadMenuEnd() {
-    this.endMenu = new MyMenu(this.app, "End Menu", -300);
+    this.endMenu = new MyMenu(this.app, "End of Game", -300);
+    this.endMenu.addText("You won!");
+    this.endMenu.addText("Your final time was 3:43s");
+    this.endMenu.addText("Hit 2 powerups and 2 obstacules");
+
     this.endMenu.addButton("Go home", () => {
       this.gotoMenu("main");
     });
 
-    // add menu to scene
-    this.app.scene.add(this.endMenu.getMenu());
+    // add menu to scene with name so we can update it later
+    let m = this.endMenu.getMenu();
+    m.name = "endMenu";
+    this.app.scene.add(m);
   }
 
   loadMenuMapSelect() {
     this.MapSelectingMenu = new MyMenu(
       this.app,
       "Select Map",
-      -500,
+      -400,
       "left",
       0.8,
       "assets/track.jpg"
@@ -140,7 +149,7 @@ export class MenuController {
     this.dificultySelectingMenu = new MyMenu(
       this.app,
       "Select Dificulty",
-      -600
+      -500
     );
     this.dificultySelectingMenu.addButton(
       "Easy",
@@ -176,7 +185,7 @@ export class MenuController {
   }
 
   loadDropObstaclesMenu() {
-    this.dropObstaclesMenu = new MyMenu(this.app, "Drop Obstacles: TODO", -700);
+    this.dropObstaclesMenu = new MyMenu(this.app, "Drop Obstacles: TODO", -600);
     this.dropObstaclesMenu.addButton("Open Garage", () => {
       this.gotoMenu("carSelect");
     });
@@ -186,6 +195,24 @@ export class MenuController {
 
     // add menu to scene
     this.app.scene.add(this.dropObstaclesMenu.getMenu());
+  }
+
+  // ========================================================
+
+  updateEndMenu(won, time, powerCnt, obstacleCnt) {
+    // remove old menu
+    let oldMenu = this.app.scene.getObjectByName("endMenu");
+    this.app.scene.remove(oldMenu);
+
+    console.log(this.app.scene.children);
+
+    this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
+    this.endMenu.updateText(`Your final time was ${time}s`, 1);
+    let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
+    this.endMenu.updateText(s, 2);
+
+    // add new menu to scene
+    this.app.scene.add(this.endMenu.getMenu());
   }
 
   garageLoad() {

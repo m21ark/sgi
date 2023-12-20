@@ -8,7 +8,7 @@ import { MyCar } from "./objs/MyCar.js";
 import { Television } from "./objs/Television.js";
 import { XMLLoader } from "./utils/XMLLoader.js";
 import { Garage } from "./objs/Garage.js";
-import { FirstPersonCamera } from "../FirstPersonCamera.js";
+import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 
 /**
  * MyContents.js
@@ -58,26 +58,14 @@ export class MyContents {
       this.app.renderer
     );
 
-    // ============== TRACK LOAD ====================
+    // ============== TRACK LOAD =================
 
-    this.sceneParser = new SceneParser();
-    this.sceneGroup = await this.sceneParser.buildGridGroup(1);
-    this.app.scene.add(this.sceneGroup);
-    this.trees = this.sceneParser.getTrees();
-    this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
+    await this.loadTrack();
 
     // ============== FIRST PERSON CAMS ====================
 
-    this.playerCam = new FirstPersonCamera(this.app);
-    this.playerCam.defineSelfObj(new MyCar());
-
     this.debugCam = new FirstPersonCamera(this.app);
     this.debugCam.defineSelfObj();
-
-    // =============== AI CAR =====================
-
-    this.AICar = new MyAICar(this.sceneParser.getKeyPath());
-    this.AICar.addAICar(this.app.scene);
 
     // =============== MENU CONTROLLER =====================
 
@@ -86,6 +74,59 @@ export class MyContents {
 
     // Start the animation loop
     this.animate();
+  }
+
+  async loadTrack() {
+    // Track set
+    this.sceneParser = new SceneParser();
+    let mapNum = 1; // this.menuController.getMap(); // TODO: make this work
+    this.sceneGroup = await this.sceneParser.buildGridGroup(mapNum);
+    this.app.scene.add(this.sceneGroup);
+    this.trees = this.sceneParser.getTrees();
+    this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
+
+    // Player car set
+    this.playerCam = new FirstPersonCamera(this.app);
+    this.playerCam.defineSelfObj(new MyCar());
+
+    // AI car set
+    this.AICar = new MyAICar(this.sceneParser.getKeyPath());
+    this.AICar.addAICar(this.app.scene);
+
+    this.placeFlag(this.sceneParser.getKeyPath()[0]);
+  }
+
+  placeFlag(pos) {
+    this.endFlagMat = new THREE.MeshPhongMaterial({
+      map: new THREE.TextureLoader().load("assets/finishFlag.jpg"),
+      side: THREE.DoubleSide,
+      color: 0xffffff,
+    });
+
+    let endLine = new THREE.Group();
+
+    // Poles
+    let poleGeo = new THREE.CylinderGeometry(0.2, 0.2, 15, 10, 10);
+    let poleMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
+    let pole1 = new THREE.Mesh(poleGeo, poleMat);
+    let pole2 = new THREE.Mesh(poleGeo, poleMat);
+    pole1.position.set(0, -3, 0);
+    pole2.position.set(10, -3, 0);
+
+    // Flag
+    let flagGeo = new THREE.PlaneGeometry(10, 5);
+    let flag = new THREE.Mesh(flagGeo, this.endFlagMat);
+    flag.position.set(5, 5, 0);
+
+    endLine.add(pole1);
+    endLine.add(pole2);
+    endLine.add(flag);
+
+    endLine.rotation.y = Math.PI / 2;
+    endLine.position.set(pos.x, 11, pos.z + 5);
+    endLine.name = "endLine";
+
+    this.app.scene.add(endLine);
   }
 
   loadXMLScene(data) {
@@ -139,9 +180,11 @@ export class MyContents {
   animate() {
     // =============== HUD =====================
 
-    this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
-    this.app.MyHUD.tickTime();
-    this.app.MyHUD.setSpeed(this.playerCam.getPlayer().position.x * 10);
+    if (this.playerCam) {
+      this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
+      this.app.MyHUD.tickTime();
+      this.app.MyHUD.setSpeed(this.playerCam.getPlayer().position.x * 10);
+    }
 
     // =============== AI CAR =====================
 
@@ -168,11 +211,6 @@ export class MyContents {
   }
 
   // =============== GUI TOGGLES =====================
-
-  toggleMoveCar() {
-    console.log("toggleMoveCar");
-    this.moveCar = !this.moveCar;
-  }
 
   toogleShowAIKeyPoints() {
     let keypoints = this.AICar.getAICarKeyPointsGroup().children;

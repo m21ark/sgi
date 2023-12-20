@@ -28,10 +28,26 @@ export class MyMenu {
     this.app = app;
   }
 
-  addButton(text, onClick, color = null) {
+  addButton(text, onClick, bgcolor = null, useBg = true, txtColor = null) {
     const cnt = this.btnCount;
-    this.buttons.push({ cnt, text, onClick, color: color });
+    this.buttons.push({
+      cnt,
+      text,
+      onClick,
+      color: bgcolor,
+      useBg: useBg,
+      txtColor: txtColor,
+    });
     this.btnCount++;
+  }
+
+  updateText(text, buttonIndex) {
+    const button = this.buttons.find((btn) => btn.cnt === buttonIndex);
+    if (button) button.text = text;
+  }
+
+  addText(text, color = "0xffffff") {
+    this.addButton(text, () => {}, null, false, color);
   }
 
   setTitle(title) {
@@ -92,6 +108,7 @@ export class MyMenu {
 
     let offsetY = this.height / 2 - verticalSpacing - 0.25 * this.height;
 
+    // TODO: temporary fix for the side image until correct map is showing
     if (this.sideImage) {
       let geometry = new THREE.PlaneGeometry(
         0.4 * this.width,
@@ -120,7 +137,15 @@ export class MyMenu {
         map: new THREE.TextureLoader().load("assets/button.jpg"),
       });
 
-      let buttonMesh = new THREE.Mesh(geometry, material);
+      let buttonMesh = new THREE.Mesh(
+        geometry,
+        button.useBg
+          ? material
+          : new THREE.MeshBasicMaterial({
+              transparent: true,
+              opacity: 0,
+            })
+      );
       let fsize = 24;
       let midWidth = this.textWriter.getWidth(button.text, fsize);
 
@@ -133,7 +158,7 @@ export class MyMenu {
           0.2,
           button.text,
           fsize,
-          "0x222222"
+          button.txtColor ? button.txtColor : "0x222222"
         );
       } else if (this.btnPos === "left") {
         buttonMesh.position.set(
