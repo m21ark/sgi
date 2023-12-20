@@ -20,7 +20,8 @@ export class MenuController {
 
     // store menus options
     this.difficulty = null;
-    this.map = null;
+    this.map = 0;
+    this.availableMaps = 3;
   }
 
   getDifficulty() {
@@ -122,29 +123,33 @@ export class MenuController {
       this.app,
       "Select Map",
       -400,
-      "left",
+      "center",
       0.8,
-      "assets/track.jpg"
     );
-    this.MapSelectingMenu.addButton("Map 1", () => {
-      this.map = 1;
+    this.MapSelectingMenu.addButton("<", () => {
+      this.map = (this.map + 1) % this.availableMaps;
       this.gotoMenu("dificultySelect");
     });
-    this.MapSelectingMenu.addButton("Map 2", () => {
-      this.map = 2;
-      this.gotoMenu("dificultySelect");
-    });
-    this.MapSelectingMenu.addButton("Map 3", () => {
-      this.map = 3;
+    this.MapSelectingMenu.addButton(">", () => {
+      this.map = (this.map - 1) % this.availableMaps;
       this.gotoMenu("dificultySelect");
     });
 
-    this.MapSelectingMenu.addButton("Go back", () => {
-      this.gotoMenu("main");
-    });
+    let group = this.MapSelectingMenu.getMenu();
+
+    let btn1 = group.children[1].children[1];
+    let btn2 = group.children[1].children[3];
+    let sprite = group.children[1].children[0];
+    let sprite2 = group.children[1].children[2];
+
+    sprite.position.set(-16, -24.5, 0);
+    sprite2.position.set(16, -15.5, 0);
+
+    btn1.position.set(-16, -16, 0);
+    btn2.position.set(16, -16, 0);
 
     // add menu to scene
-    this.app.scene.add(this.MapSelectingMenu.getMenu());
+    this.app.scene.add(group);
   }
 
   loadMenuDificultySelect() {
