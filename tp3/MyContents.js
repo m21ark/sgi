@@ -8,7 +8,7 @@ import { MyCar } from "./objs/MyCar.js";
 import { Television } from "./objs/Television.js";
 import { XMLLoader } from "./utils/XMLLoader.js";
 import { Garage } from "./objs/Garage.js";
-import { FirstPersonCamera } from "../FirstPersonCamera.js";
+import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 
 /**
  * MyContents.js
@@ -82,7 +82,7 @@ export class MyContents {
     // =============== MENU CONTROLLER =====================
 
     this.menuController = new MenuController(this.app);
-    this.menuController.gotoMenu("main");
+    this.menuController.gotoMenu("end");
 
     // Start the animation loop
     this.animate();

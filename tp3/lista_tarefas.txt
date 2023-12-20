@@ -10,7 +10,6 @@ Classes obrigatorias:
 
 MARCO:
 
-- Menu final de corrida ter info de tempo, pos final, metricas de powerups apanhados etc
 - escolher diferentes tracks no menu inicial e isso refletir se na pista
 - por a meta (poles e flags) a dar no sitio certo em cada track!
 - nivel de dificuldade 
