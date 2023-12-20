@@ -61,7 +61,7 @@ export class MyContents {
     // ============== TRACK LOAD ====================
 
     this.sceneParser = new SceneParser();
-    this.sceneGroup = await this.sceneParser.buildGridGroup(1);
+    this.sceneGroup = await this.sceneParser.buildGridGroup(1); // TODO: this should get from this.menuController.getMap()
     this.app.scene.add(this.sceneGroup);
     this.trees = this.sceneParser.getTrees();
     this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
