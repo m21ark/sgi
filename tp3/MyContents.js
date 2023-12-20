@@ -62,7 +62,6 @@ export class MyContents {
 
     // ============== TRACK LOAD =================
 
-
     // ============== FIRST PERSON CAMS ====================
 
     this.debugCam = new FirstPersonCamera(this.app);
@@ -80,7 +79,8 @@ export class MyContents {
   removePreviousInstances() {
     if (this.sceneGroup) this.app.scene.remove(this.sceneGroup);
     if (this.AICar) this.AICar.aiCar.parent.remove(this.AICar.aiCar);
-    if (this.playerCam) this.playerCam.getPlayer().parent.remove(this.playerCam.getPlayer());
+    if (this.playerCam)
+      this.playerCam.getPlayer().parent.remove(this.playerCam.getPlayer());
     if (this.endLine) this.app.scene.remove(this.endLine);
     if (this.fireworks) this.fireworks.reset();
 
@@ -161,11 +161,11 @@ export class MyContents {
         return true;
       }
     }
-    
+
     for (var i = 0; i < this.sceneParser.trackPoints.length; i++) {
       let curvePoint = this.sceneParser.trackPoints[i];
       let objectPoint = carBB.position; // Use the center of the bounding box instead of the bounding box itself
-      
+
       // Calculate the distance between the two points
       var distance = curvePoint.distanceTo(objectPoint);
       if (distance < this.sceneParser.TRACK_SIZE) {
@@ -188,7 +188,7 @@ export class MyContents {
       this.playerCam.getPlayer() != null &&
       this.playerCam.getPlayer().carBB != null &&
       this.hitabbleObjs != null
-      ) {
+    ) {
       let player = this.playerCam.getPlayer();
       player.carBB.position = player.position.clone();
       player.carBB
@@ -218,7 +218,7 @@ export class MyContents {
       case 1:
         return 0.9;
       case 2:
-        return 0.60;
+        return 0.6;
       case 3:
         return 0.55;
       default:
@@ -239,7 +239,9 @@ export class MyContents {
 
     if (this.AICar != undefined && this.moveCar) {
       this.moveCar = false;
-      this.AICar.moveAICar(this.mapDificultyToSpeed(this.menuController.getDifficulty()));
+      this.AICar.moveAICar(
+        this.mapDificultyToSpeed(this.menuController.getDifficulty())
+      );
     }
 
     // =============== CAMERAS UPDATE =====================

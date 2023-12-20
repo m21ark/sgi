@@ -22,7 +22,6 @@ export class MenuController {
     this.loadMenuMapSelect();
     this.loadMenuDificultySelect();
     this.loadDropObstaclesMenu();
-
   }
 
   getDifficulty() {
@@ -119,68 +118,29 @@ export class MenuController {
     this.app.scene.add(m);
   }
 
-  // read map on tracks folder and display it in the screen ... only using x and y coordinates and using catmull to print it
-  async displayMap(group) {
-    if (this.currentMAP) {
-      group.remove(this.currentMAP);
-    }
-    let map = await this.readTrackJson(this.map + 1);
-    let points = [];
-    let curve = new THREE.CatmullRomCurve3();
-
-    for (let i = 0; i < map.track.length; i++) {
-      points.push(new THREE.Vector3(map.track[i].x, map.track[i].z, -0.1));
-    }
-
-    curve.points = points;
-    let tubeGeometry = new THREE.TubeGeometry(curve, 50, 1.5, 8, false);
-    let tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-    let tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
-    tubeMesh.scale.set(0.1, 0.1, 0.1);
-    tubeMesh.position.set(-14, -8, 0);
-    this.currentMAP = tubeMesh;
-    group.add(tubeMesh);
-  }
-
-  async readTrackJson(trackNumber) {
-    const response = await fetch(`tracks/track_${trackNumber}.json`);
-    const trackData = await response.json();
-    return trackData;
-  }
-
   loadMenuMapSelect() {
     this.MapSelectingMenu = new MyMenu(
       this.app,
       "Select Map",
       -400,
-      "center",
-      0.8,
+      "left",
+      0.8
     );
-    this.MapSelectingMenu.addButton("Next", () => { 
+    this.MapSelectingMenu.addButton("Next", () => {
       this.map = (this.map + 1) % this.availableMaps;
-      this.displayMap(group)
-
+      this.displayMap(group);
     });
-    this.MapSelectingMenu.addButton("Confirm", async () => {
-      await this.app.contents.loadTrack(this.map + 1);
+    this.MapSelectingMenu.addButton("Select", async () => {
+      await this.app.contents.loadTrack(this.map + 1); // TODO: this doesnt work if there is a map already loaded
       this.gotoMenu("dificultySelect");
+    });
+    this.MapSelectingMenu.addButton("Go back", async () => {
+      this.gotoMenu("main");
     });
 
     let group = this.MapSelectingMenu.getMenu();
 
-    
-    let btn1 = group.children[1].children[1];
-    let btn2 = group.children[1].children[3];
-    let sprite = group.children[1].children[0];
-    let sprite2 = group.children[1].children[2];
-
-    sprite.position.set(-16, -24.5, 0);
-    sprite2.position.set(16, -15.5, -0.1);
-
-    btn1.position.set(-16, -16, 0);
-    btn2.position.set(16, -16, -0.1);
-
-    this.displayMap(group)
+    this.displayMap(group);
 
     // add menu to scene
     this.app.scene.add(group);
@@ -259,7 +219,9 @@ export class MenuController {
   selectCar(car) {
     Garage.closeGarage();
 
-    let carIndex = MyCar.availableCars.children.findIndex(c => c.name === car.name);
+    let carIndex = MyCar.availableCars.children.findIndex(
+      (c) => c.name === car.name
+    );
 
     this.app.contents.playerCam.defineSelfObj(new MyCar(5, 0.1, carIndex));
 
@@ -293,5 +255,32 @@ export class MenuController {
         " and map: " +
         this.map
     );
+  }
+
+  // read map on tracks folder and display it in the screen ... only using x and y coordinates and using catmull to print it
+  async displayMap(group) {
+    if (this.currentMAP) group.remove(this.currentMAP);
+
+    let map = await this.readTrackJson(this.map + 1);
+    let points = [];
+    let curve = new THREE.CatmullRomCurve3();
+
+    for (let i = 0; i < map.track.length; i++)
+      points.push(new THREE.Vector3(map.track[i].x, map.track[i].z, -0.1));
+
+    curve.points = points;
+    let tubeGeometry = new THREE.TubeGeometry(curve, 50, 1.5, 8, false);
+    let tubeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    let tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
+    tubeMesh.scale.set(0.1, 0.1, 0.1);
+    tubeMesh.position.set(4, -12, 0);
+    this.currentMAP = tubeMesh;
+    group.add(tubeMesh);
+  }
+
+  async readTrackJson(trackNumber) {
+    const response = await fetch(`tracks/track_${trackNumber}.json`);
+    const trackData = await response.json();
+    return trackData;
   }
 }
