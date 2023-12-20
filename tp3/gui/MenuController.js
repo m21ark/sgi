@@ -54,6 +54,7 @@ export class MenuController {
       case "game":
         this.currentMenu = null;
         this.app.setActiveCamera("FirstPerson");
+        break;
       case "carSelect":
         this.garageLoad();
         return;
@@ -223,7 +224,9 @@ export class MenuController {
 
     this.app.contents.playerCam.defineSelfObj(new MyCar(5, 0.1, carIndex));
 
-    this.gotoMenu("game");
+    Garage.mixer.addEventListener("loop", (e) => {
+      this.gotoMenu("game");
+    });
   }
 
   garageLoad() {
