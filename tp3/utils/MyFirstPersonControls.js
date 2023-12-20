@@ -21,26 +21,6 @@ export class MyFirstPersonControls {
     this.target = new THREE.Vector3();
 
     this.domElement.addEventListener(
-      "mousemove",
-      this.onMouseMove.bind(this),
-      false
-    );
-    this.domElement.addEventListener(
-      "mousedown",
-      this.onMouseDown.bind(this),
-      false
-    );
-    this.domElement.addEventListener(
-      "mouseup",
-      this.onMouseUp.bind(this),
-      false
-    );
-    this.domElement.addEventListener(
-      "contextmenu",
-      this.onContextMenu.bind(this),
-      false
-    );
-    this.domElement.addEventListener(
       "keydown",
       this.onKeyDown.bind(this),
       false

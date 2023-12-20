@@ -2,12 +2,22 @@ import * as THREE from "three";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 export class MyMenu {
-  constructor(app, title, x = -100) {
+  constructor(
+    app,
+    title,
+    x = -100,
+    btnPos = "center",
+    btnSpacing = 0.8,
+    sideImage = null
+  ) {
     this.title = title;
     this.buttons = [];
     this.textWriter = new TextSpriteDraw();
 
     this.x = x;
+    this.btnPos = btnPos;
+    this.btnSpacing = btnSpacing;
+    this.sideImage = sideImage;
 
     // height recommended to be lower <= 50 (because of frustrum size)
     this.width = 70;
@@ -18,9 +28,9 @@ export class MyMenu {
     this.app = app;
   }
 
-  addButton(text, onClick) {
+  addButton(text, onClick, color = null) {
     const cnt = this.btnCount;
-    this.buttons.push({ cnt, text, onClick });
+    this.buttons.push({ cnt, text, onClick, color: color });
     this.btnCount++;
   }
 
@@ -35,16 +45,17 @@ export class MyMenu {
     let geometry = new THREE.PlaneGeometry(this.width, this.height);
 
     // create a material
-    let material = new THREE.MeshBasicMaterial({
+    let backgroundMat = new THREE.MeshBasicMaterial({
       color: 0xaabbcc,
+      map: new THREE.TextureLoader().load("assets/menu.jpg"),
     });
 
     // create a mesh
-    let menuBackground = new THREE.Mesh(geometry, material);
+    let menuBackground = new THREE.Mesh(geometry, backgroundMat);
 
     menuBackground.translateZ(-0.1);
 
-    let fsize = 30;
+    let fsize = 40;
     let midWidth = this.textWriter.getWidth(this.title, fsize);
 
     this.textWriter.write(
@@ -54,7 +65,7 @@ export class MyMenu {
       0,
       this.title, // Use the title property
       fsize,
-      "0xFF0000"
+      "0xFFFfff"
     );
 
     /*      menuBackground = this.picker.setObjLayers(
@@ -75,35 +86,71 @@ export class MyMenu {
   getButtonOnMenu() {
     let group = new THREE.Group();
 
-    const buttonWidth = 0.3 * this.width;
-    const verticalSpacing = 0.07 * this.height;
+    const buttonWidth = 0.35 * this.width;
+    const verticalSpacing = (this.btnSpacing / 10) * this.height;
     const btnHeight = 0.1 * this.height;
 
     let offsetY = this.height / 2 - verticalSpacing - 0.25 * this.height;
 
+    if (this.sideImage) {
+      let geometry = new THREE.PlaneGeometry(
+        0.4 * this.width,
+        0.4 * this.width
+      );
+
+      let tex = new THREE.TextureLoader().load(this.sideImage);
+
+      let material = new THREE.MeshPhongMaterial({
+        map: tex,
+        transparent: true,
+      });
+      let sideImageMesh = new THREE.Mesh(geometry, material);
+      sideImageMesh.position.set(
+        this.width / 2 - buttonWidth + 5,
+        -this.height / 2 + buttonWidth / 2 + 8,
+        -0.1
+      );
+      group.add(sideImageMesh);
+    }
+
     this.buttons.forEach((button) => {
       let geometry = new THREE.PlaneGeometry(buttonWidth, btnHeight);
       let material = new THREE.MeshBasicMaterial({
-        color: 0xffbbcc,
+        color: button.color ? button.color : 0xaaaaaa,
+        map: new THREE.TextureLoader().load("assets/button.jpg"),
       });
 
       let buttonMesh = new THREE.Mesh(geometry, material);
-
-      buttonMesh.position.set(0, offsetY, -0.1);
-
-      let fsize = 18;
-
+      let fsize = 24;
       let midWidth = this.textWriter.getWidth(button.text, fsize);
 
-      this.textWriter.write(
-        group,
-        -midWidth / 2 + 1,
-        offsetY,
-        0.2,
-        button.text,
-        fsize,
-        "0x0000FF"
-      );
+      if (this.btnPos === "center") {
+        buttonMesh.position.set(0, offsetY, -0.1);
+        this.textWriter.write(
+          group,
+          -midWidth / 2 + 2,
+          offsetY,
+          0.2,
+          button.text,
+          fsize,
+          "0x222222"
+        );
+      } else if (this.btnPos === "left") {
+        buttonMesh.position.set(
+          -this.width / 2 + 5 + buttonWidth / 2 + 2,
+          offsetY,
+          -0.1
+        );
+        this.textWriter.write(
+          group,
+          -midWidth / 2 - 2 - buttonWidth / 2,
+          offsetY,
+          0.2,
+          button.text,
+          fsize,
+          "0x222222"
+        );
+      }
 
       buttonMesh = this.picker.setObjLayers(
         buttonMesh,

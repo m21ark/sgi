@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyContents } from "./MyContents.js";
-import { MyGuiInterface } from "./MyGuiInterface.js";
+// import { MyGuiInterface } from "./gui/MyGuiInterface.js";
 import Stats from "three/addons/libs/stats.module.js";
-import { MyHUD } from "./MyHUD.js";
-import { MyFirstPersonControls } from "./MyFirstPersonControls.js";
+import { MyHUD } from "./gui/MyHUD.js";
+import { MyFirstPersonControls } from "./utils/MyFirstPersonControls.js";
 
 class MyApp {
   /**
@@ -79,6 +79,8 @@ class MyApp {
     person1.lookAt(new THREE.Vector3(0, 0, 0));
     this.cameras["FirstPerson"] = person1;
 
+    this.cameras["Debug"] = this.cameras["FirstPerson"].clone()
+
     // defines the frustum size for the orthographic cameras
     const frust = this.frustumSize / 2;
     const left = -frust * aspect;
@@ -103,15 +105,11 @@ class MyApp {
     orthoRight.lookAt(new THREE.Vector3(0, 0, 0));
     this.cameras["MenuCamera"] = orthoRight;
 
-
     // create a garage camera PerspectiveCamera view without controls
     const garage = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
     garage.position.set(130, 6, 120);
     garage.lookAt(new THREE.Vector3(120, 6, 120));
     this.cameras["Garage"] = garage;
-
-
-
 
     // turn off orthoright camera's zoom and mouse controls
   }
@@ -143,12 +141,15 @@ class MyApp {
 
       // are the controls yet?
 
-      if (this.activeCameraName === "FirstPerson") {
+      if (this.activeCameraName === "FirstPerson" || this.activeCameraName === "Debug") {
         this.controls = new MyFirstPersonControls(
           this.activeCamera,
           this.renderer.domElement
         );
-      } else if (this.activeCameraName === "MenuCamera" || this.activeCameraName === "Garage") {
+      } else if (
+        this.activeCameraName === "MenuCamera" ||
+        this.activeCameraName === "Garage"
+      ) {
         // skip controls for the menu camera
         return;
       } else {

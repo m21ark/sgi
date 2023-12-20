@@ -1,6 +1,4 @@
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { MyApp } from "./MyApp.js";
-import { MyContents } from "./MyContents.js";
 
 /**
  * Represents a GUI interface for controlling the application.
@@ -27,7 +25,12 @@ class MyGuiInterface {
   init() {
     const cameraFolder = this.datgui.addFolder("Camera");
     cameraFolder
-      .add(this.app, "activeCameraName", ["Perspective", "FirstPerson"])
+      .add(this.app, "activeCameraName", [
+        "Perspective",
+        "MenuCamera",
+        "FirstPerson",
+        "Debug",
+      ])
       .name("active camera");
 
     // ===================================================================

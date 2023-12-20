@@ -13,10 +13,10 @@ export class Garage {
     );
     const keyFrameAnim = new THREE.QuaternionKeyframeTrack(
       ".quaternion",
-      [0, 10],
+      [0, 5],
       [0, 0, 0, 0, quaternion.x, quaternion.y, quaternion.z, quaternion.w] // pass the quaternion values as keyframes
     );
-    const keyFrameClip = new THREE.AnimationClip("Door", 10, [keyFrameAnim]);
+    const keyFrameClip = new THREE.AnimationClip("Door", 5, [keyFrameAnim]);
     Garage.mixer = new THREE.AnimationMixer(door);
 
     const action = Garage.mixer.clipAction(keyFrameClip);
@@ -24,13 +24,15 @@ export class Garage {
     Garage.mixer.addEventListener("loop", (e) => {
       Garage.mixer.stopAllAction(); // Stop the animation mixer to prevent further updates
       door.rotateZ(angle);
-      //Garage.closeGarage(door);
+      //Garage.closeGarage();
     });
 
     action.play();
   }
 
-  static closeGarage(door) {
+  static closeGarage() {
+    const door = Garage.objectModel.getObjectByName("Door");
+
     // close the door using animation rotation
     const angle = Math.PI / 2; // example angle value
     const quaternion = new THREE.Quaternion().setFromAxisAngle(
@@ -39,10 +41,10 @@ export class Garage {
     );
     const keyFrameAnim = new THREE.QuaternionKeyframeTrack(
       ".quaternion",
-      [0, 10],
+      [0, 5],
       [quaternion.x, quaternion.y, quaternion.z, quaternion.w, 0, 0, 0, 0] // pass the quaternion values as keyframes
     );
-    const keyFrameClip = new THREE.AnimationClip("Door", 10, [keyFrameAnim]);
+    const keyFrameClip = new THREE.AnimationClip("Door", 5, [keyFrameAnim]);
     Garage.mixer = new THREE.AnimationMixer(door);
     const action = Garage.mixer.clipAction(keyFrameClip);
     // Add an event listener for the end of the animation

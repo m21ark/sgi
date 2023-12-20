@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { LightBuilder } from "./builders/LightBuilder.js";
-import { ObjectBuilder } from "./builders/ObjectBuilder.js";
-import { MipMapLoader } from "./builders/MipMapLoader.js";
-import { MyCar } from "./MyCar.js";
+import { LightBuilder } from "../builders/LightBuilder.js";
+import { ObjectBuilder } from "../builders/ObjectBuilder.js";
+import { MipMapLoader } from "../builders/MipMapLoader.js";
+import { MyCar } from "../objs/MyCar.js";
 
 export class XMLLoader {
   constructor(contents) {

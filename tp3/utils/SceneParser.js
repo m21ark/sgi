@@ -1,12 +1,12 @@
 import * as THREE from "three";
-import { ObjectBuilder } from "./builders/ObjectBuilder.js";
-import { MyBillboard } from "./MyBillboard.js";
-import { CatmullTrack } from "./tracks/CatmullTrack.js";
-import { Garage } from "./Garage.js";
+import { ObjectBuilder } from "../builders/ObjectBuilder.js";
+import { MyBillboard } from "../objs/MyBillboard.js";
+import { CatmullTrack } from "../tracks/CatmullTrack.js";
+import { Garage } from "../objs/Garage.js";
+import { MyCar } from "../objs/MyCar.js";
 
-export class GridParser {
+export class SceneParser {
   constructor() {
-
     this.hitabbleObjs = [];
     // Textures
     const loader = new THREE.TextureLoader();
@@ -15,6 +15,10 @@ export class GridParser {
     this.endFlagTex = loader.load("scene/textures/finishFlag.jpg");
     this.metalTex = loader.load("scene/textures/metal.jpg");
     this.sideSquareTex = loader.load("scene/textures/sideSquare.jpg");
+
+    this.greenTileTex.wrapS = THREE.RepeatWrapping;
+    this.greenTileTex.wrapT = THREE.RepeatWrapping;
+    this.greenTileTex.repeat.set(20, 20);
 
     // Materials
     this.greenTileMat = new THREE.MeshPhongMaterial({
@@ -82,7 +86,7 @@ export class GridParser {
       "scene/",
       this.obstacleItem
     );
-  
+
     this.garage = await this.objBuilder.create3dModel(
       {
         filepath: "objs/garage/smallgarage.obj",
@@ -91,9 +95,23 @@ export class GridParser {
       Garage.objectModel
     );
     Garage.objectModel.scale.set(0.05, 0.05, 0.05);
-    Garage.objectModel.position.set(120, 0.1, 120);
     
-    group.add(Garage.objectModel);
+    let newGroup = new THREE.Group();
+    newGroup.add(Garage.objectModel);
+    newGroup.position.set(120, 0.1, 120);
+    const availableCars = MyCar.availableCars.clone();
+    const carCount = availableCars.children.length;
+    const spaceBetweenCars = 30 / (carCount + 1);
+
+    for (let i = 0; i < carCount; i++) {
+      let clone = availableCars.children[i].clone();
+      clone.position.set(0, 0, spaceBetweenCars * (i) - 5.0 );
+      clone.rotateY(Math.PI / 2);
+      clone.scale.set(3, 3, 3);
+      newGroup.add(clone);
+    }
+
+    group.add(newGroup);
 
     // ================ CURVE =================
     // catmull curve from the json
@@ -101,7 +119,6 @@ export class GridParser {
     json.track.forEach((point) => {
       points.push(new THREE.Vector3(point.x, 0, point.z));
     });
-
 
     this.makeCatmullCurve(group, points);
 
@@ -154,7 +171,6 @@ export class GridParser {
   }
 
   createTree(x, y) {
-
     let tree = new MyBillboard([
       "assets/tree1.png",
       "assets/tree2.png",
@@ -170,8 +186,8 @@ export class GridParser {
    * Create materials for the curve elements: the mesh, the line and the wireframe
    */
   createCurveMaterialsTextures() {
-    const texture = new THREE.TextureLoader().load("./assets/Road-texture.jpg");
-    texture.wrapS = THREE.RepeatWrapping;
+    // const texture = new THREE.TextureLoader().load("./assets/Road-texture.jpg");
+    // texture.wrapS = THREE.RepeatWrapping;
 
     this.material = new THREE.MeshBasicMaterial({
       // map: texture,
@@ -210,12 +226,9 @@ export class GridParser {
 
     const mesh = new THREE.Mesh(catmullTrack.geometry, this.material);
 
-
     mesh.scale.set(1, 1, 1);
     group.add(mesh);
   }
-
-
 
   getKeyPath() {
     let path = [...this.pathPoints];
@@ -239,5 +252,4 @@ export class GridParser {
     item.scale.set(0.2, 0.2, 0.2);
     return item;
   }
-
 }

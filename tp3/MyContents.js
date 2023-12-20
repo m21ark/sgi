@@ -1,13 +1,14 @@
 import * as THREE from "three";
 import { MyFileReader } from "./parser/MyFileReader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { MyAICar } from "./MyAICar.js";
-import { GridParser } from "./SceneParser.js";
-import { MenuController } from "./MenuController.js";
-import { MyCar } from "./MyCar.js";
-import { Television } from "./Television.js";
-import { XMLLoader } from "./XMLLoader.js";
-import { Garage } from "./Garage.js";
+import { MyAICar } from "./objs/MyAICar.js";
+import { SceneParser } from "./utils/SceneParser.js";
+import { MenuController } from "./gui/MenuController.js";
+import { MyCar } from "./objs/MyCar.js";
+import { Television } from "./objs/Television.js";
+import { XMLLoader } from "./utils/XMLLoader.js";
+import { Garage } from "./objs/Garage.js";
+import { FirstPersonCamera } from "../FirstPersonCamera.js";
 
 /**
  * MyContents.js
@@ -57,29 +58,34 @@ export class MyContents {
       this.app.renderer
     );
 
-    // ============== GRID TRACK ====================
+    // ============== TRACK LOAD ====================
 
-    this.gridParser = new GridParser();
-    this.gridGroup = await this.gridParser.buildGridGroup(1);
-    this.app.scene.add(this.gridGroup);
-    this.trees = this.gridParser.getTrees();
-    this.hitabbleObjs = this.gridParser.getHitabbleObjs();
+    this.sceneParser = new SceneParser();
+    this.sceneGroup = await this.sceneParser.buildGridGroup(1);
+    this.app.scene.add(this.sceneGroup);
+    this.trees = this.sceneParser.getTrees();
+    this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
 
-    // ============== Player ====================
+    // ============== FIRST PERSON CAMS ====================
 
-    this.addPlayer();
-    this.addListeners();
-    this.animate();
+    this.playerCam = new FirstPersonCamera(this.app);
+    this.playerCam.defineSelfObj(new MyCar());
+
+    this.debugCam = new FirstPersonCamera(this.app);
+    this.debugCam.defineSelfObj();
 
     // =============== AI CAR =====================
 
-    this.AICar = new MyAICar(this.gridParser.getKeyPath());
+    this.AICar = new MyAICar(this.sceneParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
 
     // =============== MENU CONTROLLER =====================
 
     this.menuController = new MenuController(this.app);
-    this.menuController.gotoMenu("dificultySelect");
+    this.menuController.gotoMenu("main");
+
+    // Start the animation loop
+    this.animate();
   }
 
   loadXMLScene(data) {
@@ -100,7 +106,9 @@ export class MyContents {
     if (this.AICar != undefined) this.AICar.update();
 
     Garage.update();
-    this.tv.updateRenderTarget(this.app.activeCamera); // TODO: this gives a ton of warnings
+
+    // TODO: this gives a ton of warnings
+    this.tv.updateRenderTarget(this.app.activeCamera);
 
     if (
       this.player != null &&
@@ -112,13 +120,6 @@ export class MyContents {
         .applyMatrix4(this.player.matrixWorld);
 
       this.checkCollision(this.player.carBB, this.hitabbleObjs);
-    }
-  }
-
-  toggleControlPoints() {
-    for (let key in this.controlPoints) {
-      let controlPoint = this.controlPoints[key];
-      controlPoint.visible = this.showControlPoints;
     }
   }
 
@@ -135,107 +136,12 @@ export class MyContents {
     this.app.activeCameraName = cameraId;
   }
 
-  // ============== First Person View ====================
-
-  keyboard = {};
-  player = null;
-
-  /*
-   * Adds a player to the scene that can move around
-   */
-  addPlayer() {
-    const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-    const playerMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      wireframe: true,
-    }); // Customize color as needed
-    // this.player = new THREE.Mesh(playerGeometry, playerMaterial);
-    this.player = new MyCar();
-    // this.player.position.set(-100, 40, -120);
-    this.player.position.set(200, 0.5, 10);
-    this.player.rotation.x = 0.0;
-    this.app.scene.add(this.player);
-  }
-
-  /*
-   * Adds listeners to the scene that allow the player to move around
-   */
-  addListeners() {
-    window.addEventListener("keydown", (event) => {
-      this.keyboard[event.key.toLowerCase()] = true;
-    });
-
-    window.addEventListener("keyup", (event) => {
-      this.keyboard[event.key.toLowerCase()] = false;
-    });
-  }
-
-  /*
-   * Animates the player
-   */
   animate() {
-    this.app.MyHUD.setCords(...this.player.position);
+    // =============== HUD =====================
+
+    this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
     this.app.MyHUD.tickTime();
-    this.app.MyHUD.setSpeed(this.player.position.x * 10);
-    const playerSpeed = 0.5;
-    const rotationSpeed = 0.05;
-
-    const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
-
-    // Rotate the player's direction based on their current rotation
-    playerDirection.applyAxisAngle(
-      new THREE.Vector3(0, 1, 0),
-      this.player.rotation.y
-    );
-
-    // Calculate the movement vector based on the player's direction
-    const moveVector = new THREE.Vector3();
-    if (this.keyboard["w"]) moveVector.sub(playerDirection);
-    if (this.keyboard["s"]) moveVector.add(playerDirection);
-    if (this.keyboard["a"]) {
-      const leftDirection = new THREE.Vector3(1, 0, 0);
-      leftDirection.applyAxisAngle(
-        new THREE.Vector3(0, 1, 0),
-        this.player.rotation.y
-      );
-      moveVector.add(leftDirection);
-    }
-    if (this.keyboard["d"]) {
-      const rightDirection = new THREE.Vector3(-1, 0, 0);
-      rightDirection.applyAxisAngle(
-        new THREE.Vector3(0, 1, 0),
-        this.player.rotation.y
-      );
-      moveVector.add(rightDirection);
-    }
-
-    // MOVE UP AND DOWN
-    if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
-    if (this.keyboard["shift"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
-
-    // Normalize the move vector and apply playerSpeed
-    moveVector.normalize().multiplyScalar(playerSpeed);
-
-    // Update player position
-    this.player.position.add(moveVector);
-
-    // Vertical rotation
-    if (this.keyboard["arrowleft"]) {
-      this.player.rotation.y += rotationSpeed;
-    }
-    if (this.keyboard["arrowright"]) {
-      this.player.rotation.y -= rotationSpeed;
-    }
-
-    if (this.keyboard["r"]) {
-      // reset rotation
-      this.player.rotation.y = 0;
-      this.player.rotation.z = 0;
-      this.keyboard["r"] = false;
-    }
-
-    // Update the camera position if the player is in first person view
-    if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
+    this.app.MyHUD.setSpeed(this.playerCam.getPlayer().position.x * 10);
 
     // =============== AI CAR =====================
 
@@ -244,9 +150,10 @@ export class MyContents {
       this.AICar.moveAICar();
     }
 
-    requestAnimationFrame(() => {
-      this.animate();
-    });
+    // =============== CAMERAS UPDATE =====================
+
+    if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
+    if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
     // =============== TREE BILLBOARD UPDATE =====================
 
@@ -254,31 +161,17 @@ export class MyContents {
       this.trees.forEach((tree) => {
         tree.update(this.app.activeCamera.position);
       });
+
+    requestAnimationFrame(() => {
+      this.animate();
+    });
   }
+
+  // =============== GUI TOGGLES =====================
 
   toggleMoveCar() {
     console.log("toggleMoveCar");
     this.moveCar = !this.moveCar;
-  }
-
-  /**
-   * Updates the camera position to be relative to the player's position and rotation (first person view)
-   */
-  updatePlayerCamera() {
-    const playerPosition = this.player.position.clone();
-    const cameraPosition = this.app.activeCamera.position;
-
-    // Calculate a position relative to the player's rotation
-    const relativeCameraOffset = new THREE.Vector3(0, 2, -4); // Adjust the offset as needed
-    const cameraOffset = relativeCameraOffset.applyQuaternion(
-      this.player.quaternion
-    );
-
-    // Set the camera's position to be relative to the player's position
-    cameraPosition.copy(playerPosition).add(cameraOffset);
-
-    // Make the camera look at the player's position
-    this.app.activeCamera.lookAt(playerPosition);
   }
 
   toogleShowAIKeyPoints() {
