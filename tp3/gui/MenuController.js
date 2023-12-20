@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
-import { Garage } from "./Garage.js";
+import { Garage } from "../objs/Garage.js";
 
 export class MenuController {
   constructor(app) {

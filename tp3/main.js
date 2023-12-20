@@ -1,6 +1,6 @@
 import { MyApp } from "./MyApp.js";
 import { MyContents } from "./MyContents.js";
-import { MyGuiInterface } from "./MyGuiInterface.js";
+import { MyGuiInterface } from "./gui/MyGuiInterface.js";
 
 // create the application object
 let app = new MyApp();

@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { ObjectBuilder } from "./builders/ObjectBuilder.js";
-import { MyBillboard } from "./MyBillboard.js";
-import { CatmullTrack } from "./tracks/CatmullTrack.js";
-import { Garage } from "./Garage.js";
+import { ObjectBuilder } from "../builders/ObjectBuilder.js";
+import { MyBillboard } from "../objs/MyBillboard.js";
+import { CatmullTrack } from "../tracks/CatmullTrack.js";
+import { Garage } from "../objs/Garage.js";
 
 export class SceneParser {
   constructor() {

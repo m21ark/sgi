@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { TextSpriteDraw } from "./TextSpriteDraw.js";
+// import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 
 export class MyCar extends THREE.Object3D {
   constructor(maxVel = 5, velInc = 0.1, carUsed = 0) {

@@ -69,7 +69,7 @@ class MyFileReader {
         // HTTP status code  ( 200 => OK )
 
         let reader = this.reader;
- /*        console.info(
+        /*        console.info(
           "------------------ " +
             reader.xmlfilename +
             " file read. begin parsing ------------------"

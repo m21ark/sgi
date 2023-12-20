@@ -479,7 +479,7 @@ class MySceneData {
   }
 
   onLoadFinished(app, contents) {
-/*     console.info(
+    /*     console.info(
       "------------------ consolidating data structures ------------------"
     );
 

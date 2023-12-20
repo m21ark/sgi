@@ -1,13 +1,13 @@
 import * as THREE from "three";
 import { MyFileReader } from "./parser/MyFileReader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { MyAICar } from "./MyAICar.js";
-import { SceneParser } from "./SceneParser.js";
-import { MenuController } from "./MenuController.js";
-import { MyCar } from "./MyCar.js";
-import { Television } from "./Television.js";
-import { XMLLoader } from "./XMLLoader.js";
-import { Garage } from "./Garage.js";
+import { MyAICar } from "./objs/MyAICar.js";
+import { SceneParser } from "./utils/SceneParser.js";
+import { MenuController } from "./gui/MenuController.js";
+import { MyCar } from "./objs/MyCar.js";
+import { Television } from "./objs/Television.js";
+import { XMLLoader } from "./utils/XMLLoader.js";
+import { Garage } from "./objs/Garage.js";
 
 /**
  * MyContents.js
