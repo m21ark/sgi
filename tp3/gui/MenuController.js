@@ -156,7 +156,7 @@ export class MenuController {
       "center",
       0.8,
     );
-    this.MapSelectingMenu.addButton("Next", () => {
+    this.MapSelectingMenu.addButton("Next", () => { 
       this.map = (this.map + 1) % this.availableMaps;
       this.displayMap(group)
 

@@ -62,7 +62,6 @@ export class MyContents {
 
     // ============== TRACK LOAD =================
 
-    // await this.loadTrack();
 
     // ============== FIRST PERSON CAMS ====================
 
@@ -78,7 +77,20 @@ export class MyContents {
     this.animate();
   }
 
+  removePreviousInstances() {
+    if (this.sceneGroup) this.app.scene.remove(this.sceneGroup);
+    if (this.AICar) this.AICar.aiCar.parent.remove(this.AICar.aiCar);
+    if (this.playerCam) this.playerCam.getPlayer().parent.remove(this.playerCam.getPlayer());
+    if (this.endLine) this.app.scene.remove(this.endLine);
+    if (this.fireworks) this.fireworks.reset();
+
+    Garage.objectModel = new THREE.Group();    
+  }
+
   async loadTrack(mapNum) {
+    // Remove previous instances from the scene
+    this.removePreviousInstances();
+
     // Track set
     this.sceneParser = new SceneParser();
     this.sceneGroup = await this.sceneParser.buildGridGroup(mapNum);
