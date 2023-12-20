@@ -58,26 +58,14 @@ export class MyContents {
       this.app.renderer
     );
 
-    // ============== TRACK LOAD ====================
+    // ============== TRACK LOAD =================
 
-    this.sceneParser = new SceneParser();
-    this.sceneGroup = await this.sceneParser.buildGridGroup(1); // TODO: this should get from this.menuController.getMap()
-    this.app.scene.add(this.sceneGroup);
-    this.trees = this.sceneParser.getTrees();
-    this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
+    await this.loadTrack();
 
     // ============== FIRST PERSON CAMS ====================
 
-    this.playerCam = new FirstPersonCamera(this.app);
-    this.playerCam.defineSelfObj(new MyCar());
-
     this.debugCam = new FirstPersonCamera(this.app);
     this.debugCam.defineSelfObj();
-
-    // =============== AI CAR =====================
-
-    this.AICar = new MyAICar(this.sceneParser.getKeyPath());
-    this.AICar.addAICar(this.app.scene);
 
     // =============== MENU CONTROLLER =====================
 
@@ -86,6 +74,24 @@ export class MyContents {
 
     // Start the animation loop
     this.animate();
+  }
+
+  async loadTrack() {
+    // Track set
+    this.sceneParser = new SceneParser();
+    let mapNum = 1; // this.menuController.getMap(); // TODO: make this work
+    this.sceneGroup = await this.sceneParser.buildGridGroup(mapNum);
+    this.app.scene.add(this.sceneGroup);
+    this.trees = this.sceneParser.getTrees();
+    this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
+
+    // Player car set
+    this.playerCam = new FirstPersonCamera(this.app);
+    this.playerCam.defineSelfObj(new MyCar());
+
+    // AI car set
+    this.AICar = new MyAICar(this.sceneParser.getKeyPath());
+    this.AICar.addAICar(this.app.scene);
   }
 
   loadXMLScene(data) {
@@ -139,9 +145,11 @@ export class MyContents {
   animate() {
     // =============== HUD =====================
 
-    this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
-    this.app.MyHUD.tickTime();
-    this.app.MyHUD.setSpeed(this.playerCam.getPlayer().position.x * 10);
+    if (this.playerCam) {
+      this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
+      this.app.MyHUD.tickTime();
+      this.app.MyHUD.setSpeed(this.playerCam.getPlayer().position.x * 10);
+    }
 
     // =============== AI CAR =====================
 

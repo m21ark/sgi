@@ -9,8 +9,6 @@ Classes obrigatorias:
 
 
 MARCO:
-
-- escolher diferentes tracks no menu inicial e isso refletir se na pista
 - por a meta (poles e flags) a dar no sitio certo em cada track!
 
 RICARDO:
@@ -26,3 +24,4 @@ LATER:
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - fazer deteção do numero de voltas e acabar a corrida quando o jogador fizer o numero de voltas necessarias
 - fazer fogo de artificio no fim da corrida
+- escolher pista que queremos jogar
