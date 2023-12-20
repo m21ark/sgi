@@ -4,6 +4,7 @@ import { MyBillboard } from "../objs/MyBillboard.js";
 import { CatmullTrack } from "../tracks/CatmullTrack.js";
 import { Garage } from "../objs/Garage.js";
 import { MyCar } from "../objs/MyCar.js";
+import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 
 export class SceneParser {
   constructor() {
@@ -95,7 +96,7 @@ export class SceneParser {
       Garage.objectModel
     );
     Garage.objectModel.scale.set(0.05, 0.05, 0.05);
-    
+
     let newGroup = new THREE.Group();
     newGroup.add(Garage.objectModel);
     newGroup.position.set(120, 0.1, 120);
@@ -105,9 +106,19 @@ export class SceneParser {
 
     for (let i = 0; i < carCount; i++) {
       let clone = availableCars.children[i].clone();
-      clone.position.set(0, 0, spaceBetweenCars * (i) - 5.0 );
+      clone.position.set(0, 0, spaceBetweenCars * (i) - 5.0);
       clone.rotateY(Math.PI / 2);
-      clone.scale.set(3, 3, 3);
+      clone.scale.set(4, 4, 4);
+
+      var spritey = TextSpriteDraw.makeTextSprite(clone.name,
+        {
+          fontsize: 20, textColor: { r: 255, g: 255, b: 255, a: 1.0 },
+          borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+          borderThickness: 6
+        });
+      spritey.position.set(4, 0, 0);
+
+      clone.add(spritey);
       newGroup.add(clone);
     }
 

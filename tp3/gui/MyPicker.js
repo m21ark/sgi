@@ -57,7 +57,7 @@ export class MyPicker {
   }
 
   changeTargetColor(obj, color) {
-    if (this.lastPickedObj)
+    if (this.lastPickedObj && this.lastPickedObj.material !== undefined)
       this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
     this.lastPickedObj = obj;
     this.lastPickedObj.currentHex = this.lastPickedObj.material.color.getHex();
@@ -72,7 +72,26 @@ export class MyPicker {
 
   pickingHelper(intersects, colorChange) {
     if (intersects.length > 0) {
-      const obj = intersects[0].object;
+      let obj = intersects[0].object;
+
+      if (this.selectedLayer == 0) {
+        // check the first object that has type Sprite
+        let i = 0;
+        while (intersects[i] !== undefined
+          && intersects[i].object.type !== "Sprite") {
+          i++;
+        }
+        if (i > intersects.length - 1 || intersects[i] === undefined) return;
+        obj = intersects[i].object.parent;
+        console.log(obj);
+        // if obj material is null define the material
+        if (obj.material === undefined) {
+          obj.material = new THREE.MeshBasicMaterial(
+            { color: 0xFF0000 }
+          );
+        }
+      }
+
       if (this.notPickableObjIds.includes(obj.name)) {
         this.restoreTargetColor();
         console.log("Object is marked as not to be picked !");
@@ -88,16 +107,31 @@ export class MyPicker {
     }
   }
 
+  setSelectedLayer(layer) {
+    this.selectedLayer = layer;
+    this.updateSelectedLayer();
+  }
+
   onPointerMove(event) {
     if (!this.menu) return;
-    if (this.app.activeCameraName !== "MenuCamera") return;
+    if (this.app.activeCameraName !== "MenuCamera"
+      && this.app.activeCameraName !== "Garage") return;
+
+    let cam = this.app.activeCameraName;
+
+    if (this.app.activeCameraName === "Garage") {
+      this.setSelectedLayer(0);
+    }
+    else {
+      this.setSelectedLayer(1);
+    }
 
     // 1. set the mouse position with a coordinate system where the center
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     //2. set the picking ray from the camera position and mouse coordinates
-    this.raycaster.setFromCamera(this.pointer, this.app.cameras["MenuCamera"]);
+    this.raycaster.setFromCamera(this.pointer, this.app.cameras[cam]);
 
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
@@ -108,14 +142,24 @@ export class MyPicker {
 
   onPointerDown(event) {
     if (!this.menu) return;
-    if (this.app.activeCameraName !== "MenuCamera") return;
+    if (this.app.activeCameraName !== "MenuCamera"
+      && this.app.activeCameraName !== "Garage") return;
+
+    if (this.app.activeCameraName === "Garage") {
+      this.setSelectedLayer(0);
+    }
+    else {
+      this.setSelectedLayer(1);
+    }
+
+    let cam = this.app.activeCameraName;
 
     // 1. set the mouse position with a coordinate system where the center
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     //2. set the picking ray from the camera position and mouse coordinates
-    this.raycaster.setFromCamera(this.pointer, this.app.cameras["MenuCamera"]);
+    this.raycaster.setFromCamera(this.pointer, this.app.cameras[cam]);
 
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
@@ -124,8 +168,10 @@ export class MyPicker {
     this.pickingHelper(intersects, this.pickingClickColor);
 
     // indicate the object name that is being picked
+    console.log(intersects);
     if (intersects.length > 0) {
       const obj = intersects[0].object;
+      console.log("Selected object: " + obj.name);
       const buttonIndex = parseInt(obj.name.split("_").pop(), 10);
       this.menu.handleButtonClick(buttonIndex);
     }
