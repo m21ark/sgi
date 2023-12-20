@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { MyFileReader } from "./parser/MyFileReader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyAICar } from "./MyAICar.js";
-import { GridParser } from "./SceneParser.js";
+import { SceneParser } from "./SceneParser.js";
 import { MenuController } from "./MenuController.js";
 import { MyCar } from "./MyCar.js";
 import { Television } from "./Television.js";
@@ -57,13 +57,13 @@ export class MyContents {
       this.app.renderer
     );
 
-    // ============== GRID TRACK ====================
+    // ============== TRACK LOAD ====================
 
-    this.gridParser = new GridParser();
-    this.gridGroup = await this.gridParser.buildGridGroup(1);
-    this.app.scene.add(this.gridGroup);
-    this.trees = this.gridParser.getTrees();
-    this.hitabbleObjs = this.gridParser.getHitabbleObjs();
+    this.sceneParser = new SceneParser();
+    this.sceneGroup = await this.sceneParser.buildGridGroup(1);
+    this.app.scene.add(this.sceneGroup);
+    this.trees = this.sceneParser.getTrees();
+    this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
 
     // ============== Player ====================
 
@@ -73,7 +73,7 @@ export class MyContents {
 
     // =============== AI CAR =====================
 
-    this.AICar = new MyAICar(this.gridParser.getKeyPath());
+    this.AICar = new MyAICar(this.sceneParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
 
     // =============== MENU CONTROLLER =====================
@@ -146,11 +146,11 @@ export class MyContents {
   addPlayer() {
     const playerGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     const playerMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      wireframe: true,
+      transparent: true,
+      opacity: 0,
     }); // Customize color as needed
-    // this.player = new THREE.Mesh(playerGeometry, playerMaterial);
-    this.player = new MyCar();
+    this.player = new THREE.Mesh(playerGeometry, playerMaterial);
+    // this.player = new MyCar();
     // this.player.position.set(-100, 40, -120);
     this.player.position.set(200, 0.5, 10);
     this.player.rotation.x = 0.0;

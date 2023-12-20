@@ -83,9 +83,6 @@
                 <noderef id="kart_1" />
                 <noderef id="kart_2" />
 
-                <noderef id="powerup" />
-                <noderef id="obstacle" />
-
             </children>
         </node>
 
@@ -144,33 +141,6 @@
                 </primitive>
             </children>
         </node>
-
-        <node id="powerup">
-            <transforms>
-                <translate value3="6 2 8" />
-                <scale value3="0.01 0.01 0.01" />
-                <rotate value3="90 0 0" />
-            </transforms>
-            <children>
-                <primitive>
-                    <model3d filepath="objs/block/BlockQuestion.obj" />
-                </primitive>
-            </children>
-        </node>
-
-        <node id="obstacle">
-            <transforms>
-                <translate value3="6 2.5 4" />
-                <scale value3="0.09 0.09 0.09" />
-
-            </transforms>
-            <children>
-                <primitive>
-                    <model3d filepath="objs/box/ItmPowderBox.obj" />
-                </primitive>
-            </children>
-        </node>
-
 
         <node id="finishLine">
 
