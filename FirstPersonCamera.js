@@ -81,8 +81,7 @@ export class FirstPersonCamera {
     if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
     if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
 
-    // Update the camera position if the player is in first person view
-    if (this.app.activeCameraName === "FirstPerson") this.updatePlayerCamera();
+    this.updatePlayerCamera();
   }
 
   /**

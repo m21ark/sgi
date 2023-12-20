@@ -66,10 +66,13 @@ export class MyContents {
     this.trees = this.sceneParser.getTrees();
     this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
 
-    // ============== Player ====================
+    // ============== FIRST PERSON CAMS ====================
 
     this.playerCam = new FirstPersonCamera(this.app);
-    this.playerCam.defineSelfObj();
+    this.playerCam.defineSelfObj(new MyCar());
+
+    this.debugCam = new FirstPersonCamera(this.app);
+    this.debugCam.defineSelfObj();
 
     // =============== AI CAR =====================
 
@@ -147,9 +150,10 @@ export class MyContents {
       this.AICar.moveAICar();
     }
 
-    // =============== PLAYER =====================
+    // =============== CAMERAS UPDATE =====================
 
-    this.playerCam.update();
+    if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
+    if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
     // =============== TREE BILLBOARD UPDATE =====================
 

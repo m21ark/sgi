@@ -79,6 +79,8 @@ class MyApp {
     person1.lookAt(new THREE.Vector3(0, 0, 0));
     this.cameras["FirstPerson"] = person1;
 
+    this.cameras["Debug"] = this.cameras["FirstPerson"].clone()
+
     // defines the frustum size for the orthographic cameras
     const frust = this.frustumSize / 2;
     const left = -frust * aspect;
@@ -139,7 +141,7 @@ class MyApp {
 
       // are the controls yet?
 
-      if (this.activeCameraName === "FirstPerson") {
+      if (this.activeCameraName === "FirstPerson" || this.activeCameraName === "Debug") {
         this.controls = new MyFirstPersonControls(
           this.activeCamera,
           this.renderer.domElement
