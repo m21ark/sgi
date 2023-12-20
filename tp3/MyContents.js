@@ -84,7 +84,7 @@ export class MyContents {
     if (this.endLine) this.app.scene.remove(this.endLine);
     if (this.fireworks) this.fireworks.reset();
 
-    Garage.objectModel = new THREE.Group();    
+    Garage.objectModel = new THREE.Group();
   }
 
   async loadTrack(mapNum) {
@@ -161,6 +161,18 @@ export class MyContents {
         return true;
       }
     }
+    
+    for (var i = 0; i < this.sceneParser.trackPoints.length; i++) {
+      let curvePoint = this.sceneParser.trackPoints[i];
+      let objectPoint = carBB.position; // Use the center of the bounding box instead of the bounding box itself
+      
+      // Calculate the distance between the two points
+      var distance = curvePoint.distanceTo(objectPoint);
+      if (distance < this.sceneParser.TRACK_SIZE) {
+        return false;
+      }
+    }
+    return true; // collision with grass
   }
 
   update() {
@@ -172,15 +184,18 @@ export class MyContents {
     this.tv.updateRenderTarget(this.app.activeCamera);
 
     if (
-      this.player != null &&
-      this.player.carBB != null &&
+      this.playerCam != undefined &&
+      this.playerCam.getPlayer() != null &&
+      this.playerCam.getPlayer().carBB != null &&
       this.hitabbleObjs != null
-    ) {
-      this.player.carBB
+      ) {
+      let player = this.playerCam.getPlayer();
+      player.carBB.position = player.position.clone();
+      player.carBB
         .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
-        .applyMatrix4(this.player.matrixWorld);
+        .applyMatrix4(player.matrixWorld);
 
-      this.checkCollision(this.player.carBB, this.hitabbleObjs);
+      this.checkCollision(player.carBB, this.hitabbleObjs);
     }
   }
 
@@ -208,7 +223,7 @@ export class MyContents {
         return 0.55;
       default:
         return 1;
-    } 
+    }
   }
 
   animate() {

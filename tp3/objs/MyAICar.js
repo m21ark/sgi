@@ -127,7 +127,7 @@ export class MyAICar {
     this.mixer2 = new THREE.AnimationMixer(tyres);
     const action = this.mixer2.clipAction(rotationClip);
     this.mixer2.addEventListener("loop", (event) => {
-      this.mixer.stopAllAction(); // Stop the animation mixer to prevent further updates
+      this.mixer2.stopAllAction(); // Stop the animation mixer to prevent further updates
     });
     action.play();
   }

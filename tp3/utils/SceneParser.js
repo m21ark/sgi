@@ -198,8 +198,10 @@ export class SceneParser {
     const curve = new THREE.CatmullRomCurve3(points);
 
     this.pathPoints = curve.getPoints(100);
+    this.trackPoints = curve.getPoints(150);
 
-    const catmullTrack = new CatmullTrack(curve, 7, 0.1, 7, 16);
+    this.TRACK_SIZE = 7;
+    const catmullTrack = new CatmullTrack(curve, this.TRACK_SIZE, 0.1, this.TRACK_SIZE, 16);
 
     this.createCurveMaterialsTextures();
 
