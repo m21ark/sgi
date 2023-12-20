@@ -126,6 +126,9 @@ export class MyAICar {
     const rotationClip = new THREE.AnimationClip("tyreAnim", 100, [steeringKF]);
     this.mixer2 = new THREE.AnimationMixer(tyres);
     const action = this.mixer2.clipAction(rotationClip);
+    this.mixer2.addEventListener("loop", (event) => {
+      this.mixer.stopAllAction(); // Stop the animation mixer to prevent further updates
+    });
     action.play();
   }
 
@@ -134,7 +137,6 @@ export class MyAICar {
 
     if (this.aiCar !== undefined)
       if (this.aiCar.position !== undefined) {
-        Garage.openGarage();
 
         // using keyframes ... use the path points to make a animation for the car ... you should make a rotation of the car, that rotates the car based on the angle of the last position and the angle of the next position
 
@@ -200,6 +202,11 @@ export class MyAICar {
 
         const rotationAction = this.mixer.clipAction(rotationClip);
         rotationAction.play();
+
+        // Add event listener to loop on the mixer
+        this.mixer.addEventListener("loop", (event) => {
+          this.mixer.stopAllAction(); // Stop the animation mixer to prevent further updates
+        });
 
         this.tyreAnimation(laps, speed);
       }
