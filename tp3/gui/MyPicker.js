@@ -82,6 +82,7 @@ export class MyPicker {
   setCarSpriteColor(obj, color, parent) {
 
     //remove obj from parent and add a new object
+    obj.CAR = parent;
     parent.remove(obj);
 
     obj = TextSpriteDraw.makeTextSprite(parent.name,
@@ -91,6 +92,7 @@ export class MyPicker {
         borderThickness: 6
       });
     obj.position.set(4, 0, 0);
+    obj.parent = parent;
 
     this.lastPickedCar = obj;
     parent.add(obj);
@@ -108,6 +110,7 @@ export class MyPicker {
           borderThickness: 6
         });
       obj.position.set(4, 0, 0);
+      obj.parent = parent;
 
       parent.add(obj);
     }
@@ -119,13 +122,9 @@ export class MyPicker {
 
       if (this.selectedLayer == 0) {
         // check the first object that has type Sprite
-        let i = 0;
-        while (intersects[i] !== undefined
-          && intersects[i].object.type !== "Sprite") {
-          i++;
-        }
-        if (i > intersects.length - 1 || intersects[i] === undefined) return;
-        obj = intersects[i].object;
+        obj = intersects.find((intersect) => intersect.object instanceof THREE.Sprite);
+        if (obj === undefined) return;
+        obj = obj.object;
         let parent = obj.parent;
 
         this.resetLastCarSpriteColor();
@@ -213,10 +212,15 @@ export class MyPicker {
     this.pickingHelper(intersects, this.pickingClickColor);
 
     // indicate the object name that is being picked
-    console.log(intersects);
     if (intersects.length > 0) {
-      const obj = intersects[0].object;
-      console.log("Selected object: " + obj.name);
+      let obj = intersects[0].object;
+      if (this.selectedLayer == 0) {
+        obj = intersects.find((intersect) => intersect.object instanceof THREE.Sprite);
+        if (obj == undefined || obj.object == undefined) return;
+        obj = obj.object.CAR;
+        this.app.contents.menuController.selectCar(obj);
+        return;
+      }
       const buttonIndex = parseInt(obj.name.split("_").pop(), 10);
       this.menu.handleButtonClick(buttonIndex);
     }
