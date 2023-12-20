@@ -10,6 +10,11 @@ export class MenuController {
     this.app = app;
     this.currentMenu = null;
 
+    // store menus options
+    this.difficulty = null;
+    this.map = 0;
+    this.availableMaps = 3;
+
     // load menus
     this.loadMenuMain();
     this.loadMenuPause();
@@ -18,10 +23,6 @@ export class MenuController {
     this.loadMenuDificultySelect();
     this.loadDropObstaclesMenu();
 
-    // store menus options
-    this.difficulty = null;
-    this.map = 0;
-    this.availableMaps = 3;
   }
 
   getDifficulty() {
@@ -118,6 +119,35 @@ export class MenuController {
     this.app.scene.add(m);
   }
 
+  // read map on tracks folder and display it in the screen ... only using x and y coordinates and using catmull to print it
+  async displayMap(group) {
+    if (this.currentMAP) {
+      group.remove(this.currentMAP);
+    }
+    let map = await this.readTrackJson(this.map + 1);
+    let points = [];
+    let curve = new THREE.CatmullRomCurve3();
+
+    for (let i = 0; i < map.track.length; i++) {
+      points.push(new THREE.Vector3(map.track[i].x, map.track[i].z, -0.1));
+    }
+
+    curve.points = points;
+    let tubeGeometry = new THREE.TubeGeometry(curve, 50, 1.5, 8, false);
+    let tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    let tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
+    tubeMesh.scale.set(0.1, 0.1, 0.1);
+    tubeMesh.position.set(-14, -8, 0);
+    this.currentMAP = tubeMesh;
+    group.add(tubeMesh);
+  }
+
+  async readTrackJson(trackNumber) {
+    const response = await fetch(`tracks/track_${trackNumber}.json`);
+    const trackData = await response.json();
+    return trackData;
+  }
+
   loadMenuMapSelect() {
     this.MapSelectingMenu = new MyMenu(
       this.app,
@@ -126,27 +156,31 @@ export class MenuController {
       "center",
       0.8,
     );
-    this.MapSelectingMenu.addButton("<", () => {
+    this.MapSelectingMenu.addButton("Next", () => {
       this.map = (this.map + 1) % this.availableMaps;
-      this.gotoMenu("dificultySelect");
+      this.displayMap(group)
+
     });
-    this.MapSelectingMenu.addButton(">", () => {
-      this.map = (this.map - 1) % this.availableMaps;
+    this.MapSelectingMenu.addButton("Confirm", () => {
+      
       this.gotoMenu("dificultySelect");
     });
 
     let group = this.MapSelectingMenu.getMenu();
 
+    
     let btn1 = group.children[1].children[1];
     let btn2 = group.children[1].children[3];
     let sprite = group.children[1].children[0];
     let sprite2 = group.children[1].children[2];
 
     sprite.position.set(-16, -24.5, 0);
-    sprite2.position.set(16, -15.5, 0);
+    sprite2.position.set(16, -15.5, -0.1);
 
     btn1.position.set(-16, -16, 0);
-    btn2.position.set(16, -16, 0);
+    btn2.position.set(16, -16, -0.1);
+
+    this.displayMap(group)
 
     // add menu to scene
     this.app.scene.add(group);
