@@ -161,11 +161,18 @@ export class MyContents {
         return true;
       }
     }
-    
+
+    // Check collision with ai car
+    if (carBB.intersectsBox(this.AICar.aiBB)) {
+      console.log("COLLISION");
+      return true;
+    }
+
+
     for (var i = 0; i < this.sceneParser.trackPoints.length; i++) {
       let curvePoint = this.sceneParser.trackPoints[i];
       let objectPoint = carBB.position; // Use the center of the bounding box instead of the bounding box itself
-      
+
       // Calculate the distance between the two points
       var distance = curvePoint.distanceTo(objectPoint);
       if (distance < this.sceneParser.TRACK_SIZE) {
@@ -188,13 +195,16 @@ export class MyContents {
       this.playerCam.getPlayer() != null &&
       this.playerCam.getPlayer().carBB != null &&
       this.hitabbleObjs != null
-      ) {
+    ) {
       let player = this.playerCam.getPlayer();
       player.carBB.position = player.position.clone();
       player.carBB
-        .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
+        .copy(new THREE.Box3()
+          .setFromObject(MyCar.availableCars.children[0])) // TODO: NOT 0 now
         .applyMatrix4(player.matrixWorld);
-
+      this.AICar.aiBB.copy(new THREE.Box3()
+        .setFromObject(MyCar.availableCars.children[0]))
+        .applyMatrix4(this.AICar.aiCar.matrixWorld)
       this.checkCollision(player.carBB, this.hitabbleObjs);
     }
   }
