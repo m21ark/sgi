@@ -254,6 +254,40 @@ export class MyContents {
     }
   }
 
+  async startCountdown() {
+    console.log("Starting countdown");
+    let duration = 6;
+    const countdownElement = document.createElement("div");
+    countdownElement.id = "CountDown";
+    countdownElement.innerText = "Prepare!";
+    document.body.appendChild(countdownElement);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const countdownInterval = setInterval(() => {
+      duration--;
+      if (duration > 0) {
+        countdownElement.innerText = duration;
+
+        // Calculate color based on the countdown value
+        const green = Math.max(255 - duration * 50, 0);
+        const red = Math.min(duration * 50, 255);
+
+        countdownElement.style.color = `rgb(${red}, ${green}, 0)`;
+      } else {
+        clearInterval(countdownInterval);
+        countdownElement.innerText = "GO!";
+        countdownElement.style.fontSize = "180px";
+        setTimeout(() => {
+          this.startGame();
+          document.body.removeChild(countdownElement);
+        }, 1000);
+      }
+    }, 1000);
+  }
+
+  startGame() {
+    // TODO: INCLUDE HERE ALL THE THINGS THAT SHOULD START WHEN THE GAME STARTS (AFTER COUNTDOWN ENDS)
+  }
+
   animate() {
     // UPDATE CAMERAS
     if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
@@ -304,5 +338,9 @@ export class MyContents {
   toggleFireWorks() {
     // inversion of boolean happens on GUI Interface
     if (!this.showFireworks) this.fireworks.reset();
+  }
+
+  toggleCountDown() {
+    this.startCountdown();
   }
 }

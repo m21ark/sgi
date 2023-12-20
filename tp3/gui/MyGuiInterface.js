@@ -53,6 +53,8 @@ class MyGuiInterface {
       .onChange(() => {
         this.contents.toggleFireWorks();
       });
+
+    moveCarFolder.add(this.contents, "toggleCountDown").name("toggleCountDown");
   }
 }
 

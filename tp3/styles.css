@@ -35,7 +35,7 @@ iframe {
 }
 
 .lil-gui.autoPlace {
-  top: 82%;
+  top: 78%;
   bottom: 0;
 }
 
@@ -49,6 +49,41 @@ iframe {
   padding: 0.4em;
   border-radius: 10px;
   font-family: Arial, sans-serif;
+}
+
+@font-face {
+  font-family: "CountDownFont";
+  src: url("assets/CountDownFont.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+#CountDown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120px;
+  background-color: transparent;
+  padding: 0.4em;
+  border-radius: 10px;
+  font-family: "CountDownFont", Arial, sans-serif;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    color: rgb(0, 255, 0);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    color: rgb(255, 255, 0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    color: rgb(255, 165, 0);
+  }
 }
 
 #speedContainer {

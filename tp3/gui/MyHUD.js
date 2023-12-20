@@ -18,7 +18,7 @@ export class MyHUD {
     this.lapsElement = document.createElement("div");
     this.powerupTimeElement = document.createElement("div");
     this.statusElement = document.createElement("div");
-    this.speedBarElement = document.createElement("div"); // New speed bar element
+    this.speedBarElement = document.createElement("div");
 
     // Set initial values
     this.timeElement.innerHTML = "Time: 0.00 s";
