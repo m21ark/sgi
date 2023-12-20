@@ -82,7 +82,7 @@ export class MyContents {
     // =============== MENU CONTROLLER =====================
 
     this.menuController = new MenuController(this.app);
-    this.menuController.gotoMenu("end");
+    this.menuController.gotoMenu("main");
 
     // Start the animation loop
     this.animate();
@@ -168,11 +168,6 @@ export class MyContents {
   }
 
   // =============== GUI TOGGLES =====================
-
-  toggleMoveCar() {
-    console.log("toggleMoveCar");
-    this.moveCar = !this.moveCar;
-  }
 
   toogleShowAIKeyPoints() {
     let keypoints = this.AICar.getAICarKeyPointsGroup().children;

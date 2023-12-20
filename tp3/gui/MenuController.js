@@ -109,8 +109,10 @@ export class MenuController {
       this.gotoMenu("main");
     });
 
-    // add menu to scene
-    this.app.scene.add(this.endMenu.getMenu());
+    // add menu to scene with name so we can update it later
+    let m = this.endMenu.getMenu();
+    m.name = "endMenu";
+    this.app.scene.add(m);
   }
 
   loadMenuMapSelect() {
@@ -193,6 +195,24 @@ export class MenuController {
 
     // add menu to scene
     this.app.scene.add(this.dropObstaclesMenu.getMenu());
+  }
+
+  // ========================================================
+
+  updateEndMenu(won, time, powerCnt, obstacleCnt) {
+    // remove old menu
+    let oldMenu = this.app.scene.getObjectByName("endMenu");
+    this.app.scene.remove(oldMenu);
+
+    console.log(this.app.scene.children);
+
+    this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
+    this.endMenu.updateText(`Your final time was ${time}s`, 1);
+    let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
+    this.endMenu.updateText(s, 2);
+
+    // add new menu to scene
+    this.app.scene.add(this.endMenu.getMenu());
   }
 
   garageLoad() {

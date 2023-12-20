@@ -41,7 +41,12 @@ export class MyMenu {
     this.btnCount++;
   }
 
-  addText(text, color="0xffffff") {
+  updateText(text, buttonIndex) {
+    const button = this.buttons.find((btn) => btn.cnt === buttonIndex);
+    if (button) button.text = text;
+  }
+
+  addText(text, color = "0xffffff") {
     this.addButton(text, () => {}, null, false, color);
   }
 
