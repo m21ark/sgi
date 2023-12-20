@@ -90,6 +90,7 @@ export class MyPicker {
 
   onPointerMove(event) {
     if (!this.menu) return;
+    if (this.app.activeCameraName !== "MenuCamera") return;
 
     // 1. set the mouse position with a coordinate system where the center
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -107,6 +108,7 @@ export class MyPicker {
 
   onPointerDown(event) {
     if (!this.menu) return;
+    if (this.app.activeCameraName !== "MenuCamera") return;
 
     // 1. set the mouse position with a coordinate system where the center
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
