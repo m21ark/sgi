@@ -161,8 +161,8 @@ export class MenuController {
       this.displayMap(group)
 
     });
-    this.MapSelectingMenu.addButton("Confirm", () => {
-      
+    this.MapSelectingMenu.addButton("Confirm", async () => {
+      await this.app.contents.loadTrack(this.map + 1);
       this.gotoMenu("dificultySelect");
     });
 

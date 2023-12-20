@@ -62,7 +62,7 @@ export class MyContents {
 
     // ============== TRACK LOAD =================
 
-    await this.loadTrack();
+    // await this.loadTrack();
 
     // ============== FIRST PERSON CAMS ====================
 
@@ -78,10 +78,9 @@ export class MyContents {
     this.animate();
   }
 
-  async loadTrack() {
+  async loadTrack(mapNum) {
     // Track set
     this.sceneParser = new SceneParser();
-    let mapNum = 1; // this.menuController.getMap(); // TODO: make this work
     this.sceneGroup = await this.sceneParser.buildGridGroup(mapNum);
     this.app.scene.add(this.sceneGroup);
     this.trees = this.sceneParser.getTrees();
