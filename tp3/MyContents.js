@@ -264,15 +264,8 @@ export class MyContents {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const countdownInterval = setInterval(() => {
       duration--;
-      if (duration > 0) {
-        countdownElement.innerText = duration;
-
-        // Calculate color based on the countdown value
-        const green = Math.max(255 - duration * 50, 0);
-        const red = Math.min(duration * 50, 255);
-
-        countdownElement.style.color = `rgb(${red}, ${green}, 0)`;
-      } else {
+      if (duration > 0) countdownElement.innerText = duration;
+      else {
         clearInterval(countdownInterval);
         countdownElement.innerText = "GO!";
         countdownElement.style.fontSize = "180px";
