@@ -70,7 +70,11 @@ export class MenuController {
     if (this.currentMenu) {
       this.app.MyHUD.setVisible(false);
       this.currentMenu.setCamera(this.app);
-    } else this.app.MyHUD.setVisible(true);
+    } else {
+      // Player is in game
+      // TODO: SET everything to start moving
+      this.app.MyHUD.setVisible(true);
+    }
   }
 
   loadMenuMain() {
@@ -91,7 +95,7 @@ export class MenuController {
     this.pauseMenu = new MyMenu(this.app, "Pause Menu", -200);
     this.pauseMenu.addButton("Resume", () => {
       console.log("Clicked Resume");
-      // this.gotoMenu("game"); // see later how to make this work
+      this.gotoMenu("game");
     });
     this.pauseMenu.addButton("Exit", () => {
       console.log("Clicked Exit");

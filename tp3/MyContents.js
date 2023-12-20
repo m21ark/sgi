@@ -60,8 +60,6 @@ export class MyContents {
       this.app.renderer
     );
 
-    // ============== TRACK LOAD =================
-
     // ============== FIRST PERSON CAMS ====================
 
     this.debugCam = new FirstPersonCamera(this.app);
@@ -72,8 +70,19 @@ export class MyContents {
     this.menuController = new MenuController(this.app);
     this.menuController.gotoMenu("main");
 
+    // add an ESC listener to go to pause menu
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") this.pauseGame();
+    });
+
     // Start the animation loop
     this.animate();
+  }
+
+  pauseGame() {
+    if (this.app.activeCameraName !== "FirstPerson") return;
+    // TODO: parar o resto das cenas
+    this.menuController.gotoMenu("pause");
   }
 
   removePreviousInstances() {
@@ -126,12 +135,12 @@ export class MyContents {
     let endLine = new THREE.Group();
 
     // Poles
-    let poleGeo = new THREE.CylinderGeometry(0.2, 0.2, 15, 10, 10);
+    let poleGeo = new THREE.CylinderGeometry(0.2, 0.2, 15, 5, 5);
     let poleMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
     let pole1 = new THREE.Mesh(poleGeo, poleMat);
     let pole2 = new THREE.Mesh(poleGeo, poleMat);
-    pole1.position.set(0, -3, 0);
-    pole2.position.set(10, -3, 0);
+    pole1.position.set(0, -1, 0);
+    pole2.position.set(10, -1, 0);
 
     // Flag
     let flagGeo = new THREE.PlaneGeometry(10, 5);
@@ -143,7 +152,7 @@ export class MyContents {
     endLine.add(flag);
 
     endLine.rotation.y = Math.PI / 2;
-    endLine.position.set(pos.x, 11, pos.z + 5);
+    endLine.position.set(pos.x, 6, pos.z + 5);
     endLine.name = "endLine";
 
     this.app.scene.add(endLine);
