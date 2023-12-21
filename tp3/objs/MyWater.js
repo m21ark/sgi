@@ -18,7 +18,7 @@ export class MyWater extends THREE.Object3D {
         }
       ),
       waterColor: 0x0052ac,
-      distortionScale: 4,
+      distortionScale: 1,
     });
 
     this.water.rotation.x = -Math.PI / 2;

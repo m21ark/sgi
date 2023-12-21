@@ -39,7 +39,6 @@ export class FirstPersonCamera {
   }
 
   update() {
-
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
 
     // Rotate the player's direction based on their current rotation
@@ -61,23 +60,20 @@ export class FirstPersonCamera {
       this.player.speedDown();
     }
 
-    
     if (this.keyboard["a"]) {
       this.player.incRotation();
     }
     if (this.keyboard["d"]) {
       this.player.decRotation();
     }
-    
-    
+
     moveVector.sub(playerDirection);
-  
+
     // Rotate the movement vector based on the player's rotation
     // moveVector.applyAxisAngle(
     //   new THREE.Vector3(0, 1, 0),
     //   this.player.rotation.y
     // );
-
 
     // MOVE UP AND DOWN
     // if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
@@ -88,7 +84,6 @@ export class FirstPersonCamera {
     // Update player position
 
     this.player.position.add(moveVector);
-
 
     // if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
     // if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
