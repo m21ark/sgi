@@ -63,12 +63,22 @@ export class MyCar extends THREE.Object3D {
 
   rotatePlayer() {
     this.rotation.y = this.rotationSpeed;
-    this.children[0].children[0].rotation.y =
-      this.normalizeRadian(this.rotationSpeed) * 0.08;
-    this.children[0].children[1].rotation.y =
-      this.normalizeRadian(this.rotationSpeed) * 0.03;
-    this.children[0].children[2].rotation.y =
-      this.normalizeRadian(this.rotationSpeed) * 0.05;
+
+    if (this.rotationSpeed > 0) {
+      this.children[0].children[0].rotation.y =
+        this.normalizeRadian(this.rotationSpeed) * 0.08;
+      this.children[0].children[1].rotation.y =
+        this.normalizeRadian(this.rotationSpeed) * 0.03;
+      this.children[0].children[2].rotation.y =
+        this.normalizeRadian(this.rotationSpeed) * 0.05;
+    } else if (this.rotationSpeed < 0) {
+      this.children[0].children[0].rotation.y =
+        -this.normalizeRadian(this.rotationSpeed) * 0.08;
+      this.children[0].children[1].rotation.y =
+        -this.normalizeRadian(this.rotationSpeed) * 0.03;
+      this.children[0].children[2].rotation.y =
+        -this.normalizeRadian(this.rotationSpeed) * 0.05;
+    }
   }
 
   hasPowerUpEffect() {

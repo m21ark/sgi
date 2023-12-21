@@ -102,7 +102,7 @@ export class FirstPersonCamera {
     // Rotate the player's direction based on their current rotation
     playerDirection.applyAxisAngle(
       new THREE.Vector3(0, 1, 0),
-      this.normalizeRadian(this.player.rotationSpeed) * 1.05
+      this.normalizeRadian(this.player.rotationSpeed) * (this.player.rotationSpeed > 0? 1.05 : 0.95)
     );
 
     // Calculate the movement vector based on the player's direction
