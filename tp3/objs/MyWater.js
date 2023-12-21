@@ -62,6 +62,11 @@ export class MyWater extends THREE.Object3D {
       new THREE.Vector3(2.07, 0.95, 0),
     ];
 
+    // use catmull and give those points
+
+    const curve = new THREE.CatmullRomCurve3(lakeVertices);
+    const points = curve.getPoints(100);
+
     /*
     for (let i = 0; i <= 100; i++) {
       const angle = (i / 60) * Math.PI * 2;
@@ -74,7 +79,7 @@ export class MyWater extends THREE.Object3D {
     // This generates a random lake like shape but it's not very pretty
     */
 
-    const lake = new MyIrregularPlane(lakeVertices);
+    const lake = new MyIrregularPlane(points);
     return lake.getGeometry();
   }
 }
