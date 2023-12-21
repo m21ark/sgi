@@ -38,6 +38,10 @@ export class FirstPersonCamera {
     });
   }
 
+  normalizeRadian(angle) {
+    return (angle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+  }
+  
   update() {
 
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
@@ -45,7 +49,7 @@ export class FirstPersonCamera {
     // Rotate the player's direction based on their current rotation
     playerDirection.applyAxisAngle(
       new THREE.Vector3(0, 1, 0),
-      this.player.rotation.y
+      this.normalizeRadian(this.player.rotationSpeed) * 1.05
     );
 
     // Calculate the movement vector based on the player's direction
@@ -55,7 +59,6 @@ export class FirstPersonCamera {
     }
     if (this.keyboard["w"]) {
       this.player.speedUp();
-      console.log(this.player.currVel);
     }
     if (this.keyboard["s"]) {
       this.player.speedDown();
