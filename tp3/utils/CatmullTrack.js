@@ -44,14 +44,13 @@ export class CatmullTrack {
     let verticesArray;
 
     let lastV = 0;
-    let add = true;
-    let repeatInc = 1 / 10;
+    let repeatInc = 0.1;
 
-    for (let i = 0; i < this.points.length - 1; i++) {
+    for (let i = 0; i < this.points.length; i++) {
 
       const point = this.points[i];
 
-      const nextPoint = this.points[i + 1];
+      const nextPoint = this.points[i + 1] ?? this.points[0];
 
       const tangent = nextPoint.clone().sub(point).normalize();
       const normal = new THREE.Vector3(0, 1, 0).cross(tangent).normalize();
@@ -72,38 +71,47 @@ export class CatmullTrack {
 
 
 
-      const indicesArray = [
+      let indicesArray = [
         0, 1, 2,
         1, 3, 2,
       ].map(indicesArray => indicesArray + i * 2);
 
-      if (i == this.points.length - 2) {
-        // change numbers bigger than 3 to 0...3
+      if (i !== this.points.length - 1) {
+        indices.push(...indicesArray);
+        vertices.push(...verticesArray);
+      }
+      else {
+        indicesArray = [
+          0, 1, 2,
+          1, 3, 2,
+
+        ].map(indicesArray => indicesArray + i * 2);
         indicesArray.forEach((element, index) => {
           if (element - i * 2 > 1) {
             indicesArray[index] = element - i * 2 - 2;
           }
         });
+
+        indices.push(...indicesArray);
+        vertices.push(...verticesArray);
       }
 
 
 
-      indices.push(...indicesArray);
-
-      vertices.push(...verticesArray);
-
       // Generate UV coordinates based on the current point
 
 
-      if (add)
-        lastV += repeatInc;
-      else
-        lastV -= repeatInc;
+      const nextPoints = this.points.slice(i + 1, i + 11);
+      const distances = nextPoints.map((nextPoint) => nextPoint.distanceTo(point));
+      const averageDistance = distances.reduce((sum, distance) => sum + distance, 0) / distances.length;
+      const newRepeatInc = averageDistance / 30 ?? lastV;
+      if (averageDistance == NaN) newRepeatInc = lastV;
+      console.log(averageDistance)
+      repeatInc = newRepeatInc;
 
-      if (lastV == 1) 
-        add = false;
-      else if (lastV == 0)
-        add = true;
+      lastV += repeatInc;
+
+
 
       const uvArray = [
         0.0, lastV,
@@ -129,7 +137,7 @@ export class CatmullTrack {
     const colorAttribute = new THREE.BufferAttribute(colorsFloat32Array, 3);
     const indexAttribute = new THREE.BufferAttribute(indicesUint16Array, 1);
 
-      
+
     console.log(uvAttribute)
     geometry.setAttribute("position", positionAttribute);
     geometry.setAttribute("uv", uvAttribute);
