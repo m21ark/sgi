@@ -6,14 +6,14 @@ export class MyCar extends THREE.Object3D {
     super();
     // VELOCITY
     this.maxVel = maxVel;
-    this.velInc = velInc;
+    this.velInc = velInc * 0.6;
 
     this.currVel = 0;
     this.velMultiplyer = 1;
 
     this.rotationSpeedInc = 0.02;
     this.rotationSpeed = 0;
-    this.maxRotation = 6 * Math.PI / 16;
+    this.maxRotation = (6 * Math.PI) / 16;
 
     // POSITION
     this.x = 0;
@@ -58,18 +58,18 @@ export class MyCar extends THREE.Object3D {
     this.rotatePlayer();
   }
   normalizeRadian(angle) {
-    return (angle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    return ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
   }
-
 
   rotatePlayer() {
-
     this.rotation.y = this.rotationSpeed;
-    this.children[0].children[0].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.08;
-    this.children[0].children[1].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.03;
-    this.children[0].children[2].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.05;
+    this.children[0].children[0].rotation.y =
+      this.normalizeRadian(this.rotationSpeed) * 0.08;
+    this.children[0].children[1].rotation.y =
+      this.normalizeRadian(this.rotationSpeed) * 0.03;
+    this.children[0].children[2].rotation.y =
+      this.normalizeRadian(this.rotationSpeed) * 0.05;
   }
-
 
   hasPowerUpEffect() {
     return this.powerUpTimeOut > 0;
@@ -105,7 +105,7 @@ export class MyCar extends THREE.Object3D {
   }
 
   friction() {
-    const frictionCoefficient = 0.08;
+    const frictionCoefficient = 0.03;
     const frictionForce = -frictionCoefficient * this.currVel;
     this.currVel += frictionForce;
     if (Math.abs(this.currVel) < this.velInc) this.currVel = 0;

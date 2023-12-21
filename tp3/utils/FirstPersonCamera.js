@@ -39,7 +39,7 @@ export class FirstPersonCamera {
   }
 
   normalizeRadian(angle) {
-    return (angle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    return ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
   }
 
   update2() {
@@ -88,7 +88,6 @@ export class FirstPersonCamera {
     if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
 
     this.updatePlayerCamera();
-
   }
 
   update() {
