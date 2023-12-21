@@ -289,7 +289,7 @@ export class SceneParser {
     this.pathPoints = curve.getPoints(100);
     this.trackPoints = curve.getPoints(150);
 
-    this.TRACK_SIZE = 7;
+    this.TRACK_SIZE = 11;
     const catmullTrack = new CatmullTrack(
       curve,
       this.TRACK_SIZE,

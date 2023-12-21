@@ -302,7 +302,12 @@ export class MyContents {
       // HUD UPDATE
       if (this.playerCam) {
         this.app.MyHUD.setCords(...this.debugCam.getPlayer().position);
-        this.app.MyHUD.setSpeed(this.playerCam.getPlayer().position.x);
+        const maxVel = this.playerCam.getPlayer().maxVel; 
+
+        const speed = this.playerCam.getPlayer().currVel;
+        const translatedSpeed = (speed / maxVel) * 200;
+
+        this.app.MyHUD.setSpeed(translatedSpeed);
         this.app.MyHUD.tickTime();
       }
 
