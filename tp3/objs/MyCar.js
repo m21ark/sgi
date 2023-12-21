@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 
 export class MyCar extends THREE.Object3D {
-  constructor(maxVel = 0.3, velInc = 0.05, carUsed = 0) {
+  constructor(maxVel = 0.6, velInc = 0.01, carUsed = 0) {
     super();
     // VELOCITY
     this.maxVel = maxVel;

@@ -34,9 +34,6 @@ export class CatmullTrack {
 
     const color = new THREE.Color();
 
-    this.width = 7;
-    this.height = 0.01;
-    this.depth = 7;
 
     const halfWidth = this.width / 2;
     const halfHeight = this.height / 2;
@@ -46,7 +43,7 @@ export class CatmullTrack {
     let lastV = 0;
     let repeatInc = 0.1;
 
-    for (let i = 0; i < this.points.length; i++) {
+    for (let i = 0; i < this.points.length ; i++) {
 
       const point = this.points[i];
 
@@ -76,26 +73,17 @@ export class CatmullTrack {
         1, 3, 2,
       ].map(indicesArray => indicesArray + i * 2);
 
-      if (i !== this.points.length - 1) {
-        indices.push(...indicesArray);
-        vertices.push(...verticesArray);
-      }
-      else {
-        indicesArray = [
-          0, 1, 2,
-          1, 3, 2,
-
-        ].map(indicesArray => indicesArray + i * 2);
+      if (i == this.points.length - 1) {
         indicesArray.forEach((element, index) => {
           if (element - i * 2 > 1) {
             indicesArray[index] = element - i * 2 - 2;
           }
         });
 
-        indices.push(...indicesArray);
-        vertices.push(...verticesArray);
       }
 
+      indices.push(...indicesArray);
+      vertices.push(...verticesArray);
 
 
       // Generate UV coordinates based on the current point
@@ -104,21 +92,35 @@ export class CatmullTrack {
       const nextPoints = this.points.slice(i + 1, i + 11);
       const distances = nextPoints.map((nextPoint) => nextPoint.distanceTo(point));
       const averageDistance = distances.reduce((sum, distance) => sum + distance, 0) / distances.length;
-      const newRepeatInc = averageDistance / 30 ?? lastV;
-      if (averageDistance == NaN) newRepeatInc = lastV;
-      console.log(averageDistance)
+      let newRepeatInc = repeatInc;
+      if (!isNaN(averageDistance))
+        newRepeatInc = averageDistance / 30;
+
       repeatInc = newRepeatInc;
 
       lastV += repeatInc;
 
 
 
-      const uvArray = [
+      let uvArray = [
         0.0, lastV,
         1.0, lastV,
       ];
 
       uv.push(...uvArray);
+
+      // if (i == this.points.length - 1) {
+      //   verticesArray = [vertices[0], vertices[1], vertices[2],
+      //   vertices[3], vertices[4], vertices[5]];
+
+      //   vertices.push(...verticesArray);
+      //   uvArray = [
+      //     0.0, lastV ,
+      //     1.0, lastV ,
+      //   ];
+  
+      //   uv.push(...uvArray);
+      // }
 
 
       for (let i = 0; i < 2; i++) colors.push(0.8, 0.8, 0.8);

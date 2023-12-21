@@ -127,24 +127,9 @@ export class FirstPersonCamera {
 
     moveVector.sub(playerDirection);
 
-    // Rotate the movement vector based on the player's rotation
-    // moveVector.applyAxisAngle(
-    //   new THREE.Vector3(0, 1, 0),
-    //   this.player.rotation.y
-    // );
-
-    // MOVE UP AND DOWN
-    // if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
-    // if (this.keyboard["shift"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
-
-    // Normalize the move vector and apply playerSpeed
     moveVector.normalize().multiplyScalar(this.player.currVel);
-    // Update player position
 
     this.player.position.add(moveVector);
-
-    // if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
-    // if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
 
     this.updatePlayerCamera();
   }
