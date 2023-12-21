@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-class MyBillboard extends THREE.Object3D {
+export class MyBillboard extends THREE.Object3D {
   constructor(texturePathList) {
     super();
     const randomIndex = Math.floor(Math.random() * texturePathList.length);
@@ -8,6 +8,7 @@ class MyBillboard extends THREE.Object3D {
 
     const loader = new THREE.TextureLoader();
     const texture = loader.load(selectedTexturePath);
+    texture.colorSpace = THREE.SRGBColorSpace;
 
     // Create a billboard mesh (for example, a simple plane)
     const billboardGeometry = new THREE.PlaneGeometry(4, 7);
@@ -23,11 +24,9 @@ class MyBillboard extends THREE.Object3D {
     this.add(billboardMesh);
   }
 
-  update(cam) {
-    this.billboardMesh.lookAt(cam);
+  update(camPos) {
+    let pos = camPos.clone();
+    pos.y = 0;
+    this.billboardMesh.lookAt(pos);
   }
 }
-
-MyBillboard.prototype.isGroup = true;
-
-export { MyBillboard };

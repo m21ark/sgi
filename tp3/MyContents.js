@@ -280,6 +280,7 @@ export class MyContents {
     if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
     if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
+    // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE
       if (this.playerCam) {
