@@ -6,6 +6,8 @@ export class FirstPersonCamera {
     this.keyboard = {};
     this.player = null;
 
+    this.tyreAngle = 0;
+
     this.addListeners();
   }
 
@@ -37,8 +39,7 @@ export class FirstPersonCamera {
   }
 
   update() {
-    const playerSpeed = 0.5;
-    const rotationSpeed = 0.05;
+
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
 
     // Rotate the player's direction based on their current rotation
@@ -49,37 +50,48 @@ export class FirstPersonCamera {
 
     // Calculate the movement vector based on the player's direction
     const moveVector = new THREE.Vector3();
-    if (this.keyboard["w"]) moveVector.sub(playerDirection);
-    if (this.keyboard["s"]) moveVector.add(playerDirection);
+    if (!this.keyboard["w"] && !this.keyboard["s"]) {
+      this.player.friction();
+    }
+    if (this.keyboard["w"]) {
+      this.player.speedUp();
+      console.log(this.player.currVel);
+    }
+    if (this.keyboard["s"]) {
+      this.player.speedDown();
+    }
+
+    
     if (this.keyboard["a"]) {
-      const leftDirection = new THREE.Vector3(1, 0, 0);
-      leftDirection.applyAxisAngle(
-        new THREE.Vector3(0, 1, 0),
-        this.player.rotation.y
-      );
-      moveVector.add(leftDirection);
+      this.player.incRotation();
     }
     if (this.keyboard["d"]) {
-      const rightDirection = new THREE.Vector3(-1, 0, 0);
-      rightDirection.applyAxisAngle(
-        new THREE.Vector3(0, 1, 0),
-        this.player.rotation.y
-      );
-      moveVector.add(rightDirection);
+      this.player.decRotation();
     }
+    
+    
+    moveVector.sub(playerDirection);
+  
+    // Rotate the movement vector based on the player's rotation
+    // moveVector.applyAxisAngle(
+    //   new THREE.Vector3(0, 1, 0),
+    //   this.player.rotation.y
+    // );
+
 
     // MOVE UP AND DOWN
-    if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
-    if (this.keyboard["shift"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
+    // if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
+    // if (this.keyboard["shift"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
 
     // Normalize the move vector and apply playerSpeed
-    moveVector.normalize().multiplyScalar(playerSpeed);
-
+    moveVector.normalize().multiplyScalar(this.player.currVel);
     // Update player position
+
     this.player.position.add(moveVector);
 
-    if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
-    if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
+
+    // if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
+    // if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
 
     this.updatePlayerCamera();
   }

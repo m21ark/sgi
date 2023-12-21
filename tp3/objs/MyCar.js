@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 
 export class MyCar extends THREE.Object3D {
-  constructor(maxVel = 5, velInc = 0.1, carUsed = 0) {
+  constructor(maxVel = 0.3, velInc = 0.05, carUsed = 0) {
     super();
     // VELOCITY
     this.maxVel = maxVel;
@@ -10,6 +10,10 @@ export class MyCar extends THREE.Object3D {
 
     this.currVel = 0;
     this.velMultiplyer = 1;
+
+    this.rotationSpeedInc = 0.02;
+    this.rotationSpeed = 0;
+    this.maxRotation = 6 * Math.PI / 16;
 
     // POSITION
     this.x = 0;
@@ -42,6 +46,36 @@ export class MyCar extends THREE.Object3D {
     this.add(spritey);
   }
 
+  incRotation() {
+    this.rotationSpeed += this.rotationSpeedInc;
+    // if (this.rotationSpeed > this.maxRotation) this.rotationSpeed = this.maxRotation;
+    this.rotatePlayer();
+  }
+
+  decRotation() {
+    this.rotationSpeed -= this.rotationSpeedInc;
+    // if (this.rotationSpeed < -this.maxRotation) this.rotationSpeed = -this.maxRotation;
+    this.rotatePlayer();
+  }
+  normalizeRadian(radian) {
+    const twoPi = 2 * Math.PI;
+    let normalizedRadian = radian % twoPi;
+    if (normalizedRadian < 0) {
+      normalizedRadian += twoPi;
+    }
+    return normalizedRadian;
+  }
+
+
+  rotatePlayer() {
+
+    this.rotation.y = this.rotationSpeed;
+    console.log(this.rotationSpeed);
+    this.children[0].children[1].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.08;
+    this.children[0].children[2].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.08
+  }
+
+
   hasPowerUpEffect() {
     return this.powerUpTimeOut > 0;
   }
@@ -65,11 +99,21 @@ export class MyCar extends THREE.Object3D {
   }
 
   speedUp() {
-    this.currVel += velInc;
+    this.currVel += this.velInc;
+    if (this.currVel > this.maxVel) this.currVel = this.maxVel;
   }
 
   speedDown() {
-    this.currVel -= velInc;
+    this.currVel -= this.velInc;
+
+    if (this.currVel < -this.maxVel) this.currVel = -this.maxVel;
+  }
+
+  friction() {
+    const frictionCoefficient = 0.08; 
+    const frictionForce = -frictionCoefficient * this.currVel;
+    this.currVel += frictionForce;
+    if (Math.abs(this.currVel) < this.velInc) this.currVel = 0;
   }
 
   getSpeed() {

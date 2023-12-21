@@ -259,7 +259,7 @@ export class MenuController {
       (c) => c.name === car.name
     );
 
-    this.app.contents.playerCam.defineSelfObj(new MyCar(5, 0.1, carIndex));
+    this.app.contents.playerCam.defineSelfObj(new MyCar(0.6, 0.02, carIndex));
 
     Garage.mixer.addEventListener("loop", (e) => {
       this.gotoMenu("game");
