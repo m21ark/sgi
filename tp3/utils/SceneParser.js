@@ -105,13 +105,53 @@ export class SceneParser {
     this.makeCatmullCurve(group, points);
 
     // ================ GRASS =================
-    // create a big square around the track
-    const square = new THREE.PlaneGeometry(260, 260);
-    const squareMesh = new THREE.Mesh(square, this.grassMat);
-    squareMesh.rotateX(-Math.PI / 2);
 
+    // Create the plain of grass
+    const squareGeometry = new THREE.PlaneGeometry(400, 400);
+    const squareMesh = new THREE.Mesh(squareGeometry, this.grassMat);
+    squareMesh.rotateX(-Math.PI / 2);
     squareMesh.position.set(130, 0, 130);
     group.add(squareMesh);
+
+    // ================ MOUNTAINS =================
+
+    const mountains = new THREE.Group();
+    const numCones = 100; // Adjust the number of cones as needed
+    const radius = 200; // Adjust the radius to control the distance from the center
+
+    // Helper function to create a mountain mesh
+    function createMountainMesh(x, y, z) {
+      const minHeight = 25;
+      const maxHeight = 50;
+
+      const randomHeight = Math.random() * (maxHeight - minHeight) + minHeight;
+
+      const mountainGeometry = new THREE.CylinderGeometry(
+        3,
+        randomHeight * 0.3,
+        randomHeight,
+        16,
+        1
+      );
+      const mountainMaterial = new THREE.MeshBasicMaterial({
+        color: 0x442211,
+        map: new THREE.TextureLoader().load("assets/mountain.jpg"),
+      }); // Adjust color as needed
+      const mountainMesh = new THREE.Mesh(mountainGeometry, mountainMaterial);
+      mountainMesh.position.set(x, y + randomHeight * 0.1, z);
+      return mountainMesh;
+    }
+
+    for (let i = 0; i < numCones; i++) {
+      const angle = (i / numCones) * Math.PI * 2;
+      const x = radius * Math.cos(angle);
+      const z = radius * Math.sin(angle);
+      let mountain = createMountainMesh(x, 10, z);
+      mountains.add(mountain);
+    }
+
+    mountains.position.set(125, 0, 125);
+    group.add(mountains);
 
     // ================ OBSTACLES =================
 

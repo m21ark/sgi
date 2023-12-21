@@ -73,6 +73,9 @@ export class MyContents {
     this.water.position.set(0, 0.1, 0);
     this.app.scene.add(this.water);
 
+    // TEMPORARY FOR MARCO TESTING
+    this.loadTrack(1);
+
     // Start the animation loop
     this.animate();
   }
@@ -206,7 +209,7 @@ export class MyContents {
     Garage.update();
 
     // TODO: this gives a ton of warnings
-    this.tv.updateRenderTarget(this.app.activeCamera);
+    // this.tv.updateRenderTarget(this.app.activeCamera);
 
     if (
       this.playerCam != undefined &&
