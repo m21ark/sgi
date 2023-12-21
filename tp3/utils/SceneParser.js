@@ -22,6 +22,15 @@ export class SceneParser {
       color: 0x009900,
     });
 
+    this.mountainMat = new THREE.MeshBasicMaterial({
+      color: 0x442211, // Adjust color as needed
+      map: new THREE.TextureLoader().load("assets/mountain.jpg"),
+    });
+
+    this.snowMat = new THREE.MeshBasicMaterial({
+      color: 0xddddee, // Adjust color as needed
+    });
+
     this.objBuilder = new ObjectBuilder();
 
     // Meshes for powerups and obstacles Items
@@ -115,43 +124,7 @@ export class SceneParser {
 
     // ================ MOUNTAINS =================
 
-    const mountains = new THREE.Group();
-    const numCones = 100; // Adjust the number of cones as needed
-    const radius = 200; // Adjust the radius to control the distance from the center
-
-    // Helper function to create a mountain mesh
-    function createMountainMesh(x, y, z) {
-      const minHeight = 25;
-      const maxHeight = 50;
-
-      const randomHeight = Math.random() * (maxHeight - minHeight) + minHeight;
-
-      const mountainGeometry = new THREE.CylinderGeometry(
-        3,
-        randomHeight * 0.3,
-        randomHeight,
-        16,
-        1
-      );
-      const mountainMaterial = new THREE.MeshBasicMaterial({
-        color: 0x442211,
-        map: new THREE.TextureLoader().load("assets/mountain.jpg"),
-      }); // Adjust color as needed
-      const mountainMesh = new THREE.Mesh(mountainGeometry, mountainMaterial);
-      mountainMesh.position.set(x, y + randomHeight * 0.1, z);
-      return mountainMesh;
-    }
-
-    for (let i = 0; i < numCones; i++) {
-      const angle = (i / numCones) * Math.PI * 2;
-      const x = radius * Math.cos(angle);
-      const z = radius * Math.sin(angle);
-      let mountain = createMountainMesh(x, 10, z);
-      mountains.add(mountain);
-    }
-
-    mountains.position.set(125, 0, 125);
-    group.add(mountains);
+    this.addMountains(group);
 
     // ================ OBSTACLES =================
 
@@ -196,6 +169,81 @@ export class SceneParser {
     let tree = new MyBillboard("assets/trees/", 7);
     tree.position.set(x, 6.8, y);
     return tree;
+  }
+
+  createMountainMesh(x, y, z) {
+    const minHeight = 25;
+    const maxHeight = 50;
+
+    const randomHeight = Math.random() * (maxHeight - minHeight) + minHeight;
+
+    // Calculate heights for the three parts
+    const grassHeight = randomHeight / 3;
+    const mountainHeight = randomHeight / 3;
+    const snowHeight = randomHeight / 3;
+
+    const startRadius = randomHeight * 0.3;
+    const radiusLimit1 = startRadius * 0.7;
+    const radiusLimit2 = radiusLimit1 * 0.6;
+    const topRadius = Math.random() * (2 - 1) + 1;
+
+    // Create three parts of the mountain
+    const grassGeometry = new THREE.CylinderGeometry(
+      radiusLimit1,
+      startRadius,
+      grassHeight,
+      10,
+      1
+    );
+    const mountainGeometry = new THREE.CylinderGeometry(
+      radiusLimit2,
+      radiusLimit1,
+      mountainHeight,
+      10,
+      1
+    );
+    const snowGeometry = new THREE.CylinderGeometry(
+      topRadius,
+      radiusLimit2,
+      snowHeight,
+      10,
+      1
+    );
+
+    // Create meshes for each part
+    const grassMesh = new THREE.Mesh(grassGeometry, this.grassMat);
+    const mountainMesh = new THREE.Mesh(mountainGeometry, this.mountainMat);
+    const snowMesh = new THREE.Mesh(snowGeometry, this.snowMat);
+
+    // Set positions for each part
+    grassMesh.position.set(x, y, z);
+    mountainMesh.position.set(x, y + grassHeight, z);
+    snowMesh.position.set(x, y + grassHeight + mountainHeight, z);
+
+    // Create a group to hold all parts
+    const mountainGroup = new THREE.Group();
+    mountainGroup.add(grassMesh);
+    mountainGroup.add(mountainMesh);
+    mountainGroup.add(snowMesh);
+    mountainGroup.position.y -= randomHeight * 0.2;
+    return mountainGroup;
+  }
+
+  addMountains(group) {
+    const mountains = new THREE.Group();
+    const numCones = 100; // Adjust the number of cones as needed
+    const radius = 200; // Adjust the radius to control the distance from the center
+
+    for (let i = 0; i < numCones; i++) {
+      const angle = (i / numCones) * Math.PI * 2;
+      const x = radius * Math.cos(angle);
+      const z = radius * Math.sin(angle);
+      let mountain = this.createMountainMesh(x, 10, z);
+      mountains.add(mountain);
+    }
+
+    mountains.position.set(125, 0, 125);
+    group.add(mountains);
   }
 
   /**
