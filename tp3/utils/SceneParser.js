@@ -226,12 +226,19 @@ export class SceneParser {
     mountainGroup.add(mountainMesh);
     mountainGroup.add(snowMesh);
     mountainGroup.position.y -= randomHeight * 0.2;
+
+    // randomize 5 places in x and z
+    const randomX = Math.random() * 10 - 5;
+    const randomZ = Math.random() * 10 - 5;
+    mountainGroup.position.x += randomX;
+    mountainGroup.position.z += randomZ;
+
     return mountainGroup;
   }
 
   addMountains(group) {
     const mountains = new THREE.Group();
-    const numCones = 100; // Adjust the number of cones as needed
+    const numCones = 120; // Adjust the number of cones as needed
     const radius = 200; // Adjust the radius to control the distance from the center
 
     for (let i = 0; i < numCones; i++) {
