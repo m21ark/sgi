@@ -71,8 +71,9 @@ export class MyCar extends THREE.Object3D {
 
     this.rotation.y = this.rotationSpeed;
     console.log(this.rotationSpeed);
-    this.children[0].children[1].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.08;
-    this.children[0].children[2].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.08
+    this.children[0].children[0].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.08;
+    this.children[0].children[1].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.03;
+    this.children[0].children[2].rotation.y = this.normalizeRadian(this.rotationSpeed) * 0.05;
   }
 
 
