@@ -34,48 +34,74 @@ export class CatmullTrack {
 
     const color = new THREE.Color();
 
-    for (let i = 0; i < this.points.length; i++) {
+    this.width = 7;
+    this.height = 0.01;
+    this.depth = 7;
+
+    const halfWidth = this.width / 2;
+    const halfHeight = this.height / 2;
+    const halfDepth = this.depth / 2;
+    let verticesArray;
+
+
+    for (let i = 0; i < this.points.length - 1; i++) {
+
       const point = this.points[i];
 
-      // Create parallelepiped vertices based on the point
-      const halfWidth = this.width / 2;
-      const halfHeight = this.height / 2;
-      const halfDepth = this.depth / 2;
+      const nextPoint = this.points[i + 1];
 
-      const verticesArray = [
-        point.x - halfWidth,
-        point.y - halfHeight,
-        point.z - halfDepth,
-        point.x + halfWidth,
-        point.y - halfHeight,
-        point.z - halfDepth,
-        point.x + halfWidth,
+      const tangent = nextPoint.clone().sub(point).normalize();
+      const normal = new THREE.Vector3(0, 1, 0).cross(tangent).normalize();
+      const binormal = tangent.clone().cross(normal).normalize();
+
+
+      verticesArray = [
+        point.x - normal.x * halfWidth + binormal.x * halfDepth,
         point.y + halfHeight,
-        point.z - halfDepth,
-        point.x - halfWidth,
+        point.z - normal.z * halfWidth + binormal.z * halfDepth,
+        point.x + normal.x * halfWidth + binormal.x * halfDepth,
         point.y + halfHeight,
-        point.z - halfDepth,
-        point.x - halfWidth,
-        point.y - halfHeight,
-        point.z + halfDepth,
-        point.x + halfWidth,
-        point.y - halfHeight,
-        point.z + halfDepth,
-        point.x + halfWidth,
+        point.z + normal.z * halfWidth + binormal.z * halfDepth,
+        point.x + normal.x * halfWidth - binormal.x * halfDepth,
         point.y + halfHeight,
-        point.z + halfDepth,
-        point.x - halfWidth,
+        point.z + normal.z * halfWidth - binormal.z * halfDepth,
+        point.x - normal.x * halfWidth - binormal.x * halfDepth,
         point.y + halfHeight,
-        point.z + halfDepth,
+        point.z - normal.z * halfWidth - binormal.z * halfDepth,
+        // // Bottom
+        // point.x - normal.x * halfWidth + binormal.x * halfDepth,
+        // point.y - halfHeight,
+        // point.z - normal.z * halfWidth + binormal.z * halfDepth,
+        // point.x + normal.x * halfWidth + binormal.x * halfDepth,
+        // point.y - halfHeight,
+        // point.z + normal.z * halfWidth + binormal.z * halfDepth,
+        // point.x + normal.x * halfWidth - binormal.x * halfDepth,
+        // point.y - halfHeight,
+        // point.z + normal.z * halfWidth - binormal.z * halfDepth,
+        // point.x - normal.x * halfWidth - binormal.x * halfDepth,
+        // point.y - halfHeight,
+        // point.z - normal.z * halfWidth - binormal.z * halfDepth,
       ];
 
-      const startIndex = i * 8;
 
-      // Define indices for the parallelepiped
+
       const indicesArray = [
-        0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4, 0, 4, 7, 7, 3, 0, 1, 5, 6, 6, 2, 1,
-        0, 1, 5, 5, 4, 0, 2, 3, 7, 7, 6, 2,
-      ].map((index) => index + startIndex);
+        0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4, 0, 4, 7, 7, 3, 0,
+        1, 5, 6, 6, 2, 1, 0, 1, 5, 5, 4, 0, 2, 3, 7, 7, 6, 2,
+      ].map(indicesArray => indicesArray + i * 4);
+
+      if (i == this.points.length - 2) {
+        // change numbers bigger than 3 to 0...3
+        indicesArray.forEach((element, index) => {
+          if (element - i*4 > 3) {
+            indicesArray[index] = element -i*4 - 4;
+          }
+        });
+      }
+
+      if (i == 0) console.log(indicesArray);
+
+
 
       indices.push(...indicesArray);
 

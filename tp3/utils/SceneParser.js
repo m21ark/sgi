@@ -257,13 +257,13 @@ export class SceneParser {
    * Create materials for the curve elements: the mesh, the line and the wireframe
    */
   createCurveMaterialsTextures() {
-    // const texture = new THREE.TextureLoader().load("./assets/Road-texture.jpg");
+    const texture = new THREE.TextureLoader().load("./assets/menu.jpg");
     // texture.wrapS = THREE.RepeatWrapping;
 
     this.material = new THREE.MeshBasicMaterial({
-      // map: texture,
+      map: texture,
       side: THREE.DoubleSide,
-      color: 0x1b1b19,
+      // color: 0x1b1b19,
       // emissive: 0xdddddd,
       // wireframe:  true
     });
