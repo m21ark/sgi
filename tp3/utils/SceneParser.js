@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { ObjectBuilder } from "../builders/ObjectBuilder.js";
 import { MyBillboard } from "../objs/MyBillboard.js";
-import { CatmullTrack } from "../tracks/CatmullTrack.js";
+import { CatmullTrack } from "./CatmullTrack.js";
 import { Garage } from "../objs/Garage.js";
 import { MyCar } from "../objs/MyCar.js";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
@@ -77,16 +77,16 @@ export class SceneParser {
 
     for (let i = 0; i < carCount; i++) {
       let clone = availableCars.children[i].clone();
-      clone.position.set(0, 0, spaceBetweenCars * (i) - 5.0);
+      clone.position.set(0, 0, spaceBetweenCars * i - 5.0);
       clone.rotateY(Math.PI / 2);
       clone.scale.set(4, 4, 4);
 
-      var spritey = TextSpriteDraw.makeTextSprite(clone.name,
-        {
-          fontsize: 20, textColor: { r: 255, g: 255, b: 255, a: 1.0 },
-          borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
-          borderThickness: 6
-        });
+      var spritey = TextSpriteDraw.makeTextSprite(clone.name, {
+        fontsize: 20,
+        textColor: { r: 255, g: 255, b: 255, a: 1.0 },
+        borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+        borderThickness: 6,
+      });
       spritey.position.set(4, 0, 0);
 
       clone.add(spritey);
@@ -153,14 +153,8 @@ export class SceneParser {
   }
 
   createTree(x, y) {
-    let tree = new MyBillboard([
-      "assets/tree1.png",
-      "assets/tree2.png",
-      "assets/tree3.png",
-    ]);
-
-    tree.position.set(x, 3.5, y);
-
+    let tree = new MyBillboard("assets/trees/", 7);
+    tree.position.set(x, 6.8, y);
     return tree;
   }
 
@@ -201,7 +195,13 @@ export class SceneParser {
     this.trackPoints = curve.getPoints(150);
 
     this.TRACK_SIZE = 7;
-    const catmullTrack = new CatmullTrack(curve, this.TRACK_SIZE, 0.1, this.TRACK_SIZE, 16);
+    const catmullTrack = new CatmullTrack(
+      curve,
+      this.TRACK_SIZE,
+      0.1,
+      this.TRACK_SIZE,
+      16
+    );
 
     this.createCurveMaterialsTextures();
 

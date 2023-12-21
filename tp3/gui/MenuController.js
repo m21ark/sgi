@@ -102,8 +102,24 @@ export class MenuController {
 
     const writer = new TextSpriteDraw();
     writer.write(group, -33, -17, 0.2, "FEUP | MEIC - 2023 ", 16, "0xffffff");
-    writer.write(group, -33, -20, 0.2, "Marco Rocha (up202004891)", 16, "0xffffff");
-    writer.write(group, -33, -23, 0.2, "Ricardo Matos (up202007962)", 16, "0xffffff");
+    writer.write(
+      group,
+      -33,
+      -20,
+      0.2,
+      "Marco Rocha (up202004891)",
+      16,
+      "0xffffff"
+    );
+    writer.write(
+      group,
+      -33,
+      -23,
+      0.2,
+      "Ricardo Matos (up202007962)",
+      16,
+      "0xffffff"
+    );
 
     // add menu to scene
     this.app.scene.add(group);
@@ -149,7 +165,7 @@ export class MenuController {
     );
 
     this.MapSelectingMenu.addButton("Select", async () => {
-      await this.app.contents.loadTrack(this.map + 1); // TODO: this doesnt work if there is a map already loaded
+      this.app.contents.loadTrack(this.map + 1); // TODO: this doesnt work if there is a map already loaded
       this.gotoMenu("dificultySelect");
     });
     this.MapSelectingMenu.addButton("Next", () => {

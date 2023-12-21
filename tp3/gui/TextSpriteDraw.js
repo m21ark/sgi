@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 export class TextSpriteDraw {
   constructor() {
-    this.texture = new THREE.TextureLoader().load("assets/font2.png");
+    this.texture = new THREE.TextureLoader().load("assets/font.png");
     this.material = new THREE.MeshBasicMaterial({
       map: this.texture,
       transparent: true,

@@ -1,17 +1,17 @@
 import * as THREE from "three";
 
 export class MyBillboard extends THREE.Object3D {
-  constructor(texturePathList) {
+  constructor(texturePathList, count) {
     super();
-    const randomIndex = Math.floor(Math.random() * texturePathList.length);
-    const selectedTexturePath = texturePathList[randomIndex];
+    const randomIndex = Math.floor(Math.random() * count) + 1;
+    const selectedTexturePath = texturePathList + "tree" + randomIndex + ".png";
 
     const loader = new THREE.TextureLoader();
     const texture = loader.load(selectedTexturePath);
     texture.colorSpace = THREE.SRGBColorSpace;
 
     // Create a billboard mesh (for example, a simple plane)
-    const billboardGeometry = new THREE.PlaneGeometry(4, 7);
+    const billboardGeometry = new THREE.PlaneGeometry(10, 14);
     const billboardMaterial = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
