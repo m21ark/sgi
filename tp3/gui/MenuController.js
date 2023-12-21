@@ -3,6 +3,7 @@ import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
 import { Garage } from "../objs/Garage.js";
 import { MyCar } from "../objs/MyCar.js";
+import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 export class MenuController {
   constructor(app) {
@@ -82,7 +83,14 @@ export class MenuController {
   }
 
   loadMenuMain() {
-    this.mainMenu = new MyMenu(this.app, "Main Menu", -100, "center", 1.2);
+    this.mainMenu = new MyMenu(
+      this.app,
+      "Kart Mania",
+      -100,
+      "center",
+      1.2,
+      "assets/menu.jpg"
+    );
     this.mainMenu.addButton("Play", () => {
       this.gotoMenu("mapSelect");
     });
@@ -90,8 +98,15 @@ export class MenuController {
       window.history.go(-1);
     });
 
+    let group = this.mainMenu.getMenu();
+
+    const writer = new TextSpriteDraw();
+    writer.write(group, -33, -17, 0.2, "FEUP | MEIC - 2023 ", 16, "0xffffff");
+    writer.write(group, -33, -20, 0.2, "Marco Rocha (up202004891)", 16, "0xffffff");
+    writer.write(group, -33, -23, 0.2, "Ricardo Matos (up202007962)", 16, "0xffffff");
+
     // add menu to scene
-    this.app.scene.add(this.mainMenu.getMenu());
+    this.app.scene.add(group);
   }
 
   // TODO: see how to make this work with a listener and pause the game

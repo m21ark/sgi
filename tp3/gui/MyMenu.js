@@ -8,7 +8,7 @@ export class MyMenu {
     x = -100,
     btnPos = "center",
     btnSpacing = 0.8,
-    sideImage = null
+    bgImage = null
   ) {
     this.title = title;
     this.buttons = [];
@@ -17,7 +17,7 @@ export class MyMenu {
     this.x = x;
     this.btnPos = btnPos;
     this.btnSpacing = btnSpacing;
-    this.sideImage = sideImage;
+    this.bgImage = bgImage;
 
     // height recommended to be lower <= 50 (because of frustrum size)
     this.width = 70;
@@ -62,8 +62,10 @@ export class MyMenu {
 
     // create a material
     let backgroundMat = new THREE.MeshBasicMaterial({
-      color: 0xaabbcc,
-      map: new THREE.TextureLoader().load("assets/menu.jpg"),
+      color: 0xBBBBBB,
+      map: new THREE.TextureLoader().load(
+        this.bgImage ? this.bgImage : "assets/menu.jpg"
+      ),
     });
 
     // create a mesh
@@ -81,7 +83,7 @@ export class MyMenu {
       0,
       this.title, // Use the title property
       fsize,
-      "0xFFFfff"
+      "0xFFFFFF"
     );
 
     /*      menuBackground = this.picker.setObjLayers(
@@ -107,28 +109,6 @@ export class MyMenu {
     const btnHeight = 0.1 * this.height;
 
     let offsetY = this.height / 2 - verticalSpacing - 0.25 * this.height;
-
-    // TODO: temporary fix for the side image until correct map is showing
-    if (this.sideImage) {
-      let geometry = new THREE.PlaneGeometry(
-        0.4 * this.width,
-        0.4 * this.width
-      );
-
-      let tex = new THREE.TextureLoader().load(this.sideImage);
-
-      let material = new THREE.MeshPhongMaterial({
-        map: tex,
-        transparent: true,
-      });
-      let sideImageMesh = new THREE.Mesh(geometry, material);
-      sideImageMesh.position.set(
-        this.width / 2 - buttonWidth + 5,
-        -this.height / 2 + buttonWidth / 2 + 8,
-        -0.1
-      );
-      group.add(sideImageMesh);
-    }
 
     this.buttons.forEach((button) => {
       let geometry = new THREE.PlaneGeometry(buttonWidth, btnHeight);
