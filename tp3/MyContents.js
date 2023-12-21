@@ -69,9 +69,12 @@ export class MyContents {
 
     // =============== WATER =====================
 
-    this.water = new MyWater(20, 20);
-    this.water.position.set(0, 0.1, 0);
+    // TODO: this should be loaded from JSON (pos, size etc)
+    this.water = new MyWater(10, 10, true);
+    this.water.position.set(-10, 0.05, 200); 
     this.app.scene.add(this.water);
+
+    // ===================== LAKE =======================
 
     // TEMPORARY FOR MARCO TESTING
     // this.loadTrack(1);
