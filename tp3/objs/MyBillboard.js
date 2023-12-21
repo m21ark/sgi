@@ -25,8 +25,9 @@ export class MyBillboard extends THREE.Object3D {
   }
 
   update(camPos) {
-    let pos = camPos.clone();
-    pos.y = 0;
-    this.billboardMesh.lookAt(pos);
+
+    // only rotate on y axis towards camera
+    const target = new THREE.Vector3(camPos.x, this.position.y, camPos.z);
+    this.lookAt(target);
   }
 }

@@ -10,6 +10,7 @@ import { XMLLoader } from "./utils/XMLLoader.js";
 import { Garage } from "./objs/Garage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 import { MyFireworks } from "./objs/MyFirework.js";
+import { MyWater } from "./objs/MyWater.js";
 
 export class MyContents {
   constructor(app) {
@@ -65,6 +66,15 @@ export class MyContents {
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") this.pauseGame();
     });
+
+    // =============== WATER =====================
+
+    this.water = new MyWater(20, 20);
+    this.water.position.set(0, 0.1, 0);
+    this.app.scene.add(this.water);
+
+    // TEMPORARY FOR MARCO TESTING
+    // this.loadTrack(1);
 
     // Start the animation loop
     this.animate();
@@ -200,7 +210,7 @@ export class MyContents {
     Garage.update();
 
     // TODO: this gives a ton of warnings
-    this.tv.updateRenderTarget(this.app.activeCamera);
+    // this.tv.updateRenderTarget(this.app.activeCamera);
 
     if (
       this.playerCam != undefined &&
@@ -281,6 +291,9 @@ export class MyContents {
     if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
     if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
+    // WATER UPDATE
+    this.water.update();
+
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE
@@ -308,9 +321,7 @@ export class MyContents {
       if (this.showFireworks) this.fireworks.update();
     }
 
-    requestAnimationFrame(() => {
-      this.animate();
-    });
+    requestAnimationFrame(this.animate.bind(this));
   }
 
   // =============== GUI TOGGLES =====================

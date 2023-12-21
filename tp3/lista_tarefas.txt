@@ -1,23 +1,28 @@
-
-Classes obrigatorias:
-- MyTrack (desenhar a pista)
-- MyRoute (controlar rota automatica)
-- MyObstacle
-- MyPowerUp
-- MyCar
-- Myreader (instancia as anteriores na pos certa)
-
-
 MARCO:
-- nada
+- sound effects
+- fazer lago
+- espalhar arvores
+- por carros na pos iniciais
+- pedir nome ao user
+- fazer o podio final 
+- por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
 
 RICARDO:
-- Controlo do carro e mecanica de vel maxima e ir desecalerando se nao segurar a tecla
-- Fazer controlo de movimento de carro realista nas manobras com rodas a virar e girar 
+- corrigir camera debug
+- corrigir catmull da pista
+- fazer tv 3d
 - Implementação de colisões com powerups, obstaculos, relva (redução de vel quando fora da pista) e inimigo
+- fazer os 3 tracks
+- fazer deteção do numero de voltas
+- NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
+- fazer animacao das rodas
+- keyframe animacao ser iterpolacao cubica
 
 LATER:
 
-- NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
-- fazer deteção do numero de voltas e acabar a corrida quando o jogador fizer o numero de voltas necessarias
+- ...
+
+LOW PRIORITY:
+
 - bug fireworks
+- fazer particulas de fumo
