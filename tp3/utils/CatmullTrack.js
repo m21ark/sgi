@@ -43,6 +43,9 @@ export class CatmullTrack {
     const halfDepth = this.depth / 2;
     let verticesArray;
 
+    let lastV = 0;
+    let add = true;
+    let repeatInc = 1 / 10;
 
     for (let i = 0; i < this.points.length - 1; i++) {
 
@@ -91,22 +94,25 @@ export class CatmullTrack {
 
       // Generate UV coordinates based on the current point
 
-      const v = (i % 100) / 100;  // Repeat every 10 points
+
+      if (add)
+        lastV += repeatInc;
+      else
+        lastV -= repeatInc;
+
+      if (lastV == 1) 
+        add = false;
+      else if (lastV == 0)
+        add = true;
 
       const uvArray = [
-        0.0, v,
-        0.0, v + 1 / 100,
-        1.0, v,
-        1.0, v + 1 / 100,
+        0.0, lastV,
+        1.0, lastV,
       ];
 
-      // for (let j = 0; j < 2; j++)
-        uv.push(...uvArray);
+      uv.push(...uvArray);
 
 
-
-      // Set color for each vertex
-      // color.setHSL(u, 1.0, 0.5);
       for (let i = 0; i < 2; i++) colors.push(0.8, 0.8, 0.8);
     }
 
@@ -123,6 +129,8 @@ export class CatmullTrack {
     const colorAttribute = new THREE.BufferAttribute(colorsFloat32Array, 3);
     const indexAttribute = new THREE.BufferAttribute(indicesUint16Array, 1);
 
+      
+    console.log(uvAttribute)
     geometry.setAttribute("position", positionAttribute);
     geometry.setAttribute("uv", uvAttribute);
     geometry.setAttribute("color", colorAttribute);
