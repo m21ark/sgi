@@ -180,6 +180,7 @@ export class MyContents {
       return true;
     }
 
+    if (this.sceneParser.trackPoints == undefined) return false;
     for (var i = 0; i < this.sceneParser.trackPoints.length; i++) {
       let curvePoint = this.sceneParser.trackPoints[i];
       let objectPoint = carBB.position; // Use the center of the bounding box instead of the bounding box itself
