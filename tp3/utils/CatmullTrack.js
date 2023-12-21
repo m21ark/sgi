@@ -56,50 +56,32 @@ export class CatmullTrack {
 
 
       verticesArray = [
-        point.x - normal.x * halfWidth + binormal.x * halfDepth,
-        point.y + halfHeight,
-        point.z - normal.z * halfWidth + binormal.z * halfDepth,
-        point.x + normal.x * halfWidth + binormal.x * halfDepth,
-        point.y + halfHeight,
-        point.z + normal.z * halfWidth + binormal.z * halfDepth,
-        point.x + normal.x * halfWidth - binormal.x * halfDepth,
-        point.y + halfHeight,
-        point.z + normal.z * halfWidth - binormal.z * halfDepth,
         point.x - normal.x * halfWidth - binormal.x * halfDepth,
         point.y + halfHeight,
         point.z - normal.z * halfWidth - binormal.z * halfDepth,
-        // // Bottom
-        // point.x - normal.x * halfWidth + binormal.x * halfDepth,
-        // point.y - halfHeight,
-        // point.z - normal.z * halfWidth + binormal.z * halfDepth,
-        // point.x + normal.x * halfWidth + binormal.x * halfDepth,
-        // point.y - halfHeight,
-        // point.z + normal.z * halfWidth + binormal.z * halfDepth,
-        // point.x + normal.x * halfWidth - binormal.x * halfDepth,
-        // point.y - halfHeight,
-        // point.z + normal.z * halfWidth - binormal.z * halfDepth,
-        // point.x - normal.x * halfWidth - binormal.x * halfDepth,
-        // point.y - halfHeight,
-        // point.z - normal.z * halfWidth - binormal.z * halfDepth,
+
+        point.x + normal.x * halfWidth + binormal.x * halfDepth,
+        point.y + halfHeight,
+        point.z + normal.z * halfWidth + binormal.z * halfDepth,
+
+
       ];
 
 
 
       const indicesArray = [
-        0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4, 0, 4, 7, 7, 3, 0,
-        1, 5, 6, 6, 2, 1, 0, 1, 5, 5, 4, 0, 2, 3, 7, 7, 6, 2,
-      ].map(indicesArray => indicesArray + i * 4);
+        0, 1, 2,
+        1, 3, 2,
+      ].map(indicesArray => indicesArray + i * 2);
 
       if (i == this.points.length - 2) {
         // change numbers bigger than 3 to 0...3
         indicesArray.forEach((element, index) => {
-          if (element - i*4 > 3) {
-            indicesArray[index] = element -i*4 - 4;
+          if (element - i * 2 > 1) {
+            indicesArray[index] = element - i * 2 - 2;
           }
         });
       }
-
-      if (i == 0) console.log(indicesArray);
 
 
 
@@ -108,18 +90,24 @@ export class CatmullTrack {
       vertices.push(...verticesArray);
 
       // Generate UV coordinates based on the current point
-      const u = i / (this.points.length - 1);
-      const v = 0.5;
 
-      const uvArray = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
-      // uv.push(...uvArray);
-      for (let j = 0; j < 6; j++) {
+      const v = (i % 100) / 100;  // Repeat every 10 points
+
+      const uvArray = [
+        0.0, v,
+        0.0, v + 1 / 100,
+        1.0, v,
+        1.0, v + 1 / 100,
+      ];
+
+      // for (let j = 0; j < 2; j++)
         uv.push(...uvArray);
-      }
+
+
 
       // Set color for each vertex
-      color.setHSL(u, 1.0, 0.5);
-      for (let i = 0; i < 8; i++) colors.push(0.8, 0.8, 0.8);
+      // color.setHSL(u, 1.0, 0.5);
+      for (let i = 0; i < 2; i++) colors.push(0.8, 0.8, 0.8);
     }
 
     const verticesFloat32Array = new Float32Array(vertices);

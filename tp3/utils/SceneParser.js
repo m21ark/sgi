@@ -269,8 +269,8 @@ export class SceneParser {
     });
 
     // this.material.map.repeat.set(3, 3);
-    // this.material.map.wrapS = THREE.RepeatWrapping;
-    // this.material.map.wrapT = THREE.RepeatWrapping;
+    this.material.map.wrapS = THREE.RepeatWrapping;
+    this.material.map.wrapT = THREE.RepeatWrapping;
 
     this.wireframeMaterial = new THREE.MeshBasicMaterial({
       color: 0x0000ff,
