@@ -71,13 +71,49 @@ def find(string, target_color):
     print(']')
 
 
-find("track", (255, 0, 0, 255)) # RED
+def create_wrapped_track(sorted_coordinates, starting_point):
+    # Find the index of the starting point in the sorted coordinates
+   
+    try:
+        start_index = sorted_coordinates.index(starting_point)
+    except ValueError:
+        print("Starting point not found in the sorted coordinates.")
+        return []
+
+    # Create a wrapped track starting from the specified index
+    wrapped_track = sorted_coordinates[start_index:] + sorted_coordinates[:start_index]
+    wrapped_track.append(sorted_coordinates[start_index])
+
+    return wrapped_track
+
+
+def printTrack():
+    coordinates = get_color_coordinates("track.png", (255, 0, 0, 255))  # RED
+    sorted_coordinates = sort_coordinates_by_distance(coordinates)
+
+    starting_point =  (12, 68)
+    wrapped_track = create_wrapped_track(sorted_coordinates, starting_point)
+
+    print(f'"track": [')
+    for coordinate in wrapped_track:
+        print('  {')
+        print(f'    "x": {coordinate[0]},')
+        print(f'    "z": {coordinate[1]}')
+        print('  },')
+    print(']')
+
+
+
+printTrack()
 print("=================================")
 find("trees", (0,255,0,255))  # GREEN
 print("=================================")
 find("powerups", (0,0,255,255)) # BLUE 
 print("=================================")
 find("lake", (255,0,255,255)) # PURPLE 
+
+
+
 
 
 
