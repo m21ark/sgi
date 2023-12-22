@@ -18,7 +18,6 @@ export class MyContents {
     this.lights = [];
 
     this.lake = null;
-
     this.showControlPoints = false;
     this.controlPoints = [];
     this.moveCar = false;
@@ -54,10 +53,8 @@ export class MyContents {
 
     // ============== FIRST PERSON CAMS ====================
 
-    // this.debugCam = new FirstPersonCamera(this.app);
-    // this.debugCam.defineSelfObj();
-
-    // ================ GET LAKE ===================
+    this.debugCam = new FirstPersonCamera(this.app);
+    this.debugCam.defineSelfObj();
 
     // =============== MENU CONTROLLER =====================
 
@@ -141,11 +138,10 @@ export class MyContents {
       startPoint.z,
     ]);
 
-
     // Firework set
     this.fireworks = new MyFireworks(this.app, {
-      x: startPoint.x,
-      y: 0,
+      x: startPoint.x + 10,
+      y: 2,
       z: startPoint.z,
     });
   }
@@ -156,14 +152,14 @@ export class MyContents {
   }
 
   checkCollision(carBB, hitabbleObjs) {
-
     // check collision with checkpoints
     if (this.sceneParser.checkpoints != undefined) {
       if (carBB.intersectsBox(this.sceneParser.checkpoints[0].bbox)) {
-        console.log(this.sceneParser.checkpoints[0])
+        console.log(this.sceneParser.checkpoints[0]);
         if (this.sceneParser.checkpoints[0].name == "sector1") {
           this.lap++;
           this.app.MyHUD.setLaps(this.lap, 3);
+          this.app.audio.playSound("go");
           // TODO :podium
         }
         // swap checkpoints 0 and 1
@@ -171,7 +167,6 @@ export class MyContents {
         this.sceneParser.checkpoints[0] = this.sceneParser.checkpoints[1];
         this.sceneParser.checkpoints[1] = temp;
       }
-
     }
 
     for (const hitabble of hitabbleObjs) {
@@ -298,9 +293,6 @@ export class MyContents {
     if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
     if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
-    // WATER UPDATE
-    if (this.lake) this.lake.update();
-
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE
@@ -327,14 +319,17 @@ export class MyContents {
         );
       }
 
+      // WATER UPDATE
+      // if (this.lake) this.lake.update();
+
+      // FIREWORKS UPDATE
+      if (this.showFireworks) this.fireworks.update();
+
       // TREE UPDATE
       if (this.trees)
         this.trees.forEach((tree) => {
           tree.update(this.app.activeCamera.position);
         });
-
-      // FIREWORKS UPDATE
-      if (this.showFireworks) this.fireworks.update();
     }
 
     requestAnimationFrame(this.animate.bind(this));

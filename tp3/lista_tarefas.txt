@@ -15,7 +15,6 @@ se n der pra resolver vai ter de ficar desligada por default para eu poder jogar
 
 LATER:
 
-- efeito parabolico nos fireworks
 - escolha aleatoria do carro AI pelos carros q sobram
 - adicionar a peach para termos 3 diferentes
 - corrigir o fucking bug da camera ficar de lado as vezes e é tao irritante e causa ma jogabilidade
