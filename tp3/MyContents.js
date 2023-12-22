@@ -53,8 +53,8 @@ export class MyContents {
 
     // ============== FIRST PERSON CAMS ====================
 
-    // this.debugCam = new FirstPersonCamera(this.app);
-    // this.debugCam.defineSelfObj();
+    this.debugCam = new FirstPersonCamera(this.app);
+    this.debugCam.defineSelfObj();
 
     // =============== MENU CONTROLLER =====================
 
@@ -138,7 +138,6 @@ export class MyContents {
       startPoint.z,
     ]);
 
-
     // Firework set
     this.fireworks = new MyFireworks(this.app, {
       x: startPoint.x + 10,
@@ -153,14 +152,14 @@ export class MyContents {
   }
 
   checkCollision(carBB, hitabbleObjs) {
-
     // check collision with checkpoints
     if (this.sceneParser.checkpoints != undefined) {
       if (carBB.intersectsBox(this.sceneParser.checkpoints[0].bbox)) {
-        console.log(this.sceneParser.checkpoints[0])
+        console.log(this.sceneParser.checkpoints[0]);
         if (this.sceneParser.checkpoints[0].name == "sector1") {
           this.lap++;
           this.app.MyHUD.setLaps(this.lap, 3);
+          this.app.audio.playSound("go");
           // TODO :podium
         }
         // swap checkpoints 0 and 1
@@ -168,7 +167,6 @@ export class MyContents {
         this.sceneParser.checkpoints[0] = this.sceneParser.checkpoints[1];
         this.sceneParser.checkpoints[1] = temp;
       }
-
     }
 
     for (const hitabble of hitabbleObjs) {
@@ -322,7 +320,7 @@ export class MyContents {
       }
 
       // WATER UPDATE
-      if (this.lake) this.lake.update();
+      // if (this.lake) this.lake.update();
 
       // FIREWORKS UPDATE
       if (this.showFireworks) this.fireworks.update();

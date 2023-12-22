@@ -41,7 +41,7 @@ class MyFirework {
     this.initPos = [startPos.x, startPos.y, startPos.z];
     this.position = [startPos.x, startPos.y, startPos.z];
     this.initVel = [0, 0, 0];
-    this.velocity = [0, 0, 0];
+    // this.velocity = [0, 0, 0];
     this.accel = [0, -this.gravity, 0];
 
     // Material
@@ -84,12 +84,12 @@ class MyFirework {
     const y = this.initPos[1] + this.initVel[1] * time + this.accel[1] * aux;
     const z = this.initPos[2] + this.initVel[2] * time + this.accel[2] * aux;
 
-    const vx = this.initVel[0] + this.accel[0] * time;
-    const vy = this.initVel[1] + this.accel[1] * time;
-    const vz = this.initVel[2] + this.accel[2] * time;
+    // const vx = this.initVel[0] + this.accel[0] * time;
+    // const vy = this.initVel[1] + this.accel[1] * time;
+    // const vz = this.initVel[2] + this.accel[2] * time;
 
     this.position = [x, y, z];
-    this.velocity = [vx, vy, vz];
+    // this.velocity = [vx, vy, vz];
   }
 
   geomSetAttribute(geom, attr, value) {
@@ -159,7 +159,7 @@ class MyFirework {
     this.hasExploded = false;
     this.clock = new THREE.Clock();
     this.position = [...this.initPos];
-    this.velocity = [...this.initVel];
+    // this.velocity = [...this.initVel];
     this.accel = [0, -this.gravity, 0];
     this.material.opacity = 1;
     this.material.needsUpdate = true;
