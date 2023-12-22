@@ -5,6 +5,7 @@ import { CatmullTrack } from "./CatmullTrack.js";
 import { MyGarage } from "../objs/MyGarage.js";
 import { MyCar } from "../objs/MyCar.js";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
+import { MyWater } from "../objs/MyWater.js";
 
 export class SceneParser {
   constructor() {
@@ -38,6 +39,7 @@ export class SceneParser {
     this.obstacleItem = new THREE.Group();
 
     this.trees = [];
+    this.lake = null;
   }
 
   async readJSON(filePath) {
@@ -126,6 +128,12 @@ export class SceneParser {
 
     this.addMountains(group);
 
+    // ================ LAKE =================
+
+    json.lake.forEach((lake) => {
+      this.addLake(group, lake.x, lake.z);
+    });
+
     // ================ OBSTACLES =================
 
     json.obstacles.forEach((obstacle) => {
@@ -163,6 +171,10 @@ export class SceneParser {
 
   getTrees() {
     return this.trees;
+  }
+
+  getLake() {
+    return this.lake;
   }
 
   createTree(x, y) {
@@ -251,6 +263,14 @@ export class SceneParser {
 
     mountains.position.set(125, 0, 125);
     group.add(mountains);
+  }
+
+  addLake(group, x, z) {
+    const lake = new MyWater(10, 10, true);
+    lake.position.set(x, 0.05, z);
+    group.name = "lake";
+    this.lake = lake;
+    group.add(lake);
   }
 
   /**

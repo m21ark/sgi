@@ -26,6 +26,9 @@ LATER:
 - corrigir o fucking bug da camera ficar de lado as vezes e é tao irritante e causa ma jogabilidade
 - corrigir a selecao de carro na garagem q ta msm dificil perceber se temos algo ja selecionado ou n
 - keyframes da AI estão muito lentos e não parece um jogo competitivo o suficiente
+- resolver bug go has game started on retry
+- adicionar som de fIREWORKKK
+
 
 
 LOW PRIORITY:

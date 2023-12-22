@@ -10,7 +10,6 @@ import { XMLLoader } from "./utils/XMLLoader.js";
 import { MyGarage } from "./objs/MyGarage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 import { MyFireworks } from "./objs/MyFirework.js";
-import { MyWater } from "./objs/MyWater.js";
 
 export class MyContents {
   constructor(app) {
@@ -18,12 +17,13 @@ export class MyContents {
     this.cameras = [];
     this.lights = [];
 
+    this.lake = null;
+
     this.showControlPoints = false;
     this.controlPoints = [];
     this.moveCar = false;
     this.showAIKeyPoints = false;
     this.showFireworks = false;
-
     this.hasGameStarted = false;
 
     // XML LOADER
@@ -46,7 +46,7 @@ export class MyContents {
 
     // ============== TV =================
 
-   /*  this.tv = new Television(
+    /*  this.tv = new Television(
       this.app.scene,
       this.app.cameras["FirstPerson"],
       this.app.renderer
@@ -57,6 +57,8 @@ export class MyContents {
     this.debugCam = new FirstPersonCamera(this.app);
     this.debugCam.defineSelfObj();
 
+    // ================ GET LAKE ===================
+
     // =============== MENU CONTROLLER =====================
 
     this.menuController = new MenuController(this.app);
@@ -66,13 +68,6 @@ export class MyContents {
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") this.pauseGame();
     });
-
-    // =============== WATER =====================
-
-    // TODO: this should be loaded from JSON (pos, size etc)
-    this.water = new MyWater(10, 10, true);
-    this.water.position.set(-10, 0.05, 200);
-    this.app.scene.add(this.water);
 
     // TODO: TEMPORARY FOR MARCO TESTING
     // this.loadTrack(1);
@@ -122,6 +117,9 @@ export class MyContents {
     this.app.scene.add(this.sceneGroup);
     this.trees = this.sceneParser.getTrees();
     this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
+
+    // Lake set
+    this.lake = this.sceneParser.getLake();
 
     // AI car set
     this.AICar = new MyAICar(this.sceneParser.getKeyPath());
@@ -310,7 +308,7 @@ export class MyContents {
     if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
     // WATER UPDATE
-    this.water.update();
+    if (this.lake) this.lake.update();
 
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {

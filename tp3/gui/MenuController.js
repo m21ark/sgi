@@ -15,6 +15,7 @@ export class MenuController {
     this.difficulty = null;
     this.map = 0;
     this.availableMaps = 3;
+    this.playerName = "Player";
 
     // load menus
     this.loadMenuMain();
@@ -23,6 +24,8 @@ export class MenuController {
     this.loadMenuMapSelect();
     this.loadMenuDificultySelect();
     this.loadDropObstaclesMenu();
+    this.loadNameMenu();
+    this.loadRulesMenu();
   }
 
   getDifficulty() {
@@ -31,6 +34,10 @@ export class MenuController {
 
   getMap() {
     return this.map;
+  }
+
+  getPlayerName() {
+    return this.playerName;
   }
 
   gotoMenu(menu) {
@@ -52,6 +59,12 @@ export class MenuController {
         break;
       case "dropObstacles":
         this.currentMenu = this.dropObstaclesMenu;
+        break;
+      case "name":
+        this.currentMenu = this.nameMenu;
+        break;
+      case "rules":
+        this.currentMenu = this.rulesMenu;
         break;
       case "game":
         this.currentMenu = null;
@@ -81,7 +94,6 @@ export class MenuController {
     }
   }
 
-  // TODO: see how to make this work with a listener and pause the game
   loadMenuPause() {
     this.pauseMenu = new MyMenu(this.app, "Pause Menu", -200);
     this.pauseMenu.addButton("Resume", () => {
@@ -121,7 +133,7 @@ export class MenuController {
     );
 
     this.MapSelectingMenu.addButton("Select", async () => {
-      this.app.contents.loadTrack(this.map + 1); // TODO: this doesnt work if there is a map already loaded
+      this.app.contents.loadTrack(this.map + 1); // TODO: flag isnt removed on new load
       this.gotoMenu("dificultySelect");
     });
     this.MapSelectingMenu.addButton("Next", () => {
@@ -129,7 +141,7 @@ export class MenuController {
       this.displayMap(group);
     });
     this.MapSelectingMenu.addButton("Go back", async () => {
-      this.gotoMenu("main");
+      this.gotoMenu("name");
     });
 
     let group = this.MapSelectingMenu.getMenu();
@@ -198,11 +210,14 @@ export class MenuController {
       "Kart Mania",
       -700,
       "center",
-      1.2,
+      0.8,
       "assets/menu.jpg"
     );
     this.mainMenu.addButton("Play", () => {
-      this.gotoMenu("mapSelect");
+      this.gotoMenu("name");
+    });
+    this.mainMenu.addButton("Instructions", () => {
+      this.gotoMenu("rules");
     });
     this.mainMenu.addButton("Exit", () => {
       window.history.go(-1);
@@ -233,6 +248,52 @@ export class MenuController {
 
     // add menu to scene
     this.app.scene.add(group);
+  }
+
+  loadNameMenu() {
+    this.nameMenu = new MyMenu(this.app, "Enter your name", -800);
+
+    this.nameMenu.addText(this.playerName);
+
+    this.nameMenu.addButton("Confirm", () => {
+      this.gotoMenu("mapSelect");
+    });
+
+    this.nameMenu.addButton("Change", () => {
+      while (true) {
+        let name = prompt("Enter your name", this.playerName).trim();
+        if (name) {
+          let oldMenu = this.app.scene.getObjectByName("nameMenu");
+          this.app.scene.remove(oldMenu);
+          this.nameMenu.updateText(name, 0);
+          this.app.scene.add(this.nameMenu.getMenu());
+          this.playerName = name;
+          break;
+        } else alert("Please enter a valid name");
+      }
+    });
+
+    this.nameMenu.addButton("Go back", () => {
+      this.gotoMenu("main");
+    });
+
+    // add menu to scene
+    const group = this.nameMenu.getMenu();
+    group.name = "nameMenu";
+    this.app.scene.add(group);
+  }
+
+  loadRulesMenu() {
+    this.rulesMenu = new MyMenu(this.app, "Instructions", -900, "center", 0.5);
+    this.rulesMenu.addText("Use WASD to move and ESC to pause");
+    this.rulesMenu.addText("The first to complete all laps wins");
+    this.rulesMenu.addText("Avoid obstacles and collect powerups");
+    this.rulesMenu.addButton("Go back", () => {
+      this.gotoMenu("main");
+    });
+
+    // add menu to scene
+    this.app.scene.add(this.rulesMenu.getMenu());
   }
 
   // ========================================================
