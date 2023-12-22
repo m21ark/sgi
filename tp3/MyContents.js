@@ -154,6 +154,23 @@ export class MyContents {
   }
 
   checkCollision(carBB, hitabbleObjs) {
+
+    // check collision with checkpoints
+    if (this.sceneParser.checkpoints != undefined) {
+      if (carBB.intersectsBox(this.sceneParser.checkpoints[0].bbox)) {
+        console.log(this.sceneParser.checkpoints[0])
+        if (this.sceneParser.checkpoints[0].name == "sector1") {
+          console.log("LAP")
+          this.app.MyHUD.setLaps(1, 3);
+        }
+        // swap checkpoints 0 and 1
+        let temp = this.sceneParser.checkpoints[0];
+        this.sceneParser.checkpoints[0] = this.sceneParser.checkpoints[1];
+        this.sceneParser.checkpoints[1] = temp;
+      }
+
+    }
+
     for (const hitabble of hitabbleObjs) {
       if (carBB.intersectsBox(hitabble.bbox)) {
         hitabble.effectPlayer(this.playerCam.getPlayer());

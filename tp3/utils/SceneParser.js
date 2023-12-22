@@ -211,6 +211,42 @@ export class SceneParser {
 
     this.addFlag(group, json.flagRotate ? json.flagRotate : false);
 
+    // ================ CHECKPOINT =================
+    // Create a box geometry
+    let boxGeometry = new THREE.BoxGeometry(25, 1, 25); // Adjust the size as needed
+
+    // Create a box material
+    let boxMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Adjust the color as needed
+
+    // Create the first box and add it to the group
+    let box1 = new THREE.Mesh(boxGeometry, boxMaterial);
+    let pos = this.getKeyPath()[0];
+    box1.position.copy(new THREE.Vector3(pos.x, 0, pos.z)); // Position the box at the start of the path
+    box1.visible = false; 
+    box1.name = "sector1";
+    group.add(box1);
+
+    // Create the second box and add it to the group
+    let box2 = new THREE.Mesh(boxGeometry, boxMaterial);
+    let middleIndex = Math.floor(this.getKeyPath().length / 2);
+    pos = this.getKeyPath()[middleIndex]
+    box2.position.copy(new THREE.Vector3(pos.x, 0, pos.z)); // Position the box in the middle of the path
+    box2.visible = false; 
+    box2.name = "sector2";
+
+    group.add(box2);
+
+    // Create a bounding box for box1
+    let box1BB = new THREE.Box3().setFromObject(box1);
+    box1.bbox = box1BB;
+
+    // Create a bounding box for box2
+    let box2BB = new THREE.Box3().setFromObject(box2);
+    box2.bbox = box2BB;
+
+
+    this.checkpoints = [box2, box1];
+
     return group;
   }
 
