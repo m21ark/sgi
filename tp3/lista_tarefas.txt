@@ -6,7 +6,6 @@ RICARDO:
 - fazer deteção do numero de voltas
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - fazer animacao das rodas
-- bloquear carro na posicao inicial antes da contagem terminar e na posicao certa
 
 
 - Implementação de colisões com powerups, obstaculos, e inimigo
@@ -17,7 +16,6 @@ se n der pra resolver vai ter de ficar desligada por default para eu poder jogar
 
 LATER:
 
-- efeito parabolico nos fireworks
 - escolha aleatoria do carro AI pelos carros q sobram
 - adicionar a peach para termos 3 diferentes
 - corrigir o fucking bug da camera ficar de lado as vezes e é tao irritante e causa ma jogabilidade

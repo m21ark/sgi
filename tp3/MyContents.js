@@ -53,8 +53,8 @@ export class MyContents {
 
     // ============== FIRST PERSON CAMS ====================
 
-    this.debugCam = new FirstPersonCamera(this.app);
-    this.debugCam.defineSelfObj();
+    // this.debugCam = new FirstPersonCamera(this.app);
+    // this.debugCam.defineSelfObj();
 
     // =============== MENU CONTROLLER =====================
 
@@ -128,6 +128,8 @@ export class MyContents {
 
     const startPoint = this.sceneParser.getKeyPath()[0];
 
+    this.lap = 1;
+
     // Player car set
     this.playerCam = new FirstPersonCamera(this.app);
     this.playerCam.defineSelfObj(new MyCar(), [
@@ -136,7 +138,6 @@ export class MyContents {
       startPoint.z,
     ]);
 
-    console.log("Start point: ", startPoint);
 
     // Firework set
     this.fireworks = new MyFireworks(this.app, {
@@ -152,6 +153,24 @@ export class MyContents {
   }
 
   checkCollision(carBB, hitabbleObjs) {
+
+    // check collision with checkpoints
+    if (this.sceneParser.checkpoints != undefined) {
+      if (carBB.intersectsBox(this.sceneParser.checkpoints[0].bbox)) {
+        console.log(this.sceneParser.checkpoints[0])
+        if (this.sceneParser.checkpoints[0].name == "sector1") {
+          this.lap++;
+          this.app.MyHUD.setLaps(this.lap, 3);
+          // TODO :podium
+        }
+        // swap checkpoints 0 and 1
+        let temp = this.sceneParser.checkpoints[0];
+        this.sceneParser.checkpoints[0] = this.sceneParser.checkpoints[1];
+        this.sceneParser.checkpoints[1] = temp;
+      }
+
+    }
+
     for (const hitabble of hitabbleObjs) {
       if (carBB.intersectsBox(hitabble.bbox)) {
         hitabble.effectPlayer(this.playerCam.getPlayer());
@@ -280,7 +299,7 @@ export class MyContents {
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE
       if (this.playerCam) {
-        this.app.MyHUD.setCords(...this.debugCam.getPlayer().position);
+        this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
         const player = this.playerCam.getPlayer();
         const maxVel = player.getMaxVel();
 

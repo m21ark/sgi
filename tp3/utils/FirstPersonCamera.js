@@ -25,13 +25,12 @@ export class FirstPersonCamera {
     this.player = new THREE.Mesh(geo, mat);
     if (obj) this.player = obj;
     this.player.position.set(...pos);
-    this.player.rotation.y = -Math.PI / 2;
     this.app.scene.add(this.player);
   }
 
   addListeners() {
     window.addEventListener("keydown", (event) => {
-      this.keyboard[event.key.toLowerCase()] = true;
+      this.keyboard[event.key.toLowerCase()] = this.app.contents.hasGameStarted && true;
     });
 
     window.addEventListener("keyup", (event) => {
@@ -104,7 +103,7 @@ export class FirstPersonCamera {
     playerDirection.applyAxisAngle(
       new THREE.Vector3(0, 1, 0),
       this.normalizeRadian(this.player.rotationSpeed) *
-        (this.player.rotationSpeed > 0 ? 1.05 : 0.95)
+      (this.player.rotationSpeed > 0 ? 1.05 : 0.95)
     );
 
     // Calculate the movement vector based on the player's direction
