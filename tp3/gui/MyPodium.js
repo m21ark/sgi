@@ -7,7 +7,6 @@ export class MyPodium extends MyMenu {
   constructor(app) {
     super(app, "Podium", -1000, "center", 0.2);
     this.fireworks = new MyFireworks(this.app);
-    this.setFireworks(false);
   }
 
   updateFireworks() {
@@ -28,7 +27,12 @@ export class MyPodium extends MyMenu {
     this.menu.position.set(this.x, 12.5, 0);
     this.menu.name = "endMenu";
 
-    // add a plane to the menu
+    this.addPlane();
+
+    return [this.endMenu, this.menu];
+  }
+
+  addPlane() {
     let plane = new THREE.Mesh(
       new THREE.PlaneGeometry(70, 50),
       new THREE.MeshBasicMaterial({
@@ -39,26 +43,19 @@ export class MyPodium extends MyMenu {
     plane.position.set(0, -25, 24);
     plane.rotateX(-Math.PI / 2);
     this.menu.add(plane);
-
-    return [this.endMenu, this.menu];
-  }
-
-  clearPodium() {
-    console.log("clearing podium");
   }
 
   setCars() {
     // set ai car on the left side and player car on the right side
 
-    // ai car
-    /*  let aiCar = this.app.contents.aiCar.getAIcar();
-    aiCar.position.set(-10, 0, 0);
-    aiCar.rotateY(Math.PI / 2);
-    this.app.scene.add(aiCar); */
+    // TODO: fazer isto
 
     // use blocks as placehodlers
     let geometry = new THREE.BoxGeometry(5, 5, 5);
-    let material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true });
+    let material = new THREE.MeshBasicMaterial({
+      color: 0x00ffff,
+      wireframe: true,
+    });
     let aiCar = new THREE.Mesh(geometry, material);
     aiCar.position.set(-15, -20, 25);
     // aiCar.rotateY(Math.PI / 2);
@@ -92,31 +89,37 @@ export class MyPodium extends MyMenu {
   }
 
   setPodiumCamera() {
-    const camera = new THREE.PerspectiveCamera(this.x, 0.2, 0.1, 200);
+    const camera = new THREE.PerspectiveCamera(70, 0.2, 0.1, 200);
     camera.position.set(this.x, 20, -75);
-    camera.lookAt(new THREE.Vector3(this.x, -10, 0));
+    camera.lookAt(new THREE.Vector3(this.x, -5, 0));
 
     this.app.cameras["EndCamera"] = camera;
     this.app.setActiveCamera("EndCamera");
 
-    this.setCars();
+    // resize window beacuse camera was added after init
+    this.app.onResize();
 
-    // add temporary listener to spacebar to go back to menu
     window.addEventListener("keydown", (e) => {
       if (this.app.activeCameraName !== "EndCamera") return;
       if (e.key === " ") {
         this.app.setActiveCamera("MenuCamera");
         this.app.contents.menuController.gotoMenu("main");
-        this.clearPodium();
         window.removeEventListener("keydown", this);
       }
     });
   }
 
   updateEndMenu(won, time, timeRival, powerCnt, obstacleCnt, difficulty) {
+    this.setFireworks(won);
+
     // remove old menu
     let oldMenu = this.app.scene.getObjectByName("endMenu");
     this.app.scene.remove(oldMenu);
+
+    // map difficulty to string
+    if (difficulty === 1) difficulty = "easy";
+    else if (difficulty === 2) difficulty = "medium";
+    else difficulty = "hard";
 
     this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
     this.endMenu.updateText(`Your final time was ${time}s`, 1);
@@ -124,8 +127,12 @@ export class MyPodium extends MyMenu {
     let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
     this.endMenu.updateText(s, 3);
     this.endMenu.updateText(`Difficulty: ${difficulty}`, 4);
+    this.menu = this.endMenu.getMenu();
+    this.menu.position.set(this.x, 12.5, 0);
+    this.menu.name = "endMenu";
+    this.addPlane();
+    this.setCars();
 
-    // add new menu to scene
-    this.app.scene.add(this.endMenu.getMenu());
+    return [this.endMenu, this.menu];
   }
 }

@@ -57,8 +57,7 @@ export class MyContents {
     // =============== MENU CONTROLLER =====================
 
     this.menuController = new MenuController(this.app);
-    // this.menuController.gotoMenu("main");
-    this.menuController.gotoMenu("end");
+    this.menuController.gotoMenu("main");
 
     // add an ESC listener to go to pause menu
     document.addEventListener("keydown", (event) => {
@@ -66,7 +65,7 @@ export class MyContents {
     });
 
     // TODO: TEMPORARY FOR MARCO TESTING
-    this.loadTrack(1);
+    // this.loadTrack(1);
 
     // Start the animation loop
     this.animate();
@@ -151,9 +150,7 @@ export class MyContents {
           if (this.lap <= this.numLaps) {
             this.app.MyHUD.setLaps(this.lap, this.numLaps);
             this.app.audio.playSound("go");
-          } else {
-            this.podium();
-          }
+          } else this.podium();
         }
         // swap checkpoints 0 and 1
         let temp = this.sceneParser.checkpoints[0];
@@ -166,9 +163,7 @@ export class MyContents {
       if (carBB.intersectsBox(hitabble.bbox)) {
         hitabble.effectPlayer(this.playerCam.getPlayer());
         if (hitabble.type == "powerup") {
-          // if (this.hasGameStarted) this.app.audio.playSound("powerup");
-          this.podium(); // TODO: temporary here and line above commented
-          return true;
+          if (this.hasGameStarted) this.app.audio.playSound("powerup");
         } else {
           if (this.hasGameStarted) this.app.audio.playSound("obstacle");
         }
@@ -227,7 +222,7 @@ export class MyContents {
   }
 
   update() {
-    // if (this.activeCameraName === "EndCamera")
+    if (this.app.activeCameraName === "EndCamera")
       this.menuController.podium.updateFireworks();
 
     if (this.gameHasEnded) return;
@@ -285,7 +280,7 @@ export class MyContents {
 
   async startCountdown() {
     this.app.MyHUD.setVisible(false);
-    let duration = 0; // TODO: TEMPORARY
+    let duration = 6;
     const countdownElement = document.createElement("div");
     countdownElement.id = "CountDown";
     countdownElement.innerText = "Prepare!";

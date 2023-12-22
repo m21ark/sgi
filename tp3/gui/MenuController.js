@@ -286,7 +286,8 @@ export class MenuController {
   // ========================================================
 
   updateEndMenu(won, time, timeRival, powerCnt, obstacleCnt, difficulty) {
-    this.podium.updateEndMenu(
+    let menu = null;
+    [this.endMenu, menu] = this.podium.updateEndMenu(
       won,
       time,
       timeRival,
@@ -294,6 +295,8 @@ export class MenuController {
       obstacleCnt,
       difficulty
     );
+
+    this.app.scene.add(menu);
   }
 
   selectCar(car) {
@@ -340,7 +343,6 @@ export class MenuController {
         MyGarage.openGarage();
       }
     }, 100);
-    // temporary solution
     const garage = new THREE.PerspectiveCamera(75, 0.2, 0.1, 1000);
     garage.position.set(160, 6, 120);
     garage.lookAt(new THREE.Vector3(120, 6, 120));

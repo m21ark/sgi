@@ -62,11 +62,11 @@ export class MyAICar {
 
     this.aiBB = new THREE.Box3().setFromObject(car);
     this.aiCar.add(car);
-    var spritey = TextSpriteDraw.makeTextSprite(" AI Car ", {
-      fontsize: 20,
+    var spritey = TextSpriteDraw.makeTextSprite("Rival", {
+      fontsize: 16,
       textColor: { r: 255, g: 255, b: 255, a: 1.0 },
     });
-    spritey.position.set(-2, 0.5, -1);
+    spritey.position.set(-3, 0.5, -1);
 
     this.aiCar.add(spritey);
     let position = [...this.locateFlagStart()];
