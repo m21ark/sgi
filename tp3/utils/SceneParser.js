@@ -189,6 +189,8 @@ export class SceneParser {
       group.add(treeMesh);
     });
 
+    this.addTreesCircle(group);
+
     // ================ FLAG =================
 
     this.addFlag(group, json.flagRotate ? json.flagRotate : false);
@@ -318,10 +320,30 @@ export class SceneParser {
     return mountainGroup;
   }
 
+  addTreesCircle(group) {
+    const numCones = 70;
+    const radius = 170;
+    const forest = new THREE.Group();
+    for (let i = 0; i < numCones; i++) {
+      const angle = (i / numCones) * Math.PI * 2;
+      const x = radius * Math.cos(angle);
+      const z = radius * Math.sin(angle);
+
+      const randomX = Math.random() * 10 - 5;
+      const randomZ = Math.random() * 10 - 5;
+      let tree = this.createTree(x + randomX, z + randomZ);
+
+      forest.add(tree);
+      this.trees.push(tree);
+    }
+    forest.position.set(125, 0, 125);
+    group.add(forest);
+  }
+
   addMountains(group) {
     const mountains = new THREE.Group();
-    const numCones = 120; // Adjust the number of cones as needed
-    const radius = 200; // Adjust the radius to control the distance from the center
+    const numCones = 120;
+    const radius = 200;
 
     for (let i = 0; i < numCones; i++) {
       const angle = (i / numCones) * Math.PI * 2;
