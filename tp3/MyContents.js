@@ -228,7 +228,7 @@ export class MyContents {
 
   update() {
     // if (this.activeCameraName === "EndCamera")
-      this.menuController.podium.fireworks.update();
+      this.menuController.podium.updateFireworks();
 
     if (this.gameHasEnded) return;
 

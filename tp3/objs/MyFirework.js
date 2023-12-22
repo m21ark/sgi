@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export class MyFireworks {
-  constructor(app, pos) {
+  constructor(app, pos = null) {
     this.app = app;
     this.fireworks = [];
     this.pos = pos;
@@ -21,6 +21,7 @@ export class MyFireworks {
   }
 
   update(prob = 0.3) {
+    if (this.pos === null) return;
     if (Math.random() < prob)
       this.fireworks.push(new MyFirework(this.app, this.pos));
     for (let i = 0; i < this.fireworks.length; i++) {
@@ -81,19 +82,11 @@ class MyFirework {
   updatePhysics(time) {
     // x = x0 + v0*t + 0.5*a*t^2
     // v = v0 + a*t
-
     const aux = time * time * 0.5;
-
     const x = this.initPos[0] + this.initVel[0] * time + this.accel[0] * aux;
     const y = this.initPos[1] + this.initVel[1] * time + this.accel[1] * aux;
     const z = this.initPos[2] + this.initVel[2] * time + this.accel[2] * aux;
-
-    // const vx = this.initVel[0] + this.accel[0] * time;
-    // const vy = this.initVel[1] + this.accel[1] * time;
-    // const vz = this.initVel[2] + this.accel[2] * time;
-
     this.position = [x, y, z];
-    // this.velocity = [vx, vy, vz];
   }
 
   geomSetAttribute(geom, attr, value) {
@@ -114,7 +107,6 @@ class MyFirework {
   }
 
   launch() {
-    console.log("launching firework");
     // Calculate initial velocity for launch
     this.initVel = [
       THREE.MathUtils.randFloat(-this.launchSpeed, this.launchSpeed),
@@ -131,12 +123,10 @@ class MyFirework {
     this.app.scene.add(this.point);
   }
 
-  explode(originPos, fragN = 40) {
+  explode(originPos, fragN = 30) {
     this.hasExploded = true;
     this.app.scene.remove(this.point);
-
     this.app.audio.playSound("firework");
-
     // Create fragments
     for (let i = 0; i < fragN; i++) {
       const pos = { x: originPos[0], y: originPos[1], z: originPos[2] };
@@ -200,11 +190,11 @@ class MyFirework {
     this.geomSetAttribute(this.point.geometry, "position", vertices);
 
     // Fade out exploded particles
-    this.material.opacity -= 0.025;
+    this.material.opacity -= 0.02;
     this.material.needsUpdate = true;
 
     // Remove exploded particles
-    if (this.material.opacity <= 0 || this.position[1] <= 0) {
+    if (this.material.opacity <= 0) {
       this.app.scene.remove(this.point);
       this.done = true;
     }

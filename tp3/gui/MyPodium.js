@@ -6,14 +6,12 @@ import { MyFireworks } from "../objs/MyFirework.js";
 export class MyPodium extends MyMenu {
   constructor(app) {
     super(app, "Podium", -1000, "center", 0.2);
+    this.fireworks = new MyFireworks(this.app);
+    this.setFireworks(false);
+  }
 
-    this.fireworks = new MyFireworks(this.app, {
-      x: this.x,
-      y: -20,
-      z: 25,
-    });
-
-    console.log("set fireworks at", this.fireworks.pos);
+  updateFireworks() {
+    this.fireworks.update();
   }
 
   loadMenuEnd() {
@@ -27,6 +25,7 @@ export class MyPodium extends MyMenu {
 
     // add menu to scene with name so we can update it later
     this.menu = this.endMenu.getMenu();
+    this.menu.position.set(this.x, 12.5, 0);
     this.menu.name = "endMenu";
 
     // add a plane to the menu
@@ -59,7 +58,7 @@ export class MyPodium extends MyMenu {
 
     // use blocks as placehodlers
     let geometry = new THREE.BoxGeometry(5, 5, 5);
-    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    let material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true });
     let aiCar = new THREE.Mesh(geometry, material);
     aiCar.position.set(-15, -20, 25);
     // aiCar.rotateY(Math.PI / 2);
@@ -75,14 +74,27 @@ export class MyPodium extends MyMenu {
   setFireworks(won) {
     // fireworks
     const offset = won ? 1 : -1;
-    this.app.contents.fireworks.setPos(0, offset * 20, 25);
+    const pos = {
+      x: -1000 + 15 * offset,
+      y: 2,
+      z: -25,
+    };
+    this.fireworks.setPos(pos);
+
+    // add a sphere helper in pos
+    let geometry = new THREE.SphereGeometry(0.8, 32, 32);
+    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    let sphere = new THREE.Mesh(geometry, material);
+    sphere.position.set(pos.x, pos.y, pos.z);
+    this.app.scene.add(sphere);
+
     console.log("setting fireworks");
   }
 
   setPodiumCamera() {
     const camera = new THREE.PerspectiveCamera(this.x, 0.2, 0.1, 200);
-    camera.position.set(this.x, 10, -75);
-    camera.lookAt(new THREE.Vector3(this.x, -20, 0));
+    camera.position.set(this.x, 20, -75);
+    camera.lookAt(new THREE.Vector3(this.x, -10, 0));
 
     this.app.cameras["EndCamera"] = camera;
     this.app.setActiveCamera("EndCamera");
@@ -112,8 +124,6 @@ export class MyPodium extends MyMenu {
     let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
     this.endMenu.updateText(s, 3);
     this.endMenu.updateText(`Difficulty: ${difficulty}`, 4);
-
-    this.setFireworks(won);
 
     // add new menu to scene
     this.app.scene.add(this.endMenu.getMenu());
