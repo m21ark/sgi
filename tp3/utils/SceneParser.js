@@ -7,6 +7,7 @@ import { MyCar } from "../objs/MyCar.js";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 import { MyObstacle } from "../objs/MyObstacle.js";
 import { MyPowerUp } from "../objs/MyPowerUp.js";
+import { MyWater } from "../objs/MyWater.js";
 
 export class SceneParser {
   static ObjectType = {
@@ -45,12 +46,17 @@ export class SceneParser {
     this.obstacleItem = new THREE.Group();
 
     this.trees = [];
+    this.lake = null;
   }
 
   async readJSON(filePath) {
     const response = await fetch(filePath);
     const data = await response.json();
     return data;
+  }
+
+  getControlPoints() {
+    return this.controPointGroup;
   }
 
   async buildGridGroup(track_number) {
@@ -120,6 +126,29 @@ export class SceneParser {
 
     this.makeCatmullCurve(group, points);
 
+    this.controlPoints = points;
+
+    // add a small translucid blue spehere to each control point
+    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ffaa,
+      transparent: true,
+      opacity: 0.5,
+    });
+
+    this.controPointGroup = new THREE.Group();
+    this.controPointGroup.name = "Track_ControlPoints";
+
+    points.forEach((controlPoint) => {
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      sphere.position.set(...controlPoint);
+      sphere.position.y += 0.5;
+      sphere.visible = false;
+      this.controPointGroup.add(sphere);
+    });
+
+    group.add(this.controPointGroup);
+
     // ================ GRASS =================
 
     // Create the plain of grass
@@ -132,6 +161,12 @@ export class SceneParser {
     // ================ MOUNTAINS =================
 
     this.addMountains(group);
+
+    // ================ LAKE =================
+
+    json.lake.forEach((lake) => {
+      this.addLake(group, lake.x, lake.z, lake.rotate);
+    });
 
     // ================ OBSTACLES =================
 
@@ -170,7 +205,52 @@ export class SceneParser {
       group.add(treeMesh);
     });
 
+    this.addTreesCircle(group);
+
+    // ================ FLAG =================
+
+    this.addFlag(group, json.flagRotate ? json.flagRotate : false);
+
     return group;
+  }
+
+  addFlag(group, rotate) {
+    const pos = this.getKeyPath()[0];
+
+    this.endFlagMat = new THREE.MeshPhongMaterial({
+      map: new THREE.TextureLoader().load("assets/finishFlag.jpg"),
+      side: THREE.DoubleSide,
+      color: 0xffffff,
+    });
+
+    let endLine = new THREE.Group();
+
+    // Poles
+    let poleGeo = new THREE.CylinderGeometry(0.2, 0.2, 15, 5, 5);
+    let poleMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
+    let pole1 = new THREE.Mesh(poleGeo, poleMat);
+    let pole2 = new THREE.Mesh(poleGeo, poleMat);
+    pole1.position.set(0, -1, 0);
+    pole2.position.set(10, -1, 0);
+
+    // Flag
+    let flagGeo = new THREE.PlaneGeometry(10, 5);
+    let flag = new THREE.Mesh(flagGeo, this.endFlagMat);
+    flag.position.set(5, 5, 0);
+
+    endLine.add(pole1);
+    endLine.add(pole2);
+    endLine.add(flag);
+
+    endLine.rotation.y = Math.PI / 2;
+
+    if (rotate) {
+      endLine.rotation.y = Math.PI;
+      endLine.position.set(pos.x + 5, 6, pos.z);
+    } else endLine.position.set(pos.x, 6, pos.z + 5);
+    endLine.name = "endLine";
+
+    group.add(endLine);
   }
 
   getHitabbleObjs() {
@@ -179,6 +259,10 @@ export class SceneParser {
 
   getTrees() {
     return this.trees;
+  }
+
+  getLake() {
+    return this.lake;
   }
 
   createTree(x, y) {
@@ -252,10 +336,30 @@ export class SceneParser {
     return mountainGroup;
   }
 
+  addTreesCircle(group) {
+    const numCones = 70;
+    const radius = 170;
+    const forest = new THREE.Group();
+    for (let i = 0; i < numCones; i++) {
+      const angle = (i / numCones) * Math.PI * 2;
+      const x = radius * Math.cos(angle);
+      const z = radius * Math.sin(angle);
+
+      const randomX = Math.random() * 10 - 5;
+      const randomZ = Math.random() * 10 - 5;
+      let tree = this.createTree(x + randomX, z + randomZ);
+
+      forest.add(tree);
+      this.trees.push(tree);
+    }
+    forest.position.set(125, 0, 125);
+    group.add(forest);
+  }
+
   addMountains(group) {
     const mountains = new THREE.Group();
-    const numCones = 120; // Adjust the number of cones as needed
-    const radius = 200; // Adjust the radius to control the distance from the center
+    const numCones = 120;
+    const radius = 200;
 
     for (let i = 0; i < numCones; i++) {
       const angle = (i / numCones) * Math.PI * 2;
@@ -267,6 +371,15 @@ export class SceneParser {
 
     mountains.position.set(125, 0, 125);
     group.add(mountains);
+  }
+
+  addLake(group, x, z, rotate) {
+    const lake = new MyWater(10, 10, true);
+    lake.position.set(x, 0.05, z);
+    if (rotate) lake.rotateY(Math.PI / 2);
+    group.name = "lake";
+    this.lake = lake;
+    group.add(lake);
   }
 
   /**

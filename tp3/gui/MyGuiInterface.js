@@ -47,6 +47,13 @@ class MyGuiInterface {
         this.contents.toogleShowAIKeyPoints();
       });
 
+      moveCarFolder
+      .add(this.contents, "showControlPoints", false)
+      .name("showControlPoints")
+      .onChange(() => {
+        this.contents.toogleShowControlPoints();
+      });
+
     moveCarFolder
       .add(this.contents, "showFireworks", false)
       .name("showFireworks")

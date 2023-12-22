@@ -10,7 +10,6 @@ import { XMLLoader } from "./utils/XMLLoader.js";
 import { MyGarage } from "./objs/MyGarage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 import { MyFireworks } from "./objs/MyFirework.js";
-import { MyWater } from "./objs/MyWater.js";
 
 export class MyContents {
   constructor(app) {
@@ -18,12 +17,13 @@ export class MyContents {
     this.cameras = [];
     this.lights = [];
 
+    this.lake = null;
+
     this.showControlPoints = false;
     this.controlPoints = [];
     this.moveCar = false;
     this.showAIKeyPoints = false;
     this.showFireworks = false;
-
     this.hasGameStarted = false;
 
     // XML LOADER
@@ -46,16 +46,18 @@ export class MyContents {
 
     // ============== TV =================
 
-    // this.tv = new Television(
-    //   this.app.scene,
-    //   this.app.cameras["FirstPerson"],
-    //   this.app.renderer
-    // );
+    /*  this.tv = new Television(
+      this.app.scene,
+      this.app.cameras["FirstPerson"],
+      this.app.renderer
+    ); */
 
     // ============== FIRST PERSON CAMS ====================
 
     this.debugCam = new FirstPersonCamera(this.app);
     this.debugCam.defineSelfObj();
+
+    // ================ GET LAKE ===================
 
     // =============== MENU CONTROLLER =====================
 
@@ -66,13 +68,6 @@ export class MyContents {
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") this.pauseGame();
     });
-
-    // =============== WATER =====================
-
-    // TODO: this should be loaded from JSON (pos, size etc)
-    this.water = new MyWater(10, 10, true);
-    this.water.position.set(-10, 0.05, 200);
-    this.app.scene.add(this.water);
 
     // TODO: TEMPORARY FOR MARCO TESTING
     // this.loadTrack(1);
@@ -123,6 +118,9 @@ export class MyContents {
     this.trees = this.sceneParser.getTrees();
     this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
 
+    // Lake set
+    this.lake = this.sceneParser.getLake();
+
     // AI car set
     this.AICar = new MyAICar(this.sceneParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
@@ -139,48 +137,12 @@ export class MyContents {
 
     console.log("Start point: ", startPoint);
 
-    // End flag set
-    this.placeFlag(startPoint);
-
     // Firework set
     this.fireworks = new MyFireworks(this.app, {
       x: startPoint.x,
-      y: -5,
+      y: 0,
       z: startPoint.z,
     });
-  }
-
-  placeFlag(pos) {
-    this.endFlagMat = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load("assets/finishFlag.jpg"),
-      side: THREE.DoubleSide,
-      color: 0xffffff,
-    });
-
-    let endLine = new THREE.Group();
-
-    // Poles
-    let poleGeo = new THREE.CylinderGeometry(0.2, 0.2, 15, 5, 5);
-    let poleMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
-    let pole1 = new THREE.Mesh(poleGeo, poleMat);
-    let pole2 = new THREE.Mesh(poleGeo, poleMat);
-    pole1.position.set(0, -1, 0);
-    pole2.position.set(10, -1, 0);
-
-    // Flag
-    let flagGeo = new THREE.PlaneGeometry(10, 5);
-    let flag = new THREE.Mesh(flagGeo, this.endFlagMat);
-    flag.position.set(5, 5, 0);
-
-    endLine.add(pole1);
-    endLine.add(pole2);
-    endLine.add(flag);
-
-    endLine.rotation.y = Math.PI / 2;
-    endLine.position.set(pos.x, 6, pos.z + 5);
-    endLine.name = "endLine";
-
-    this.app.scene.add(endLine);
   }
 
   loadXMLScene(data) {
@@ -314,7 +276,7 @@ export class MyContents {
     if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
     // WATER UPDATE
-    this.water.update();
+    if (this.lake) this.lake.update();
 
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
@@ -360,6 +322,15 @@ export class MyContents {
     // display or hide keypoints
     keypoints.forEach((keypoint) => {
       keypoint.visible = this.showAIKeyPoints;
+    });
+  }
+
+  toogleShowControlPoints() {
+    let controlPoints = this.sceneParser.getControlPoints().children;
+
+    // display or hide keypoints
+    controlPoints.forEach((point) => {
+      point.visible = this.showControlPoints;
     });
   }
 

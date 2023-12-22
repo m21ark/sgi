@@ -54,6 +54,7 @@ export class MyObstacle {
       setTimeout(() => {
         player.rotationSpeedInc = 0.02;
       }, this.timeEffect * 1000);
+      return;
     }
 
     if (!this.timeBoost) {
