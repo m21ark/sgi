@@ -15,6 +15,10 @@ export class MyAICar {
     this.clock = new THREE.Clock();
   }
 
+  getFinalTime() {
+    return 34; // TODO: calculate the final time
+  }
+
   locateFlagStart() {
     let pos = this.keyPoints[this.currentKeyPointIndex];
     return [pos.x, 0.1, pos.z];

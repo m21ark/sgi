@@ -46,7 +46,9 @@ export class MyObstacle {
   }
 
   effectPlayer(player) {
-    // TODO time boost should be applied to the player and then the effect on the podium
+    // TODO: time boost should be applied to the player and then the effect on the podium
+
+    player.incObstaclesCount();
 
     if (this.switchedControls) {
       player.rotationSpeedInc = -0.02;

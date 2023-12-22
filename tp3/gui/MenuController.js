@@ -4,6 +4,7 @@ import { MyPicker } from "./MyPicker.js";
 import { MyGarage } from "../objs/MyGarage.js";
 import { MyCar } from "../objs/MyCar.js";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
+import { MyPodium } from "./MyPodium.js";
 
 export class MenuController {
   constructor(app) {
@@ -79,8 +80,8 @@ export class MenuController {
         this.currentMenu = null;
         console.log(
           "Camera '" +
-          menu +
-          "' option not found. Using default perspective camera"
+            menu +
+            "' option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
     }
@@ -106,22 +107,6 @@ export class MenuController {
 
     // add menu to scene
     this.app.scene.add(this.pauseMenu.getMenu());
-  }
-
-  loadMenuEnd() {
-    this.endMenu = new MyMenu(this.app, "End of Game", -300);
-    this.endMenu.addText("You won!");
-    this.endMenu.addText("Your final time was 3:43s");
-    this.endMenu.addText("Hit 2 powerups and 2 obstacules");
-
-    this.endMenu.addButton("Go home", () => {
-      this.gotoMenu("main");
-    });
-
-    // add menu to scene with name so we can update it later
-    let m = this.endMenu.getMenu();
-    m.name = "endMenu";
-    this.app.scene.add(m);
   }
 
   loadMenuMapSelect() {
@@ -206,14 +191,7 @@ export class MenuController {
   }
 
   loadMenuMain() {
-    this.mainMenu = new MyMenu(
-      this.app,
-      "Kart Mania",
-      -700,
-      "center",
-      0.8,
-      "assets/menu.jpg"
-    );
+    this.mainMenu = new MyMenu(this.app, "Kart Mania", -700, "center", 0.8);
     this.mainMenu.addButton("Play", () => {
       this.gotoMenu("name");
     });
@@ -285,7 +263,7 @@ export class MenuController {
   }
 
   loadRulesMenu() {
-    this.rulesMenu = new MyMenu(this.app, "Instructions", -900, "center", 0.5);
+    this.rulesMenu = new MyMenu(this.app, "Instructions", -300, "center", 0.5);
     this.rulesMenu.addText("Use WASD to move and ESC to pause");
     this.rulesMenu.addText("The first to complete all laps wins");
     this.rulesMenu.addText("Avoid obstacles and collect powerups");
@@ -297,20 +275,19 @@ export class MenuController {
     this.app.scene.add(this.rulesMenu.getMenu());
   }
 
+  loadMenuEnd() {
+    this.podium = new MyPodium(this.app);
+    let menu = null;
+    [this.endMenu, menu] = this.podium.loadMenuEnd();
+
+    // add menu to scene
+    this.app.scene.add(menu);
+  }
+
   // ========================================================
 
-  updateEndMenu(won, time, powerCnt, obstacleCnt) {
-    // remove old menu
-    let oldMenu = this.app.scene.getObjectByName("endMenu");
-    this.app.scene.remove(oldMenu);
-
-    this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
-    this.endMenu.updateText(`Your final time was ${time}s`, 1);
-    let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
-    this.endMenu.updateText(s, 2);
-
-    // add new menu to scene
-    this.app.scene.add(this.endMenu.getMenu());
+  updateEndMenu(won, time, timeRival, powerCnt, obstacleCnt, difficulty) {
+    // TODO: fazer isto
   }
 
   selectCar(car) {
@@ -324,15 +301,22 @@ export class MenuController {
     let position = this.app.contents.sceneParser.getKeyPath()[0];
     let nextPosition = this.app.contents.sceneParser.getKeyPath()[1];
 
-    this.app.contents.playerCam.defineSelfObj(
-      new MyCar(0.6, 0.01, carIndex),
-      [position.x + 3, 0.1, position.z - 3]
-    );
+    this.app.contents.playerCam.defineSelfObj(new MyCar(0.6, 0.01, carIndex), [
+      position.x + 3,
+      0.1,
+      position.z - 3,
+    ]);
 
     // Calculate rotation to align the car to the next point
     let direction = new THREE.Vector3().subVectors(nextPosition, position);
-    this.app.contents.playerCam.player.rotationSpeed = Math.atan2(direction.x, direction.z);
-    this.app.contents.playerCam.player.rotation.y = Math.atan2(direction.x, direction.z);
+    this.app.contents.playerCam.player.rotationSpeed = Math.atan2(
+      direction.x,
+      direction.z
+    );
+    this.app.contents.playerCam.player.rotation.y = Math.atan2(
+      direction.x,
+      direction.z
+    );
 
     MyGarage.mixer.addEventListener("loop", (e) => {
       this.gotoMenu("game");

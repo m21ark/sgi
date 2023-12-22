@@ -38,9 +38,9 @@ export class MyContents {
   async init() {
     // ============== HUD =================
 
-    // Temporary
+    this.numLaps = 1;
     this.app.MyHUD.setPauseStatus(true);
-    this.app.MyHUD.setLaps(1, 3);
+    this.app.MyHUD.setLaps(1, this.numLaps);
     this.app.MyHUD.setPosition(1, 2);
 
     // ============== TV =================
@@ -59,7 +59,8 @@ export class MyContents {
     // =============== MENU CONTROLLER =====================
 
     this.menuController = new MenuController(this.app);
-    this.menuController.gotoMenu("main");
+    // this.menuController.gotoMenu("main");
+    this.menuController.gotoMenu("end");
 
     // add an ESC listener to go to pause menu
     document.addEventListener("keydown", (event) => {
@@ -67,7 +68,7 @@ export class MyContents {
     });
 
     // TODO: TEMPORARY FOR MARCO TESTING
-    // this.loadTrack(1);
+    this.loadTrack(1);
 
     // Start the animation loop
     this.animate();
@@ -106,6 +107,7 @@ export class MyContents {
 
   resetGame() {
     this.hasGameStarted = false;
+    this.gameHasEnded = false;
   }
 
   async loadTrack(mapNum) {
@@ -155,12 +157,14 @@ export class MyContents {
     // check collision with checkpoints
     if (this.sceneParser.checkpoints != undefined) {
       if (carBB.intersectsBox(this.sceneParser.checkpoints[0].bbox)) {
-        console.log(this.sceneParser.checkpoints[0]);
         if (this.sceneParser.checkpoints[0].name == "sector1") {
           this.lap++;
-          this.app.MyHUD.setLaps(this.lap, 3);
-          this.app.audio.playSound("go");
-          // TODO :podium
+          if (this.lap <= this.numLaps) {
+            this.app.MyHUD.setLaps(this.lap, this.numLaps);
+            this.app.audio.playSound("go");
+          } else {
+            this.podium();
+          }
         }
         // swap checkpoints 0 and 1
         let temp = this.sceneParser.checkpoints[0];
@@ -173,7 +177,9 @@ export class MyContents {
       if (carBB.intersectsBox(hitabble.bbox)) {
         hitabble.effectPlayer(this.playerCam.getPlayer());
         if (hitabble.type == "powerup") {
-          if (this.hasGameStarted) this.app.audio.playSound("powerup");
+          // if (this.hasGameStarted) this.app.audio.playSound("powerup");
+          this.podium(); // TODO: temporary here and line above commented
+          return true;
         } else {
           if (this.hasGameStarted) this.app.audio.playSound("obstacle");
         }
@@ -203,6 +209,29 @@ export class MyContents {
     return true; // collision with grass
   }
 
+  podium() {
+
+    // Stop the game
+    this.hasGameStarted = false;
+    this.gameHasEnded = true;
+    this.app.audio.pauseSound("bgMusic");
+    this.app.audio.playSound("won");
+    this.app.MyHUD.setPauseStatus(true);
+    this.AICar.stopAnimation();
+
+    // Set values for the end menu
+    const wonBool = true;
+    const myTime = this.app.MyHUD.getTime();
+    const aiTime = this.AICar.getFinalTime();
+    const powerCnt = this.playerCam.getPlayer().getPowerUpsCount();
+    const obstacleCnt = this.playerCam.getPlayer().getObstaclesCount();
+    const difficulty = this.menuController.getDifficulty();
+    this.menuController.updateEndMenu(wonBool, myTime, aiTime, powerCnt, obstacleCnt, difficulty)
+
+
+    this.menuController.gotoMenu("end");
+  }
+
   update() {
     if (this.AICar != undefined) this.AICar.update();
 
@@ -210,6 +239,8 @@ export class MyContents {
 
     // TODO: this gives a ton of warnings
     // this.tv.updateRenderTarget(this.app.activeCamera);
+
+    if (this.gameHasEnded) return;
 
     if (
       this.playerCam != undefined &&
@@ -257,7 +288,7 @@ export class MyContents {
 
   async startCountdown() {
     this.app.MyHUD.setVisible(false);
-    let duration = 6;
+    let duration = 0; // TODO: TEMPORARY
     const countdownElement = document.createElement("div");
     countdownElement.id = "CountDown";
     countdownElement.innerText = "Prepare!";
@@ -281,6 +312,7 @@ export class MyContents {
   }
 
   startGame() {
+    this.gameHasEnded = false;
     this.hasGameStarted = true;
     this.app.MyHUD.setVisible(true);
     this.app.MyHUD.setPauseStatus(false);
@@ -320,7 +352,7 @@ export class MyContents {
       }
 
       // WATER UPDATE
-      // if (this.lake) this.lake.update();
+      // if (this.lake) this.lake.update(); // TODO: temporary disabled
 
       // FIREWORKS UPDATE
       if (this.showFireworks) this.fireworks.update();

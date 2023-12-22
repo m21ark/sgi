@@ -26,7 +26,7 @@ export class MyPowerUp {
   setBBox(bbox) {
     this.bbox = bbox;
   }
-  
+
   getPos() {
     return [this.x, this.y, this.z];
   }
@@ -47,12 +47,13 @@ export class MyPowerUp {
   }
 
   effectPlayer(player) {
-    // TODO time boost should be applied to the player and then the effect on the podium
+    // TODO: time boost should be applied to the player and then the effect on the podium
     player.velMultiplyer = 2;
-    
+
+    player.incPowerupCount();
+
     setTimeout(() => {
       player.velMultiplyer = 1;
     }, this.timeEffect * 1000);
-
   }
 }

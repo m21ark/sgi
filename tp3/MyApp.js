@@ -229,8 +229,8 @@ class MyApp {
     this.audio.addSound("countdown");
     this.audio.addSound("go");
     this.audio.addSound("garage");
-    // this.audio.addSound("won");
-    // this.audio.addSound("lost");
+    this.audio.addSound("won");
+    this.audio.addSound("lost");
     this.audio.addSound("menuHover");
     this.audio.addSound("menuSelect");
     this.audio.addSound("obstacle");
@@ -239,6 +239,6 @@ class MyApp {
     this.audio.addSound("bgMusic", true, 0.15);
     // this.audio.addSound("menuMusic", true, 0.8);
   }
-}
+  }
 
 export { MyApp };
