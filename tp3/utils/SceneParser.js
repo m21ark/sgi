@@ -5,9 +5,16 @@ import { CatmullTrack } from "./CatmullTrack.js";
 import { MyGarage } from "../objs/MyGarage.js";
 import { MyCar } from "../objs/MyCar.js";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
+import { MyObstacle } from "../objs/MyObstacle.js";
+import { MyPowerUp } from "../objs/MyPowerUp.js";
 import { MyWater } from "../objs/MyWater.js";
 
 export class SceneParser {
+  static ObjectType = {
+    OBSTACLE: "obstacle",
+    POWERUP: "powerup",
+  };
+
   constructor() {
     this.hitabbleObjs = [];
 
@@ -167,7 +174,12 @@ export class SceneParser {
       const obstacleMesh = this.createObstacle(obstacle.x, obstacle.z);
       let hitBB = new THREE.Box3().setFromObject(obstacleMesh);
       hitBB.position = obstacleMesh.position;
-      this.hitabbleObjs.push(hitBB);
+      // create the obstacle object
+      let obstacleObj = new MyObstacle();
+      obstacleObj.type = SceneParser.ObjectType.OBSTACLE;
+      obstacleObj.setBBox(hitBB);
+      this.hitabbleObjs.push(obstacleObj);
+
       group.add(obstacleMesh);
     });
 
@@ -177,7 +189,11 @@ export class SceneParser {
       const powerupMesh = this.createPowerup(powerup.x, powerup.z);
       let hitBB = new THREE.Box3().setFromObject(powerupMesh);
       hitBB.position = powerupMesh.position;
-      this.hitabbleObjs.push(hitBB);
+      let powerupObj = new MyPowerUp();
+      powerupObj.setBBox(hitBB);
+      powerupObj.type = SceneParser.ObjectType.POWERUP;
+
+      this.hitabbleObjs.push(powerupObj);
       group.add(powerupMesh);
     });
 

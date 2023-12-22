@@ -152,15 +152,22 @@ export class MyContents {
 
   checkCollision(carBB, hitabbleObjs) {
     for (const hitabble of hitabbleObjs) {
-      if (carBB.intersectsBox(hitabble)) {
-        console.log("COLLISION");
+      if (carBB.intersectsBox(hitabble.bbox)) {
+        hitabble.effectPlayer(this.playerCam.getPlayer());
+        if (hitabble.type == "powerup") {
+          if (this.hasGameStarted) this.app.audio.playSound("powerup");
+        }
+        else {
+          if (this.hasGameStarted) this.app.audio.playSound("obstacle");
+        }
         return true;
       }
     }
 
     // Check collision with ai car
     if (carBB.intersectsBox(this.AICar.aiBB)) {
-      console.log("COLLISION");
+      if (this.hasGameStarted) this.app.audio.playSound("obstacle");
+      this.playerCam.getPlayer().collideCar();
       return true;
     }
 
@@ -201,9 +208,7 @@ export class MyContents {
       this.AICar.aiBB
         .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
         .applyMatrix4(this.AICar.aiCar.matrixWorld);
-      if (this.checkCollision(player.carBB, this.hitabbleObjs)) {
-        if (this.hasGameStarted) this.app.audio.playSound("powerup");
-      }
+      this.checkCollision(player.carBB, this.hitabbleObjs)
     }
   }
 
@@ -279,12 +284,13 @@ export class MyContents {
       // HUD UPDATE
       if (this.playerCam) {
         this.app.MyHUD.setCords(...this.debugCam.getPlayer().position);
-        const maxVel = this.playerCam.getPlayer().maxVel;
+        const player = this.playerCam.getPlayer();
+        const maxVel = player.getMaxVel();
 
-        const speed = this.playerCam.getPlayer().getSpeed();
-        const translatedSpeed = (speed / maxVel) * 200;
+        const speed = player.getSpeed();
+        const translatedSpeed = (speed / maxVel) * (200 * player.velMultiplyer);
 
-        this.app.MyHUD.setSpeed(Math.abs(translatedSpeed));
+        this.app.MyHUD.setSpeed(Math.abs(translatedSpeed), 200 * player.velMultiplyer);
         this.app.MyHUD.tickTime();
       }
 

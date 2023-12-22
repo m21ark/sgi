@@ -71,19 +71,6 @@
             <children>
 
 
-                <spotlight id="light1" enabled="true"
-                    color="1.0 1.0 1.0 1"
-                    intensity="100.0"
-                    distance="40"
-                    decay="0.75"
-                    castshadow="false"
-                    position="19 19 19"
-                    target="0 0 0"
-                    penumbra="1"
-                    angle="30"
-                />
-
-
                 <spotlight id="sun" enabled="true"
                     color="1.0 1.0 1.0 1"
                     intensity="15.0"

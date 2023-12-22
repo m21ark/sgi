@@ -6,7 +6,7 @@
 
 export class MyPowerUp {
   constructor(
-    timeEffect = 5,
+    timeEffect = 2,
     timeBoost = 0,
     velMultiplyer = 1,
     invulnerable = false
@@ -23,6 +23,10 @@ export class MyPowerUp {
     this.invulnerable = invulnerable;
   }
 
+  setBBox(bbox) {
+    this.bbox = bbox;
+  }
+  
   getPos() {
     return [this.x, this.y, this.z];
   }
@@ -40,5 +44,15 @@ export class MyPowerUp {
     configs.set("velMultiplyer", this.velMultiplyer);
     configs.set("invulnerable", this.invulnerable);
     return configs;
+  }
+
+  effectPlayer(player) {
+    // TODO time boost should be applied to the player and then the effect on the podium
+    player.velMultiplyer = 2;
+    
+    setTimeout(() => {
+      player.velMultiplyer = 1;
+    }, this.timeEffect * 1000);
+
   }
 }
