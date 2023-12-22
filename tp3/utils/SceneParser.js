@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { ObjectBuilder } from "../builders/ObjectBuilder.js";
 import { MyBillboard } from "../objs/MyBillboard.js";
 import { CatmullTrack } from "./CatmullTrack.js";
-import { Garage } from "../objs/Garage.js";
+import { MyGarage } from "../objs/MyGarage.js";
 import { MyCar } from "../objs/MyCar.js";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 
@@ -73,12 +73,12 @@ export class SceneParser {
         filepath: "objs/garage/smallgarage.obj",
       },
       "scene/",
-      Garage.objectModel
+      MyGarage.objectModel
     );
-    Garage.objectModel.scale.set(0.05, 0.05, 0.05);
+    MyGarage.objectModel.scale.set(0.05, 0.05, 0.05);
 
     let newGroup = new THREE.Group();
-    newGroup.add(Garage.objectModel);
+    newGroup.add(MyGarage.objectModel);
     newGroup.position.set(120, 0.1, 120);
     const availableCars = MyCar.availableCars.clone();
     const carCount = availableCars.children.length;

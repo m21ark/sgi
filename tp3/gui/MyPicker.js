@@ -58,6 +58,9 @@ export class MyPicker {
   }
 
   changeTargetColor(obj, color) {
+    if (this.lastPickedObj && this.lastPickedObj.name === obj.name) return;
+    else this.app.audio.playSound("menuHover");
+
     if (this.lastPickedObj && this.lastPickedObj.material !== undefined)
       this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
     this.lastPickedObj = obj;
@@ -80,17 +83,16 @@ export class MyPicker {
   }
 
   setCarSpriteColor(obj, color, parent) {
-
     //remove obj from parent and add a new object
     obj.CAR = parent;
     parent.remove(obj);
 
-    obj = TextSpriteDraw.makeTextSprite(parent.name,
-      {
-        fontsize: 20, textColor: color,
-        borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
-        borderThickness: 6
-      });
+    obj = TextSpriteDraw.makeTextSprite(parent.name, {
+      fontsize: 20,
+      textColor: color,
+      borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+      borderThickness: 6,
+    });
     obj.position.set(4, 0, 0);
     obj.parent = parent;
 
@@ -103,12 +105,12 @@ export class MyPicker {
       let parent = this.lastPickedCar.parent;
       parent.remove(this.lastPickedCar);
       this.lastPickedCar = null;
-      let obj = TextSpriteDraw.makeTextSprite(parent.name,
-        {
-          fontsize: 20, textColor: { r: 255, g: 255, b: 255, a: 1.0 },
-          borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
-          borderThickness: 6
-        });
+      let obj = TextSpriteDraw.makeTextSprite(parent.name, {
+        fontsize: 20,
+        textColor: { r: 255, g: 255, b: 255, a: 1.0 },
+        borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+        borderThickness: 6,
+      });
       obj.position.set(4, 0, 0);
       obj.parent = parent;
 
@@ -122,7 +124,9 @@ export class MyPicker {
 
       if (this.selectedLayer == 0) {
         // check the first object that has type Sprite
-        obj = intersects.find((intersect) => intersect.object instanceof THREE.Sprite);
+        obj = intersects.find(
+          (intersect) => intersect.object instanceof THREE.Sprite
+        );
         if (obj === undefined) return;
         obj = obj.object;
         let parent = obj.parent;
@@ -140,7 +144,7 @@ export class MyPicker {
     } else {
       this.resetLastCarSpriteColor();
       this.restoreTargetColor();
-    };
+    }
   }
 
   updateSelectedLayer() {
@@ -158,15 +162,17 @@ export class MyPicker {
 
   onPointerMove(event) {
     if (!this.menu) return;
-    if (this.app.activeCameraName !== "MenuCamera"
-      && this.app.activeCameraName !== "Garage") return;
+    if (
+      this.app.activeCameraName !== "MenuCamera" &&
+      this.app.activeCameraName !== "Garage"
+    )
+      return;
 
     let cam = this.app.activeCameraName;
 
     if (this.app.activeCameraName === "Garage") {
       this.setSelectedLayer(0);
-    }
-    else {
+    } else {
       this.setSelectedLayer(1);
     }
 
@@ -186,13 +192,15 @@ export class MyPicker {
 
   onPointerDown(event) {
     if (!this.menu) return;
-    if (this.app.activeCameraName !== "MenuCamera"
-      && this.app.activeCameraName !== "Garage") return;
+    if (
+      this.app.activeCameraName !== "MenuCamera" &&
+      this.app.activeCameraName !== "Garage"
+    )
+      return;
 
     if (this.app.activeCameraName === "Garage") {
       this.setSelectedLayer(0);
-    }
-    else {
+    } else {
       this.setSelectedLayer(1);
     }
 
@@ -215,13 +223,16 @@ export class MyPicker {
     if (intersects.length > 0) {
       let obj = intersects[0].object;
       if (this.selectedLayer == 0) {
-        obj = intersects.find((intersect) => intersect.object instanceof THREE.Sprite);
+        obj = intersects.find(
+          (intersect) => intersect.object instanceof THREE.Sprite
+        );
         if (obj == undefined || obj.object == undefined) return;
         obj = obj.object.CAR;
         this.app.contents.menuController.selectCar(obj);
         return;
       }
       const buttonIndex = parseInt(obj.name.split("_").pop(), 10);
+      this.app.audio.playSound("menuSelect");
       this.menu.handleButtonClick(buttonIndex);
     }
   }
