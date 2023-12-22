@@ -18,7 +18,6 @@ export class MyContents {
     this.lights = [];
 
     this.lake = null;
-
     this.showControlPoints = false;
     this.controlPoints = [];
     this.moveCar = false;
@@ -56,8 +55,6 @@ export class MyContents {
 
     this.debugCam = new FirstPersonCamera(this.app);
     this.debugCam.defineSelfObj();
-
-    // ================ GET LAKE ===================
 
     // =============== MENU CONTROLLER =====================
 
@@ -143,8 +140,8 @@ export class MyContents {
 
     // Firework set
     this.fireworks = new MyFireworks(this.app, {
-      x: startPoint.x,
-      y: 0,
+      x: startPoint.x + 10,
+      y: 2,
       z: startPoint.z,
     });
   }
@@ -279,9 +276,6 @@ export class MyContents {
     if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
     if (this.app.activeCameraName === "Debug") this.debugCam.update();
 
-    // WATER UPDATE
-    if (this.lake) this.lake.update();
-
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE
@@ -308,14 +302,17 @@ export class MyContents {
         );
       }
 
+      // WATER UPDATE
+      if (this.lake) this.lake.update();
+
+      // FIREWORKS UPDATE
+      if (this.showFireworks) this.fireworks.update();
+
       // TREE UPDATE
       if (this.trees)
         this.trees.forEach((tree) => {
           tree.update(this.app.activeCamera.position);
         });
-
-      // FIREWORKS UPDATE
-      if (this.showFireworks) this.fireworks.update();
     }
 
     requestAnimationFrame(this.animate.bind(this));
