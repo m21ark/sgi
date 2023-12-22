@@ -261,11 +261,11 @@ export class MyContents {
   mapDificultyToSpeed(difficulty) {
     switch (difficulty) {
       case 1:
-        return 0.9;
-      case 2:
-        return 0.6;
-      case 3:
         return 0.55;
+      case 2:
+        return 0.48;
+      case 3:
+        return 0.46;
       default:
         return 1;
     }
