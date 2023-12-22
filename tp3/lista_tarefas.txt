@@ -2,8 +2,7 @@ MARCO:
 - por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
 
 RICARDO:
-- fazer deteção do numero de voltas
-- NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
+- NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LO JINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - fazer animacao das rodas
 - por modelos dos carros no podio :D
 

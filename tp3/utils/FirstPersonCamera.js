@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { ObjectBuilder } from "../builders/ObjectBuilder.js";
 
 export class FirstPersonCamera {
   constructor(app) {
@@ -14,7 +15,6 @@ export class FirstPersonCamera {
   getPlayer() {
     return this.player;
   }
-  
 
   defineSelfObj(obj = null, pos = [200, 0, 0]) {
     const geo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
@@ -102,6 +102,12 @@ export class FirstPersonCamera {
       this.update2();
       return;
     }
+
+    // for every ObjectBuilder.ShaderMaterials update the time uniform with the current velocities
+    ObjectBuilder.ShaderMaterials.forEach((shader) => {
+      shader.uniforms.time.value += 0.01;
+      shader.uniforms.velocity.value = this.player.getSpeed();
+    });
 
     // Rotate the player's direction based on their current rotation
     playerDirection.applyAxisAngle(
