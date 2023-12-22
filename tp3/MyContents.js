@@ -131,6 +131,8 @@ export class MyContents {
 
     const startPoint = this.sceneParser.getKeyPath()[0];
 
+    this.lap = 1;
+
     // Player car set
     this.playerCam = new FirstPersonCamera(this.app);
     this.playerCam.defineSelfObj(new MyCar(), [
@@ -160,8 +162,9 @@ export class MyContents {
       if (carBB.intersectsBox(this.sceneParser.checkpoints[0].bbox)) {
         console.log(this.sceneParser.checkpoints[0])
         if (this.sceneParser.checkpoints[0].name == "sector1") {
-          console.log("LAP")
-          this.app.MyHUD.setLaps(1, 3);
+          this.lap++;
+          this.app.MyHUD.setLaps(this.lap, 3);
+          // TODO :podium
         }
         // swap checkpoints 0 and 1
         let temp = this.sceneParser.checkpoints[0];
