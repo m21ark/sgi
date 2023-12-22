@@ -6,7 +6,6 @@ RICARDO:
 - fazer deteção do numero de voltas
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - fazer animacao das rodas
-- bloquear carro na posicao inicial antes da contagem terminar e na posicao certa
 
 
 - Implementação de colisões com powerups, obstaculos, e inimigo

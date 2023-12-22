@@ -30,7 +30,7 @@ export class FirstPersonCamera {
 
   addListeners() {
     window.addEventListener("keydown", (event) => {
-      this.keyboard[event.key.toLowerCase()] = true;
+      this.keyboard[event.key.toLowerCase()] = this.app.contents.hasGameStarted && true;
     });
 
     window.addEventListener("keyup", (event) => {
