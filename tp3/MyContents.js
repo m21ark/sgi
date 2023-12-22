@@ -123,22 +123,31 @@ export class MyContents {
     this.trees = this.sceneParser.getTrees();
     this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
 
-    // Player car set
-    this.playerCam = new FirstPersonCamera(this.app);
-    this.playerCam.defineSelfObj(new MyCar());
-
     // AI car set
     this.AICar = new MyAICar(this.sceneParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
 
+    const startPoint = this.sceneParser.getKeyPath()[0];
+
+    // Player car set
+    this.playerCam = new FirstPersonCamera(this.app);
+    this.playerCam.defineSelfObj(new MyCar(), [
+      startPoint.x,
+      startPoint.y,
+      startPoint.z,
+    ]);
+
+    console.log("Start point: ", startPoint);
+
     // End flag set
-    this.placeFlag(this.sceneParser.getKeyPath()[0]);
+    this.placeFlag(startPoint);
 
     // Firework set
-    this.fireworks = new MyFireworks(
-      this.app,
-      this.sceneParser.getKeyPath()[0]
-    );
+    this.fireworks = new MyFireworks(this.app, {
+      x: startPoint.x,
+      y: -5,
+      z: startPoint.z,
+    });
   }
 
   placeFlag(pos) {
@@ -230,7 +239,7 @@ export class MyContents {
         .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
         .applyMatrix4(this.AICar.aiCar.matrixWorld);
       if (this.checkCollision(player.carBB, this.hitabbleObjs)) {
-        this.app.audio.playSound("powerup");
+        if (this.hasGameStarted) this.app.audio.playSound("powerup");
       }
     }
   }

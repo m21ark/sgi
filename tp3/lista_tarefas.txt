@@ -1,8 +1,5 @@
 MARCO:
-- sound effects
-- fazer lago
 - espalhar arvores
-- por carros na pos iniciais
 - pedir nome ao user
 - fazer o podio final 
 - por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)

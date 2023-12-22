@@ -15,7 +15,7 @@ export class FirstPersonCamera {
     return this.player;
   }
 
-  defineSelfObj(obj = null) {
+  defineSelfObj(obj = null, pos = [240, 0.5, 22.5]) {
     const geo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     const mat = new THREE.MeshBasicMaterial({
       transparent: true,
@@ -23,8 +23,8 @@ export class FirstPersonCamera {
     });
     this.player = new THREE.Mesh(geo, mat);
     if (obj) this.player = obj;
-    this.player.position.set(200, 0.5, 10);
-    this.player.rotation.x = 0.0;
+    this.player.position.set(...pos);
+    this.player.rotation.x = 0;
     this.app.scene.add(this.player);
   }
 
@@ -102,7 +102,8 @@ export class FirstPersonCamera {
     // Rotate the player's direction based on their current rotation
     playerDirection.applyAxisAngle(
       new THREE.Vector3(0, 1, 0),
-      this.normalizeRadian(this.player.rotationSpeed) * (this.player.rotationSpeed > 0? 1.05 : 0.95)
+      this.normalizeRadian(this.player.rotationSpeed) *
+        (this.player.rotationSpeed > 0 ? 1.05 : 0.95)
     );
 
     // Calculate the movement vector based on the player's direction
