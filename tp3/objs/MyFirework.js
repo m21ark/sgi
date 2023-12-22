@@ -7,6 +7,10 @@ export class MyFireworks {
     this.pos = pos;
   }
 
+  setPos(pos) {
+    this.pos = pos;
+  }
+
   reset() {
     this.fireworks = [];
     // remove all scene children with name "firework"
@@ -110,6 +114,7 @@ class MyFirework {
   }
 
   launch() {
+    console.log("launching firework");
     // Calculate initial velocity for launch
     this.initVel = [
       THREE.MathUtils.randFloat(-this.launchSpeed, this.launchSpeed),

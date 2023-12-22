@@ -9,7 +9,6 @@ import { Television } from "./objs/Television.js";
 import { XMLLoader } from "./utils/XMLLoader.js";
 import { MyGarage } from "./objs/MyGarage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
-import { MyFireworks } from "./objs/MyFirework.js";
 
 export class MyContents {
   constructor(app) {
@@ -22,7 +21,6 @@ export class MyContents {
     this.controlPoints = [];
     this.moveCar = false;
     this.showAIKeyPoints = false;
-    this.showFireworks = false;
     this.hasGameStarted = false;
 
     // XML LOADER
@@ -100,8 +98,6 @@ export class MyContents {
     if (this.playerCam)
       this.playerCam.getPlayer().parent.remove(this.playerCam.getPlayer());
     if (this.endLine) this.app.scene.remove(this.endLine);
-    if (this.fireworks) this.fireworks.reset();
-
     MyGarage.objectModel = new THREE.Group();
   }
 
@@ -139,13 +135,6 @@ export class MyContents {
       startPoint.y,
       startPoint.z,
     ]);
-
-    // Firework set
-    this.fireworks = new MyFireworks(this.app, {
-      x: startPoint.x + 10,
-      y: 2,
-      z: startPoint.z,
-    });
   }
 
   loadXMLScene(data) {
@@ -210,7 +199,6 @@ export class MyContents {
   }
 
   podium() {
-
     // Stop the game
     this.hasGameStarted = false;
     this.gameHasEnded = true;
@@ -226,21 +214,30 @@ export class MyContents {
     const powerCnt = this.playerCam.getPlayer().getPowerUpsCount();
     const obstacleCnt = this.playerCam.getPlayer().getObstaclesCount();
     const difficulty = this.menuController.getDifficulty();
-    this.menuController.updateEndMenu(wonBool, myTime, aiTime, powerCnt, obstacleCnt, difficulty)
-
+    this.menuController.updateEndMenu(
+      wonBool,
+      myTime,
+      aiTime,
+      powerCnt,
+      obstacleCnt,
+      difficulty
+    );
 
     this.menuController.gotoMenu("end");
   }
 
   update() {
-    if (this.AICar != undefined) this.AICar.update();
+    // if (this.activeCameraName === "EndCamera")
+      this.menuController.podium.fireworks.update();
 
-    MyGarage.update();
+    if (this.gameHasEnded) return;
+
+    if (this.AICar != undefined) this.AICar.update();
 
     // TODO: this gives a ton of warnings
     // this.tv.updateRenderTarget(this.app.activeCamera);
 
-    if (this.gameHasEnded) return;
+    MyGarage.update();
 
     if (
       this.playerCam != undefined &&
@@ -354,9 +351,6 @@ export class MyContents {
       // WATER UPDATE
       // if (this.lake) this.lake.update(); // TODO: temporary disabled
 
-      // FIREWORKS UPDATE
-      if (this.showFireworks) this.fireworks.update();
-
       // TREE UPDATE
       if (this.trees)
         this.trees.forEach((tree) => {
@@ -385,11 +379,6 @@ export class MyContents {
     controlPoints.forEach((point) => {
       point.visible = this.showControlPoints;
     });
-  }
-
-  toggleFireWorks() {
-    // inversion of boolean happens on GUI Interface
-    if (!this.showFireworks) this.fireworks.reset();
   }
 
   toggleCountDown() {

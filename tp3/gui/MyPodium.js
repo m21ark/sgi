@@ -1,11 +1,19 @@
 import * as THREE from "three";
-import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { MyMenu } from "./MyMenu.js";
+import { MyCar } from "../objs/MyCar.js";
+import { MyFireworks } from "../objs/MyFirework.js";
 
 export class MyPodium extends MyMenu {
   constructor(app) {
     super(app, "Podium", -1000, "center", 0.2);
-    this.oldCamera = null;
+
+    this.fireworks = new MyFireworks(this.app, {
+      x: this.x,
+      y: -20,
+      z: 25,
+    });
+
+    console.log("set fireworks at", this.fireworks.pos);
   }
 
   loadMenuEnd() {
@@ -18,8 +26,8 @@ export class MyPodium extends MyMenu {
     this.endMenu.addText(`Press space to go back to menu`);
 
     // add menu to scene with name so we can update it later
-    let m = this.endMenu.getMenu();
-    m.name = "endMenu";
+    this.menu = this.endMenu.getMenu();
+    this.menu.name = "endMenu";
 
     // add a plane to the menu
     let plane = new THREE.Mesh(
@@ -31,9 +39,9 @@ export class MyPodium extends MyMenu {
 
     plane.position.set(0, -25, 24);
     plane.rotateX(-Math.PI / 2);
-    m.add(plane);
+    this.menu.add(plane);
 
-    return [this.endMenu, m];
+    return [this.endMenu, this.menu];
   }
 
   clearPodium() {
@@ -41,7 +49,34 @@ export class MyPodium extends MyMenu {
   }
 
   setCars() {
-    console.log(this.app.scene);
+    // set ai car on the left side and player car on the right side
+
+    // ai car
+    /*  let aiCar = this.app.contents.aiCar.getAIcar();
+    aiCar.position.set(-10, 0, 0);
+    aiCar.rotateY(Math.PI / 2);
+    this.app.scene.add(aiCar); */
+
+    // use blocks as placehodlers
+    let geometry = new THREE.BoxGeometry(5, 5, 5);
+    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    let aiCar = new THREE.Mesh(geometry, material);
+    aiCar.position.set(-15, -20, 25);
+    // aiCar.rotateY(Math.PI / 2);
+    this.menu.add(aiCar);
+
+    // player car
+    let playerCar = new THREE.Mesh(geometry, material);
+    playerCar.position.set(15, -20, 25);
+    // playerCar.rotateY(Math.PI / 2);
+    this.menu.add(playerCar);
+  }
+
+  setFireworks(won) {
+    // fireworks
+    const offset = won ? 1 : -1;
+    this.app.contents.fireworks.setPos(0, offset * 20, 25);
+    console.log("setting fireworks");
   }
 
   setPodiumCamera() {
@@ -52,8 +87,11 @@ export class MyPodium extends MyMenu {
     this.app.cameras["EndCamera"] = camera;
     this.app.setActiveCamera("EndCamera");
 
+    this.setCars();
+
     // add temporary listener to spacebar to go back to menu
     window.addEventListener("keydown", (e) => {
+      if (this.app.activeCameraName !== "EndCamera") return;
       if (e.key === " ") {
         this.app.setActiveCamera("MenuCamera");
         this.app.contents.menuController.gotoMenu("main");
@@ -74,6 +112,8 @@ export class MyPodium extends MyMenu {
     let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
     this.endMenu.updateText(s, 3);
     this.endMenu.updateText(`Difficulty: ${difficulty}`, 4);
+
+    this.setFireworks(won);
 
     // add new menu to scene
     this.app.scene.add(this.endMenu.getMenu());

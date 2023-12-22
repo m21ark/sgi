@@ -1,7 +1,6 @@
 import { MyCar } from "./MyCar.js";
 import * as THREE from "three";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
-import { MyGarage } from "./MyGarage.js";
 
 export class MyAICar {
   constructor(keyPoints = [[0, 0, 0]]) {
@@ -58,9 +57,9 @@ export class MyAICar {
       .sub(new THREE.Vector3(...this.keyPoints[this.currentKeyPointIndex]))
       .normalize();
     const angle = Math.atan2(direction.x, direction.z);
-    
+
     this.aiCar.rotation.y = angle;
-    
+
     this.aiBB = new THREE.Box3().setFromObject(car);
     this.aiCar.add(car);
     var spritey = TextSpriteDraw.makeTextSprite(" AI Car ", {
@@ -119,7 +118,7 @@ export class MyAICar {
       });
     }
 
-    let acumDis = 0
+    let acumDis = 0;
     const indices = [];
 
     for (let i = 0; i < laps; i++) {
@@ -127,8 +126,8 @@ export class MyAICar {
         const nextIndex = (j + 1) % this.keyPoints.length;
         const distance = Math.sqrt(
           Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
-          Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
-          Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
+            Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
+            Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
         );
 
         const decayFactor = 0.04; // Adjust the decay factor as needed
@@ -194,7 +193,7 @@ export class MyAICar {
             flat_keypoints.push(keyPoint.x, 0.1, keyPoint.z);
           });
         }
-        let acumDis = 0
+        let acumDis = 0;
 
         const indices = [];
 
@@ -203,12 +202,13 @@ export class MyAICar {
             const nextIndex = (j + 1) % this.keyPoints.length;
             const distance = Math.sqrt(
               Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
-              Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
-              Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
+                Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
+                Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
             );
 
             const decayFactor = 0.04; // Adjust the decay factor as needed
-            let adjustedSpeed = (speed - 0.3) * Math.exp(decayFactor * distance);
+            let adjustedSpeed =
+              (speed - 0.3) * Math.exp(decayFactor * distance);
             adjustedSpeed = Math.min(2, adjustedSpeed);
             let adjustedDistance = acumDis + adjustedSpeed;
 
@@ -216,9 +216,6 @@ export class MyAICar {
             acumDis = adjustedDistance;
           });
         }
-
-
-
 
         let rotationKeyframes = [];
         for (let i = 0; i < laps; i++) {
