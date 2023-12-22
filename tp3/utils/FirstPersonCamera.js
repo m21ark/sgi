@@ -25,7 +25,7 @@ export class FirstPersonCamera {
     this.player = new THREE.Mesh(geo, mat);
     if (obj) this.player = obj;
     this.player.position.set(...pos);
-    this.player.rotation.x = 0;
+    this.player.rotation.y = -Math.PI / 2;
     this.app.scene.add(this.player);
   }
 

@@ -5,7 +5,7 @@
 
 export class MyObstacle {
   constructor(
-    timeEffect = 5,
+    timeEffect = 2,
     timeBoost = 0,
     velMultiplyer = 1,
     switchedControls = false
@@ -20,6 +20,10 @@ export class MyObstacle {
     this.timeBoost = timeBoost; // should be positive
     this.velMultiplyer = velMultiplyer; // should be < 1
     this.switchedControls = switchedControls;
+  }
+
+  setBBox(bbox) {
+    this.bbox = bbox;
   }
 
   getPos() {
@@ -39,5 +43,25 @@ export class MyObstacle {
     configs.set("velMultiplyer", this.velMultiplyer);
     configs.set("switchedControls", this.switchedControls);
     return configs;
+  }
+
+  effectPlayer(player) {
+    // TODO time boost should be applied to the player and then the effect on the podium
+
+    if (this.switchedControls) {
+      player.rotationSpeedInc = -0.02;
+
+      setTimeout(() => {
+        player.rotationSpeedInc = 0.02;
+      }, this.timeEffect * 1000);
+    }
+
+    if (!this.timeBoost) {
+      player.velMultiplyer = 0.7;
+
+      setTimeout(() => {
+        player.velMultiplyer = 1;
+      }, this.timeEffect * 1000);
+    }
   }
 }

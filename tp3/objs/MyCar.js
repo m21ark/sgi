@@ -12,7 +12,7 @@ export class MyCar extends THREE.Object3D {
     this.velMultiplyer = 1;
 
     this.rotationSpeedInc = 0.02;
-    this.rotationSpeed = 0;
+    this.rotationSpeed = -Math.PI / 2;
     this.maxRotation = (6 * Math.PI) / 16;
 
     // POSITION
@@ -20,18 +20,10 @@ export class MyCar extends THREE.Object3D {
     this.y = 0;
     this.z = 0;
 
-    // TIME
-    this.timeBoost = 0;
 
     // POWER UP
-    this.powerUpTimeOut = -1;
-    this.powerup = null;
-    this.invulnerable = false;
+    this.powerUpEffect = false;
 
-    // OBSTACLE
-    this.obstacleTimeOut = -1;
-    this.obstacle = null;
-    this.switchedControls = false;
 
     this.add(MyCar.availableCars.children[carUsed].clone());
 
@@ -82,16 +74,9 @@ export class MyCar extends THREE.Object3D {
   }
 
   hasPowerUpEffect() {
-    return this.powerUpTimeOut > 0;
+    return this.powerUpEffect;
   }
 
-  hasObstacleEffect() {
-    return this.obstacleTimeOut > 0;
-  }
-
-  getTimeBoost() {
-    return this.timeBoost;
-  }
 
   getPos() {
     return [this.x, this.y, this.z];
@@ -105,13 +90,13 @@ export class MyCar extends THREE.Object3D {
 
   speedUp() {
     this.currVel += this.velInc;
-    if (this.currVel > this.maxVel) this.currVel = this.maxVel;
+    if (this.currVel > this.getMaxVel()) this.currVel = this.getMaxVel();
   }
 
   speedDown() {
     this.currVel -= this.velInc;
 
-    if (this.currVel < -this.maxVel) this.currVel = -this.maxVel;
+    if (this.currVel < -this.getMaxVel()) this.currVel = -this.getMaxVel();
   }
 
   friction() {
@@ -121,69 +106,18 @@ export class MyCar extends THREE.Object3D {
     if (Math.abs(this.currVel) < this.velInc) this.currVel = 0;
   }
 
+  getMaxVel() {
+    return this.maxVel * this.velMultiplyer;
+  }
 
   getSpeed() {
-    return this.currVel * this.velMultiplyer;
+    return this.currVel;
   }
 
   getSpeedInfo() {
     return [this.currVel, this.velMultiplyer];
   }
 
-  getState() {
-    return [
-      this.getSpeed(),
-      this.timeBoost,
-      this.powerUpTimeOut,
-      this.obstacleTimeOut,
-    ];
-  }
-
-  removePowerUpEffect() {
-    this.powerup = null;
-    this.invulnerable = false;
-    this.velMultiplyer = 1;
-    if (this.currVel > this.maxVel) this.currVel = this.maxVel;
-  }
-
-  removeObstacleEffect() {
-    this.obstacle = null;
-    this.switchedControls = false;
-  }
-
-  tickTime() {
-    if (this.powerUpTimeOut >= 0) this.powerUpTimeOut--;
-    if (this.obstacleTimeOut >= 0) this.obstacleTimeOut--;
-
-    if (this.powerUpTimeOut == -1 && this.powerup != null)
-      removePowerUpEffect();
-    if (this.obstacleTimeOut == -1 && this.obstacle != null)
-      removeObstacleEffect();
-  }
-
-  hitPowerUp(powerup) {
-    if (this.hasPowerUpEffect()) return;
-    this.powerup = powerup;
-    let conf = powerup.getParams();
-
-    this.powerUpTimeOut = conf.get("timeEffect");
-    this.timeBoost -= Math.abs(conf.get("timeBoost"));
-    this.velMultiplyer =
-      conf.get("velMultiplyer") > 1 ? conf.get("velMultiplyer") : 1;
-    this.invulnerable = conf.get("invulnerable");
-  }
-
-  hitObstacle(obstacle) {
-    if (this.hasObstacleEffect()) return;
-    this.obstacle = obstacle;
-    let conf = powerup.getParams();
-
-    this.obstacleTimeOut = conf.get("timeEffect");
-    this.timeBoost += Math.abs(conf.get("timeBoost"));
-    this.velMultiplyer =
-      conf.get("velMultiplyer") < 1 ? conf.get("velMultiplyer") : 1;
-    this.switchedControls = conf.get("changeControls");
-  }
 }
 
 MyCar.availableCars = new THREE.Group();

@@ -79,10 +79,6 @@ export class MyHUD {
     this.speedBarElement.style.color = "#000"; // Adjust the color of the speed number
   }
 
-  setTime(time) {
-    this.timeElement.innerHTML = `Time: ${time.toFixed(2)} s`;
-  }
-
   getTime() {
     return parseFloat(this.timeElement.innerHTML.split(" ")[1]);
   }
