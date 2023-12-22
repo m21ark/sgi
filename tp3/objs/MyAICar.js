@@ -1,7 +1,7 @@
 import { MyCar } from "./MyCar.js";
 import * as THREE from "three";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
-import { Garage } from "./Garage.js";
+import { MyGarage } from "./MyGarage.js";
 
 export class MyAICar {
   constructor(keyPoints = [[0, 0, 0]]) {

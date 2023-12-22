@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { MyMenu } from "./MyMenu.js";
 import { MyPicker } from "./MyPicker.js";
-import { Garage } from "../objs/Garage.js";
+import { MyGarage } from "../objs/MyGarage.js";
 import { MyCar } from "../objs/MyCar.js";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
@@ -77,7 +77,6 @@ export class MenuController {
       this.currentMenu.setCamera(this.app);
     } else {
       // Player is in game
-      // TODO: SET everything to start moving
       this.app.MyHUD.setVisible(true);
     }
   }
@@ -253,7 +252,8 @@ export class MenuController {
   }
 
   selectCar(car) {
-    Garage.closeGarage();
+    this.app.audio.playSound("garage");
+    MyGarage.closeGarage();
 
     let carIndex = MyCar.availableCars.children.findIndex(
       (c) => c.name === car.name
@@ -261,7 +261,7 @@ export class MenuController {
 
     this.app.contents.playerCam.defineSelfObj(new MyCar(0.6, 0.01, carIndex));
 
-    Garage.mixer.addEventListener("loop", (e) => {
+    MyGarage.mixer.addEventListener("loop", (e) => {
       this.gotoMenu("game");
     });
   }
@@ -271,9 +271,10 @@ export class MenuController {
     this.app.setActiveCamera("Garage");
     this.app.cameras["Garage"].position.set(130, 6, 120);
     const checkGarageLoaded = setInterval(() => {
-      if (Garage.objectModel.children.length > 0) {
+      if (MyGarage.objectModel.children.length > 0) {
         clearInterval(checkGarageLoaded);
-        Garage.openGarage();
+        this.app.audio.playSound("garage");
+        MyGarage.openGarage();
       }
     }, 100);
     // temporary solution

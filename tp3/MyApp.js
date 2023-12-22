@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyContents } from "./MyContents.js";
-// import { MyGuiInterface } from "./gui/MyGuiInterface.js";
 import Stats from "three/addons/libs/stats.module.js";
 import { MyHUD } from "./gui/MyHUD.js";
 import { MyFirstPersonControls } from "./utils/MyFirstPersonControls.js";
+import { MyAudioController } from "./audio/MyAudioController.js";
 
 class MyApp {
   /**
@@ -29,6 +29,7 @@ class MyApp {
     this.axis = null;
     this.contents = null;
   }
+
   /**
    * initializes the application
    */
@@ -46,6 +47,7 @@ class MyApp {
 
     this.initCameras();
     this.setActiveCamera("Perspective");
+    this.initAudio(); // requires FirstPerson Camera
 
     // Create a renderer with Antialiasing
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -79,7 +81,7 @@ class MyApp {
     person1.lookAt(new THREE.Vector3(0, 0, 0));
     this.cameras["FirstPerson"] = person1;
 
-    this.cameras["Debug"] = this.cameras["FirstPerson"].clone()
+    this.cameras["Debug"] = this.cameras["FirstPerson"].clone();
 
     // defines the frustum size for the orthographic cameras
     const frust = this.frustumSize / 2;
@@ -141,7 +143,10 @@ class MyApp {
 
       // are the controls yet?
 
-      if (this.activeCameraName === "FirstPerson" || this.activeCameraName === "Debug") {
+      if (
+        this.activeCameraName === "FirstPerson" ||
+        this.activeCameraName === "Debug"
+      ) {
         this.controls = new MyFirstPersonControls(
           this.activeCamera,
           this.renderer.domElement
@@ -217,6 +222,21 @@ class MyApp {
     this.lastCameraName = this.activeCameraName;
 
     this.stats.end();
+  }
+
+  initAudio() {
+    this.audio = new MyAudioController(this.cameras["FirstPerson"]);
+    this.audio.addSound("countdown");
+    this.audio.addSound("go");
+    this.audio.addSound("garage");
+    // this.audio.addSound("won");
+    // this.audio.addSound("lost");
+    this.audio.addSound("menuHover");
+    this.audio.addSound("menuSelect");
+    this.audio.addSound("obstacle");
+    this.audio.addSound("powerup");
+    this.audio.addSound("bgMusic", true, 0.15);
+    // this.audio.addSound("menuMusic", true, 0.8);
   }
 }
 

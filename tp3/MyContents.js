@@ -7,7 +7,7 @@ import { MenuController } from "./gui/MenuController.js";
 import { MyCar } from "./objs/MyCar.js";
 import { Television } from "./objs/Television.js";
 import { XMLLoader } from "./utils/XMLLoader.js";
-import { Garage } from "./objs/Garage.js";
+import { MyGarage } from "./objs/MyGarage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 import { MyFireworks } from "./objs/MyFirework.js";
 import { MyWater } from "./objs/MyWater.js";
@@ -71,12 +71,10 @@ export class MyContents {
 
     // TODO: this should be loaded from JSON (pos, size etc)
     this.water = new MyWater(10, 10, true);
-    this.water.position.set(-10, 0.05, 200); 
+    this.water.position.set(-10, 0.05, 200);
     this.app.scene.add(this.water);
 
-    // ===================== LAKE =======================
-
-    // TEMPORARY FOR MARCO TESTING
+    // TODO: TEMPORARY FOR MARCO TESTING
     // this.loadTrack(1);
 
     // Start the animation loop
@@ -88,6 +86,7 @@ export class MyContents {
     if (this.app.activeCameraName !== "FirstPerson") return;
     if (this.app.MyHUD.isPaused()) return;
 
+    this.app.audio.pauseSound("bgMusic");
     this.app.MyHUD.setPauseStatus(true);
     this.AICar.stopAnimation();
     this.menuController.gotoMenu("pause");
@@ -97,6 +96,7 @@ export class MyContents {
     if (this.app.activeCameraName !== "FirstPerson") return;
     if (!this.app.MyHUD.isPaused()) return;
 
+    this.app.audio.playSound("bgMusic");
     this.app.MyHUD.setPauseStatus(false);
     this.AICar.resumeAnimation();
   }
@@ -109,7 +109,7 @@ export class MyContents {
     if (this.endLine) this.app.scene.remove(this.endLine);
     if (this.fireworks) this.fireworks.reset();
 
-    Garage.objectModel = new THREE.Group();
+    MyGarage.objectModel = new THREE.Group();
   }
 
   async loadTrack(mapNum) {
@@ -123,22 +123,31 @@ export class MyContents {
     this.trees = this.sceneParser.getTrees();
     this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
 
-    // Player car set
-    this.playerCam = new FirstPersonCamera(this.app);
-    this.playerCam.defineSelfObj(new MyCar());
-
     // AI car set
     this.AICar = new MyAICar(this.sceneParser.getKeyPath());
     this.AICar.addAICar(this.app.scene);
 
+    const startPoint = this.sceneParser.getKeyPath()[0];
+
+    // Player car set
+    this.playerCam = new FirstPersonCamera(this.app);
+    this.playerCam.defineSelfObj(new MyCar(), [
+      startPoint.x,
+      startPoint.y,
+      startPoint.z,
+    ]);
+
+    console.log("Start point: ", startPoint);
+
     // End flag set
-    this.placeFlag(this.sceneParser.getKeyPath()[0]);
+    this.placeFlag(startPoint);
 
     // Firework set
-    this.fireworks = new MyFireworks(
-      this.app,
-      this.sceneParser.getKeyPath()[0]
-    );
+    this.fireworks = new MyFireworks(this.app, {
+      x: startPoint.x,
+      y: -5,
+      z: startPoint.z,
+    });
   }
 
   placeFlag(pos) {
@@ -211,7 +220,7 @@ export class MyContents {
   update() {
     if (this.AICar != undefined) this.AICar.update();
 
-    Garage.update();
+    MyGarage.update();
 
     // TODO: this gives a ton of warnings
     // this.tv.updateRenderTarget(this.app.activeCamera);
@@ -230,7 +239,9 @@ export class MyContents {
       this.AICar.aiBB
         .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
         .applyMatrix4(this.AICar.aiCar.matrixWorld);
-      this.checkCollision(player.carBB, this.hitabbleObjs);
+      if (this.checkCollision(player.carBB, this.hitabbleObjs)) {
+        if (this.hasGameStarted) this.app.audio.playSound("powerup");
+      }
     }
   }
 
@@ -273,6 +284,7 @@ export class MyContents {
       if (duration > 0) countdownElement.innerText = duration;
       else {
         clearInterval(countdownInterval);
+        this.app.audio.playSound("go");
         countdownElement.innerText = "GO!";
         countdownElement.style.fontSize = "180px";
         setTimeout(() => {
@@ -280,6 +292,7 @@ export class MyContents {
           document.body.removeChild(countdownElement);
         }, 1000);
       }
+      if (duration == 5) this.app.audio.playSound("countdown");
     }, 1000);
   }
 
@@ -288,6 +301,7 @@ export class MyContents {
     this.app.MyHUD.setVisible(true);
     this.app.MyHUD.setPauseStatus(false);
     this.moveCar = true;
+    this.app.audio.playSound("bgMusic");
   }
 
   animate() {
@@ -303,7 +317,7 @@ export class MyContents {
       // HUD UPDATE
       if (this.playerCam) {
         this.app.MyHUD.setCords(...this.debugCam.getPlayer().position);
-        const maxVel = this.playerCam.getPlayer().maxVel; 
+        const maxVel = this.playerCam.getPlayer().maxVel;
 
         const speed = this.playerCam.getPlayer().getSpeed();
         const translatedSpeed = (speed / maxVel) * 200;
