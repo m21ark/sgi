@@ -221,7 +221,9 @@
   "lake": [
     {
       "x": 166,
-      "z": 29
+      "z": 29,
+      "rotate": false
     }
-  ]
+  ],
+  "flagRotate": false
 }

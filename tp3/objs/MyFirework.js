@@ -57,8 +57,8 @@ class MyFirework {
       depthTest: false,
     });
 
-    this.height = 16;
-    this.speed = 60;
+    this.height = 8;
+    this.speed = 50;
 
     this.launch();
   }

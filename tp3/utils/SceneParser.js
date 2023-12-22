@@ -48,6 +48,10 @@ export class SceneParser {
     return data;
   }
 
+  getControlPoints() {
+    return this.controPointGroup;
+  }
+
   async buildGridGroup(track_number) {
     const csvPath = "tracks/track_" + track_number + ".json";
     const json = await this.readJSON(csvPath);
@@ -115,6 +119,29 @@ export class SceneParser {
 
     this.makeCatmullCurve(group, points);
 
+    this.controlPoints = points;
+
+    // add a small translucid blue spehere to each control point
+    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ffaa,
+      transparent: true,
+      opacity: 0.5,
+    });
+
+    this.controPointGroup = new THREE.Group();
+    this.controPointGroup.name = "Track_ControlPoints";
+
+    points.forEach((controlPoint) => {
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      sphere.position.set(...controlPoint);
+      sphere.position.y += 0.5;
+      sphere.visible = false;
+      this.controPointGroup.add(sphere);
+    });
+
+    group.add(this.controPointGroup);
+
     // ================ GRASS =================
 
     // Create the plain of grass
@@ -131,7 +158,7 @@ export class SceneParser {
     // ================ LAKE =================
 
     json.lake.forEach((lake) => {
-      this.addLake(group, lake.x, lake.z);
+      this.addLake(group, lake.x, lake.z, lake.rotate);
     });
 
     // ================ OBSTACLES =================
@@ -162,7 +189,50 @@ export class SceneParser {
       group.add(treeMesh);
     });
 
+    // ================ FLAG =================
+
+    this.addFlag(group, json.flagRotate ? json.flagRotate : false);
+
     return group;
+  }
+
+  addFlag(group, rotate) {
+    const pos = this.getKeyPath()[0];
+
+    this.endFlagMat = new THREE.MeshPhongMaterial({
+      map: new THREE.TextureLoader().load("assets/finishFlag.jpg"),
+      side: THREE.DoubleSide,
+      color: 0xffffff,
+    });
+
+    let endLine = new THREE.Group();
+
+    // Poles
+    let poleGeo = new THREE.CylinderGeometry(0.2, 0.2, 15, 5, 5);
+    let poleMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
+    let pole1 = new THREE.Mesh(poleGeo, poleMat);
+    let pole2 = new THREE.Mesh(poleGeo, poleMat);
+    pole1.position.set(0, -1, 0);
+    pole2.position.set(10, -1, 0);
+
+    // Flag
+    let flagGeo = new THREE.PlaneGeometry(10, 5);
+    let flag = new THREE.Mesh(flagGeo, this.endFlagMat);
+    flag.position.set(5, 5, 0);
+
+    endLine.add(pole1);
+    endLine.add(pole2);
+    endLine.add(flag);
+
+    endLine.rotation.y = Math.PI / 2;
+
+    if (rotate) {
+      endLine.rotation.y = Math.PI;
+      endLine.position.set(pos.x + 5, 6, pos.z);
+    } else endLine.position.set(pos.x, 6, pos.z + 5);
+    endLine.name = "endLine";
+
+    group.add(endLine);
   }
 
   getHitabbleObjs() {
@@ -265,9 +335,10 @@ export class SceneParser {
     group.add(mountains);
   }
 
-  addLake(group, x, z) {
+  addLake(group, x, z, rotate) {
     const lake = new MyWater(10, 10, true);
     lake.position.set(x, 0.05, z);
+    if (rotate) lake.rotateY(Math.PI / 2);
     group.name = "lake";
     this.lake = lake;
     group.add(lake);

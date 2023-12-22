@@ -137,48 +137,12 @@ export class MyContents {
 
     console.log("Start point: ", startPoint);
 
-    // End flag set
-    this.placeFlag(startPoint);
-
     // Firework set
     this.fireworks = new MyFireworks(this.app, {
       x: startPoint.x,
-      y: -5,
+      y: 0,
       z: startPoint.z,
     });
-  }
-
-  placeFlag(pos) {
-    this.endFlagMat = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load("assets/finishFlag.jpg"),
-      side: THREE.DoubleSide,
-      color: 0xffffff,
-    });
-
-    let endLine = new THREE.Group();
-
-    // Poles
-    let poleGeo = new THREE.CylinderGeometry(0.2, 0.2, 15, 5, 5);
-    let poleMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
-    let pole1 = new THREE.Mesh(poleGeo, poleMat);
-    let pole2 = new THREE.Mesh(poleGeo, poleMat);
-    pole1.position.set(0, -1, 0);
-    pole2.position.set(10, -1, 0);
-
-    // Flag
-    let flagGeo = new THREE.PlaneGeometry(10, 5);
-    let flag = new THREE.Mesh(flagGeo, this.endFlagMat);
-    flag.position.set(5, 5, 0);
-
-    endLine.add(pole1);
-    endLine.add(pole2);
-    endLine.add(flag);
-
-    endLine.rotation.y = Math.PI / 2;
-    endLine.position.set(pos.x, 6, pos.z + 5);
-    endLine.name = "endLine";
-
-    this.app.scene.add(endLine);
   }
 
   loadXMLScene(data) {
@@ -353,6 +317,15 @@ export class MyContents {
     // display or hide keypoints
     keypoints.forEach((keypoint) => {
       keypoint.visible = this.showAIKeyPoints;
+    });
+  }
+
+  toogleShowControlPoints() {
+    let controlPoints = this.sceneParser.getControlPoints().children;
+
+    // display or hide keypoints
+    controlPoints.forEach((point) => {
+      point.visible = this.showControlPoints;
     });
   }
 
