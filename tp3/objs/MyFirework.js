@@ -115,6 +115,8 @@ class MyFirework {
     const originY = origin[1];
     const originZ = origin[2];
 
+    this.app.audio.playSound("firework");
+
     for (let i = 0; i < n; i++) {
       // Generate a random direction for each exploded particle
       const direction = new THREE.Vector3(

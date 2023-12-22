@@ -107,6 +107,10 @@ export class MyContents {
     MyGarage.objectModel = new THREE.Group();
   }
 
+  resetGame() {
+    this.hasGameStarted = false;
+  }
+
   async loadTrack(mapNum) {
     // Remove previous instances from the scene
     this.removePreviousInstances();
@@ -155,8 +159,7 @@ export class MyContents {
         hitabble.effectPlayer(this.playerCam.getPlayer());
         if (hitabble.type == "powerup") {
           if (this.hasGameStarted) this.app.audio.playSound("powerup");
-        }
-        else {
+        } else {
           if (this.hasGameStarted) this.app.audio.playSound("obstacle");
         }
         return true;
@@ -207,7 +210,7 @@ export class MyContents {
       this.AICar.aiBB
         .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
         .applyMatrix4(this.AICar.aiCar.matrixWorld);
-      this.checkCollision(player.carBB, this.hitabbleObjs)
+      this.checkCollision(player.carBB, this.hitabbleObjs);
     }
   }
 
@@ -289,7 +292,10 @@ export class MyContents {
         const speed = player.getSpeed();
         const translatedSpeed = (speed / maxVel) * (200 * player.velMultiplyer);
 
-        this.app.MyHUD.setSpeed(Math.abs(translatedSpeed), 200 * player.velMultiplyer);
+        this.app.MyHUD.setSpeed(
+          Math.abs(translatedSpeed),
+          200 * player.velMultiplyer
+        );
         this.app.MyHUD.tickTime();
       }
 

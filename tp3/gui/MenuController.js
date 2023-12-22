@@ -100,6 +100,7 @@ export class MenuController {
       this.gotoMenu("game");
     });
     this.pauseMenu.addButton("Exit", () => {
+      this.app.contents.resetGame();
       this.gotoMenu("main");
     });
 
