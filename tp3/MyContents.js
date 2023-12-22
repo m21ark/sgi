@@ -46,11 +46,11 @@ export class MyContents {
 
     // ============== TV =================
 
-    this.tv = new Television(
+   /*  this.tv = new Television(
       this.app.scene,
       this.app.cameras["FirstPerson"],
       this.app.renderer
-    );
+    ); */
 
     // ============== FIRST PERSON CAMS ====================
 
@@ -209,7 +209,7 @@ export class MyContents {
 
       // Calculate the distance between the two points
       var distance = curvePoint.distanceTo(objectPoint);
-      if (distance < (this.sceneParser.TRACK_SIZE+3)/ 2 ) {
+      if (distance < (this.sceneParser.TRACK_SIZE + 3) / 2) {
         return false;
       }
     }
@@ -223,7 +223,7 @@ export class MyContents {
     MyGarage.update();
 
     // TODO: this gives a ton of warnings
-    this.tv.updateRenderTarget(this.app.activeCamera);
+    // this.tv.updateRenderTarget(this.app.activeCamera);
 
     if (
       this.playerCam != undefined &&
