@@ -10,36 +10,83 @@ export class Television {
     this.render = render;
 
     this.camera.position.z = 5;
-
-    this.renderTarget = new THREE.WebGLRenderTarget(
+    this.depthTexture = new THREE.DepthTexture(
       window.innerWidth,
       window.innerHeight
     );
+    this.renderTarget = new THREE.WebGLRenderTarget(
+      window.innerWidth,
+      window.innerHeight,
+      {
+        depthBuffer: true,
+        depthTexture: this.depthTexture,
+      }
+    );
+    this.renderTarget.depthTexture.format = THREE.DepthFormat;
+    this.renderTarget.depthTexture.type = THREE.UnsignedShortType;
 
     // Create a plane geometry to represent the television screen
-    const geometry = new THREE.PlaneGeometry(this.width, this.height);
+    const geometry = new THREE.PlaneGeometry(this.width, this.height, 100, 100);
     // Create a shader material
     this.material = new THREE.ShaderMaterial({
       vertexShader: `
+                    uniform sampler2D renderBuffer;
                     varying vec2 vUv;
+  
                     void main() {
-                        vUv = uv;
-                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                      vUv = uv;
+
+                      vec4 newPosition = modelViewMatrix * vec4(position, 1.0);
+                      // newPosition.z += vDepth * 10.0; 
+                      // 
+                      // // Set the transformed position
+                      gl_Position = projectionMatrix * newPosition;
                     }
-                `,
+                    `,
       fragmentShader: `
+                    #include <packing>
                     uniform sampler2D renderTexture;
+                    uniform sampler2D renderBuffer;
                     varying vec2 vUv;
+
+                    uniform float cameraNear;
+			              uniform float cameraFar;
+
+                    /*
+                    float perspectiveDepthToViewZ(float depth, float near, float far) {
+                      return (near * far) / ( (depth * (far - near)) - far);
+                    }
+
+                    float viewZToOrthographicDepth(float viewZ, float near, float far) {
+                      return (viewZ + near) / (near - far);
+                    }*/
+                    
+                    float readDepth( sampler2D depthSampler, vec2 coord ) {
+                      float fragCoordZ = texture2D( depthSampler, coord ).x;
+                      float viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );
+                      return viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );
+                    }
+
                     void main() {
-                        gl_FragColor = texture2D(renderTexture, vUv);
+                        float depth = readDepth( renderBuffer, vUv );
+
+                        gl_FragColor.rgb = 1.0 - vec3( depth );
+				                gl_FragColor.a = 1.0;
+                        
+
+                        //gl_FragColor = texture2D(renderBuffer, vUv);
                     }
                 `,
       uniforms: {
         renderTexture: { value: this.renderTarget.texture },
+        renderBuffer: { value: this.renderTarget.depthTexture },
+        cameraNear: { value: this.camera.near },
+        cameraFar: { value: this.camera.far },
       },
       transparent: true,
       side: THREE.DoubleSide, // Set material to double-sided
     });
+
 
     this.group = new THREE.Group();
 
@@ -110,7 +157,13 @@ export class Television {
   updateRenderTarget(cam) {
     this.camera = cam;
     this.render.setRenderTarget(this.renderTarget);
-    this.render.render(this.scene, this.camera, this.renderTarget);
+    this.render.render(this.scene, this.camera);
+
+    this.material.uniforms.renderTexture.value = this.renderTarget.texture;
+    this.material.uniforms.renderBuffer.value = this.renderTarget.depthTexture;
+    this.material.uniforms.cameraNear.value = this.camera.near;
+    this.material.uniforms.cameraFar.value = this.camera.far;
+    
     this.render.setRenderTarget(null);
     this.material.needsUpdate = true;
   }

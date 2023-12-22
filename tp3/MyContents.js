@@ -223,7 +223,7 @@ export class MyContents {
     MyGarage.update();
 
     // TODO: this gives a ton of warnings
-    // this.tv.updateRenderTarget(this.app.activeCamera);
+    this.tv.updateRenderTarget(this.app.activeCamera);
 
     if (
       this.playerCam != undefined &&

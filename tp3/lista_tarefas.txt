@@ -11,7 +11,9 @@ RICARDO:
 - fazer deteção do numero de voltas
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - fazer animacao das rodas
+
 - keyframe animacao ser iterpolacao cubica
+
 
 LATER:
 
