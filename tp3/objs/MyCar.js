@@ -12,7 +12,7 @@ export class MyCar extends THREE.Object3D {
     this.velMultiplyer = 1;
 
     this.rotationSpeedInc = 0.02;
-    this.rotationSpeed = -Math.PI / 2;
+    this.rotationSpeed = 0;
     this.maxRotation = (6 * Math.PI) / 16;
 
     // POSITION

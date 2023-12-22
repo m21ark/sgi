@@ -16,7 +16,8 @@ export class MyAICar {
   }
 
   locateFlagStart() {
-    return this.keyPoints[this.currentKeyPointIndex];
+    let pos = this.keyPoints[this.currentKeyPointIndex];
+    return [pos.x, 0.1, pos.z];
   }
 
   getAIcar() {
@@ -44,6 +45,18 @@ export class MyAICar {
   addAICar(scene) {
     this.aiCar = new THREE.Group();
     let car = MyCar.availableCars.children[0].clone();
+
+    // rotate the car in respect to the next key point
+    let nextKeyPoint = this.keyPoints[this.currentKeyPointIndex + 1];
+    if (nextKeyPoint === undefined) nextKeyPoint = this.keyPoints[1];
+
+    const direction = new THREE.Vector3(...nextKeyPoint)
+      .sub(new THREE.Vector3(...this.keyPoints[this.currentKeyPointIndex]))
+      .normalize();
+    const angle = Math.atan2(direction.x, direction.z);
+    
+    this.aiCar.rotation.y = angle;
+    
     this.aiBB = new THREE.Box3().setFromObject(car);
     this.aiCar.add(car);
     var spritey = TextSpriteDraw.makeTextSprite(" AI Car ", {
@@ -55,7 +68,6 @@ export class MyAICar {
     this.aiCar.add(spritey);
     let position = [...this.locateFlagStart()];
     this.aiCar.position.set(position[0], position[1], position[2]);
-    this.aiCar.rotation.y = -Math.PI / 2;
     scene.add(this.aiCar);
 
     // add a small translucid blue spehere to each key point
@@ -175,7 +187,7 @@ export class MyAICar {
         let flat_keypoints = [];
         for (let i = 0; i < laps; i++) {
           this.keyPoints.forEach((keyPoint) => {
-            flat_keypoints.push(...keyPoint);
+            flat_keypoints.push(keyPoint.x, 0.1, keyPoint.z);
           });
         }
         let acumDis = 0

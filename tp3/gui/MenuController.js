@@ -79,8 +79,8 @@ export class MenuController {
         this.currentMenu = null;
         console.log(
           "Camera '" +
-            menu +
-            "' option not found. Using default perspective camera"
+          menu +
+          "' option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
     }
@@ -320,7 +320,18 @@ export class MenuController {
       (c) => c.name === car.name
     );
 
-    this.app.contents.playerCam.defineSelfObj(new MyCar(0.6, 0.01, carIndex));
+    let position = this.app.contents.sceneParser.getKeyPath()[0];
+    let nextPosition = this.app.contents.sceneParser.getKeyPath()[1];
+
+    this.app.contents.playerCam.defineSelfObj(
+      new MyCar(0.6, 0.01, carIndex),
+      [position.x + 3, 0.1, position.z - 3]
+    );
+
+    // Calculate rotation to align the car to the next point
+    let direction = new THREE.Vector3().subVectors(nextPosition, position);
+    this.app.contents.playerCam.player.rotationSpeed = Math.atan2(direction.x, direction.z);
+    this.app.contents.playerCam.player.rotation.y = Math.atan2(direction.x, direction.z);
 
     MyGarage.mixer.addEventListener("loop", (e) => {
       this.gotoMenu("game");

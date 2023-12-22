@@ -54,8 +54,8 @@ export class MyContents {
 
     // ============== FIRST PERSON CAMS ====================
 
-    this.debugCam = new FirstPersonCamera(this.app);
-    this.debugCam.defineSelfObj();
+    // this.debugCam = new FirstPersonCamera(this.app);
+    // this.debugCam.defineSelfObj();
 
     // ================ GET LAKE ===================
 
@@ -135,7 +135,6 @@ export class MyContents {
       startPoint.z,
     ]);
 
-    console.log("Start point: ", startPoint);
 
     // Firework set
     this.fireworks = new MyFireworks(this.app, {
@@ -283,7 +282,7 @@ export class MyContents {
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE
       if (this.playerCam) {
-        this.app.MyHUD.setCords(...this.debugCam.getPlayer().position);
+        this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
         const player = this.playerCam.getPlayer();
         const maxVel = player.getMaxVel();
 
