@@ -167,6 +167,7 @@ export class MyContents {
     // Check collision with ai car
     if (carBB.intersectsBox(this.AICar.aiBB)) {
       if (this.hasGameStarted) this.app.audio.playSound("obstacle");
+      this.playerCam.getPlayer().collideCar();
       return true;
     }
 

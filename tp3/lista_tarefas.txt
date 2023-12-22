@@ -5,13 +5,13 @@ MARCO:
 - por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
 
 RICARDO:
-- Implementação de colisões com powerups, obstaculos, e inimigo
 - fazer deteção do numero de voltas
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LOJINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - fazer animacao das rodas
 - bloquear carro na posicao inicial antes da contagem terminar e na posicao certa
 
 
+- Implementação de colisões com powerups, obstaculos, e inimigo
 - keyframe animacao ser iterpolacao cubica
 (tive de comentar a TV por completo.  não sei o q fizeste mas mesmo sem os updates so tenho 17fps... 
 se n der pra resolver vai ter de ficar desligada por default para eu poder jogar )

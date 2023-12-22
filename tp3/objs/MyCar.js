@@ -23,6 +23,7 @@ export class MyCar extends THREE.Object3D {
 
     // POWER UP
     this.powerUpEffect = false;
+    this.collisionEffect = 3;
 
 
     this.add(MyCar.availableCars.children[carUsed].clone());
@@ -116,6 +117,14 @@ export class MyCar extends THREE.Object3D {
 
   getSpeedInfo() {
     return [this.currVel, this.velMultiplyer];
+  }
+
+  collideCar() {
+    this.velMultiplyer = 0.7;
+
+    setTimeout( () => {
+       this.velMultiplyer = 1;
+    }, this.collisionEffect * 1000);
   }
 
 }
