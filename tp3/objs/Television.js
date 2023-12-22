@@ -26,43 +26,51 @@ export class Television {
     this.renderTarget.depthTexture.type = THREE.UnsignedShortType;
 
     // Create a plane geometry to represent the television screen
-    const geometry = new THREE.PlaneGeometry(this.width, this.height, 100, 100);
+    const geometry = new THREE.PlaneGeometry(this.width, this.height, 1000, 1000);
     // Create a shader material
     this.material = new THREE.ShaderMaterial({
       vertexShader: `
-                    #include <packing>
+      #include <packing>
 
-                    uniform sampler2D renderBuffer;
-                    varying vec2 vUv;
-                    uniform float cameraNear;
-			              uniform float cameraFar;
-
-                    float readDepth( sampler2D depthSampler, vec2 coord ) {
-                      float fragCoordZ = texture2D( depthSampler, coord ).x;
-                      float viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );
-                      return viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );
-                    }
-  
-                    void main() {
-                      vUv = uv;
-                      float depth = readDepth( renderBuffer, vUv );
-
-                      vec4 newPosition = modelViewMatrix * vec4(position, 1.0);
-                      newPosition.z += depth * 3.0;
-
-                      // Get the normal vector
-                      vec3 normal = normalize(normalMatrix * normal);
-
-                      // Conditionally add or subtract based on depth value in the direction of the normal
-                      if (depth > 0.5) {
-                        newPosition += vec4(normal, 0.0);
-                      } else {
-                        newPosition -= vec4(normal, 0.0);
-                      }
-
-                      // Set the transformed position
-                      gl_Position = projectionMatrix * newPosition;
-                      }
+      uniform sampler2D renderBuffer;
+      varying vec2 vUv;
+      uniform float cameraNear;
+      uniform float cameraFar;
+      
+      // float perspectiveDepthToViewZ(float depth, float near, float far) {
+      //     return (2.0 * near) / (far + near - depth * (far - near));
+      // }
+      
+      // float viewZToOrthographicDepth(float viewZ, float near, float far) {
+      //     return (viewZ + near) / (near - far);
+      // }
+      
+      float readDepth(sampler2D depthSampler, vec2 coord) {
+          float fragCoordZ = texture2D(depthSampler, coord).x;
+          float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+          return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+      }
+      
+      void main() {
+          vUv = uv;
+          float depth = readDepth(renderBuffer, vUv);
+      
+          vec4 newPosition = modelViewMatrix * vec4(position, 1.0);
+          
+          // Get the normal vector
+          vec3 normal = normalize(mat3(normalMatrix) * normal);
+      
+          // Conditionally add or subtract based on depth value in the direction of the normal
+          if (depth > 0.5) {
+              newPosition.xyz += normal * depth * 4.0;
+          } else {
+              newPosition.xyz -= normal * depth * 4.0;
+          }
+      
+          // Set the transformed position
+          gl_Position = projectionMatrix * newPosition;
+      }
+      
                       `,
       fragmentShader: `
                     #include <packing>
