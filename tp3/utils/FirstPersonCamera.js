@@ -21,6 +21,7 @@ export class FirstPersonCamera {
       transparent: true,
       opacity: 0,
     });
+    if (this.player) this.app.scene.remove(this.player);
     this.player = new THREE.Mesh(geo, mat);
     if (obj) this.player = obj;
     this.player.position.set(200, 0.5, 10);
@@ -127,7 +128,7 @@ export class FirstPersonCamera {
 
     moveVector.sub(playerDirection);
 
-    moveVector.normalize().multiplyScalar(this.player.currVel);
+    moveVector.normalize().multiplyScalar(this.player.getSpeed());
 
     this.player.position.add(moveVector);
 

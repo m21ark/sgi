@@ -111,11 +111,12 @@ export class MyCar extends THREE.Object3D {
   }
 
   friction() {
-    const frictionCoefficient = 0.08;
+    const frictionCoefficient = 0.03;
     const frictionForce = -frictionCoefficient * this.currVel;
     this.currVel += frictionForce;
     if (Math.abs(this.currVel) < this.velInc) this.currVel = 0;
   }
+
 
   getSpeed() {
     return this.currVel * this.velMultiplyer;

@@ -200,10 +200,11 @@ export class MyContents {
 
       // Calculate the distance between the two points
       var distance = curvePoint.distanceTo(objectPoint);
-      if (distance < this.sceneParser.TRACK_SIZE) {
+      if (distance < (this.sceneParser.TRACK_SIZE+3)/ 2 ) {
         return false;
       }
     }
+    this.playerCam.getPlayer().friction();
     return true; // collision with grass
   }
 
@@ -304,10 +305,10 @@ export class MyContents {
         this.app.MyHUD.setCords(...this.debugCam.getPlayer().position);
         const maxVel = this.playerCam.getPlayer().maxVel; 
 
-        const speed = this.playerCam.getPlayer().currVel;
+        const speed = this.playerCam.getPlayer().getSpeed();
         const translatedSpeed = (speed / maxVel) * 200;
 
-        this.app.MyHUD.setSpeed(translatedSpeed);
+        this.app.MyHUD.setSpeed(Math.abs(translatedSpeed));
         this.app.MyHUD.tickTime();
       }
 

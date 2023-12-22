@@ -103,9 +103,27 @@ export class MyAICar {
       });
     }
 
-    const indices = this.keyPoints.map((_, i) => {
-      return i * speed;
-    });
+    let acumDis = 0
+    const indices = [];
+
+    for (let i = 0; i < laps; i++) {
+      this.keyPoints.forEach((_, j) => {
+        const nextIndex = (j + 1) % this.keyPoints.length;
+        const distance = Math.sqrt(
+          Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
+          Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
+          Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
+        );
+
+        const decayFactor = 0.04; // Adjust the decay factor as needed
+        let adjustedSpeed = (speed - 0.3) * Math.exp(decayFactor * distance);
+        adjustedSpeed = Math.min(2, adjustedSpeed);
+        let adjustedDistance = acumDis + adjustedSpeed;
+
+        indices.push(acumDis);
+        acumDis = adjustedDistance;
+      });
+    }
 
     let steeringKeyframes = [];
     for (let i = 0; i < laps; i++) {
@@ -160,10 +178,31 @@ export class MyAICar {
             flat_keypoints.push(...keyPoint);
           });
         }
+        let acumDis = 0
 
-        const indices = this.keyPoints.map((_, i) => {
-          return i * speed;
-        });
+        const indices = [];
+
+        for (let i = 0; i < laps; i++) {
+          this.keyPoints.forEach((_, j) => {
+            const nextIndex = (j + 1) % this.keyPoints.length;
+            const distance = Math.sqrt(
+              Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
+              Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
+              Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
+            );
+
+            const decayFactor = 0.04; // Adjust the decay factor as needed
+            let adjustedSpeed = (speed - 0.3) * Math.exp(decayFactor * distance);
+            adjustedSpeed = Math.min(2, adjustedSpeed);
+            let adjustedDistance = acumDis + adjustedSpeed;
+
+            indices.push(acumDis);
+            acumDis = adjustedDistance;
+          });
+        }
+
+
+
 
         let rotationKeyframes = [];
         for (let i = 0; i < laps; i++) {
