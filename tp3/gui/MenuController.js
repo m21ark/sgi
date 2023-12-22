@@ -49,9 +49,6 @@ export class MenuController {
       case "pause":
         this.currentMenu = this.pauseMenu;
         break;
-      case "end":
-        this.currentMenu = this.endMenu;
-        break;
       case "mapSelect":
         this.currentMenu = this.MapSelectingMenu;
         break;
@@ -75,6 +72,10 @@ export class MenuController {
         break;
       case "carSelect":
         this.garageLoad();
+        return;
+      case "end":
+        this.app.MyHUD.setVisible(false);
+        this.podium.setPodiumCamera();
         return;
       default:
         this.currentMenu = null;
@@ -279,15 +280,20 @@ export class MenuController {
     this.podium = new MyPodium(this.app);
     let menu = null;
     [this.endMenu, menu] = this.podium.loadMenuEnd();
-
-    // add menu to scene
     this.app.scene.add(menu);
   }
 
   // ========================================================
 
   updateEndMenu(won, time, timeRival, powerCnt, obstacleCnt, difficulty) {
-    // TODO: fazer isto
+    this.podium.updateEndMenu(
+      won,
+      time,
+      timeRival,
+      powerCnt,
+      obstacleCnt,
+      difficulty
+    );
   }
 
   selectCar(car) {

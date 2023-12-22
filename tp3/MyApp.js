@@ -112,8 +112,6 @@ class MyApp {
     garage.position.set(130, 6, 120);
     garage.lookAt(new THREE.Vector3(120, 6, 120));
     this.cameras["Garage"] = garage;
-
-    // turn off orthoright camera's zoom and mouse controls
   }
 
   /**
@@ -153,7 +151,8 @@ class MyApp {
         );
       } else if (
         this.activeCameraName === "MenuCamera" ||
-        this.activeCameraName === "Garage"
+        this.activeCameraName === "Garage" ||
+        this.activeCameraName === "EndCamera"
       ) {
         // skip controls for the menu camera
         return;
@@ -239,6 +238,6 @@ class MyApp {
     this.audio.addSound("bgMusic", true, 0.15);
     // this.audio.addSound("menuMusic", true, 0.8);
   }
-  }
+}
 
 export { MyApp };
