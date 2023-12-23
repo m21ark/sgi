@@ -6,7 +6,7 @@ export class MyCar extends THREE.Object3D {
     super();
     // VELOCITY
     this.maxVel = maxVel;
-    this.velInc = velInc * 0.6;
+    this.velInc = velInc * 0.4;
 
     this.currVel = 0;
     this.velMultiplyer = 1;

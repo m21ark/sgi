@@ -35,5 +35,4 @@ LOW PRIORITY:
 - adicionar mais luzes e sombras (neste momento não temos nada)
 - yoshi/mario sounds on car select
 - suavizar mountain tops
-- fazer smooth transition para podio
-- reduzir velocidade do carro pq ta muito rapido
+- ajustar velocidades do carro e AI para ser mais desafiante nas diferentes dificuldades (e carro AI começa mto rapido e dps abranda mto perto da meta)

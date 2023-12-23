@@ -310,7 +310,7 @@ export class MenuController {
     let position = this.app.contents.sceneParser.getKeyPath()[0];
     let nextPosition = this.app.contents.sceneParser.getKeyPath()[1];
 
-    this.app.contents.playerCam.defineSelfObj(new MyCar(0.6, 0.01, carIndex), [
+    this.app.contents.playerCam.defineSelfObj(new MyCar(0.5, 0.01, carIndex), [
       position.x + 3,
       0.1,
       position.z - 3,

@@ -194,6 +194,8 @@ export class MyContents {
   }
 
   podium() {
+    this.endGame(true); // TODO: make this check if the player won or lost
+
     // Stop the game
     this.hasGameStarted = false;
     this.gameHasEnded = true;
@@ -218,7 +220,10 @@ export class MyContents {
       difficulty
     );
 
-    this.menuController.gotoMenu("end");
+    // wait 3s before showing the end menu
+    setTimeout(() => {
+      this.menuController.gotoMenu("end");
+    }, 3000);
   }
 
   update() {
@@ -276,6 +281,16 @@ export class MyContents {
       default:
         return 1;
     }
+  }
+
+  async endGame(won) {
+    const endSMS = document.createElement("div");
+    endSMS.id = "CountDown";
+    endSMS.innerText = won ? "You won!" : "You lost!";
+    endSMS.style.fontSize = "80px";
+    document.body.appendChild(endSMS);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    document.body.removeChild(endSMS);
   }
 
   async startCountdown() {
