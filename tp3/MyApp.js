@@ -111,6 +111,29 @@ class MyApp {
     garage.position.set(130, 6, 120);
     garage.lookAt(new THREE.Vector3(120, 6, 120));
     this.cameras["Garage"] = garage;
+
+    const frust2 = 250;
+    const leftTop = -frust2 * aspect;
+    const rightTop = frust2 * aspect;
+    const topTop = frust2;
+    const bottomTop = -frust2;
+    const nearTop = -frust2;
+    const farTop = frust2;
+
+    // add othographic camera on top of scene
+    const orthoTop = new THREE.OrthographicCamera(
+      leftTop,
+      rightTop,
+      topTop,
+      bottomTop,
+      nearTop,
+      farTop
+    );
+    orthoTop.zoom = 1;
+    orthoTop.up = new THREE.Vector3(0, 0, -1);
+    orthoTop.position.set(125, frust2/2, 125);
+    orthoTop.lookAt(new THREE.Vector3(125, 0 , 125));
+    this.cameras["TopCamera"] = orthoTop;
   }
 
   /**
@@ -143,7 +166,8 @@ class MyApp {
         this.activeCameraName === "Debug" ||
         this.activeCameraName === "MenuCamera" ||
         this.activeCameraName === "Garage" ||
-        this.activeCameraName === "EndCamera"
+        this.activeCameraName === "EndCamera" ||
+        this.activeCameraName === "TopCamera"
       ) {
         // skip controls for these cameras
         return;
