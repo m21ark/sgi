@@ -14,8 +14,8 @@ export class MyAICar {
     this.clock = new THREE.Clock();
   }
 
-  getFinalTime() {
-    return 34; // TODO: calculate the final time
+  getFinalTime() {    
+    return Math.round(this.finalTime);
   }
 
   locateFlagStart() {
@@ -216,6 +216,8 @@ export class MyAICar {
             acumDis = adjustedDistance;
           });
         }
+
+        this.finalTime = indices[indices.length - 1];
 
         let rotationKeyframes = [];
         for (let i = 0; i < laps; i++) {

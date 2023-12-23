@@ -16,7 +16,7 @@ export class FirstPersonCamera {
     return this.player;
   }
 
-  defineSelfObj(obj = null, pos = [200, 0, 0]) {
+  defineSelfObj(obj = null, pos = [-1000, 0, 0]) {
     const geo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     const mat = new THREE.MeshBasicMaterial({
       transparent: true,

@@ -1,10 +1,11 @@
 MARCO:
-- por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
+- fazer vitoria da AI
 
 RICARDO:
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LO JINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - fazer animacao das rodas
 - por modelos dos carros no podio :D
+- por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
 
 
 - Implementação de colisões com powerups, obstaculos, e inimigo
@@ -30,6 +31,7 @@ LOW PRIORITY:
 
 - fazer particulas de fumo
 - se parar totalmente na relva, a velocidade maxima fica 2 por algum motivo
+- efeito de velocidade na camera com FOV multiplier
 - adicionar sons de motor a acelerar
 - adicionar som sempre q se completa uma volta
 - adicionar mais luzes e sombras (neste momento não temos nada)

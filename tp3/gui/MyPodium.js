@@ -18,7 +18,6 @@ export class MyPodium extends MyMenu {
     this.endMenu.addText("You won!");
     this.endMenu.addText("Your final time was 3:43s");
     this.endMenu.addText(`Rival time was 3:56s`);
-    this.endMenu.addText("Hit 2 powerups and 2 obstacules");
     this.endMenu.addText(`Difficulty: easy`);
     this.endMenu.addText(`Press space to go back to menu`);
 
@@ -105,6 +104,9 @@ export class MyPodium extends MyMenu {
         this.app.setActiveCamera("MenuCamera");
         this.app.contents.menuController.gotoMenu("main");
         window.removeEventListener("keydown", this);
+
+        // remove fireworks
+        this.fireworks.reset();
       }
     });
   }
@@ -124,9 +126,7 @@ export class MyPodium extends MyMenu {
     this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
     this.endMenu.updateText(`Your final time was ${time}s`, 1);
     this.endMenu.updateText(`Rival time was ${timeRival}s`, 2);
-    let s = `Hit ${powerCnt} powerups and ${obstacleCnt} obstacles`;
-    this.endMenu.updateText(s, 3);
-    this.endMenu.updateText(`Difficulty: ${difficulty}`, 4);
+    this.endMenu.updateText(`Difficulty: ${difficulty}`, 3);
     this.menu = this.endMenu.getMenu();
     this.menu.position.set(this.x, 12.5, 0);
     this.menu.name = "endMenu";
