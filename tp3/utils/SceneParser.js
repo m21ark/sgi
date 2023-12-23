@@ -291,9 +291,10 @@ export class SceneParser {
 
   addFlag(group, rotate) {
     const pos = this.getKeyPath()[0];
+    const flagMat = new THREE.TextureLoader().load("assets/finishFlag.jpg");
 
     this.endFlagMat = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load("assets/finishFlag.jpg"),
+      map: flagMat,
       side: THREE.DoubleSide,
       color: 0xffffff,
     });
@@ -324,6 +325,23 @@ export class SceneParser {
       endLine.position.set(pos.x + 5, 6, pos.z);
     } else endLine.position.set(pos.x, 6, pos.z + 5);
     endLine.name = "endLine";
+
+    // add a plane on the floor with the flag texture on the endline
+    let planeGeo = new THREE.PlaneGeometry(5, 10);
+    flagMat.wrapS = THREE.RepeatWrapping;
+    flagMat.wrapT = THREE.RepeatWrapping;
+    flagMat.repeat.set(1, 2);
+    let planeMat = new THREE.MeshPhongMaterial({
+      map: flagMat,
+      side: THREE.DoubleSide,
+      color: 0xffffff,
+    });
+    let plane = new THREE.Mesh(planeGeo, planeMat);
+    plane.position.set(pos.x, 0.1, pos.z);
+    plane.rotation.x = -Math.PI / 2;
+    if (rotate) plane.rotation.z = Math.PI / 2;
+    plane.name = "endLinePlane";
+    group.add(plane);
 
     group.add(endLine);
   }

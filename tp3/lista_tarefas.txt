@@ -1,5 +1,5 @@
 MARCO:
-- a linha de meta tem uma marca de encaixe do inicio e fim de catmull q se podia disfarçar (por ex com um banner de meta no chao)
+...
 
 RICARDO:
 
@@ -23,6 +23,7 @@ LATER:
 ...
 
 LOW PRIORITY:
+- carro player começa antes da linha de partida (nao alinhado com AI)
 - picker da garagem esta mto sensivel para escolher entre mario e yoshi
 - indicar visualmente com texto o powerup/ obstaculo q se apanhou
 - powerup e obstaculo não tem cooldown time
