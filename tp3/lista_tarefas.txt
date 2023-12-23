@@ -3,11 +3,10 @@ MARCO:
 
 RICARDO:
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LO JINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
-- fazer animacao das rodas
-- por modelos dos carros no podio :D
 - por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
 
 
+- fazer animacao das rodas
 - Implementação de colisões com powerups, obstaculos, e inimigo
 - keyframe animacao ser iterpolacao cubica
 (tive de comentar a TV por completo.  não sei o q fizeste mas mesmo sem os updates so tenho 17fps... 

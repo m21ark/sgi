@@ -9,6 +9,52 @@ import { MyObstacle } from "../objs/MyObstacle.js";
 import { MyPowerUp } from "../objs/MyPowerUp.js";
 import { MyWater } from "../objs/MyWater.js";
 
+var textureLoader = new THREE.TextureLoader();
+
+
+var customUniforms = {
+    // Example uniforms
+    color: { value: new THREE.Color(0xdddddd) },
+    // emissive: { value: new THREE.Color(0xdddddd) },
+    specular: { value: new THREE.Color(0x111111) },
+    shininess: { value: 30 },
+    time: { value: 1.0 },
+    map: { value: null },
+    // Add any other uniforms required by your shader
+};
+
+
+// Combine your custom uniforms with the ones required by the Phong shader
+var uniforms = THREE.UniformsUtils.merge([THREE.UniformsLib.common, THREE.UniformsLib.specular, THREE.UniformsLib.envmap, customUniforms]);
+
+console.log(uniforms);
+
+const phongVertexShader = THREE.ShaderLib.phong.vertexShader;
+
+let newC =  `
+varying vec3 vNormal;
+varying vec2 vUv;
+varying vec3 vViewPosition;
+uniform float time;
+
+void main() {
+    vUv = uv;
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    vec3 newPosition = position;
+    newPosition *= 1.0 + 0.1 * sin(time);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+}
+`
+
+
+
+console.log(THREE.ShaderLib.phong.fragmentShader);
+
+// const modifiedPhongVertexShader = phongVertexShader.replace(
+//   '#include <begin_vertex>',
+//   newC
+// );
+// 
 export class SceneParser {
   static ObjectType = {
     OBSTACLE: "obstacle",
@@ -59,11 +105,27 @@ export class SceneParser {
     return this.controPointGroup;
   }
 
+  static BoxesShaders = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: newC,
+    fragmentShader: `
+    varying vec2 vUv;
+    uniform sampler2D uSampler;
+    
+    void main() {
+        gl_FragColor = texture2D(uSampler, vUv);
+    }
+    `,
+
+});
+
   async buildGridGroup(track_number) {
     const csvPath = "tracks/track_" + track_number + ".json";
     const json = await this.readJSON(csvPath);
 
     const group = new THREE.Group();
+
+    
 
     // define the meshes for powerups and obstacles
     await this.objBuilder.create3dModel(
@@ -72,15 +134,17 @@ export class SceneParser {
       },
       "scene/",
       this.powerupItem
-    );
+    )
+    
     await this.objBuilder.create3dModel(
       {
         filepath: "objs/box/ItmPowderBox.obj",
       },
       "scene/",
       this.obstacleItem
-    );
+    )
 
+  
     await this.objBuilder.create3dModel(
       {
         filepath: "objs/garage/smallgarage.obj",
@@ -483,6 +547,10 @@ export class SceneParser {
 
   createPowerup(x, y) {
     const item = this.powerupItem.clone();
+    for (let child of item.children) {
+      child.material = SceneParser.BoxesShaders;
+    }
+    item.material = SceneParser.BoxesShaders;
     item.position.set(x, 0.15, y);
     item.rotateX(Math.PI / 2);
     item.scale.set(0.015, 0.015, 0.015);
@@ -491,6 +559,10 @@ export class SceneParser {
 
   createObstacle(x, y) {
     const item = this.obstacleItem.clone();
+    for (let child of item.children) {
+      child.material = SceneParser.BoxesShaders;
+    }
+    item.material = SceneParser.BoxesShaders;
     item.position.set(x, 0.8, y);
     item.scale.set(0.1, 0.1, 0.1);
     return item;

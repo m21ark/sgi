@@ -246,6 +246,10 @@ export class MyContents {
     // TODO: this gives a ton of warnings
     // this.tv.updateRenderTarget(this.app.activeCamera);
 
+    if (this.sceneParser != undefined) {
+      SceneParser.BoxesShaders.uniforms.time.value += 0.05;
+    }
+
     MyGarage.update();
 
     if (

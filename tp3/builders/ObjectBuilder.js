@@ -6,6 +6,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { ColladaLoader } from "three/addons/loaders/ColladaLoader.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
+import { SceneParser } from "../utils/SceneParser.js";
 
 // defines how objects should be created
 export class ObjectBuilder {
@@ -247,9 +248,27 @@ export class ObjectBuilder {
               dir + rep.filepath,
               (obj) => {
                 const model = obj;
+
+                if (rep.filepath.includes("block")) {
+                  console.log(model)
+                  for (let child of model.children) {
+                    let oldMat = child.material.map;
+                    let mat =  SceneParser.BoxesShaders;
+
+                    // mat.uniforms.map.value = oldMat;
+                    child.material = mat;
+                  }
+                 // oldMat = model.material.map;
+                 // mat =  SceneParser.BoxesShaders.clone();
+                 // mat.uniforms.map.value = oldMat;
+                 // model.material = mat;
+                } 
+                if (rep.filepath.includes("box")) {
+                  
+                }
                 group.add(model);
 
-                resolve(model.geometry);
+                resolve(model);
               },
               undefined,
               (error) => {
