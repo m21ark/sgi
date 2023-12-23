@@ -89,13 +89,7 @@ export class FirstPersonCamera {
     this.updateCamera();
   }
 
-  update() {
-    if (!this.player.friction) {
-      // its a debug camera
-      this.flightUpdate();
-      return;
-    }
-
+  carUpdate() {
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
 
     // make car wheels rotate
@@ -129,6 +123,11 @@ export class FirstPersonCamera {
     this.player.position.add(moveVector);
 
     this.updateCamera();
+  }
+
+  update() {
+    if (!this.player.friction) this.flightUpdate(); // Debug flight camera
+    else this.carUpdate(); // Car camera
   }
 
   /**

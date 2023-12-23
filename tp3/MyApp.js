@@ -3,7 +3,6 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyContents } from "./MyContents.js";
 import Stats from "three/addons/libs/stats.module.js";
 import { MyHUD } from "./gui/MyHUD.js";
-import { MyFirstPersonControls } from "./utils/MyFirstPersonControls.js";
 import { MyAudioController } from "./audio/MyAudioController.js";
 
 class MyApp {
@@ -139,22 +138,14 @@ class MyApp {
       // among other things
       this.onResize();
 
-      // are the controls yet?
-
       if (
         this.activeCameraName === "FirstPerson" ||
-        this.activeCameraName === "Debug"
-      ) {
-        this.controls = new MyFirstPersonControls(
-          this.activeCamera,
-          this.renderer.domElement
-        );
-      } else if (
+        this.activeCameraName === "Debug" ||
         this.activeCameraName === "MenuCamera" ||
         this.activeCameraName === "Garage" ||
         this.activeCameraName === "EndCamera"
       ) {
-        // skip controls for the menu camera
+        // skip controls for these cameras
         return;
       } else {
         this.controls = new OrbitControls(

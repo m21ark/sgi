@@ -230,6 +230,9 @@ export class MyContents {
   }
 
   update() {
+    // UPDATE CAMERAS
+    if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
+    if (this.app.activeCameraName === "Debug") this.debugCam.update();
     if (this.app.activeCameraName === "EndCamera")
       this.menuController.podium.updateFireworks();
 
@@ -334,10 +337,6 @@ export class MyContents {
   }
 
   animate() {
-    // UPDATE CAMERAS
-    if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
-    if (this.app.activeCameraName === "Debug") this.debugCam.update();
-
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE
