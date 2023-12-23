@@ -251,17 +251,15 @@ export class ObjectBuilder {
 
                 if (rep.filepath.includes("block")) {
                   // VAI DAR PROBLEMA
-                  for (let i = 0; i < materials.length; i++) {
+                  for (let i = 0; i < model.children.length; i++) {
                     let child = model.children[i];
                     let oldMat = child.material.map;
-                    console.log(child.material);
-                    let mat =  i==0 ? SceneParser.BlockShaders:SceneParser.BlockShaders;
+                 
+                    let mat =  i==0 ? SceneParser.BlockShaders:SceneParser.BlockShader2;
 
                     mat.uniforms.map.value = oldMat;
                     child.material = mat;
                   }
-
-                  console.log(model.material);
 
                 } 
                 if (rep.filepath.includes("box")) {
