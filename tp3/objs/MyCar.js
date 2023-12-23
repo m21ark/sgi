@@ -23,21 +23,9 @@ export class MyCar extends THREE.Object3D {
     this.powerUpEffect = false;
     this.collisionEffect = 3;
 
-    // COUNTERS
-    this.powerupCount = 0;
-    this.obstaclesCount = 0;
-
     this.add(MyCar.availableCars.children[carUsed].clone());
 
     this.carBB = new THREE.Box3().setFromObject(this); // bounding box
-  }
-
-  getPowerUpsCount() {
-    return this.powerupCount;
-  }
-
-  getObstaclesCount() {
-    return this.obstaclesCount;
   }
 
   incRotation() {
@@ -60,14 +48,6 @@ export class MyCar extends THREE.Object3D {
     /*     this.children[0].children[0].rotation.y = 0.08;
     this.children[0].children[1].rotation.y = 0.03;
     this.children[0].children[2].rotation.y = 0.05; */
-  }
-
-  incPowerupCount() {
-    this.powerupCount += 1;
-  }
-
-  incObstaclesCount() {
-    this.obstaclesCount += 1;
   }
 
   hasPowerUpEffect() {

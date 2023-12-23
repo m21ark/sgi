@@ -103,12 +103,14 @@ export class MyPodium extends MyMenu {
     });
   }
 
-  updateEndMenu(won, time, timeRival, powerCnt, obstacleCnt, difficulty) {
+  updateEndMenu(won, time, timeRival, difficulty) {
     this.setFireworks(won);
 
     // remove old menu
     let oldMenu = this.app.scene.getObjectByName("endMenu");
     this.app.scene.remove(oldMenu);
+
+    const name = this.app.contents.menuController.getPlayerName();
 
     // map difficulty to string
     if (difficulty === 1) difficulty = "easy";
@@ -116,7 +118,7 @@ export class MyPodium extends MyMenu {
     else difficulty = "hard";
 
     this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
-    this.endMenu.updateText(`Your final time was ${time}s`, 1);
+    this.endMenu.updateText(`${name}'s final time was ${time}s`, 1);
     this.endMenu.updateText(`Rival time was ${timeRival}s`, 2);
     this.endMenu.updateText(`Difficulty: ${difficulty}`, 3);
     this.menu = this.endMenu.getMenu();

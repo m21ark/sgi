@@ -1,5 +1,4 @@
 MARCO:
-- player name should appear somewhere... or the nametag or the end screen
 - a linha de meta tem uma marca de encaixe do inicio e fim de catmull q se podia disfarçar (por ex com um banner de meta no chao)
 - ai car devia dar 3 voltas como o player
 - corrigir a selecao de carro na garagem q ta msm dificil perceber se temos algo ja selecionado ou n (- yoshi/mario sounds on car select)
