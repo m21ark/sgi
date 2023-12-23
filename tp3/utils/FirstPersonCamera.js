@@ -16,7 +16,8 @@ export class FirstPersonCamera {
     return this.player;
   }
 
-  defineSelfObj(obj = null, pos = [-1000, 0, 0]) {
+  defineSelfObj(obj = null, pos) {
+    // If no object is passed, create a default one
     const geo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     const mat = new THREE.MeshBasicMaterial({
       transparent: true,
@@ -30,13 +31,10 @@ export class FirstPersonCamera {
   }
 
   addListeners() {
+    // Add event listeners for keyboard events
     window.addEventListener("keydown", (event) => {
-      this.keyboard[event.key.toLowerCase()] =
-        (this.app.contents.hasGameStarted ||
-          this.app.activeCameraName == "Debug") &&
-        true;
+      this.keyboard[event.key.toLowerCase()] = true;
     });
-
     window.addEventListener("keyup", (event) => {
       this.keyboard[event.key.toLowerCase()] = false;
     });
@@ -46,7 +44,7 @@ export class FirstPersonCamera {
     return ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
   }
 
-  update2() {
+  flightUpdate() {
     const playerSpeed = 0.5;
     const rotationSpeed = 0.05;
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
@@ -91,19 +89,19 @@ export class FirstPersonCamera {
     if (this.keyboard["arrowleft"]) this.player.rotation.y += rotationSpeed;
     if (this.keyboard["arrowright"]) this.player.rotation.y -= rotationSpeed;
 
-    this.updatePlayerCamera();
+    this.updateCamera();
   }
 
   update() {
-    const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
-
-    // if this.player doesn't have a friction function, then call update2() instead
     if (!this.player.friction) {
-      this.update2();
+      // its a debug camera
+      this.flightUpdate();
       return;
     }
 
-    // for every ObjectBuilder.ShaderMaterials update the time uniform with the current velocities
+    const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
+
+    // make car wheels rotate
     ObjectBuilder.ShaderMaterials.forEach((shader) => {
       shader.uniforms.time.value += 0.01;
       shader.uniforms.velocity.value = this.player.getSpeed();
@@ -118,21 +116,16 @@ export class FirstPersonCamera {
 
     // Calculate the movement vector based on the player's direction
     const moveVector = new THREE.Vector3();
-    if (!this.keyboard["w"] && !this.keyboard["s"]) {
-      this.player.friction();
-    }
-    if (this.keyboard["w"]) {
-      this.player.speedUp();
-    }
-    if (this.keyboard["s"]) {
-      this.player.speedDown();
-    }
 
-    if (this.keyboard["a"]) {
-      this.player.incRotation();
-    }
-    if (this.keyboard["d"]) {
-      this.player.decRotation();
+    const allowedToMove =
+      this.app.contents.hasGameStarted || this.app.activeCameraName === "Debug";
+
+    if (allowedToMove) {
+      if (!this.keyboard["w"] && !this.keyboard["s"]) this.player.friction();
+      if (this.keyboard["w"]) this.player.speedUp();
+      if (this.keyboard["s"]) this.player.speedDown();
+      if (this.keyboard["a"]) this.player.incRotation();
+      if (this.keyboard["d"]) this.player.decRotation();
     }
 
     moveVector.sub(playerDirection);
@@ -141,18 +134,18 @@ export class FirstPersonCamera {
 
     this.player.position.add(moveVector);
 
-    this.updatePlayerCamera();
+    this.updateCamera();
   }
 
   /**
    * Updates the camera position to be relative to the player's position and rotation (first person view)
    */
-  updatePlayerCamera() {
+  updateCamera() {
     const playerPosition = this.player.position.clone();
     const cameraPosition = this.app.activeCamera.position;
 
     // Calculate a position relative to the player's rotation
-    const relativeCameraOffset = new THREE.Vector3(0, 2, -4); // Adjust the offset as needed
+    const relativeCameraOffset = new THREE.Vector3(0, 2, -4);
     const cameraOffset = relativeCameraOffset.applyQuaternion(
       this.player.quaternion
     );

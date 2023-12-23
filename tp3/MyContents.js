@@ -52,7 +52,7 @@ export class MyContents {
     // ============== FIRST PERSON CAMS ====================
 
     this.debugCam = new FirstPersonCamera(this.app);
-    this.debugCam.defineSelfObj();
+    this.debugCam.defineSelfObj(null, [200, 5, 20]);
 
     // =============== MENU CONTROLLER =====================
 
