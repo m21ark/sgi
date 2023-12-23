@@ -314,10 +314,10 @@ export class ObjectBuilder {
                   if (uv.y > 0.5) {
                     // this is a square texture where the texture of the tire is in the top half 
                     // and the texture of the rim is in the bottom half
-                    // we need to rotate the texture of the rim around the (0.5, 0,7358803987) coordinate
+                    // we need to rotate the texture of the rim around the (0.5, 0,765625) coordinate
 
                     // Calculate the offset from the center
-                    vec2 offset = vec2(uv.x - 0.5, uv.y - 0.7358803987);
+                    vec2 offset = vec2(uv.x - 0.484375, uv.y - 0.765625);
 
                     // Calculate the polar coordinates
                     float angle = atan(offset.y, offset.x);
@@ -325,8 +325,8 @@ export class ObjectBuilder {
                     // Rotate the texture
                     angle += time * -velocity;
 
-                    // Convert back to Cartesian coordinatesaw
-                    uv = vec2(0.5, 0.7358803987) + vec2(cos(angle), sin(angle)) * length(offset);
+                    // Convert back to Cartesian coordinatesa
+                    uv = vec2(0.484375, 0.765625) + vec2(cos(angle), sin(angle)) * length(offset);
 
                     // Wrap within [0, 1]
                     uv = mod(uv, 1.0);

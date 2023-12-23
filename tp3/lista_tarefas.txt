@@ -1,5 +1,6 @@
 MARCO:
 - por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
+- remover fireworks
 
 RICARDO:
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LO JINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
