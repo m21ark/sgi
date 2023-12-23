@@ -303,14 +303,14 @@ export class MenuController {
     this.app.audio.playSound("garage");
     MyGarage.closeGarage();
 
-    let carIndex = MyCar.availableCars.children.findIndex(
+    this.carIndex = MyCar.availableCars.children.findIndex(
       (c) => c.name === car.name
     );
 
     let position = this.app.contents.sceneParser.getKeyPath()[0];
     let nextPosition = this.app.contents.sceneParser.getKeyPath()[1];
 
-    this.app.contents.playerCam.defineSelfObj(new MyCar(0.5, 0.01, carIndex), [
+    this.app.contents.playerCam.defineSelfObj(new MyCar(0.5, 0.01, this.carIndex), [
       position.x + 3,
       0.1,
       position.z - 3,

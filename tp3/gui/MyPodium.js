@@ -47,29 +47,27 @@ export class MyPodium extends MyMenu {
   setCars() {
     // set ai car on the left side and player car on the right side
 
-    // TODO: fazer isto
-
     // use blocks as placehodlers
     let geometry = new THREE.BoxGeometry(5, 5, 5);
     let material = new THREE.MeshBasicMaterial({
       color: 0x00ffff,
       wireframe: true,
     });
-    let aiCar = new THREE.Mesh(geometry, material);
+    let aiCar = MyCar.availableCars.children[0].clone();
+    aiCar.scale.set(6, 6, 6);
     aiCar.position.set(-15, -20, 25);
-    // aiCar.rotateY(Math.PI / 2);
     this.menu.add(aiCar);
 
     // player car
-    let playerCar = new THREE.Mesh(geometry, material);
+    let playerCar = MyCar.availableCars.children[this.app.contents.menuController.carIndex].clone();
+    playerCar.scale.set(6, 6, 6);
     playerCar.position.set(15, -20, 25);
-    // playerCar.rotateY(Math.PI / 2);
     this.menu.add(playerCar);
   }
 
   setFireworks(won) {
     // fireworks
-    const offset = won ? 1 : -1;
+    const offset = won ? -1 : 1;
     const pos = {
       x: -1000 + 15 * offset,
       y: 2,
