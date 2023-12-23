@@ -108,6 +108,8 @@ export class MyContents {
     // Remove previous instances from the scene
     this.removePreviousInstances();
 
+    this.toAddObstacles = [];
+
     // Track set
     this.sceneParser = new SceneParser();
     this.sceneGroup = await this.sceneParser.buildGridGroup(mapNum);

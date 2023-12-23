@@ -194,7 +194,8 @@ export class MyPicker {
     if (!this.menu) return;
     if (
       this.app.activeCameraName !== "MenuCamera" &&
-      this.app.activeCameraName !== "Garage"
+      this.app.activeCameraName !== "Garage" &&
+      this.app.activeCameraName !== "TopCamera"
     )
       return;
 
@@ -213,6 +214,13 @@ export class MyPicker {
     //2. set the picking ray from the camera position and mouse coordinates
     this.raycaster.setFromCamera(this.pointer, this.app.cameras[cam]);
 
+    if (this.app.activeCameraName === "TopCamera") {
+      this.app.audio.playSound("menuSelect");
+      console.log(this.raycaster)
+      this.menu.handleObstacleAdd(this.raycaster.ray.origin);
+      return;
+    }
+
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
 
@@ -222,6 +230,7 @@ export class MyPicker {
     // indicate the object name that is being picked
     if (intersects.length > 0) {
       let obj = intersects[0].object;
+
       if (this.selectedLayer == 0) {
         obj = intersects.find(
           (intersect) => intersect.object instanceof THREE.Sprite

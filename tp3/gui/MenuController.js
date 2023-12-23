@@ -24,7 +24,6 @@ export class MenuController {
     this.loadMenuEnd();
     this.loadMenuMapSelect();
     this.loadMenuDificultySelect();
-    this.loadDropObstaclesMenu();
     this.loadNameMenu();
     this.loadRulesMenu();
   }
@@ -181,34 +180,7 @@ export class MenuController {
   loadDropObstaclesMenu() {
     this.app.MyHUD.setVisible(false);
     this.app.setActiveCamera("TopCamera");
-    // this.app.cameras["TopCamera"].position.set(130, 6, 120);
-    // this.app.cameras["TopCamera"].lookAt(new THREE.Vector3(300, 0 , 300));
-
-
-    // const aspect = window.innerWidth / window.innerHeight;
-
-    //  console.log(this.app.cameras["TopCamera"]);
-    // 
-    // const garage = new THREE.PerspectiveCamera(75, 0.2, 0.1, 1000);
-    // garage.position.set(160, 6, 120);
-    // garage.lookAt(new THREE.Vector3(120, 6, 120));
-    // this.app.cameras["TopCamera"] = garage;
-    // 
-
-    // this.dropObstaclesMenu = new MyMenu(this.app, "Drop Obstacles: TODO", -600);
-
-    // change camera to TopCamera
-
-
-    // this.dropObstaclesMenu.addButton("Open Garage", () => {
-    //   this.gotoMenu("carSelect");
-    // });
-    // this.dropObstaclesMenu.addButton("Go back", () => {
-    //   this.gotoMenu("dificultySelect");
-    // });
-
-    // add menu to scene
-    // this.app.scene.add(this.dropObstaclesMenu.getMenu());
+    
   }
 
   loadMenuMain() {

@@ -185,6 +185,20 @@ export class MyMenu {
     this.picker.setActiveMenu(this);
   }
 
+  handleObstacleAdd(pos) {
+    // Che if pos is clone to any of the trackPoints
+    const trackPoints = this.app.contents.sceneParser.trackPoints;
+    pos.y = 0.1;
+    for (let i = 0; i < trackPoints.length; i++) {
+
+      if (trackPoints[i].distanceTo(pos) < (this.app.contents.sceneParser.TRACK_SIZE + 3) / 2) {
+        console.log("Added obstacle at: " + trackPoints[i]);
+        this.app.contents.menuController.goto("game");
+        return;
+      }
+    }
+  }
+
   handleButtonClick(buttonIndex) {
     const button = this.buttons.find((btn) => btn.cnt === buttonIndex);
     if (button && button.onClick) {

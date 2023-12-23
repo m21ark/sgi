@@ -112,7 +112,7 @@ class MyApp {
     garage.lookAt(new THREE.Vector3(120, 6, 120));
     this.cameras["Garage"] = garage;
 
-    const frust2 = 250;
+    const frust2 = 220;
     const leftTop = -frust2 * aspect;
     const rightTop = frust2 * aspect;
     const topTop = frust2;
