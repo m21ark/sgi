@@ -254,24 +254,24 @@ export class ObjectBuilder {
                   for (let i = 0; i < model.children.length; i++) {
                     let child = model.children[i];
                     let oldMat = child.material.map;
-                 
-                    let mat =  i==0 ? SceneParser.BlockShaders:SceneParser.BlockShader2;
+
+                    let mat =
+                      i == 0
+                        ? SceneParser.BlockShaders
+                        : SceneParser.BlockShaders2;
 
                     mat.uniforms.map.value = oldMat;
                     child.material = mat;
                   }
-
-                } 
+                }
                 if (rep.filepath.includes("box")) {
-
                   for (let child of model.children) {
                     let oldMat = child.material.map;
-                    let mat =  SceneParser.BoxesShaders;
+                    let mat = SceneParser.BoxesShaders;
 
                     mat.uniforms.map.value = oldMat;
                     child.material = mat;
                   }
-
                 }
                 group.add(model);
 

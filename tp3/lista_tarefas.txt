@@ -1,5 +1,4 @@
 MARCO:
-- player name should appear somewhere... or the nametag or the end screen
 - a linha de meta tem uma marca de encaixe do inicio e fim de catmull q se podia disfarçar (por ex com um banner de meta no chao)
 - ai car devia dar 3 voltas como o player
 - corrigir a selecao de carro na garagem q ta msm dificil perceber se temos algo ja selecionado ou n (- yoshi/mario sounds on car select)
@@ -18,6 +17,10 @@ facil
 
 
 - rodas estão mto estranhas. rodam bue pouco e apenas qnd se acelera. se estivermos com vel constate estao paradas. tmb não estao a virar para os lados as da frente e acho q era suposto
+
+- escolha aleatoria do carro AI pelos carros q sobram e não os q ja foram escolhidos ( e aparecer o correto no podium)
+
+
 - keyframe animacao ser iterpolacao cubica
 
 LATER:

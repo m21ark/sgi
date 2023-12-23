@@ -59,7 +59,10 @@ export class MyPodium extends MyMenu {
     this.menu.add(aiCar);
 
     // player car
-    let playerCar = MyCar.availableCars.children[this.app.contents.menuController.carIndex].clone();
+    let playerCar =
+      MyCar.availableCars.children[
+        this.app.contents.menuController.carIndex
+      ].clone();
     playerCar.scale.set(6, 6, 6);
     playerCar.position.set(15, -20, 25);
     this.menu.add(playerCar);
@@ -74,15 +77,6 @@ export class MyPodium extends MyMenu {
       z: -25,
     };
     this.fireworks.setPos(pos);
-
-    // add a sphere helper in pos
-    let geometry = new THREE.SphereGeometry(0.8, 32, 32);
-    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    let sphere = new THREE.Mesh(geometry, material);
-    sphere.position.set(pos.x, pos.y, pos.z);
-    this.app.scene.add(sphere);
-
-    console.log("setting fireworks");
   }
 
   setPodiumCamera() {
@@ -109,12 +103,14 @@ export class MyPodium extends MyMenu {
     });
   }
 
-  updateEndMenu(won, time, timeRival, powerCnt, obstacleCnt, difficulty) {
+  updateEndMenu(won, time, timeRival, difficulty) {
     this.setFireworks(won);
 
     // remove old menu
     let oldMenu = this.app.scene.getObjectByName("endMenu");
     this.app.scene.remove(oldMenu);
+
+    const name = this.app.contents.menuController.getPlayerName();
 
     // map difficulty to string
     if (difficulty === 1) difficulty = "easy";
@@ -122,7 +118,7 @@ export class MyPodium extends MyMenu {
     else difficulty = "hard";
 
     this.endMenu.updateText(won ? "You won!" : "You lost!", 0);
-    this.endMenu.updateText(`Your final time was ${time}s`, 1);
+    this.endMenu.updateText(`${name}'s final time was ${time}s`, 1);
     this.endMenu.updateText(`Rival time was ${timeRival}s`, 2);
     this.endMenu.updateText(`Difficulty: ${difficulty}`, 3);
     this.menu = this.endMenu.getMenu();

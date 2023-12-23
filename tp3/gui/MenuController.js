@@ -285,14 +285,12 @@ export class MenuController {
 
   // ========================================================
 
-  updateEndMenu(won, time, timeRival, powerCnt, obstacleCnt, difficulty) {
+  updateEndMenu(won, time, timeRival, difficulty) {
     let menu = null;
     [this.endMenu, menu] = this.podium.updateEndMenu(
       won,
       time,
       timeRival,
-      powerCnt,
-      obstacleCnt,
       difficulty
     );
 

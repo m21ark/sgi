@@ -64,6 +64,7 @@
                 <noderef id="lights" />
                 <noderef id="kart_1" />
                 <noderef id="kart_2" />
+                <noderef id="kart_3" />
             </children>
         </node>
 
@@ -106,6 +107,17 @@
             <children>
                 <primitive>
                     <model3d filepath="objs/kart_mario/kart_mario.dae" />
+                </primitive>
+            </children>
+        </node>
+
+        <node id="kart_3">
+            <transforms>
+                <translate value3="3 2 11" />
+            </transforms>
+            <children>
+                <primitive>
+                    <model3d filepath="objs/kart_peach/kart_peach.dae" />
                 </primitive>
             </children>
         </node>

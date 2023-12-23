@@ -23,6 +23,10 @@ export class MyContents {
     this.showAIKeyPoints = false;
     this.hasGameStarted = false;
 
+    // DEBUG FLIGHT CAMERA
+    this.debugCam = new FirstPersonCamera(this.app);
+    this.debugCam.defineSelfObj(null, [150, 5, 20]);
+
     // XML LOADER
     this.reader = new MyFileReader(app, this, this.loadXMLScene);
     this.sceneDir = "scene/";
@@ -48,11 +52,6 @@ export class MyContents {
     //   this.app.cameras["FirstPerson"],
     //   this.app.renderer
     // );
-
-    // ============== FIRST PERSON CAMS ====================
-
-    this.debugCam = new FirstPersonCamera(this.app);
-    this.debugCam.defineSelfObj(null, [200, 5, 20]);
 
     // =============== MENU CONTROLLER =====================
 
@@ -211,17 +210,8 @@ export class MyContents {
 
     const myTime = this.app.MyHUD.getTime();
     const aiTime = this.AICar.getFinalTime();
-    const powerCnt = this.playerCam.getPlayer().getPowerUpsCount();
-    const obstacleCnt = this.playerCam.getPlayer().getObstaclesCount();
     const difficulty = this.menuController.getDifficulty();
-    this.menuController.updateEndMenu(
-      won,
-      myTime,
-      aiTime,
-      powerCnt,
-      obstacleCnt,
-      difficulty
-    );
+    this.menuController.updateEndMenu(won, myTime, aiTime, difficulty);
 
     // wait 3s before showing the end menu
     setTimeout(() => {
@@ -249,7 +239,7 @@ export class MyContents {
     if (this.sceneParser != undefined) {
       SceneParser.BoxesShaders.uniforms.time.value += 0.05;
       SceneParser.BlockShaders.uniforms.time.value += 0.05;
-      SceneParser.BlockShader2.uniforms.time.value += 0.05;
+      SceneParser.BlockShaders2.uniforms.time.value += 0.05;
     }
 
     MyGarage.update();
@@ -365,7 +355,7 @@ export class MyContents {
       if (this.AICar != undefined && this.moveCar) {
         this.moveCar = false;
         this.AICar.moveAICar(
-          this.mapDificultyToSpeed(this.menuController.getDifficulty())
+          this.mapDificultyToSpeed(this.menuController.getDifficulty()), this.numLaps
         );
       }
 
@@ -404,5 +394,9 @@ export class MyContents {
 
   toggleCountDown() {
     this.startCountdown();
+  }
+
+  triggerPodium() {
+    this.podium(true);
   }
 }
