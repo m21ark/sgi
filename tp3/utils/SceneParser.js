@@ -13,14 +13,14 @@ var textureLoader = new THREE.TextureLoader();
 
 
 var customUniforms = {
-    // Example uniforms
-    color: { value: new THREE.Color(0xdddddd) },
-    // emissive: { value: new THREE.Color(0xdddddd) },
-    specular: { value: new THREE.Color(0x111111) },
-    shininess: { value: 30 },
-    time: { value: 1.0 },
-    map: { value: null },
-    // Add any other uniforms required by your shader
+  // Example uniforms
+  color: { value: new THREE.Color(0xdddddd) },
+  // emissive: { value: new THREE.Color(0xdddddd) },
+  specular: { value: new THREE.Color(0x111111) },
+  shininess: { value: 30 },
+  time: { value: 1.0 },
+  map: { value: null },
+  // Add any other uniforms required by your shader
 };
 
 
@@ -31,7 +31,7 @@ console.log(uniforms);
 
 const phongVertexShader = THREE.ShaderLib.phong.vertexShader;
 
-let newC =  `
+let newC = `
 varying vec3 vNormal;
 varying vec2 vUv;
 varying vec3 vViewPosition;
@@ -116,8 +116,20 @@ export class SceneParser {
         gl_FragColor = texture2D(uSampler, vUv);
     }
     `,
+  });
 
-});
+  static BlockShaders = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: newC,
+    fragmentShader: `
+    varying vec2 vUv;
+    uniform sampler2D uSampler;
+    
+    void main() {
+        gl_FragColor = texture2D(uSampler, vUv);
+    }
+    `,
+  });
 
   async buildGridGroup(track_number) {
     const csvPath = "tracks/track_" + track_number + ".json";
@@ -125,7 +137,7 @@ export class SceneParser {
 
     const group = new THREE.Group();
 
-    
+
 
     // define the meshes for powerups and obstacles
     await this.objBuilder.create3dModel(
@@ -135,7 +147,7 @@ export class SceneParser {
       "scene/",
       this.powerupItem
     )
-    
+
     await this.objBuilder.create3dModel(
       {
         filepath: "objs/box/ItmPowderBox.obj",
@@ -144,7 +156,7 @@ export class SceneParser {
       this.obstacleItem
     )
 
-  
+
     await this.objBuilder.create3dModel(
       {
         filepath: "objs/garage/smallgarage.obj",

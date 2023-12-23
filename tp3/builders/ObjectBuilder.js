@@ -250,21 +250,27 @@ export class ObjectBuilder {
                 const model = obj;
 
                 if (rep.filepath.includes("block")) {
-                  console.log(model)
+                  // VAI DAR PROBLEMA
+                  for (let child of model.children) {
+                    let oldMat = new THREE.TextureLoader().load("scene/objs/block/blockquestion02_alb.png");
+                    console.log(child.material);
+                    let mat =  SceneParser.BoxesShaders;
+
+                    mat.uniforms.map.value = oldMat;
+                    child.material = mat;
+                  }
+
+                } 
+                if (rep.filepath.includes("box")) {
+
                   for (let child of model.children) {
                     let oldMat = child.material.map;
                     let mat =  SceneParser.BoxesShaders;
 
-                    // mat.uniforms.map.value = oldMat;
+                    mat.uniforms.map.value = oldMat;
                     child.material = mat;
                   }
-                 // oldMat = model.material.map;
-                 // mat =  SceneParser.BoxesShaders.clone();
-                 // mat.uniforms.map.value = oldMat;
-                 // model.material = mat;
-                } 
-                if (rep.filepath.includes("box")) {
-                  
+
                 }
                 group.add(model);
 
