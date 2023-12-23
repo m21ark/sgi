@@ -28,8 +28,8 @@ export class MyHUD {
 
     // Set initial values with 3D bold style
     this.positionElement.innerHTML =
-      "<span class='cool3d-text'>Position: 0/0</span> ";
-    this.lapsElement.innerHTML = "<span class='cool3d-text'>Laps: 0/0</span>";
+      "<span>Position: 0/0</span> ";
+    this.lapsElement.innerHTML = "<span>Laps: 0/0</span>";
 
     // Apply 3D bold style using CSS
     this.positionElement.style.fontWeight = "bold";

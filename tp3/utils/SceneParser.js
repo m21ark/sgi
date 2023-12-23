@@ -66,14 +66,14 @@ export class SceneParser {
     const group = new THREE.Group();
 
     // define the meshes for powerups and obstacles
-    this.powerupMesh = await this.objBuilder.create3dModel(
+    await this.objBuilder.create3dModel(
       {
         filepath: "objs/block/BlockQuestion.obj",
       },
       "scene/",
       this.powerupItem
     );
-    this.obstacleMesh = await this.objBuilder.create3dModel(
+    await this.objBuilder.create3dModel(
       {
         filepath: "objs/box/ItmPowderBox.obj",
       },
@@ -81,7 +81,7 @@ export class SceneParser {
       this.obstacleItem
     );
 
-    this.garage = await this.objBuilder.create3dModel(
+    await this.objBuilder.create3dModel(
       {
         filepath: "objs/garage/smallgarage.obj",
       },
@@ -222,16 +222,16 @@ export class SceneParser {
     let box1 = new THREE.Mesh(boxGeometry, boxMaterial);
     let pos = this.getKeyPath()[0];
     box1.position.copy(new THREE.Vector3(pos.x, 0, pos.z)); // Position the box at the start of the path
-    box1.visible = false; 
+    box1.visible = false;
     box1.name = "sector1";
     group.add(box1);
 
     // Create the second box and add it to the group
     let box2 = new THREE.Mesh(boxGeometry, boxMaterial);
     let middleIndex = Math.floor(this.getKeyPath().length / 2);
-    pos = this.getKeyPath()[middleIndex]
+    pos = this.getKeyPath()[middleIndex];
     box2.position.copy(new THREE.Vector3(pos.x, 0, pos.z)); // Position the box in the middle of the path
-    box2.visible = false; 
+    box2.visible = false;
     box2.name = "sector2";
 
     group.add(box2);
@@ -243,7 +243,6 @@ export class SceneParser {
     // Create a bounding box for box2
     let box2BB = new THREE.Box3().setFromObject(box2);
     box2.bbox = box2BB;
-
 
     this.checkpoints = [box2, box1];
 
@@ -361,7 +360,7 @@ export class SceneParser {
     mountainGroup.add(grassMesh);
     mountainGroup.add(mountainMesh);
     mountainGroup.add(snowMesh);
-    mountainGroup.position.y -= randomHeight * 0.2;
+    mountainGroup.position.y -= randomHeight * 0.25;
 
     // randomize 5 places in x and z
     const randomX = Math.random() * 10 - 5;
@@ -493,7 +492,7 @@ export class SceneParser {
   createObstacle(x, y) {
     const item = this.obstacleItem.clone();
     item.position.set(x, 0.8, y);
-    item.scale.set(0.10, 0.10, 0.10);
+    item.scale.set(0.1, 0.1, 0.1);
     return item;
   }
 }

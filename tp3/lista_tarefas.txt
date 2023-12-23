@@ -1,11 +1,11 @@
 MARCO:
-- por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
-- remover fireworks
+
 
 RICARDO:
 - NO INICIO DA PARTIDA É PRECISO UM MENU DE DROP DE OBSTACULOS DE UMA LO JINHA PARA ESPALHAR PELO PERCURSO (drag and drop)
 - fazer animacao das rodas
 - por modelos dos carros no podio :D
+- por shader no obstaculo e no powerup (e fazer disable deles temporariamente apos colisao)
 
 
 - Implementação de colisões com powerups, obstaculos, e inimigo
@@ -25,12 +25,16 @@ LATER:
 - atualizar time efeito powerup / obstaculo na HUD 
 - player name should appear somewhere... or the nametag or the end screen
 - garage door doesnt open on new round
+- ai car devia dar 3 voltas como o player
+- ai car ainda da uma volta estranha junto à meta
 
 
 LOW PRIORITY:
 
+- a linha de meta tem uma marca de encaixe do inicio e fim de catmull q se podia disfarçar (por ex com um banner de meta no chao)
 - fazer particulas de fumo
 - se parar totalmente na relva, a velocidade maxima fica 2 por algum motivo
+- efeito de velocidade na camera com FOV multiplier
 - adicionar sons de motor a acelerar
 - adicionar som sempre q se completa uma volta
 - adicionar mais luzes e sombras (neste momento não temos nada)

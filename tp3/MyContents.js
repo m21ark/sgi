@@ -52,7 +52,7 @@ export class MyContents {
     // ============== FIRST PERSON CAMS ====================
 
     this.debugCam = new FirstPersonCamera(this.app);
-    this.debugCam.defineSelfObj();
+    this.debugCam.defineSelfObj(null, [200, 5, 20]);
 
     // =============== MENU CONTROLLER =====================
 
@@ -150,7 +150,7 @@ export class MyContents {
           if (this.lap <= this.numLaps) {
             this.app.MyHUD.setLaps(this.lap, this.numLaps);
             this.app.audio.playSound("go");
-          } else this.podium();
+          } else this.podium(true);
         }
         // swap checkpoints 0 and 1
         let temp = this.sceneParser.checkpoints[0];
@@ -193,26 +193,29 @@ export class MyContents {
     return true; // collision with grass
   }
 
-  podium() {
-    this.endGame(true); // TODO: make this check if the player won or lost
+  checkIfLost() {
+    if (this.AICar.getFinalTime() < this.app.MyHUD.getTime())
+      this.podium(false);
+  }
+
+  podium(won) {
+    this.endGame(won);
 
     // Stop the game
     this.hasGameStarted = false;
     this.gameHasEnded = true;
     this.app.audio.pauseSound("bgMusic");
-    this.app.audio.playSound("won");
+    this.app.audio.playSound(won ? "won" : "lost");
     this.app.MyHUD.setPauseStatus(true);
     this.AICar.stopAnimation();
 
-    // Set values for the end menu
-    const wonBool = true;
     const myTime = this.app.MyHUD.getTime();
     const aiTime = this.AICar.getFinalTime();
     const powerCnt = this.playerCam.getPlayer().getPowerUpsCount();
     const obstacleCnt = this.playerCam.getPlayer().getObstaclesCount();
     const difficulty = this.menuController.getDifficulty();
     this.menuController.updateEndMenu(
-      wonBool,
+      won,
       myTime,
       aiTime,
       powerCnt,
@@ -227,12 +230,18 @@ export class MyContents {
   }
 
   update() {
+    // UPDATE CAMERAS
+    if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
+    if (this.app.activeCameraName === "Debug") this.debugCam.update();
     if (this.app.activeCameraName === "EndCamera")
       this.menuController.podium.updateFireworks();
 
     if (this.gameHasEnded) return;
 
-    if (this.AICar != undefined) this.AICar.update();
+    if (this.AICar) {
+      this.AICar.update();
+      this.checkIfLost();
+    }
 
     // TODO: this gives a ton of warnings
     // this.tv.updateRenderTarget(this.app.activeCamera);
@@ -328,10 +337,6 @@ export class MyContents {
   }
 
   animate() {
-    // UPDATE CAMERAS
-    if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
-    if (this.app.activeCameraName === "Debug") this.debugCam.update();
-
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE

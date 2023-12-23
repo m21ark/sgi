@@ -12,12 +12,10 @@ export class MyFireworks {
   }
 
   reset() {
-    this.fireworks = [];
-    // remove all scene children with name "firework"
-    this.app.scene.children.forEach((child) => {
-      if (child.name === "firework" || child.name === "fireworkFragment")
-        this.app.scene.remove(child);
+    this.fireworks.forEach((firework) => {
+      firework.remove();
     });
+    this.fireworks = [];
   }
 
   update(prob = 0.4) {
@@ -75,6 +73,17 @@ class MyFirework {
     // Launch
     if (!this.isFragment) this.launch();
     else this.radiate();
+  }
+
+  remove() {
+    // remove self
+    this.app.scene.remove(this.point);
+    this.done = true;
+
+    // remove all fragments
+    this.fragments.forEach((frag) => {
+      frag.remove();
+    });
   }
 
   getHeighestPoint(vel) {
@@ -152,17 +161,6 @@ class MyFirework {
     this.point = new THREE.Points(geometry, this.material);
     this.point.name = "fireworkFragment";
     this.app.scene.add(this.point);
-  }
-
-  reset() {
-    this.done = false;
-    this.hasExploded = false;
-    this.clock = new THREE.Clock();
-    this.position = [...this.initPos];
-    // this.velocity = [...this.initVel];
-    this.accel = [0, -this.gravity, 0];
-    this.material.opacity = 1;
-    this.material.needsUpdate = true;
   }
 
   fireworkUpdate() {
