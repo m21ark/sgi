@@ -20,7 +20,7 @@ export class MyFireworks {
     });
   }
 
-  update(prob = 0.3) {
+  update(prob = 0.4) {
     if (this.pos === null) return;
     if (Math.random() < prob)
       this.fireworks.push(new MyFirework(this.app, this.pos));
@@ -59,9 +59,14 @@ class MyFirework {
       depthTest: false,
     });
 
+    // Set point size
+    this.material.size = 0.3;
+
     // Utils
     this.done = false;
-    this.launchSpeed = 4.5;
+    this.launchSpeed = 5;
+    this.explodeSpeed = 9;
+    this.fragCount = 30;
     this.explosionHeight = null;
     this.hasExploded = isFragment;
     this.isFragment = isFragment;
@@ -123,12 +128,12 @@ class MyFirework {
     this.app.scene.add(this.point);
   }
 
-  explode(originPos, fragN = 30) {
+  explode(originPos) {
     this.hasExploded = true;
     this.app.scene.remove(this.point);
     this.app.audio.playSound("firework");
     // Create fragments
-    for (let i = 0; i < fragN; i++) {
+    for (let i = 0; i < this.fragCount; i++) {
       const pos = { x: originPos[0], y: originPos[1], z: originPos[2] };
       this.fragments.push(new MyFirework(this.app, pos, true));
     }
@@ -137,9 +142,9 @@ class MyFirework {
   radiate() {
     // Calculate initial velocity for launch
     this.initVel = [
-      THREE.MathUtils.randFloat(-this.launchSpeed, this.launchSpeed),
-      THREE.MathUtils.randFloat(-this.launchSpeed, this.launchSpeed),
-      THREE.MathUtils.randFloat(-this.launchSpeed, this.launchSpeed),
+      THREE.MathUtils.randFloat(-this.explodeSpeed, this.explodeSpeed),
+      THREE.MathUtils.randFloat(-this.explodeSpeed, this.explodeSpeed),
+      THREE.MathUtils.randFloat(-this.explodeSpeed, this.explodeSpeed),
     ];
 
     // Create geometry

@@ -11,7 +11,7 @@ RICARDO:
 - keyframe animacao ser iterpolacao cubica
 (tive de comentar a TV por completo.  não sei o q fizeste mas mesmo sem os updates so tenho 17fps... 
 se n der pra resolver vai ter de ficar desligada por default para eu poder jogar )
-
+- rodas estão mto estranhas. rodam bue pouco e apenas qnd se acelera. se estivermos com vel constate estao paradas. tmb não estao a virar para os lados as da frente e acho q era suposto
 
 LATER:
 
@@ -23,11 +23,11 @@ LATER:
 - atualizar a pos 1st ou 2nd na corrida
 - atualizar time efeito powerup / obstaculo na HUD 
 - player name should appear somewhere... or the nametag or the end screen
+- garage door doesnt open on new round
 
 
 LOW PRIORITY:
 
-- bug fireworks
 - fazer particulas de fumo
 - se parar totalmente na relva, a velocidade maxima fica 2 por algum motivo
 - adicionar sons de motor a acelerar
