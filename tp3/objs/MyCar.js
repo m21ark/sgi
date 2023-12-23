@@ -13,7 +13,6 @@ export class MyCar extends THREE.Object3D {
 
     this.rotationSpeedInc = 0.02;
     this.rotationSpeed = 0;
-    this.maxRotation = (6 * Math.PI) / 16;
 
     // POSITION
     this.x = 0;
@@ -43,13 +42,11 @@ export class MyCar extends THREE.Object3D {
 
   incRotation() {
     this.rotationSpeed += this.rotationSpeedInc;
-    // if (this.rotationSpeed > this.maxRotation) this.rotationSpeed = this.maxRotation;
     this.rotatePlayer();
   }
 
   decRotation() {
     this.rotationSpeed -= this.rotationSpeedInc;
-    // if (this.rotationSpeed < -this.maxRotation) this.rotationSpeed = -this.maxRotation;
     this.rotatePlayer();
   }
   normalizeRadian(angle) {
@@ -58,22 +55,9 @@ export class MyCar extends THREE.Object3D {
 
   rotatePlayer() {
     this.rotation.y = this.rotationSpeed;
-
-    if (this.rotationSpeed > 0) {
-      this.children[0].children[0].rotation.y =
-        this.normalizeRadian(this.rotationSpeed) * 0.08;
-      this.children[0].children[1].rotation.y =
-        this.normalizeRadian(this.rotationSpeed) * 0.03;
-      this.children[0].children[2].rotation.y =
-        this.normalizeRadian(this.rotationSpeed) * 0.05;
-    } else if (this.rotationSpeed < 0) {
-      this.children[0].children[0].rotation.y =
-        -this.normalizeRadian(this.rotationSpeed) * 0.08;
-      this.children[0].children[1].rotation.y =
-        -this.normalizeRadian(this.rotationSpeed) * 0.03;
-      this.children[0].children[2].rotation.y =
-        -this.normalizeRadian(this.rotationSpeed) * 0.05;
-    }
+    this.children[0].children[0].rotation.y = 0.08;
+    this.children[0].children[1].rotation.y = 0.03;
+    this.children[0].children[2].rotation.y = 0.05;
   }
 
   incPowerupCount() {
@@ -105,7 +89,6 @@ export class MyCar extends THREE.Object3D {
 
   speedDown() {
     this.currVel -= this.velInc;
-
     if (this.currVel < -this.getMaxVel()) this.currVel = -this.getMaxVel();
   }
 

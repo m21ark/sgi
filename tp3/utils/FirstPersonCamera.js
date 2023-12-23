@@ -15,10 +15,12 @@ export class FirstPersonCamera {
 
   defineSelfObj(obj = null, pos) {
     // If no object is passed, create a default one
-    const geo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const geo = new THREE.BoxGeometry(2, 2, 5);
     const mat = new THREE.MeshBasicMaterial({
-      transparent: true,
-      opacity: 0,
+      /* transparent: true,
+      opacity: 0, */
+      color: 0xff0000,
+      wireframe: true,
     });
     if (this.player) this.app.scene.remove(this.player);
     this.player = new THREE.Mesh(geo, mat);
@@ -107,8 +109,7 @@ export class FirstPersonCamera {
     // Rotate the player's direction based on their current rotation
     playerDirection.applyAxisAngle(
       new THREE.Vector3(0, 1, 0),
-      this.normalizeRadian(this.player.rotationSpeed) *
-        (this.player.rotationSpeed > 0 ? 1.05 : 0.95)
+      this.player.rotation.y
     );
 
     // Calculate the movement vector based on the player's direction
@@ -136,7 +137,7 @@ export class FirstPersonCamera {
     const lerp = (start, end, alpha) => {
       return (1 - alpha) * start + alpha * end;
     };
-    const targetFOV = 75 + player.getSpeed() * 40;
+    const targetFOV = 75 + Math.abs(player.getSpeed()) * 40;
     camera.fov = lerp(camera.fov, targetFOV, lerpFactor);
     camera.updateProjectionMatrix();
   }
@@ -144,17 +145,12 @@ export class FirstPersonCamera {
   updateCamera() {
     const playerPosition = this.player.position.clone();
     const cameraPosition = this.app.activeCamera.position;
-
-    // Calculate a position relative to the player's rotation
-    const relativeCameraOffset = new THREE.Vector3(0, 2, -4);
-    const cameraOffset = relativeCameraOffset.applyQuaternion(
-      this.player.quaternion
+    const offset = new THREE.Vector3(0, 2, -4);
+    const rotationMatrix = new THREE.Matrix4().makeRotationY(
+      this.player.rotation.y
     );
-
-    // Set the camera's position to be relative to the player's position
-    cameraPosition.copy(playerPosition).add(cameraOffset);
-
-    // Make the camera look at the player's position
+    const relativeCameraOffset = offset.applyMatrix4(rotationMatrix);
+    cameraPosition.copy(playerPosition).add(relativeCameraOffset);
     this.app.activeCamera.lookAt(playerPosition);
   }
 }
