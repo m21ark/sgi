@@ -1,7 +1,5 @@
 MARCO:
-- a linha de meta tem uma marca de encaixe do inicio e fim de catmull q se podia disfarçar (por ex com um banner de meta no chao)
-- ai car devia dar 3 voltas como o player
-- corrigir a selecao de carro na garagem q ta msm dificil perceber se temos algo ja selecionado ou n (- yoshi/mario sounds on car select)
+...
 
 RICARDO:
 
@@ -27,6 +25,8 @@ LATER:
 ...
 
 LOW PRIORITY:
+- carro player começa antes da linha de partida (nao alinhado com AI)
+- picker da garagem esta mto sensivel para escolher entre mario e yoshi
 - indicar visualmente com texto o powerup/ obstaculo q se apanhou
 - powerup e obstaculo não tem cooldown time
 - keyframes da AI estão muito lentos e não parece um jogo competitivo o suficiente
