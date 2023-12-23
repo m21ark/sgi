@@ -225,6 +225,11 @@ class MyApp {
     this.audio.addSound("menuSelect");
     this.audio.addSound("obstacle");
     this.audio.addSound("powerup");
+
+    this.audio.addSound("yoshi", false, 0.7);
+    this.audio.addSound("mario");
+    this.audio.addSound("peach");
+
     this.audio.addSound("firework", false, 1);
     this.audio.addSound("bgMusic", true, 0.15);
     // this.audio.addSound("menuMusic", true, 0.8);
