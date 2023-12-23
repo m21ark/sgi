@@ -41,11 +41,13 @@ export class MyCar extends THREE.Object3D {
   }
 
   incRotation() {
+    if (this.currVel == 0) return;
     this.rotationSpeed += this.rotationSpeedInc;
     this.rotatePlayer();
   }
 
   decRotation() {
+    if (this.currVel == 0) return;
     this.rotationSpeed -= this.rotationSpeedInc;
     this.rotatePlayer();
   }
@@ -55,9 +57,9 @@ export class MyCar extends THREE.Object3D {
 
   rotatePlayer() {
     this.rotation.y = this.rotationSpeed;
-    this.children[0].children[0].rotation.y = 0.08;
+    /*     this.children[0].children[0].rotation.y = 0.08;
     this.children[0].children[1].rotation.y = 0.03;
-    this.children[0].children[2].rotation.y = 0.05;
+    this.children[0].children[2].rotation.y = 0.05; */
   }
 
   incPowerupCount() {

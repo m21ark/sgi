@@ -34,7 +34,6 @@ export class CatmullTrack {
 
     const color = new THREE.Color();
 
-
     const halfWidth = this.width / 2;
     const halfHeight = this.height / 2;
     const halfDepth = this.depth / 2;
@@ -43,8 +42,7 @@ export class CatmullTrack {
     let lastV = 0;
     let repeatInc = 0.1;
 
-    for (let i = 0; i < this.points.length ; i++) {
-
+    for (let i = 0; i < this.points.length; i++) {
       const point = this.points[i];
 
       const nextPoint = this.points[i + 1] ?? this.points[0];
@@ -52,7 +50,6 @@ export class CatmullTrack {
       const tangent = nextPoint.clone().sub(point).normalize();
       const normal = new THREE.Vector3(0, 1, 0).cross(tangent).normalize();
       const binormal = tangent.clone().cross(normal).normalize();
-
 
       verticesArray = [
         point.x - normal.x * halfWidth - binormal.x * halfDepth,
@@ -62,16 +59,11 @@ export class CatmullTrack {
         point.x + normal.x * halfWidth + binormal.x * halfDepth,
         point.y + halfHeight,
         point.z + normal.z * halfWidth + binormal.z * halfDepth,
-
-
       ];
 
-
-
-      let indicesArray = [
-        0, 1, 2,
-        1, 3, 2,
-      ].map(indicesArray => indicesArray + i * 2);
+      let indicesArray = [0, 1, 2, 1, 3, 2].map(
+        (indicesArray) => indicesArray + i * 2
+      );
 
       if (i == this.points.length - 1) {
         indicesArray.forEach((element, index) => {
@@ -79,33 +71,28 @@ export class CatmullTrack {
             indicesArray[index] = element - i * 2 - 2;
           }
         });
-
       }
 
       indices.push(...indicesArray);
       vertices.push(...verticesArray);
 
-
       // Generate UV coordinates based on the current point
 
-
       const nextPoints = this.points.slice(i + 1, i + 11);
-      const distances = nextPoints.map((nextPoint) => nextPoint.distanceTo(point));
-      const averageDistance = distances.reduce((sum, distance) => sum + distance, 0) / distances.length;
+      const distances = nextPoints.map((nextPoint) =>
+        nextPoint.distanceTo(point)
+      );
+      const averageDistance =
+        distances.reduce((sum, distance) => sum + distance, 0) /
+        distances.length;
       let newRepeatInc = repeatInc;
-      if (!isNaN(averageDistance))
-        newRepeatInc = averageDistance / 30;
+      if (!isNaN(averageDistance)) newRepeatInc = averageDistance / 30;
 
       repeatInc = newRepeatInc;
 
       lastV += repeatInc;
 
-
-
-      let uvArray = [
-        0.0, lastV,
-        1.0, lastV,
-      ];
+      let uvArray = [0.0, lastV, 1.0, lastV];
 
       uv.push(...uvArray);
 
@@ -118,10 +105,9 @@ export class CatmullTrack {
       //     0.0, lastV ,
       //     1.0, lastV ,
       //   ];
-  
+
       //   uv.push(...uvArray);
       // }
-
 
       for (let i = 0; i < 2; i++) colors.push(0.8, 0.8, 0.8);
     }
@@ -139,8 +125,6 @@ export class CatmullTrack {
     const colorAttribute = new THREE.BufferAttribute(colorsFloat32Array, 3);
     const indexAttribute = new THREE.BufferAttribute(indicesUint16Array, 1);
 
-
-    console.log(uvAttribute)
     geometry.setAttribute("position", positionAttribute);
     geometry.setAttribute("uv", uvAttribute);
     geometry.setAttribute("color", colorAttribute);

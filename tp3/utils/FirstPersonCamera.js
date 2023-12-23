@@ -15,12 +15,10 @@ export class FirstPersonCamera {
 
   defineSelfObj(obj = null, pos) {
     // If no object is passed, create a default one
-    const geo = new THREE.BoxGeometry(2, 2, 5);
+    const geo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
     const mat = new THREE.MeshBasicMaterial({
-      /* transparent: true,
-      opacity: 0, */
-      color: 0xff0000,
-      wireframe: true,
+      transparent: true,
+      opacity: 0,
     });
     if (this.player) this.app.scene.remove(this.player);
     this.player = new THREE.Mesh(geo, mat);
@@ -106,12 +104,6 @@ export class FirstPersonCamera {
       shader.uniforms.velocity.value = this.player.getSpeed();
     });
 
-    // Rotate the player's direction based on their current rotation
-    playerDirection.applyAxisAngle(
-      new THREE.Vector3(0, 1, 0),
-      this.player.rotation.y
-    );
-
     // Calculate the movement vector based on the player's direction
     const moveVector = new THREE.Vector3();
     const allowedToMove = this.app.contents.hasGameStarted;
@@ -123,6 +115,12 @@ export class FirstPersonCamera {
       if (this.keyboard["a"]) this.player.incRotation();
       if (this.keyboard["d"]) this.player.decRotation();
     }
+
+    // Rotate the player's direction based on their current rotation
+    playerDirection.applyAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      this.player.rotation.y
+    );
 
     // Apply movement to the player position
     moveVector.sub(playerDirection);

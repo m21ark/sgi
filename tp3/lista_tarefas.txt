@@ -17,7 +17,6 @@ LATER:
 
 - escolha aleatoria do carro AI pelos carros q sobram
 - adicionar a peach para termos 3 diferentes
-- corrigir o fucking bug da camera ficar de lado as vezes e é tao irritante e causa ma jogabilidade
 - corrigir a selecao de carro na garagem q ta msm dificil perceber se temos algo ja selecionado ou n
 - keyframes da AI estão muito lentos e não parece um jogo competitivo o suficiente
 - atualizar a pos 1st ou 2nd na corrida
