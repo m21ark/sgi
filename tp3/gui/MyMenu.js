@@ -193,7 +193,7 @@ export class MyMenu {
 
       if (trackPoints[i].distanceTo(pos) < (this.app.contents.sceneParser.TRACK_SIZE + 3) / 2) {
         console.log("Added obstacle at: " + trackPoints[i]);
-        this.app.contents.menuController.goto("game");
+        this.app.contents.menuController.gotoMenu("carSelect");
         return;
       }
     }
