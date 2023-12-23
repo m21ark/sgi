@@ -6,9 +6,6 @@ export class FirstPersonCamera {
     this.app = app;
     this.keyboard = {};
     this.player = null;
-
-    this.tyreAngle = 0;
-
     this.addListeners();
   }
 
@@ -45,20 +42,20 @@ export class FirstPersonCamera {
   }
 
   flightUpdate() {
-    const playerSpeed = 0.5;
+    const flightSpeed = 0.5;
     const rotationSpeed = 0.05;
-    const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
+    const flightDirection = new THREE.Vector3(0, 0, -1);
 
-    // Rotate the player's direction based on their current rotation
-    playerDirection.applyAxisAngle(
+    // Rotate the target's direction based on their current rotation
+    flightDirection.applyAxisAngle(
       new THREE.Vector3(0, 1, 0),
       this.player.rotation.y
     );
 
-    // Calculate the movement vector based on the player's direction
+    // Calculate the movement vector based on the target's direction
     const moveVector = new THREE.Vector3();
-    if (this.keyboard["w"]) moveVector.sub(playerDirection);
-    if (this.keyboard["s"]) moveVector.add(playerDirection);
+    if (this.keyboard["w"]) moveVector.sub(flightDirection);
+    if (this.keyboard["s"]) moveVector.add(flightDirection);
     if (this.keyboard["a"]) {
       const leftDirection = new THREE.Vector3(1, 0, 0);
       leftDirection.applyAxisAngle(
@@ -80,8 +77,8 @@ export class FirstPersonCamera {
     if (this.keyboard[" "]) moveVector.add(new THREE.Vector3(0, 1, 0));
     if (this.keyboard["shift"]) moveVector.sub(new THREE.Vector3(0, 1, 0));
 
-    // Normalize the move vector and apply playerSpeed
-    moveVector.normalize().multiplyScalar(playerSpeed);
+    // Normalize the move vector and apply flightSpeed
+    moveVector.normalize().multiplyScalar(flightSpeed);
 
     // Update player position
     this.player.position.add(moveVector);
@@ -116,9 +113,7 @@ export class FirstPersonCamera {
 
     // Calculate the movement vector based on the player's direction
     const moveVector = new THREE.Vector3();
-
-    const allowedToMove =
-      this.app.contents.hasGameStarted || this.app.activeCameraName === "Debug";
+    const allowedToMove = this.app.contents.hasGameStarted;
 
     if (allowedToMove) {
       if (!this.keyboard["w"] && !this.keyboard["s"]) this.player.friction();
@@ -128,10 +123,9 @@ export class FirstPersonCamera {
       if (this.keyboard["d"]) this.player.decRotation();
     }
 
+    // Apply movement to the player position
     moveVector.sub(playerDirection);
-
     moveVector.normalize().multiplyScalar(this.player.getSpeed());
-
     this.player.position.add(moveVector);
 
     this.updateCamera();
