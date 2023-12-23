@@ -89,6 +89,12 @@ export class FirstPersonCamera {
     this.updateCamera();
   }
 
+  update() {
+    if (this.app.activeCameraName === "Debug")
+      this.flightUpdate(); // Debug flight camera
+    else this.carUpdate(); // Car camera
+  }
+
   carUpdate() {
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
 
@@ -122,17 +128,19 @@ export class FirstPersonCamera {
     moveVector.normalize().multiplyScalar(this.player.getSpeed());
     this.player.position.add(moveVector);
 
+    this.updateFOV(this.player, this.app.activeCamera, 0.05);
     this.updateCamera();
   }
 
-  update() {
-    if (!this.player.friction) this.flightUpdate(); // Debug flight camera
-    else this.carUpdate(); // Car camera
+  updateFOV(player, camera, lerpFactor) {
+    const lerp = (start, end, alpha) => {
+      return (1 - alpha) * start + alpha * end;
+    };
+    const targetFOV = 75 + player.getSpeed() * 40;
+    camera.fov = lerp(camera.fov, targetFOV, lerpFactor);
+    camera.updateProjectionMatrix();
   }
 
-  /**
-   * Updates the camera position to be relative to the player's position and rotation (first person view)
-   */
   updateCamera() {
     const playerPosition = this.player.position.clone();
     const cameraPosition = this.app.activeCamera.position;
