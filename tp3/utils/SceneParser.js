@@ -9,8 +9,7 @@ import { MyObstacle } from "../objs/MyObstacle.js";
 import { MyPowerUp } from "../objs/MyPowerUp.js";
 import { MyWater } from "../objs/MyWater.js";
 
-
-let newC = `
+let MyVertexShader = `
 varying vec3 vNormal;
 varying vec2 vUv;
 varying vec3 vViewPosition;
@@ -23,8 +22,27 @@ void main() {
     newPosition *= 1.0 + 0.1 * sin(time);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
 }
-`
+`;
 
+let MyFragmentShader = ` 
+varying vec2 vUv;
+uniform sampler2D map;
+void main() {
+    vec4 color = texture2D(map, vUv);
+    color.a = 0.75;
+    gl_FragColor = color;
+}
+`;
+
+let myShader = new THREE.ShaderMaterial({
+  uniforms: {
+    time: { value: 1.0 },
+    map: { value: null },
+  },
+  vertexShader: MyVertexShader,
+  fragmentShader: MyFragmentShader,
+  transparent: true,
+});
 
 export class SceneParser {
   static ObjectType = {
@@ -76,61 +94,15 @@ export class SceneParser {
     return this.controPointGroup;
   }
 
-  static BoxesShaders = new THREE.ShaderMaterial({
-    uniforms: {
-      time: { value: 1.0 },
-      map: { value: null },
-    },
-    vertexShader: newC,
-    fragmentShader: `
-    varying vec2 vUv;
-    uniform sampler2D map;
-    
-    void main() {
-        gl_FragColor = texture2D(map, vUv);
-    }
-    `,
-  });
-
-  static BlockShader2 = new THREE.ShaderMaterial({
-    uniforms: {
-      time: { value: 1.0 },
-      map: { value: null },
-    },
-    vertexShader: newC,
-    fragmentShader: `
-    varying vec2 vUv;
-    uniform sampler2D map;
-    
-    void main() {
-        gl_FragColor = texture2D(map, vUv);
-    }
-    `,
-  });
-
-  static BlockShaders = new THREE.ShaderMaterial({
-    uniforms: {
-      time: { value: 1.0 },
-      map: { value: null },
-    },
-    vertexShader: newC,
-    fragmentShader: `
-    varying vec2 vUv;
-    uniform sampler2D map;
-    
-    void main() {
-        gl_FragColor = texture2D(map, vUv);
-    }
-    `,
-  });
+  static BoxesShaders = myShader.clone();
+  static BlockShaders = myShader.clone();
+  static BlockShaders2 = myShader.clone();
 
   async buildGridGroup(track_number) {
     const csvPath = "tracks/track_" + track_number + ".json";
     const json = await this.readJSON(csvPath);
 
     const group = new THREE.Group();
-
-
 
     // define the meshes for powerups and obstacles
     await this.objBuilder.create3dModel(
@@ -139,7 +111,7 @@ export class SceneParser {
       },
       "scene/",
       this.powerupItem
-    )
+    );
 
     await this.objBuilder.create3dModel(
       {
@@ -147,8 +119,7 @@ export class SceneParser {
       },
       "scene/",
       this.obstacleItem
-    )
-
+    );
 
     await this.objBuilder.create3dModel(
       {
