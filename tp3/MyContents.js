@@ -248,6 +248,8 @@ export class MyContents {
 
     if (this.sceneParser != undefined) {
       SceneParser.BoxesShaders.uniforms.time.value += 0.05;
+      SceneParser.BlockShaders.uniforms.time.value += 0.05;
+      SceneParser.BlockShader2.uniforms.time.value += 0.05;
     }
 
     MyGarage.update();

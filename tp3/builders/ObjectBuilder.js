@@ -251,14 +251,17 @@ export class ObjectBuilder {
 
                 if (rep.filepath.includes("block")) {
                   // VAI DAR PROBLEMA
-                  for (let child of model.children) {
-                    let oldMat = new THREE.TextureLoader().load("scene/objs/block/blockquestion02_alb.png");
+                  for (let i = 0; i < materials.length; i++) {
+                    let child = model.children[i];
+                    let oldMat = child.material.map;
                     console.log(child.material);
-                    let mat =  SceneParser.BoxesShaders;
+                    let mat =  i==0 ? SceneParser.BlockShaders:SceneParser.BlockShaders;
 
                     mat.uniforms.map.value = oldMat;
                     child.material = mat;
                   }
+
+                  console.log(model.material);
 
                 } 
                 if (rep.filepath.includes("box")) {

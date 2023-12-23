@@ -14,18 +14,62 @@ var textureLoader = new THREE.TextureLoader();
 
 var customUniforms = {
   // Example uniforms
-  color: { value: new THREE.Color(0xdddddd) },
+  //color: { value: new THREE.Color(0xdddddd) },
   // emissive: { value: new THREE.Color(0xdddddd) },
-  specular: { value: new THREE.Color(0x111111) },
-  shininess: { value: 30 },
+  // specular: { value: new THREE.Color(0x111111) },
+  // shininess: { value: 30 },
   time: { value: 1.0 },
   map: { value: null },
   // Add any other uniforms required by your shader
 };
 
+/*
+
+#define PHONG
+uniform float time;
+varying vec3 vViewPosition;
+#include <common>
+#include <uv_pars_vertex>
+#include <displacementmap_pars_vertex>
+#include <envmap_pars_vertex>
+#include <color_pars_vertex>
+#include <fog_pars_vertex>
+#include <normal_pars_vertex>
+#include <morphtarget_pars_vertex>
+#include <skinning_pars_vertex>
+#include <shadowmap_pars_vertex>
+#include <logdepthbuf_pars_vertex>
+#include <clipping_planes_pars_vertex>
+void main() {
+  #include <uv_vertex>
+  #include <color_vertex>
+  #include <morphcolor_vertex>
+  #include <beginnormal_vertex>
+  #include <morphnormal_vertex>
+  #include <skinbase_vertex>
+  #include <skinnormal_vertex>
+  #include <defaultnormal_vertex>
+  #include <normal_vertex>
+  #include <begin_vertex>
+  #include <morphtarget_vertex>
+  #include <skinning_vertex>
+  #include <displacementmap_vertex>
+  #include <project_vertex>
+  #include <logdepthbuf_vertex>
+  #include <clipping_planes_vertex>
+  vViewPosition = - mvPosition.xyz;
+  #include <worldpos_vertex>
+  #include <envmap_vertex>
+  #include <shadowmap_vertex>
+  #include <fog_vertex>
+  mvPosition = modelViewMatrix * vec4(position, 1.0);
+  vec3 newPosition = position;
+  newPosition *= 1.0 + 0.1 * sin(time);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+}*/
 
 // Combine your custom uniforms with the ones required by the Phong shader
-var uniforms = THREE.UniformsUtils.merge([THREE.UniformsLib.common, THREE.UniformsLib.specular, THREE.UniformsLib.envmap, customUniforms]);
+var uniforms = THREE.UniformsUtils.merge([customUniforms]);
 
 console.log(uniforms);
 
@@ -106,14 +150,33 @@ export class SceneParser {
   }
 
   static BoxesShaders = new THREE.ShaderMaterial({
-    uniforms: uniforms,
+    uniforms: {
+      time: { value: 1.0 },
+      map: { value: null },
+    },
     vertexShader: newC,
     fragmentShader: `
     varying vec2 vUv;
-    uniform sampler2D uSampler;
+    uniform sampler2D map;
     
     void main() {
-        gl_FragColor = texture2D(uSampler, vUv);
+        gl_FragColor = texture2D(map, vUv);
+    }
+    `,
+  });
+
+  static BlockShader2 = new THREE.ShaderMaterial({
+    uniforms: {
+      time: { value: 1.0 },
+      map: { value: null },
+    },
+    vertexShader: newC,
+    fragmentShader: `
+    varying vec2 vUv;
+    uniform sampler2D map;
+    
+    void main() {
+        gl_FragColor = texture2D(map, vUv);
     }
     `,
   });
@@ -123,10 +186,10 @@ export class SceneParser {
     vertexShader: newC,
     fragmentShader: `
     varying vec2 vUv;
-    uniform sampler2D uSampler;
+    uniform sampler2D map;
     
     void main() {
-        gl_FragColor = texture2D(uSampler, vUv);
+        gl_FragColor = texture2D(map, vUv);
     }
     `,
   });
