@@ -55,6 +55,8 @@ class MyGuiInterface {
       });
 
     utisFolder.add(this.contents, "toggleCountDown").name("toggleCountDown");
+
+    utisFolder.add(this.contents, "triggerPodium").name("triggerPodium");
   }
 }
 

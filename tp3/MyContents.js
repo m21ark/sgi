@@ -52,7 +52,7 @@ export class MyContents {
     // ============== FIRST PERSON CAMS ====================
 
     this.debugCam = new FirstPersonCamera(this.app);
-    this.debugCam.defineSelfObj(null, [200, 5, 20]);
+    this.debugCam.defineSelfObj(null, [-1000, 5, 20]);
 
     // =============== MENU CONTROLLER =====================
 
@@ -404,5 +404,9 @@ export class MyContents {
 
   toggleCountDown() {
     this.startCountdown();
+  }
+
+  triggerPodium() {
+    this.podium(true);
   }
 }

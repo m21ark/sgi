@@ -59,7 +59,10 @@ export class MyPodium extends MyMenu {
     this.menu.add(aiCar);
 
     // player car
-    let playerCar = MyCar.availableCars.children[this.app.contents.menuController.carIndex].clone();
+    let playerCar =
+      MyCar.availableCars.children[
+        this.app.contents.menuController.carIndex
+      ].clone();
     playerCar.scale.set(6, 6, 6);
     playerCar.position.set(15, -20, 25);
     this.menu.add(playerCar);
@@ -74,15 +77,6 @@ export class MyPodium extends MyMenu {
       z: -25,
     };
     this.fireworks.setPos(pos);
-
-    // add a sphere helper in pos
-    let geometry = new THREE.SphereGeometry(0.8, 32, 32);
-    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    let sphere = new THREE.Mesh(geometry, material);
-    sphere.position.set(pos.x, pos.y, pos.z);
-    this.app.scene.add(sphere);
-
-    console.log("setting fireworks");
   }
 
   setPodiumCamera() {
