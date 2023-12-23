@@ -486,14 +486,14 @@ export class SceneParser {
     const item = this.powerupItem.clone();
     item.position.set(x, 0.15, y);
     item.rotateX(Math.PI / 2);
-    item.scale.set(0.025, 0.025, 0.025);
+    item.scale.set(0.015, 0.015, 0.015);
     return item;
   }
 
   createObstacle(x, y) {
     const item = this.obstacleItem.clone();
-    item.position.set(x, 1.4, y);
-    item.scale.set(0.2, 0.2, 0.2);
+    item.position.set(x, 0.8, y);
+    item.scale.set(0.10, 0.10, 0.10);
     return item;
   }
 }

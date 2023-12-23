@@ -22,6 +22,7 @@ LATER:
 - keyframes da AI estão muito lentos e não parece um jogo competitivo o suficiente
 - atualizar a pos 1st ou 2nd na corrida
 - atualizar time efeito powerup / obstaculo na HUD 
+- player name should appear somewhere... or the nametag or the end screen
 
 
 LOW PRIORITY:
@@ -33,6 +34,6 @@ LOW PRIORITY:
 - adicionar som sempre q se completa uma volta
 - adicionar mais luzes e sombras (neste momento não temos nada)
 - yoshi/mario sounds on car select
-- powerups mais pequenos
+- suavizar mountain tops
 - fazer smooth transition para podio
 - reduzir velocidade do carro pq ta muito rapido
