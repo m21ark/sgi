@@ -360,7 +360,7 @@ export class SceneParser {
     mountainGroup.add(grassMesh);
     mountainGroup.add(mountainMesh);
     mountainGroup.add(snowMesh);
-    mountainGroup.position.y -= randomHeight * 0.2;
+    mountainGroup.position.y -= randomHeight * 0.25;
 
     // randomize 5 places in x and z
     const randomX = Math.random() * 10 - 5;

@@ -12,14 +12,9 @@ export class MyFireworks {
   }
 
   reset() {
-
-    cons
-    // remove all scene children with name "firework"
-    this.app.scene.children.forEach((child) => {
-      if (child.name === "firework" || child.name === "fireworkFragment")
-        this.app.scene.remove(child);
+    this.fireworks.forEach((firework) => {
+      firework.remove();
     });
-
     this.fireworks = [];
   }
 
@@ -78,6 +73,17 @@ class MyFirework {
     // Launch
     if (!this.isFragment) this.launch();
     else this.radiate();
+  }
+
+  remove() {
+    // remove self
+    this.app.scene.remove(this.point);
+    this.done = true;
+
+    // remove all fragments
+    this.fragments.forEach((frag) => {
+      frag.remove();
+    });
   }
 
   getHeighestPoint(vel) {
