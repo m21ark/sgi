@@ -100,7 +100,7 @@ export class FirstPersonCamera {
 
     // make car wheels rotate
     ObjectBuilder.ShaderMaterials.forEach((shader) => {
-      shader.uniforms.time.value += 0.01;
+      shader.uniforms.time.value += 0.03;
       shader.uniforms.velocity.value = this.player.getSpeed();
     });
 
