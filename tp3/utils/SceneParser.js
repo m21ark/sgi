@@ -135,11 +135,11 @@ export class SceneParser {
     newGroup.position.set(120, 0.1, 120);
     const availableCars = MyCar.availableCars.clone();
     const carCount = availableCars.children.length;
-    const spaceBetweenCars = 30 / (carCount + 1);
+    const spaceBetweenCars = 40 / (carCount + 1);
 
     for (let i = 0; i < carCount; i++) {
       let clone = availableCars.children[i].clone();
-      clone.position.set(0, 0, spaceBetweenCars * i - 5.0);
+      clone.position.set(0, 0, spaceBetweenCars * i - 10.0);
       clone.rotateY(Math.PI / 2);
       clone.scale.set(4, 4, 4);
 

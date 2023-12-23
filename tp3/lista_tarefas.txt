@@ -16,7 +16,7 @@ facil
 
 - rodas estão mto estranhas. rodam bue pouco e apenas qnd se acelera. se estivermos com vel constate estao paradas. tmb não estao a virar para os lados as da frente e acho q era suposto
 - garage door doesnt open on new round
-- escolha aleatoria do carro AI pelos carros q sobram  --> e adicionar a peach para termos 3 diferentes
+- escolha aleatoria do carro AI pelos carros q sobram e não os q ja foram escolhidos ( e aparecer o correto no podium)
 
 
 - keyframe animacao ser iterpolacao cubica
