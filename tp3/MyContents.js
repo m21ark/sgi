@@ -36,18 +36,18 @@ export class MyContents {
   async init() {
     // ============== HUD =================
 
-    this.numLaps = 1;
+    this.numLaps = 3;
     this.app.MyHUD.setPauseStatus(true);
     this.app.MyHUD.setLaps(1, this.numLaps);
     this.app.MyHUD.setPosition(1, 2);
 
     // ============== TV =================
 
-    /*  this.tv = new Television(
-      this.app.scene,
-      this.app.cameras["FirstPerson"],
-      this.app.renderer
-    ); */
+    // this.tv = new Television(
+    //   this.app.scene,
+    //   this.app.cameras["FirstPerson"],
+    //   this.app.renderer
+    // );
 
     // ============== FIRST PERSON CAMS ====================
 

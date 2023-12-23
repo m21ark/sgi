@@ -26,7 +26,7 @@ export class Television {
     this.renderTarget.depthTexture.type = THREE.UnsignedShortType;
 
     // Create a plane geometry to represent the television screen
-    const geometry = new THREE.PlaneGeometry(this.width, this.height, 1000, 1000);
+    const geometry = new THREE.PlaneGeometry(this.width, this.height, 300, 300);
     // Create a shader material
     this.material = new THREE.ShaderMaterial({
       vertexShader: `
