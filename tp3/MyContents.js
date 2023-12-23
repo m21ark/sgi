@@ -355,7 +355,7 @@ export class MyContents {
       if (this.AICar != undefined && this.moveCar) {
         this.moveCar = false;
         this.AICar.moveAICar(
-          this.mapDificultyToSpeed(this.menuController.getDifficulty())
+          this.mapDificultyToSpeed(this.menuController.getDifficulty()), this.numLaps
         );
       }
 

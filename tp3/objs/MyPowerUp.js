@@ -50,8 +50,6 @@ export class MyPowerUp {
     // TODO: time boost should be applied to the player and then the effect on the podium
     player.velMultiplyer = 2;
 
-    player.incPowerupCount();
-
     setTimeout(() => {
       player.velMultiplyer = 1;
     }, this.timeEffect * 1000);
