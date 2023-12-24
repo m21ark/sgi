@@ -9,6 +9,7 @@ import { Television } from "./objs/Television.js";
 import { XMLLoader } from "./utils/XMLLoader.js";
 import { MyGarage } from "./objs/MyGarage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
+import { MySmoke } from "./objs/MySmoke.js";
 
 export class MyContents {
   constructor(app) {
@@ -26,7 +27,7 @@ export class MyContents {
 
     // DEBUG FLIGHT CAMERA
     this.debugCam = new FirstPersonCamera(this.app);
-    this.debugCam.defineSelfObj(null, [150, 5, 20]);
+    this.debugCam.defineSelfObj(null, [0, 0, -1]);
 
     // XML LOADER
     this.reader = new MyFileReader(app, this, this.loadXMLScene);
@@ -52,6 +53,19 @@ export class MyContents {
     //   this.app.cameras["FirstPerson"],
     //   this.app.renderer
     // );
+
+    this.smokes = new MySmoke(this.app);
+    this.smokes.setPos(new THREE.Vector3(0, 1, 0));
+
+    let cube = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    );
+
+    cube.position.set(0, 0, 0);
+    this.app.scene.add(cube);
+
+    // this.loadTrack(1);
 
     this.animate();
   }
@@ -326,6 +340,8 @@ export class MyContents {
   }
 
   animate() {
+    this.smokes.update();
+
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE

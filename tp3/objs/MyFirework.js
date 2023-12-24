@@ -97,9 +97,9 @@ class MyFirework {
     // x = x0 + v0*t + 0.5*a*t^2
     // v = v0 + a*t
     const aux = time * time * 0.5;
-    const x = this.initPos[0] + this.initVel[0] * time + this.accel[0] * aux;
+    const x = this.initPos[0] + this.initVel[0] * time; //  + this.accel[0] * aux;
     const y = this.initPos[1] + this.initVel[1] * time + this.accel[1] * aux;
-    const z = this.initPos[2] + this.initVel[2] * time + this.accel[2] * aux;
+    const z = this.initPos[2] + this.initVel[2] * time; //  + this.accel[2] * aux;
     this.position = [x, y, z];
   }
 

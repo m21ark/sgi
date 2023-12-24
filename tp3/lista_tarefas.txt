@@ -26,10 +26,10 @@ LATER:
 - fazer video (?)
 
 LOW PRIORITY:
+- hitbox da meta fora do sitio
 - powerup e obstaculo não tem cooldown time on colision
 - keyframes da AI estão muito lentos e não parece um jogo competitivo o suficiente nas diferentes dificuldades (e carro AI começa mto rapido e dps abranda mto perto da meta)
 - ai car ainda da uma volta estranha junto à meta
 - fazer particulas de fumo
 - se parar totalmente na relva, a velocidade maxima fica 2 por algum motivo
 - adicionar sons de motor a acelerar
-- adicionar mais luzes e sombras (neste momento não temos nada)
