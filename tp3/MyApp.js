@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyContents } from "./MyContents.js";
 import Stats from "three/addons/libs/stats.module.js";
-import { MyHUD } from "./gui/MyHUD.js";
+import { MyHUD, MyDebugHUD } from "./gui/MyHUD.js";
 import { MyAudioController } from "./audio/MyAudioController.js";
 
 class MyApp {
@@ -13,6 +13,7 @@ class MyApp {
     this.scene = null;
     this.stats = null;
     this.MyHUD = null;
+    this.MyDebugHUD = null;
 
     // camera related attributes
     this.activeCamera = null;
@@ -43,6 +44,8 @@ class MyApp {
 
     this.MyHUD = new MyHUD();
     document.body.appendChild(this.MyHUD.getDom());
+    this.MyDebugHUD = new MyDebugHUD();
+    document.body.appendChild(this.MyDebugHUD.getDom());
 
     this.initCameras();
     this.setActiveCamera("Perspective");
@@ -131,8 +134,8 @@ class MyApp {
     );
     orthoTop.zoom = 1;
     orthoTop.up = new THREE.Vector3(0, 0, -1);
-    orthoTop.position.set(125, frust2/2, 125);
-    orthoTop.lookAt(new THREE.Vector3(125, 0 , 125));
+    orthoTop.position.set(125, frust2 / 2, 125);
+    orthoTop.lookAt(new THREE.Vector3(125, 0, 125));
     this.cameras["TopCamera"] = orthoTop;
   }
 

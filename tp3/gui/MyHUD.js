@@ -12,16 +12,14 @@ export class MyHUD {
     this.domElement.id = "MyHud";
 
     // Create sub elements
-    this.timeElement = document.createElement("div");
-    this.cordsElement = document.createElement("div");
-    this.lapsElement = document.createElement("div");
-    this.powerupTimeElement = document.createElement("div");
     this.statusElement = document.createElement("div");
+    this.lapsElement = document.createElement("div");
+    this.timeElement = document.createElement("div");
+    this.powerupTimeElement = document.createElement("div");
     this.speedBarElement = document.createElement("div");
 
     // Set initial values
     this.timeElement.innerHTML = "Time: 0.00 s";
-    this.cordsElement.innerHTML = "X: 0.00 Y: 0.00 Z: 0.00";
     this.powerupTimeElement.innerHTML = "Powerup Time: 0.00 s";
     this.statusElement.innerHTML = "N/A";
 
@@ -29,21 +27,28 @@ export class MyHUD {
     this.lapsElement.innerHTML = "<span>Laps: 0/0</span>";
     this.lapsElement.style.fontWeight = "bold";
 
-    // Append elements to the HUD
-    this.domElement.appendChild(this.lapsElement);
-    this.domElement.appendChild(this.timeElement);
-    this.domElement.appendChild(this.powerupTimeElement);
-    this.domElement.appendChild(this.statusElement);
-    this.domElement.appendChild(this.speedBarElement);
-    this.domElement.appendChild(this.cordsElement);
-
     // Additional styles for the speed bar
     this.speedBarElement.id = "speedBar_speed";
     this.speedBarElement.style.width = "100px";
     this.speedBarElement.style.height = "100px";
     this.speedBarElement.style.borderRadius = "50%";
-    this.speedBarElement.style.border = "5px solid #ccc"; // Change the color of the border
+    this.speedBarElement.style.border = "5px solid #ccc";
     this.speedBarElement.style.position = "relative";
+    this.speedBarElement.style.margin = "auto";
+    this.speedBarElement.style.marginTop = "10px";
+    this.speedBarElement.style.marginBottom = "10px";
+
+    // Append elements to the HUD in the desired order
+    this.domElement.appendChild(this.lapsElement);
+    this.domElement.appendChild(this.timeElement);
+    this.domElement.appendChild(this.powerupTimeElement);
+    this.domElement.appendChild(this.speedBarElement);
+    this.domElement.appendChild(this.statusElement);
+
+    // Additional styling for the statusContainer
+    this.statusElement.style.position = "absolute";
+    this.statusElement.style.top = "8";
+    this.statusElement.style.right = "8";
   }
 
   getDom() {
@@ -81,12 +86,6 @@ export class MyHUD {
     const elapsedTime = this.clock.getElapsedTime();
     let time = Math.round(elapsedTime * 10) / 10;
     this.timeElement.innerHTML = `Time: ${time} s`;
-  }
-
-  setCords(x, y, z) {
-    this.cordsElement.innerHTML = `X: ${x.toFixed(2)} Y: ${y.toFixed(
-      2
-    )} Z: ${z.toFixed(2)}`;
   }
 
   setLaps(laps, total) {
@@ -164,5 +163,26 @@ export class MyHUD {
 
   setVisible(visible) {
     this.domElement.style.display = visible ? "block" : "none";
+  }
+}
+
+export class MyDebugHUD {
+  constructor() {
+    this.domElement = document.createElement("div");
+    this.domElement.id = "debugHUD";
+  }
+
+  getDom() {
+    return this.domElement;
+  }
+
+  setVisible(visible) {
+    this.domElement.style.display = visible ? "block" : "none";
+  }
+
+  setCords(x, y, z) {
+    this.domElement.innerHTML = `X: ${x.toFixed(2)} Y: ${y.toFixed(
+      2
+    )} Z: ${z.toFixed(2)}`;
   }
 }

@@ -210,7 +210,12 @@ export class MyContents {
   update() {
     // UPDATE CAMERAS
     if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
-    if (this.app.activeCameraName === "Debug") this.debugCam.update();
+    if (this.app.activeCameraName === "Debug") {
+      this.debugCam.update();
+      this.app.MyDebugHUD.setVisible(true);
+      this.app.MyDebugHUD.setCords(...this.debugCam.player.position);
+    } else this.app.MyDebugHUD.setVisible(false);
+
     if (this.app.activeCameraName === "EndCamera")
       this.menuController.podium.updateFireworks();
 
@@ -325,7 +330,6 @@ export class MyContents {
     if (!this.app.MyHUD.isPaused()) {
       // HUD UPDATE
       if (this.playerCam) {
-        this.app.MyHUD.setCords(...this.playerCam.getPlayer().position);
         const player = this.playerCam.getPlayer();
         const maxVel = player.getMaxVel();
 
