@@ -25,15 +25,12 @@ LATER:
 ...
 
 LOW PRIORITY:
-- picker da garagem esta mto sensivel para escolher entre mario e yoshi
 - indicar visualmente com texto o powerup/ obstaculo q se apanhou
 - powerup e obstaculo não tem cooldown time
-- keyframes da AI estão muito lentos e não parece um jogo competitivo o suficiente
+- keyframes da AI estão muito lentos e não parece um jogo competitivo o suficiente nas diferentes dificuldades (e carro AI começa mto rapido e dps abranda mto perto da meta)
 - ai car ainda da uma volta estranha junto à meta
 - atualizar a pos 1st ou 2nd na corrida
 - fazer particulas de fumo
 - se parar totalmente na relva, a velocidade maxima fica 2 por algum motivo
 - adicionar sons de motor a acelerar
-- adicionar som sempre q se completa uma volta
 - adicionar mais luzes e sombras (neste momento não temos nada)
-- ajustar velocidades do carro e AI para ser mais desafiante nas diferentes dificuldades (e carro AI começa mto rapido e dps abranda mto perto da meta)

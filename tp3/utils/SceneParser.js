@@ -137,13 +137,13 @@ export class SceneParser {
     newGroup.position.set(120, 0.1, 120);
     const availableCars = MyCar.availableCars.clone();
     const carCount = availableCars.children.length;
-    const spaceBetweenCars = 40 / (carCount + 1);
+    const spaceBetweenCars = 45 / (carCount + 1);
 
     for (let i = 0; i < carCount; i++) {
       let clone = availableCars.children[i].clone();
-      clone.position.set(0, 0, spaceBetweenCars * i - 10.0);
+      clone.position.set(10, 0, spaceBetweenCars * i - 11);
       clone.rotateY(Math.PI / 2);
-      clone.scale.set(4, 4, 4);
+      clone.scale.set(3, 3, 3);
 
       var spritey = TextSpriteDraw.makeTextSprite(clone.name, {
         fontsize: 20,

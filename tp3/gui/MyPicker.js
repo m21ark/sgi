@@ -76,12 +76,12 @@ export class MyPicker {
   pointerUP(event) {
     if (this.app.activeCameraName === "TopCamera") {
       this.app.audio.playSound("menuSelect");
-      
+
       if (this.selectedObs === "") return;
 
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  
+
       //2. set the picking ray from the camera position and mouse coordinates
       this.raycaster.setFromCamera(this.pointer, this.app.cameras["TopCamera"]);
       // the next function should be called on the up event
@@ -140,6 +140,7 @@ export class MyPicker {
     if (intersects.length > 0) {
       let obj = intersects[0].object;
 
+      // in garage mode or top camera mode for obstacles
       if (this.selectedLayer == 0) {
         // check the first object that has type Sprite
         obj = intersects.find(
@@ -155,10 +156,9 @@ export class MyPicker {
         return;
       }
 
-      if (this.notPickableObjIds.includes(obj.name)) {
-        this.restoreTargetColor();
-        console.log("Object is marked as not to be picked !");
-      } else this.changeTargetColor(obj, colorChange);
+      // Else is a menu button
+      if (this.notPickableObjIds.includes(obj.name)) this.restoreTargetColor();
+      else this.changeTargetColor(obj, colorChange);
     } else {
       this.resetLastCarSpriteColor();
       this.restoreTargetColor();
@@ -217,12 +217,12 @@ export class MyPicker {
     )
       return;
 
-    if (this.app.activeCameraName === "Garage" ||
-      this.app.activeCameraName === "TopCamera") {
+    if (
+      this.app.activeCameraName === "Garage" ||
+      this.app.activeCameraName === "TopCamera"
+    )
       this.setSelectedLayer(0);
-    } else {
-      this.setSelectedLayer(1);
-    }
+    else this.setSelectedLayer(1);
 
     let cam = this.app.activeCameraName;
 
@@ -233,38 +233,44 @@ export class MyPicker {
     //2. set the picking ray from the camera position and mouse coordinates
     this.raycaster.setFromCamera(this.pointer, this.app.cameras[cam]);
 
-
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
 
     // 4. picking helper (change color of first intersected object)
     this.pickingHelper(intersects, this.pickingClickColor);
 
-    // indicate the object name that is being picked
+    // if there are selected objects
     if (intersects.length > 0) {
       let obj = intersects[0].object;
 
+      // if garage or top camera mode
       if (this.selectedLayer == 0) {
         obj = intersects.find(
           (intersect) => intersect.object instanceof THREE.Sprite
         );
+
         if (this.app.activeCameraName === "TopCamera") {
+          // is top camera mode for obstacles pick & drop
           console.log(intersects);
-          if (obj == undefined || obj.object == undefined) this.selectedObs = ""
+          if (obj == undefined || obj.object == undefined)
+            this.selectedObs = "";
           else this.selectedObs = obj.object.name;
           console.log(this.selectedObs);
           return;
         }
+
+        // is garage mode
         if (obj == undefined || obj.object == undefined) return;
         obj = obj.object.CAR;
+        this.setCarSpriteColor(obj, { r: 0, g: 0, b: 0, a: 0 }, obj.parent);
         this.app.contents.menuController.selectCar(obj);
         return;
       }
+
+      // Else is a menu button
       const buttonIndex = parseInt(obj.name.split("_").pop(), 10);
       this.app.audio.playSound("menuSelect");
       this.menu.handleButtonClick(buttonIndex);
     }
   }
-
-
 }
