@@ -83,8 +83,8 @@ export class MenuController {
         this.currentMenu = null;
         console.log(
           "Camera '" +
-          menu +
-          "' option not found. Using default perspective camera"
+            menu +
+            "' option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
     }
@@ -181,7 +181,6 @@ export class MenuController {
   }
 
   loadDropObstaclesMenu() {
-
     if (this.dropContentsLoaded) return;
     this.dropContentsLoaded = true;
 
@@ -203,7 +202,7 @@ export class MenuController {
 
     spritey.position.set(-225, 100, 10);
 
-    spritey.name = "Vel.Drop"
+    spritey.name = "Vel.Drop";
 
     group.add(obstacle);
     group.add(spritey);
@@ -223,7 +222,7 @@ export class MenuController {
       textColor: { r: 255, g: 0, b: 0, a: 1.0 },
     });
 
-    spritey.name = "Direction"
+    spritey.name = "Direction";
 
     spritey.position.set(-225, 100, 150);
 
@@ -236,7 +235,6 @@ export class MenuController {
   dropObstaclesMenu() {
     this.app.MyHUD.setVisible(false);
     this.app.setActiveCamera("TopCamera");
-    
   }
 
   loadMenuMain() {
@@ -360,9 +358,13 @@ export class MenuController {
     else if (this.carIndex === 1) this.app.audio.playSound("mario");
     else if (this.carIndex === 2) this.app.audio.playSound("peach");
 
+    let carPos = this.app.contents.sceneParser.flagRotate
+      ? [position.x + 3, 0.1, position.z]
+      : [position.x, 0.1, position.z + 3];
+
     this.app.contents.playerCam.defineSelfObj(
       new MyCar(0.5, 0.01, this.carIndex),
-      [position.x + 3, 0.1, position.z - 3]
+      carPos
     );
 
     // Calculate rotation to align the car to the next point

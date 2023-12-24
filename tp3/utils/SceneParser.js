@@ -59,6 +59,8 @@ export class SceneParser {
     this.grassTex.wrapT = THREE.RepeatWrapping;
     this.grassTex.repeat.set(20, 20);
 
+    this.flagRotate = false;
+
     this.grassMat = new THREE.MeshPhongMaterial({
       map: this.grassTex,
       side: THREE.DoubleSide,
@@ -291,6 +293,7 @@ export class SceneParser {
 
   addFlag(group, rotate) {
     const pos = this.getKeyPath()[0];
+    this.flagRotate = rotate;
     const flagMat = new THREE.TextureLoader().load("assets/finishFlag.jpg");
 
     this.endFlagMat = new THREE.MeshPhongMaterial({

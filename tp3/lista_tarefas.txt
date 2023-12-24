@@ -12,7 +12,7 @@ MEdio
 facil
 - tv lagada
 - garage door doesnt open on new round
-
+- dropdown menu não aparece em hard na pista 1 (mas so as vezes?). numero de obstaculos a dar drop deve ser influenciado pela dificuldade (?)
 
 - rodas estão mto estranhas. rodam bue pouco e apenas qnd se acelera. se estivermos com vel constate estao paradas. tmb não estao a virar para os lados as da frente e acho q era suposto
 
@@ -25,7 +25,6 @@ LATER:
 ...
 
 LOW PRIORITY:
-- carro player começa antes da linha de partida (nao alinhado com AI)
 - picker da garagem esta mto sensivel para escolher entre mario e yoshi
 - indicar visualmente com texto o powerup/ obstaculo q se apanhou
 - powerup e obstaculo não tem cooldown time
