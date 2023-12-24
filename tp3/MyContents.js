@@ -353,7 +353,7 @@ export class MyContents {
       }
 
       // WATER UPDATE
-      // if (this.lake) this.lake.update(); // TODO: temporary disabled
+      if (this.lake) this.lake.update();
 
       // TREE UPDATE
       if (this.trees)
