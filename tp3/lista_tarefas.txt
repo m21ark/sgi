@@ -14,12 +14,9 @@ facil
 - garage door doesnt open on new round
 - dropdown menu não aparece em hard na pista 1 (mas so as vezes? e as vezes o dropdown buga e n funciona). numero de obstaculos a dar drop deve ser influenciado pela dificuldade (?) 
 - dropdown devia mostrar o item a arrastar e depois na posicao q se largou (e tirar da pista 1 os default obstaculos q tinhamos posto)
-
 - rodas estão mto estranhas. rodam bue pouco e apenas qnd se acelera. se estivermos com vel constate estao paradas. tmb não estao a virar para os lados as da frente e acho q era suposto
-
 - escolha aleatoria do carro AI pelos carros q sobram e não os q ja foram escolhidos ( e aparecer o correto no podium)
-
-
+- indicar visualmente com texto o powerup/ obstaculo q se apanhou
 - keyframe animacao ser iterpolacao cubica
 
 LATER:
@@ -29,7 +26,6 @@ LATER:
 - fazer video (?)
 
 LOW PRIORITY:
-- indicar visualmente com texto o powerup/ obstaculo q se apanhou
 - powerup e obstaculo não tem cooldown time on colision
 - keyframes da AI estão muito lentos e não parece um jogo competitivo o suficiente nas diferentes dificuldades (e carro AI começa mto rapido e dps abranda mto perto da meta)
 - ai car ainda da uma volta estranha junto à meta
