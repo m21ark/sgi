@@ -14,7 +14,6 @@ export class MyHUD {
     // Create sub elements
     this.timeElement = document.createElement("div");
     this.cordsElement = document.createElement("div");
-    this.positionElement = document.createElement("div");
     this.lapsElement = document.createElement("div");
     this.powerupTimeElement = document.createElement("div");
     this.statusElement = document.createElement("div");
@@ -26,17 +25,11 @@ export class MyHUD {
     this.powerupTimeElement.innerHTML = "Powerup Time: 0.00 s";
     this.statusElement.innerHTML = "N/A";
 
-    // Set initial values with 3D bold style
-    this.positionElement.innerHTML =
-      "<span>Position: 0/0</span> ";
+    // Set initial values with bold style
     this.lapsElement.innerHTML = "<span>Laps: 0/0</span>";
-
-    // Apply 3D bold style using CSS
-    this.positionElement.style.fontWeight = "bold";
     this.lapsElement.style.fontWeight = "bold";
 
     // Append elements to the HUD
-    this.domElement.appendChild(this.positionElement);
     this.domElement.appendChild(this.lapsElement);
     this.domElement.appendChild(this.timeElement);
     this.domElement.appendChild(this.powerupTimeElement);
@@ -96,10 +89,6 @@ export class MyHUD {
     )} Z: ${z.toFixed(2)}`;
   }
 
-  setPosition(pos, total) {
-    this.positionElement.children[0].innerHTML = `Position: ${pos}/${total}`;
-  }
-
   setLaps(laps, total) {
     this.lapsElement.children[0].innerHTML = `Laps: ${laps}/${total}`;
   }
@@ -114,11 +103,11 @@ export class MyHUD {
     // Create the play and pause icons
     const playIcon = document.createElement("i");
     playIcon.className = "fa fa-play";
-    playIcon.style.marginRight = "5px"; // Add some spacing between the icon and text
+    playIcon.style.marginRight = "5px";
 
     const pauseIcon = document.createElement("i");
     pauseIcon.className = "fa fa-pause";
-    pauseIcon.style.marginRight = "5px"; // Add some spacing between the icon and text
+    pauseIcon.style.marginRight = "5px";
 
     // Clear existing content
     this.statusElement.innerHTML = "";

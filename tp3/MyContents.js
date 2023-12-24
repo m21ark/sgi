@@ -22,6 +22,7 @@ export class MyContents {
     this.moveCar = false;
     this.showAIKeyPoints = false;
     this.hasGameStarted = false;
+    this.numLaps = 3;
 
     // DEBUG FLIGHT CAMERA
     this.debugCam = new FirstPersonCamera(this.app);
@@ -33,17 +34,16 @@ export class MyContents {
     this.reader.open(this.sceneDir + "myScene.xml");
   }
 
-  /**
-   * Initializes the component.
-   * Creates and attaches the axis to the scene if it doesn't exist.
-   */
   async init() {
-    // ============== HUD =================
-
-    this.numLaps = 3;
     this.app.MyHUD.setPauseStatus(true);
     this.app.MyHUD.setLaps(1, this.numLaps);
-    this.app.MyHUD.setPosition(1, 2);
+    this.menuController = new MenuController(this.app);
+    this.menuController.gotoMenu("main");
+
+    // add an ESC listener to go to pause menu
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") this.pauseGame();
+    });
 
     // ============== TV =================
 
@@ -53,20 +53,6 @@ export class MyContents {
     //   this.app.renderer
     // );
 
-    // =============== MENU CONTROLLER =====================
-
-    this.menuController = new MenuController(this.app);
-    this.menuController.gotoMenu("main");
-
-    // add an ESC listener to go to pause menu
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") this.pauseGame();
-    });
-
-    // TODO: TEMPORARY FOR MARCO TESTING
-    // this.loadTrack(1);
-
-    // Start the animation loop
     this.animate();
   }
 
@@ -357,7 +343,8 @@ export class MyContents {
       if (this.AICar != undefined && this.moveCar) {
         this.moveCar = false;
         this.AICar.moveAICar(
-          this.mapDificultyToSpeed(this.menuController.getDifficulty()), this.numLaps
+          this.mapDificultyToSpeed(this.menuController.getDifficulty()),
+          this.numLaps
         );
       }
 
