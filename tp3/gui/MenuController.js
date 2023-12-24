@@ -12,6 +12,8 @@ export class MenuController {
     this.app = app;
     this.currentMenu = null;
 
+    this.dropContentsLoaded = false;
+
     // store menus options
     this.difficulty = null;
     this.map = 0;
@@ -56,6 +58,7 @@ export class MenuController {
         break;
       case "dropObstacles":
         this.loadDropObstaclesMenu();
+        this.dropObstaclesMenu();
         return;
       case "name":
         this.currentMenu = this.nameMenu;
@@ -178,6 +181,55 @@ export class MenuController {
   }
 
   loadDropObstaclesMenu() {
+
+    if (this.dropContentsLoaded) return;
+    this.dropContentsLoaded = true;
+
+    // put a obstacleItem in the scene at 125, 110, 125
+    if (!this.app.contents) return;
+    let group = new THREE.Group();
+    const obstacleItem = this.app.contents.sceneParser.obstacleItem;
+    const obstacle = obstacleItem.clone();
+    obstacle.scale.set(4, 4, 4);
+    obstacle.rotation.x = Math.PI / 4;
+    obstacle.rotation.z = Math.PI / 4;
+    obstacle.position.set(-225, 100, 60);
+
+    var spritey = TextSpriteDraw.makeTextSprite("Vel.Drop", {
+      fontsize: 62,
+      backgroundColor: { r: 0, g: 0, b: 0, a: 0.0 },
+      textColor: { r: 255, g: 0, b: 0, a: 1.0 },
+    });
+
+    spritey.position.set(-225, 100, 10);
+
+    group.add(obstacle);
+    group.add(spritey);
+
+    this.app.scene.add(group);
+
+    // create a new obstacle that its call direction and is right after the vel drop
+    const direction = obstacleItem.clone();
+    direction.scale.set(4, 4, 4);
+    direction.rotation.x = Math.PI / 4;
+    direction.rotation.z = Math.PI / 4;
+    direction.position.set(-225, 100, 200);
+
+    var spritey = TextSpriteDraw.makeTextSprite("Direction", {
+      fontsize: 55,
+      backgroundColor: { r: 0, g: 0, b: 0, a: 0.0 },
+      textColor: { r: 255, g: 0, b: 0, a: 1.0 },
+    });
+
+    spritey.position.set(-225, 100, 150);
+
+    group.add(direction);
+    group.add(spritey);
+
+    this.app.scene.add(group);
+  }
+
+  dropObstaclesMenu() {
     this.app.MyHUD.setVisible(false);
     this.app.setActiveCamera("TopCamera");
     

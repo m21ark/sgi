@@ -217,6 +217,7 @@ export class MyPicker {
     if (this.app.activeCameraName === "TopCamera") {
       this.app.audio.playSound("menuSelect");
       console.log(this.raycaster)
+      // the next function should be called on the up event
       this.menu.handleObstacleAdd(this.raycaster.ray.origin);
       return;
     }
