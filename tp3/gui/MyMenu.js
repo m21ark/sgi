@@ -185,9 +185,11 @@ export class MyMenu {
     this.picker.setActiveMenu(this);
   }
 
-  handleObstacleAdd(pos) {
+  handleObstacleAdd(pos, name) {
     // Che if pos is clone to any of the trackPoints
     const trackPoints = this.app.contents.sceneParser.trackPoints;
+    console.log("TrackPoints: " + trackPoints.length);
+    console.log(pos);
     pos.y = 0.1;
     for (let i = 0; i < trackPoints.length; i++) {
 

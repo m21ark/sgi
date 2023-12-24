@@ -203,6 +203,8 @@ export class MenuController {
 
     spritey.position.set(-225, 100, 10);
 
+    spritey.name = "Vel.Drop"
+
     group.add(obstacle);
     group.add(spritey);
 
@@ -220,6 +222,8 @@ export class MenuController {
       backgroundColor: { r: 0, g: 0, b: 0, a: 0.0 },
       textColor: { r: 255, g: 0, b: 0, a: 1.0 },
     });
+
+    spritey.name = "Direction"
 
     spritey.position.set(-225, 100, 150);
 

@@ -22,7 +22,7 @@ export class MyPicker {
 
     document.addEventListener("pointermove", this.onPointerMove.bind(this));
     document.addEventListener("pointerdown", this.onPointerDown.bind(this));
-    document.addEventListener("pointerup", this.restoreTargetColor.bind(this));
+    document.addEventListener("pointerup", this.pointerUP.bind(this));
 
     this.updateSelectedLayer();
   }
@@ -72,6 +72,24 @@ export class MyPicker {
     if (this.lastPickedObj)
       this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
     this.lastPickedObj = null;
+  }
+  pointerUP(event) {
+    if (this.app.activeCameraName === "TopCamera") {
+      this.app.audio.playSound("menuSelect");
+      
+      if (this.selectedObs === "") return;
+
+      this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  
+      //2. set the picking ray from the camera position and mouse coordinates
+      this.raycaster.setFromCamera(this.pointer, this.app.cameras["TopCamera"]);
+      // the next function should be called on the up event
+      this.menu.handleObstacleAdd(this.raycaster.ray.origin, this.selectedObs);
+      return;
+    }
+
+    this.restoreTargetColor();
   }
 
   changeSpriteColor(obj, color) {
@@ -199,7 +217,8 @@ export class MyPicker {
     )
       return;
 
-    if (this.app.activeCameraName === "Garage") {
+    if (this.app.activeCameraName === "Garage" ||
+      this.app.activeCameraName === "TopCamera") {
       this.setSelectedLayer(0);
     } else {
       this.setSelectedLayer(1);
@@ -214,13 +233,6 @@ export class MyPicker {
     //2. set the picking ray from the camera position and mouse coordinates
     this.raycaster.setFromCamera(this.pointer, this.app.cameras[cam]);
 
-    if (this.app.activeCameraName === "TopCamera") {
-      this.app.audio.playSound("menuSelect");
-      console.log(this.raycaster)
-      // the next function should be called on the up event
-      this.menu.handleObstacleAdd(this.raycaster.ray.origin);
-      return;
-    }
 
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
@@ -236,6 +248,13 @@ export class MyPicker {
         obj = intersects.find(
           (intersect) => intersect.object instanceof THREE.Sprite
         );
+        if (this.app.activeCameraName === "TopCamera") {
+          console.log(intersects);
+          if (obj == undefined || obj.object == undefined) this.selectedObs = ""
+          else this.selectedObs = obj.object.name;
+          console.log(this.selectedObs);
+          return;
+        }
         if (obj == undefined || obj.object == undefined) return;
         obj = obj.object.CAR;
         this.app.contents.menuController.selectCar(obj);
@@ -246,4 +265,6 @@ export class MyPicker {
       this.menu.handleButtonClick(buttonIndex);
     }
   }
+
+
 }
