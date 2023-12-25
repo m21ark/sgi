@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export class MySmoke {
-  constructor(app, pos = null) {
+  constructor(app, pos = new THREE.Vector3(0, 0, 0)) {
     this.app = app;
     this.smokes = [];
     this.pos = pos;

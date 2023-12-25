@@ -133,6 +133,24 @@ export class FirstPersonCamera {
 
     this.updateFOV(this.player, this.app.activeCamera, 0.05);
     this.updateCamera();
+
+    // update smoke particles
+    if (this.player.currVel < 0.15) {
+      let x = this.player.position.x;
+      let y = this.player.position.y;
+      let z = this.player.position.z;
+
+      // Get the direction vector of the car
+      const carDirection = new THREE.Vector3(0, 0, -1);
+      carDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), y);
+
+      // Adjust the position based on the car's direction
+      const offset = new THREE.Vector3(0, 0, y > Math.PI ? -0.2 : 0.2);
+      offset.applyQuaternion(this.player.quaternion);
+
+      let pos = new THREE.Vector3(x + offset.x, 0.05, z + offset.z);
+      this.app.contents.smokes.setPos(pos);
+    }
   }
 
   updateFOV(player, camera, lerpFactor) {
