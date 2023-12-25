@@ -142,6 +142,25 @@ export class MyContents {
     this.app = this.XMLLoader.loadXMLScene(data);
   }
 
+  lookForCollisions() {
+    if (
+      this.playerCam &&
+      this.playerCam.getPlayer() &&
+      this.playerCam.getPlayer().carBB &&
+      this.hitabbleObjs
+    ) {
+      let player = this.playerCam.getPlayer();
+      player.carBB.position = player.position.clone();
+      player.carBB
+        .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0])) // TODO: NOT 0 now
+        .applyMatrix4(player.matrixWorld);
+      this.AICar.aiBB
+        .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
+        .applyMatrix4(this.AICar.aiCar.matrixWorld);
+      this.checkCollision(player.carBB, this.hitabbleObjs);
+    }
+  }
+
   checkCollision(carBB, hitabbleObjs) {
     // check collision with checkpoints
     if (this.sceneParser.checkpoints != undefined) {
@@ -230,43 +249,33 @@ export class MyContents {
       this.app.MyDebugHUD.setCords(...this.debugCam.player.position);
     } else this.app.MyDebugHUD.setVisible(false);
 
+    // UPDATE FIREWORKS
     if (this.app.activeCameraName === "EndCamera")
       this.menuController.podium.updateFireworks();
 
     if (this.gameHasEnded) return;
 
+    // UPDATE AI CAR
     if (this.AICar) {
       this.AICar.update();
       this.checkIfLost();
     }
 
-    // TODO: this gives a ton of warnings
-    // this.tv.updateRenderTarget(this.app.activeCamera);
-
+    // UPDATE SHADERS FOR POWERUPS AND OBSTACLES PULSATION
     if (this.sceneParser != undefined) {
       SceneParser.BoxesShaders.uniforms.time.value += 0.05;
       SceneParser.BlockShaders.uniforms.time.value += 0.05;
       SceneParser.BlockShaders2.uniforms.time.value += 0.05;
     }
 
+    // TODO: this gives a ton of warnings
+    // this.tv.updateRenderTarget(this.app.activeCamera);
+
+    // UPDATE GARAGE ANIMATION
     MyGarage.update();
 
-    if (
-      this.playerCam != undefined &&
-      this.playerCam.getPlayer() != null &&
-      this.playerCam.getPlayer().carBB != null &&
-      this.hitabbleObjs != null
-    ) {
-      let player = this.playerCam.getPlayer();
-      player.carBB.position = player.position.clone();
-      player.carBB
-        .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0])) // TODO: NOT 0 now
-        .applyMatrix4(player.matrixWorld);
-      this.AICar.aiBB
-        .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
-        .applyMatrix4(this.AICar.aiCar.matrixWorld);
-      this.checkCollision(player.carBB, this.hitabbleObjs);
-    }
+    // UPDATE COLLISIONS
+    this.lookForCollisions();
   }
 
   setActiveCamera(cameraId) {
@@ -285,11 +294,11 @@ export class MyContents {
   mapDificultyToSpeed(difficulty) {
     switch (difficulty) {
       case 1:
-        return 0.55;
+        return 0.52;
       case 2:
-        return 0.48;
+        return 0.5;
       case 3:
-        return 0.46;
+        return 0.48;
       default:
         return 1;
     }

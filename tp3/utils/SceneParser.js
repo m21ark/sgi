@@ -100,12 +100,7 @@ export class SceneParser {
   static BlockShaders = myShader.clone();
   static BlockShaders2 = myShader.clone();
 
-  async buildGridGroup(track_number) {
-    const csvPath = "tracks/track_" + track_number + ".json";
-    const json = await this.readJSON(csvPath);
-
-    const group = new THREE.Group();
-
+  async loadObjs() {
     // define the meshes for powerups and obstacles
     await this.objBuilder.create3dModel(
       {
@@ -130,66 +125,31 @@ export class SceneParser {
       "scene/",
       MyGarage.objectModel
     );
-    MyGarage.objectModel.scale.set(0.05, 0.05, 0.05);
+  }
 
-    let newGroup = new THREE.Group();
-    newGroup.add(MyGarage.objectModel);
-    newGroup.position.set(120, 0.1, 120);
-    const availableCars = MyCar.availableCars.clone();
-    const carCount = availableCars.children.length;
-    const spaceBetweenCars = 45 / (carCount + 1);
+  async buildGridGroup(track_number) {
+    const csvPath = "tracks/track_" + track_number + ".json";
+    const json = await this.readJSON(csvPath);
 
-    for (let i = 0; i < carCount; i++) {
-      let clone = availableCars.children[i].clone();
-      clone.position.set(10, 0, spaceBetweenCars * i - 11);
-      clone.rotateY(Math.PI / 2);
-      clone.scale.set(3, 3, 3);
+    const group = new THREE.Group();
 
-      var spritey = TextSpriteDraw.makeTextSprite(clone.name, {
-        fontsize: 20,
-        textColor: { r: 255, g: 255, b: 255, a: 1.0 },
-        borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
-        borderThickness: 6,
-      });
-      spritey.position.set(4, 0, 0);
+    // ADDING STUFF
+    await this.loadObjs();
+    this.addGarage(group);
+    this.addTrackCurve(group, json);
+    this.addMountains(group);
 
-      clone.add(spritey);
-      newGroup.add(clone);
-    }
+    // ================ LAKE =================
 
-    group.add(newGroup);
-
-    // ================ CURVE =================
-    // catmull curve from the json
-    const points = [];
-    json.track.forEach((point) => {
-      points.push(new THREE.Vector3(point.x, 0, point.z));
+    json.lake.forEach((lake) => {
+      this.addLake(group, lake.x, lake.z, lake.rotate);
     });
 
-    this.makeCatmullCurve(group, points);
+    // ================ FLAG =================
 
-    this.controlPoints = points;
-
-    // add a small translucid blue spehere to each control point
-    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-    const sphereMaterial = new THREE.MeshBasicMaterial({
-      color: 0x00ffaa,
-      transparent: true,
-      opacity: 0.5,
-    });
-
-    this.controPointGroup = new THREE.Group();
-    this.controPointGroup.name = "Track_ControlPoints";
-
-    points.forEach((controlPoint) => {
-      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-      sphere.position.set(...controlPoint);
-      sphere.position.y += 0.5;
-      sphere.visible = false;
-      this.controPointGroup.add(sphere);
-    });
-
-    group.add(this.controPointGroup);
+    let rotateFlag = json.flagRotate ? json.flagRotate : false;
+    this.addFlag(group, rotateFlag);
+    this.addCheckpoints(group, rotateFlag);
 
     // ================ GRASS =================
 
@@ -199,16 +159,6 @@ export class SceneParser {
     squareMesh.rotateX(-Math.PI / 2);
     squareMesh.position.set(130, 0, 130);
     group.add(squareMesh);
-
-    // ================ MOUNTAINS =================
-
-    this.addMountains(group);
-
-    // ================ LAKE =================
-
-    json.lake.forEach((lake) => {
-      this.addLake(group, lake.x, lake.z, lake.rotate);
-    });
 
     // ================ OBSTACLES =================
 
@@ -249,46 +199,108 @@ export class SceneParser {
 
     this.addTreesCircle(group);
 
-    // ================ FLAG =================
+    return group;
+  }
 
-    this.addFlag(group, json.flagRotate ? json.flagRotate : false);
+  addGarage(group) {
+    MyGarage.objectModel.scale.set(0.05, 0.05, 0.05);
 
-    // ================ CHECKPOINT =================
+    let garageGroup = new THREE.Group();
+    garageGroup.add(MyGarage.objectModel);
+    garageGroup.position.set(120, 0.1, 120);
+    const availableCars = MyCar.availableCars.clone();
+    const carCount = availableCars.children.length;
+    const spaceBetweenCars = 45 / (carCount + 1);
+
+    for (let i = 0; i < carCount; i++) {
+      let clone = availableCars.children[i].clone();
+      clone.position.set(10, 0, spaceBetweenCars * i - 11);
+      clone.rotateY(Math.PI / 2);
+      clone.scale.set(3, 3, 3);
+
+      var spritey = TextSpriteDraw.makeTextSprite(clone.name, {
+        fontsize: 20,
+        textColor: { r: 255, g: 255, b: 255, a: 1.0 },
+        borderColor: { r: 0, g: 0, b: 0, a: 1.0 },
+        borderThickness: 6,
+      });
+      spritey.position.set(4, 0, 0);
+
+      clone.add(spritey);
+      garageGroup.add(clone);
+    }
+
+    group.add(garageGroup);
+  }
+
+  addTrackCurve(group, json) {
+    // catmull curve from the json
+    const points = [];
+    json.track.forEach((point) => {
+      points.push(new THREE.Vector3(point.x, 0, point.z));
+    });
+
+    this.makeCatmullCurve(group, points);
+
+    this.controlPoints = points;
+
+    // add a small translucid blue spehere to each control point
+    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ffaa,
+      transparent: true,
+      opacity: 0.5,
+    });
+
+    this.controPointGroup = new THREE.Group();
+    this.controPointGroup.name = "Track_ControlPoints";
+
+    points.forEach((controlPoint) => {
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      sphere.position.set(...controlPoint);
+      sphere.position.y += 0.5;
+      sphere.visible = false;
+      this.controPointGroup.add(sphere);
+    });
+
+    group.add(this.controPointGroup);
+  }
+
+  addCheckpoints(group, rotateFlag) {
     // Create a box geometry
-    let boxGeometry = new THREE.BoxGeometry(25, 1, 25); // Adjust the size as needed
+    let boxGeometry = new THREE.BoxGeometry(10, 1, 2);
+    let boxMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ff00,
+      wireframe: true,
+      visible: false,
+    });
 
-    // Create a box material
-    let boxMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Adjust the color as needed
-
-    // Create the first box and add it to the group
+    // SET THE FIRST CHECKPOINT ON THE START OF THE TRACK
     let box1 = new THREE.Mesh(boxGeometry, boxMaterial);
     let pos = this.getKeyPath()[0];
-    box1.position.copy(new THREE.Vector3(pos.x, 0, pos.z)); // Position the box at the start of the path
-    box1.visible = false;
+    box1.position.set(pos.x, 0.5, pos.z);
     box1.name = "sector1";
+    if (!rotateFlag) {
+      box1.rotateY(Math.PI / 2);
+      console.log("rotate");
+    }
     group.add(box1);
 
-    // Create the second box and add it to the group
+    // SET THE SECOND CHECKPOINT ON THE MIDDLE OF THE TRACK
+    boxGeometry = new THREE.BoxGeometry(25, 1, 25);
     let box2 = new THREE.Mesh(boxGeometry, boxMaterial);
     let middleIndex = Math.floor(this.getKeyPath().length / 2);
     pos = this.getKeyPath()[middleIndex];
-    box2.position.copy(new THREE.Vector3(pos.x, 0, pos.z)); // Position the box in the middle of the path
-    box2.visible = false;
+    box2.position.copy(new THREE.Vector3(pos.x, 0, pos.z));
     box2.name = "sector2";
-
     group.add(box2);
 
-    // Create a bounding box for box1
+    // Create bounding boxes
     let box1BB = new THREE.Box3().setFromObject(box1);
-    box1.bbox = box1BB;
-
-    // Create a bounding box for box2
     let box2BB = new THREE.Box3().setFromObject(box2);
+    box1.bbox = box1BB;
     box2.bbox = box2BB;
-
     this.checkpoints = [box2, box1];
-
-    return group;
   }
 
   addFlag(group, rotate) {
