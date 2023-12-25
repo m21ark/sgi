@@ -328,7 +328,7 @@ export class MyContents {
 
     // SMOKE UPDATE
     if (this.playerCam)
-      if (this.playerCam.getPlayer().currVel < 0.15) this.smokes.update();
+      if (this.playerCam.getPlayer().currVel < 0.2) this.smokes.update();
 
     // UPDATE AI CAR
     if (this.AICar) {

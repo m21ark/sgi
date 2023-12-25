@@ -135,7 +135,7 @@ export class FirstPersonCamera {
     this.updateCamera();
 
     // update smoke particles
-    if (this.player.currVel < 0.15) {
+    if (this.player.currVel < 0.2) {
       let x = this.player.position.x;
       let y = this.player.position.y;
       let z = this.player.position.z;
@@ -150,7 +150,7 @@ export class FirstPersonCamera {
 
       let pos = new THREE.Vector3(x + offset.x, 0.05, z + offset.z);
       this.app.contents.smokes.setPos(pos);
-    }
+    } else this.app.contents.smokes.reset();
   }
 
   updateFOV(player, camera, lerpFactor) {
