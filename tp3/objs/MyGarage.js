@@ -13,7 +13,7 @@ export class MyGarage {
     );
     const keyFrameAnim = new THREE.QuaternionKeyframeTrack(
       ".quaternion",
-      [0, 5],
+      [0, 3],
       [0, 0, 0, 0, quaternion.x, quaternion.y, quaternion.z, quaternion.w] // pass the quaternion values as keyframes
     );
     const keyFrameClip = new THREE.AnimationClip("Door", 5, [keyFrameAnim]);
@@ -40,7 +40,7 @@ export class MyGarage {
     );
     const keyFrameAnim = new THREE.QuaternionKeyframeTrack(
       ".quaternion",
-      [0, 5],
+      [0, 3],
       [quaternion.x, quaternion.y, quaternion.z, quaternion.w, 0, 0, 0, 0] // pass the quaternion values as keyframes
     );
     const keyFrameClip = new THREE.AnimationClip("Door", 5, [keyFrameAnim]);

@@ -252,6 +252,7 @@ class MyApp {
     this.audio.addSound("menuSelect");
     this.audio.addSound("obstacle");
     this.audio.addSound("powerup");
+    this.audio.addSound("engine", false, 0.25);
 
     this.audio.addSound("yoshi", false, 0.7);
     this.audio.addSound("mario");

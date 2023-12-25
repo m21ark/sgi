@@ -28,6 +28,10 @@ export class MyCar extends THREE.Object3D {
     this.carBB = new THREE.Box3().setFromObject(this); // bounding box
   }
 
+  isAtMaxVel() {
+    return this.currVel == this.getMaxVel();
+  }
+
   incRotation() {
     if (this.currVel == 0) return;
     this.rotationSpeed += this.rotationSpeedInc;

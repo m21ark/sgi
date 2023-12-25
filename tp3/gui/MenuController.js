@@ -287,8 +287,9 @@ export class MenuController {
 
     this.nameMenu.addButton("Change", () => {
       while (true) {
-        let name = prompt("Enter your name", this.playerName).trim();
+        let name = prompt("Enter your name", this.playerName);
         if (name) {
+          name = name.trim();
           let oldMenu = this.app.scene.getObjectByName("nameMenu");
           this.app.scene.remove(oldMenu);
           this.nameMenu.updateText(name, 0);
