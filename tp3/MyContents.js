@@ -209,7 +209,8 @@ export class MyContents {
         return false;
       }
     }
-    this.playerCam.getPlayer().friction();
+
+    this.playerCam.getPlayer().frictionGrass();
     return true; // collision with grass
   }
 

@@ -280,10 +280,7 @@ export class SceneParser {
     let pos = this.getKeyPath()[0];
     box1.position.set(pos.x, 0.5, pos.z);
     box1.name = "sector1";
-    if (!rotateFlag) {
-      box1.rotateY(Math.PI / 2);
-      console.log("rotate");
-    }
+    if (!rotateFlag) box1.rotateY(Math.PI / 2);
     group.add(box1);
 
     // SET THE SECOND CHECKPOINT ON THE MIDDLE OF THE TRACK

@@ -14,7 +14,7 @@ export class MyAICar {
     this.clock = new THREE.Clock();
   }
 
-  getFinalTime() {    
+  getFinalTime() {
     return Math.round(this.finalTime);
   }
 

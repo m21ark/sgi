@@ -27,8 +27,6 @@ LATER:
 
 LOW PRIORITY:
 - powerup e obstaculo não tem cooldown time on colision
-- carro AI começa mto rapido e dps abranda mto perto da meta
-- ai car ainda da uma volta estranha junto à meta
+- carro AI começa mto rapido e dps abranda mto perto da meta (e da uma volta estranha junto à meta)
 - fazer particulas de fumo
-- se parar totalmente na relva, a velocidade maxima fica 2 por algum motivo
 - adicionar sons de motor a acelerar

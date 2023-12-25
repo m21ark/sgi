@@ -135,7 +135,7 @@ export class FirstPersonCamera {
     const lerp = (start, end, alpha) => {
       return (1 - alpha) * start + alpha * end;
     };
-    const targetFOV = 75 + Math.abs(player.getSpeed()) * 40;
+    const targetFOV = 75 + Math.abs(player.getSpeed()) * 30;
     camera.fov = lerp(camera.fov, targetFOV, lerpFactor);
     camera.updateProjectionMatrix();
   }
