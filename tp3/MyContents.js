@@ -19,6 +19,7 @@ export class MyContents {
 
     this.lake = null;
     this.showControlPoints = false;
+    this.showCheckPoints = false;
     this.controlPoints = [];
     this.moveCar = false;
     this.showAIKeyPoints = false;
@@ -28,6 +29,9 @@ export class MyContents {
     // DEBUG FLIGHT CAMERA
     this.debugCam = new FirstPersonCamera(this.app);
     this.debugCam.defineSelfObj(null, [180, 10, 20]);
+
+    // Car smoke particles
+    this.smokes = new MySmoke(this.app);
 
     // XML LOADER
     this.reader = new MyFileReader(app, this, this.loadXMLScene);
@@ -53,8 +57,6 @@ export class MyContents {
     //   this.app.cameras["FirstPerson"],
     //   this.app.renderer
     // );
-
-    this.smokes = new MySmoke(this.app);
 
     this.animate();
   }
@@ -230,52 +232,10 @@ export class MyContents {
     const difficulty = this.menuController.getDifficulty();
     this.menuController.updateEndMenu(won, myTime, aiTime, difficulty);
 
-    // wait 3s before showing the end menu
+    // wait 2s before showing the end menu
     setTimeout(() => {
       this.menuController.gotoMenu("end");
-    }, 3000);
-  }
-
-  update() {
-    // UPDATE CAMERAS
-    if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
-    if (this.app.activeCameraName === "Debug") {
-      this.debugCam.update();
-      this.app.MyDebugHUD.setVisible(true);
-      this.app.MyDebugHUD.setCords(...this.debugCam.player.position);
-    } else this.app.MyDebugHUD.setVisible(false);
-
-    // UPDATE FIREWORKS
-    if (this.app.activeCameraName === "EndCamera")
-      this.menuController.podium.updateFireworks();
-
-    // SMOKE UPDATE
-    if (this.playerCam)
-      if (this.playerCam.getPlayer().currVel < 0.15) this.smokes.update();
-
-    if (this.gameHasEnded) return;
-
-    // UPDATE AI CAR
-    if (this.AICar) {
-      this.AICar.update();
-      this.checkIfLost();
-    }
-
-    // UPDATE SHADERS FOR POWERUPS AND OBSTACLES PULSATION
-    if (this.sceneParser != undefined) {
-      SceneParser.BoxesShaders.uniforms.time.value += 0.05;
-      SceneParser.BlockShaders.uniforms.time.value += 0.05;
-      SceneParser.BlockShaders2.uniforms.time.value += 0.05;
-    }
-
-    // TODO: this gives a ton of warnings
-    // this.tv.updateRenderTarget(this.app.activeCamera);
-
-    // UPDATE GARAGE ANIMATION
-    MyGarage.update();
-
-    // UPDATE COLLISIONS
-    this.lookForCollisions();
+    }, 2000);
   }
 
   setActiveCamera(cameraId) {
@@ -348,6 +308,50 @@ export class MyContents {
     this.app.audio.playSound("bgMusic");
   }
 
+  // =============== UPDATES =====================
+
+  update() {
+    // UPDATE CAMERAS
+    if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
+    if (this.app.activeCameraName === "Debug") {
+      this.debugCam.update();
+      this.app.MyDebugHUD.setVisible(true);
+      this.app.MyDebugHUD.setCords(...this.debugCam.player.position);
+    } else this.app.MyDebugHUD.setVisible(false);
+
+    // UPDATE FIREWORKS
+    if (this.app.activeCameraName === "EndCamera")
+      this.menuController.podium.updateFireworks();
+
+    if (this.gameHasEnded) return;
+
+    // SMOKE UPDATE
+    if (this.playerCam)
+      if (this.playerCam.getPlayer().currVel < 0.15) this.smokes.update();
+
+    // UPDATE AI CAR
+    if (this.AICar) {
+      this.AICar.update();
+      this.checkIfLost();
+    }
+
+    // UPDATE SHADERS FOR POWERUPS AND OBSTACLES PULSATION
+    if (this.sceneParser != undefined) {
+      SceneParser.BoxesShaders.uniforms.time.value += 0.05;
+      SceneParser.BlockShaders.uniforms.time.value += 0.05;
+      SceneParser.BlockShaders2.uniforms.time.value += 0.05;
+    }
+
+    // TODO: this gives a ton of warnings
+    // this.tv.updateRenderTarget(this.app.activeCamera);
+
+    // UPDATE GARAGE ANIMATION
+    MyGarage.update();
+
+    // UPDATE COLLISIONS
+    this.lookForCollisions();
+  }
+
   animate() {
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
@@ -414,5 +418,13 @@ export class MyContents {
 
   triggerPodium() {
     this.podium(true);
+  }
+
+  toogleCheckpointVisibility() {
+    if (this.sceneParser.checkpoints != undefined) {
+      this.sceneParser.checkpoints.forEach((checkpoint) => {
+        checkpoint.material.visible = this.showCheckPoints;
+      });
+    }
   }
 }

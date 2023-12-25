@@ -27,4 +27,3 @@ LATER:
 
 LOW PRIORITY:
 - carro AI começa mto rapido e dps abranda mto perto da meta (e da uma volta estranha junto à meta)
-- fazer particulas de fumo

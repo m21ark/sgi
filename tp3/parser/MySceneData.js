@@ -479,20 +479,7 @@ class MySceneData {
   }
 
   onLoadFinished(app, contents) {
-    /*     console.info(
-      "------------------ consolidating data structures ------------------"
-    );
-
-    console.debug("consolidating materials...");
-    // TODO: check material refs and replace with material objects
-
-    console.debug("consolidating scene graph root...");
-    // TODO: check root not null and root exists
-
-    console.debug("consolidating camera...");
-    // TODO: check active camera not null and exists
-
-    // TODO: continue consolidation checks */
+    // ...
   }
 
   getLOD(id) {

@@ -122,7 +122,7 @@ export class MenuController {
     );
 
     this.MapSelectingMenu.addButton("Select", async () => {
-      this.app.contents.loadTrack(this.map + 1); // TODO: flag isnt removed on new load
+      this.app.contents.loadTrack(this.map + 1);
       this.gotoMenu("dificultySelect");
     });
     this.MapSelectingMenu.addButton("Next", () => {

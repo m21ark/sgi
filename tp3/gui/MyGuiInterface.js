@@ -38,8 +38,6 @@ class MyGuiInterface {
     const utisFolder = this.datgui.addFolder("Utils");
     utisFolder.open();
 
-    utisFolder.add(this.contents, "moveCar", false).name("moveCar");
-
     utisFolder
       .add(this.contents, "showAIKeyPoints", false)
       .name("showAIKeyPoints")
@@ -52,6 +50,13 @@ class MyGuiInterface {
       .name("showControlPoints")
       .onChange(() => {
         this.contents.toogleShowControlPoints();
+      });
+
+    utisFolder
+      .add(this.contents, "showCheckPoints", false)
+      .name("showCheckPoints")
+      .onChange(() => {
+        this.contents.toogleCheckpointVisibility();
       });
 
     utisFolder.add(this.contents, "toggleCountDown").name("toggleCountDown");
