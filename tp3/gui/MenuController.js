@@ -83,8 +83,8 @@ export class MenuController {
         this.currentMenu = null;
         console.log(
           "Camera '" +
-            menu +
-            "' option not found. Using default perspective camera"
+          menu +
+          "' option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
     }
@@ -367,6 +367,14 @@ export class MenuController {
       new MyCar(0.5, 0.01, this.carIndex),
       carPos
     );
+
+    // select randomly a car index that is not carIndex from 0 to 2
+    let rivalCarIndex = Math.floor(Math.random() * 10) % 3;
+    while (rivalCarIndex === this.carIndex) {
+      rivalCarIndex = Math.floor(Math.random() * 10) % 3;
+    }
+
+    this.app.contents.AICar.addAICar(this.app.scene, rivalCarIndex);
 
     // Calculate rotation to align the car to the next point
     let direction = new THREE.Vector3().subVectors(nextPosition, position);

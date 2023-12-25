@@ -15,12 +15,12 @@ export class MyHUD {
     this.statusElement = document.createElement("div");
     this.lapsElement = document.createElement("div");
     this.timeElement = document.createElement("div");
-    this.powerupTimeElement = document.createElement("div");
+    this.separatorElement = document.createElement("div");
     this.speedBarElement = document.createElement("div");
 
     // Set initial values
     this.timeElement.innerHTML = "Time: 0.00 s";
-    this.powerupTimeElement.innerHTML = "Powerup Time: 0.00 s";
+    this.separatorElement.innerHTML = "--------------------";
     this.statusElement.innerHTML = "N/A";
 
     // Set initial values with bold style
@@ -41,7 +41,7 @@ export class MyHUD {
     // Append elements to the HUD in the desired order
     this.domElement.appendChild(this.lapsElement);
     this.domElement.appendChild(this.timeElement);
-    this.domElement.appendChild(this.powerupTimeElement);
+    this.domElement.appendChild(this.separatorElement);
     this.domElement.appendChild(this.speedBarElement);
     this.domElement.appendChild(this.statusElement);
 
@@ -92,11 +92,6 @@ export class MyHUD {
     this.lapsElement.children[0].innerHTML = `Laps: ${laps}/${total}`;
   }
 
-  setPowerupTime(time) {
-    if (time > 0)
-      this.powerupTimeElement.innerHTML = `Powerup Time: ${time.toFixed(2)} s`;
-    else this.powerupTimeElement.innerHTML = "";
-  }
 
   _setStatus(status) {
     // Create the play and pause icons

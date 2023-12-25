@@ -114,7 +114,6 @@ export class MyContents {
 
     // AI car set
     this.AICar = new MyAICar(this.sceneParser.getKeyPath());
-    this.AICar.addAICar(this.app.scene);
 
     const startPoint = this.sceneParser.getKeyPath()[0];
 
@@ -146,6 +145,7 @@ export class MyContents {
       player.carBB
         .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0])) // TODO: NOT 0 now
         .applyMatrix4(player.matrixWorld);
+      if (this.AICar.aiBB == undefined) return;
       this.AICar.aiBB
         .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
         .applyMatrix4(this.AICar.aiCar.matrixWorld);

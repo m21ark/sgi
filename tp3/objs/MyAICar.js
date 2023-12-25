@@ -45,9 +45,11 @@ export class MyAICar {
     }
   }
 
-  addAICar(scene) {
+  addAICar(scene, rivalCarIndex = 0) {
     this.aiCar = new THREE.Group();
-    let car = MyCar.availableCars.children[0].clone();
+    this.carIndex = rivalCarIndex;
+    console.log("rival car index: " + rivalCarIndex);
+    let car = MyCar.availableCars.children[rivalCarIndex].clone();
 
     // rotate the car in respect to the next key point
     let nextKeyPoint = this.keyPoints[this.currentKeyPointIndex + 1];
