@@ -195,9 +195,10 @@ export class MyMenu {
         if (this.app.contents.sceneParser.addObstacle(pos, name, difficulty)) {
           this.app.contents.menuController.gotoMenu("carSelect");
         }
-        return;
+        return true;
       }
     }
+    return false;
   }
 
   handleButtonClick(buttonIndex) {

@@ -93,7 +93,12 @@ export class MyPicker {
       //2. set the picking ray from the camera position and mouse coordinates
       this.raycaster.setFromCamera(this.pointer, this.app.cameras["TopCamera"]);
       // the next function should be called on the up event
-      this.menu.handleObstacleAdd(this.raycaster.ray.origin, this.selectedObs);
+      if (this.menu.handleObstacleAdd(this.raycaster.ray.origin, this.selectedObs)) {
+        let copyCircle = this.circle.clone();
+        copyCircle.position.set(this.raycaster.ray.origin.x, 100, this.raycaster.ray.origin.z);
+        copyCircle.visible = true;
+        this.app.contents.sceneParser.groupp.add(copyCircle);
+      }
       this.selectedObs = "";
       return;
     }
