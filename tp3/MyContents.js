@@ -181,12 +181,18 @@ export class MyContents {
 
     for (const hitabble of hitabbleObjs) {
       if (carBB.intersectsBox(hitabble.bbox)) {
+        // if the player has already collided with this object in the last 2 seconds, ignore it
+        if (!hitabble.hadNewCollision()) continue;
+
+        // give the player the effect of the hitabble object
         hitabble.effectPlayer(this.playerCam.getPlayer());
-        if (hitabble.type == "powerup") {
-          if (this.hasGameStarted) this.app.audio.playSound("powerup");
-        } else {
-          if (this.hasGameStarted) this.app.audio.playSound("obstacle");
+
+        // Play sounds
+        if (this.hasGameStarted) {
+          if (hitabble.type == "powerup") this.app.audio.playSound("powerup");
+          else this.app.audio.playSound("obstacle");
         }
+
         return true;
       }
     }

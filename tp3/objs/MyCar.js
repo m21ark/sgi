@@ -78,7 +78,7 @@ export class MyCar extends THREE.Object3D {
     if (this.currVel < -this.getMaxVel()) this.currVel = -this.getMaxVel();
   }
 
-  friction(frictionCoefficient = 0.05) {
+  friction(frictionCoefficient = 0.035) {
     const frictionForce = -frictionCoefficient * this.currVel;
     this.currVel += frictionForce;
     if (Math.abs(this.currVel) < this.velInc) this.currVel = 0;

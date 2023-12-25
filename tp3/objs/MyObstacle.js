@@ -20,6 +20,8 @@ export class MyObstacle {
     this.timeBoost = timeBoost; // should be positive
     this.velMultiplyer = velMultiplyer; // should be < 1
     this.switchedControls = switchedControls;
+
+    this.lastCollisionTime = 0;
   }
 
   setBBox(bbox) {
@@ -43,6 +45,16 @@ export class MyObstacle {
     configs.set("velMultiplyer", this.velMultiplyer);
     configs.set("switchedControls", this.switchedControls);
     return configs;
+  }
+
+  hadNewCollision() {
+    const currTime = Date.now();
+    // cooldown of 2 seconds
+    if (currTime - this.lastCollisionTime > 2000) {
+      this.lastCollisionTime = currTime;
+      return true;
+    }
+    return false;
   }
 
   effectPlayer(player) {

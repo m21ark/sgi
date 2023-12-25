@@ -379,9 +379,9 @@ export class MenuController {
       direction.z
     );
 
-    MyGarage.mixer.addEventListener("loop", (e) => {
+    setTimeout(() => {
       this.gotoMenu("game");
-    });
+    }, MyGarage.animationTime * 1000 + 0.1);
   }
 
   garageLoad() {

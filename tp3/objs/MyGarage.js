@@ -1,6 +1,8 @@
 import * as THREE from "three";
 
 export class MyGarage {
+  static animationTime = 3;
+
   static openGarage() {
     // search for the object named "door" in the objectModel
     const door = MyGarage.objectModel.getObjectByName("Door");
@@ -13,7 +15,7 @@ export class MyGarage {
     );
     const keyFrameAnim = new THREE.QuaternionKeyframeTrack(
       ".quaternion",
-      [0, 3],
+      [0, MyGarage.animationTime],
       [0, 0, 0, 0, quaternion.x, quaternion.y, quaternion.z, quaternion.w] // pass the quaternion values as keyframes
     );
     const keyFrameClip = new THREE.AnimationClip("Door", 5, [keyFrameAnim]);
@@ -40,7 +42,7 @@ export class MyGarage {
     );
     const keyFrameAnim = new THREE.QuaternionKeyframeTrack(
       ".quaternion",
-      [0, 3],
+      [0, MyGarage.animationTime],
       [quaternion.x, quaternion.y, quaternion.z, quaternion.w, 0, 0, 0, 0] // pass the quaternion values as keyframes
     );
     const keyFrameClip = new THREE.AnimationClip("Door", 5, [keyFrameAnim]);

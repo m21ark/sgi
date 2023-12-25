@@ -21,6 +21,18 @@ export class MyPowerUp {
     this.timeBoost = timeBoost; // should be negative
     this.velMultiplyer = velMultiplyer; // should be > 1
     this.invulnerable = invulnerable;
+
+    this.lastCollisionTime = 0;
+  }
+
+  hadNewCollision() {
+    const currTime = Date.now();
+    // cooldown of 2 seconds
+    if (currTime - this.lastCollisionTime > 2000) {
+      this.lastCollisionTime = currTime;
+      return true;
+    }
+    return false;
   }
 
   setBBox(bbox) {
