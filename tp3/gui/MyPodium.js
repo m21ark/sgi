@@ -53,7 +53,7 @@ export class MyPodium extends MyMenu {
       color: 0x00ffff,
       wireframe: true,
     });
-    let aiCar = MyCar.availableCars.children[this.app.contents.AiCar.carIndex].clone();
+    let aiCar = MyCar.availableCars.children[this.app.contents.menuController.rivalCarIndex].clone();
     aiCar.scale.set(6, 6, 6);
     aiCar.position.set(-15, -20, 25);
     this.menu.add(aiCar);

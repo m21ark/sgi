@@ -369,12 +369,12 @@ export class MenuController {
     );
 
     // select randomly a car index that is not carIndex from 0 to 2
-    let rivalCarIndex = Math.floor(Math.random() * 10) % 3;
-    while (rivalCarIndex === this.carIndex) {
-      rivalCarIndex = Math.floor(Math.random() * 10) % 3;
+    this.rivalCarIndex = Math.floor(Math.random() * 10) % 3;
+    while (this.rivalCarIndex === this.carIndex) {
+      this.rivalCarIndex = Math.floor(Math.random() * 10) % 3;
     }
 
-    this.app.contents.AICar.addAICar(this.app.scene, rivalCarIndex);
+    this.app.contents.AICar.addAICar(this.app.scene, this.rivalCarIndex);
 
     // Calculate rotation to align the car to the next point
     let direction = new THREE.Vector3().subVectors(nextPosition, position);
