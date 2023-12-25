@@ -22,6 +22,7 @@ export class MyContents {
     this.showCheckPoints = false;
     this.controlPoints = [];
     this.moveCar = false;
+    this.showHitboxes = false;
     this.showAIKeyPoints = false;
     this.hasGameStarted = false;
     this.numLaps = 3;
@@ -412,7 +413,7 @@ export class MyContents {
     });
   }
 
-  toggleCountDown() {
+  triggerCountDown() {
     this.startCountdown();
   }
 
@@ -425,6 +426,30 @@ export class MyContents {
       this.sceneParser.checkpoints.forEach((checkpoint) => {
         checkpoint.material.visible = this.showCheckPoints;
       });
+    }
+  }
+
+  toogleSHowHitboxes() {
+    // Hitboxes for obstacles and powerups
+    this.hitabbleObjs.forEach((obj) => {
+      if (this.showHitboxes) {
+        obj.bboxMesh = new THREE.Box3Helper(obj.bbox, 0x00ff00);
+        this.app.scene.add(obj.bboxMesh);
+      } else this.app.scene.remove(obj.bboxMesh);
+    });
+
+    // Hitbox for  AI car and player
+    if (this.showHitboxes) {
+      this.AICar.aiBBMesh = new THREE.Box3Helper(this.AICar.aiBB, 0x00ff00);
+      this.app.scene.add(this.AICar.aiBBMesh);
+      this.playerCam.getPlayer().carBBMesh = new THREE.Box3Helper(
+        this.playerCam.getPlayer().carBB,
+        0x00ff00
+      );
+      this.app.scene.add(this.playerCam.getPlayer().carBBMesh);
+    } else {
+      this.app.scene.remove(this.AICar.aiBBMesh);
+      this.app.scene.remove(this.playerCam.getPlayer().carBBMesh);
     }
   }
 }

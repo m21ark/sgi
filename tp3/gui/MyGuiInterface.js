@@ -59,7 +59,14 @@ class MyGuiInterface {
         this.contents.toogleCheckpointVisibility();
       });
 
-    utisFolder.add(this.contents, "toggleCountDown").name("toggleCountDown");
+    utisFolder
+      .add(this.contents, "showHitboxes", false)
+      .name("showHitboxes")
+      .onChange(() => {
+        this.contents.toogleSHowHitboxes();
+      });
+
+    utisFolder.add(this.contents, "triggerCountDown").name("triggerCountDown");
     utisFolder.add(this.contents, "triggerPodium").name("triggerPodium");
 
     // ==================================================================
@@ -67,8 +74,8 @@ class MyGuiInterface {
     const debugCameraFolder = utisFolder.addFolder("Debug Camera");
     const debugTarget = this.contents.debugCam.player.position;
     debugCameraFolder.add(debugTarget, "x", -1000, 1000);
-    debugCameraFolder.add(debugTarget, "y", -1000, 1000);
-    debugCameraFolder.add(debugTarget, "z", -1000, 1000);
+    debugCameraFolder.add(debugTarget, "y", -400, 400);
+    debugCameraFolder.add(debugTarget, "z", -400, 400);
   }
 }
 
