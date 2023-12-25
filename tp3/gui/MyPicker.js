@@ -24,12 +24,19 @@ export class MyPicker {
     document.addEventListener("pointerdown", this.onPointerDown.bind(this));
     document.addEventListener("pointerup", this.pointerUP.bind(this));
 
+    const geometry = new THREE.CircleGeometry(5, 10);
+    const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+    this.circle = new THREE.Mesh(geometry, material);
+    this.circle.rotation.x += Math.PI / 2; // Rotate the circle
+    this.circle.visible = false;
+    this.circle.name = "POINTER";
     this.updateSelectedLayer();
   }
 
   setActiveMenu(menu) {
     this.menu = menu;
     this.app = menu.app;
+    this.app.scene.add(this.circle);
   }
 
   clearMenu() {
@@ -77,7 +84,8 @@ export class MyPicker {
     if (this.app.activeCameraName === "TopCamera") {
       this.app.audio.playSound("menuSelect");
 
-      if (this.selectedObs === "") return;
+      if (this.selectedObs === "" && this.selectedObs == undefined) return;
+      this.circle.visible = false;
 
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -140,7 +148,7 @@ export class MyPicker {
     if (intersects.length > 0) {
       let obj = intersects[0].object;
 
-      // in garage mode or top camera mode for obstacles
+      // in garage mode for obstacles
       if (this.selectedLayer == 0) {
         // check the first object that has type Sprite
         obj = intersects.find(
@@ -182,7 +190,8 @@ export class MyPicker {
     if (!this.menu) return;
     if (
       this.app.activeCameraName !== "MenuCamera" &&
-      this.app.activeCameraName !== "Garage"
+      this.app.activeCameraName !== "Garage" &&
+      this.app.activeCameraName !== "TopCamera"
     )
       return;
 
@@ -203,6 +212,19 @@ export class MyPicker {
 
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
+
+    if (this.app.activeCameraName == "TopCamera" && this.selectedObs != "" && this.selectedObs != undefined) {
+      // Put a circle around the mouse
+      const mouse = new THREE.Vector2();
+      mouse.x = this.raycaster.ray.origin.x;
+      mouse.y = this.raycaster.ray.origin.y - 30;
+      mouse.z = this.raycaster.ray.origin.z;
+
+
+      this.circle.position.set(mouse.x, mouse.y, mouse.z);
+
+
+    }
 
     // 4. picking helper (change color of first intersected object)
     this.pickingHelper(intersects, this.pickingHoverColor);
@@ -237,7 +259,8 @@ export class MyPicker {
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
 
     // 4. picking helper (change color of first intersected object)
-    this.pickingHelper(intersects, this.pickingClickColor);
+    if (this.app.activeCameraName !== "TopCamera")
+      this.pickingHelper(intersects, this.pickingClickColor);
 
     // if there are selected objects
     if (intersects.length > 0) {
@@ -251,11 +274,12 @@ export class MyPicker {
 
         if (this.app.activeCameraName === "TopCamera") {
           // is top camera mode for obstacles pick & drop
-          console.log(intersects);
           if (obj == undefined || obj.object == undefined)
             this.selectedObs = "";
-          else this.selectedObs = obj.object.name;
-          console.log(this.selectedObs);
+          else {
+            this.selectedObs = obj.object.name;
+            this.circle.visible = true;
+          };
           return;
         }
 

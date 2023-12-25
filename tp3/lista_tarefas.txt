@@ -7,17 +7,18 @@ MEdio:
     - atualizar time efeito powerup / obstaculo na HUD 
 
 facil:
-    - tv lagada
     - garage door doesnt open on new round
     - dropdown menu não aparece em hard na pista 1 (mas so as vezes? e as vezes o dropdown buga e n funciona). numero de obstaculos a dar drop deve ser influenciado pela dificuldade (?) 
     - dropdown devia mostrar o item a arrastar e depois na posicao q se largou (e tirar da pista 1 os default obstaculos q tinhamos posto)
     - rodas estão mto estranhas. rodam bue pouco e apenas qnd se acelera. se estivermos com vel constate estao paradas. tmb não estao a virar para os lados as da frente e acho q era suposto
     - escolha aleatoria do carro AI pelos carros q sobram e não os q ja foram escolhidos ( e aparecer o correto no podium)
     - indicar visualmente com texto o powerup/ obstaculo q se apanhou
-    - keyframe animacao ser iterpolacao cubica
     - adicionar toggle para a TV (e para a agua se achares necessario. no meu pc (do marco) não é preciso)
     - carro AI começa mto rapido e dps abranda mto perto da meta (e da uma volta estranha junto à meta)
 
+
+    - tv lagada
+    - keyframe animacao ser iterpolacao cubica
 
 LATER:
 - Ver todos os TODO
