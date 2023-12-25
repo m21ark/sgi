@@ -8,7 +8,6 @@ MEdio:
 
 facil:
     - garage door doesnt open on new round
-    - dropdown menu não aparece em hard na pista 1 (mas so as vezes? e as vezes o dropdown buga e n funciona). numero de obstaculos a dar drop deve ser influenciado pela dificuldade (?) 
     - dropdown devia mostrar o item a arrastar e depois na posicao q se largou (e tirar da pista 1 os default obstaculos q tinhamos posto)
     - rodas estão mto estranhas. rodam bue pouco e apenas qnd se acelera. se estivermos com vel constate estao paradas. tmb não estao a virar para os lados as da frente e acho q era suposto
     - escolha aleatoria do carro AI pelos carros q sobram e não os q ja foram escolhidos ( e aparecer o correto no podium)
@@ -18,6 +17,7 @@ facil:
 
 
     - tv lagada
+    - dropdown menu não aparece em hard na pista 1 (mas so as vezes? e as vezes o dropdown buga e n funciona). numero de obstaculos a dar drop deve ser influenciado pela dificuldade (?) 
     - keyframe animacao ser iterpolacao cubica
 
 LATER:

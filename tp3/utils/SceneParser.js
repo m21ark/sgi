@@ -84,6 +84,7 @@ export class SceneParser {
 
     this.trees = [];
     this.lake = null;
+    this.indexLastObj = 0;
   }
 
   async readJSON(filePath) {
@@ -202,20 +203,31 @@ export class SceneParser {
     this.addTreesCircle(group);
     this.gg = [];
     this.hitObs = [];
+    this.groupp = group;
 
     return group;
   }
 
-  addObstacle(pos, name) {
+  addNextObstacleToGroup() {
+    if (this.indexLastObj >= this.gg.length) return;
+    const obstacleMesh = this.gg[this.indexLastObj];
+    this.groupp.add(obstacleMesh);
+    // add hitobbj to hittable objs
+    this.hitabbleObjs.push(this.hitObs[this.indexLastObj]);
+    this.indexLastObj++;
+  }
+
+
+  addObstacle(pos, name, difficulty) {
     const obstacleMesh = this.createObstacle(pos.x, pos.z);
     obstacleMesh.name = name;
     let hitBB = new THREE.Box3().setFromObject(obstacleMesh);
     hitBB.position = obstacleMesh.position;
     // create the obstacle object
-    let obstacleObj = name == "Direction"? new MyObstacle(0,0,0,true) :new MyObstacle();
+    let obstacleObj = name == "Direction" ? new MyObstacle(2, 0, 0, true) : new MyObstacle();
     obstacleObj.type = SceneParser.ObjectType.OBSTACLE;
     obstacleObj.setBBox(hitBB);
-    
+
     this.gg.push(obstacleMesh);
     this.hitObs.push(obstacleObj);
 

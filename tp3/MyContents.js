@@ -181,8 +181,13 @@ export class MyContents {
 
         // Play sounds
         if (this.hasGameStarted) {
-          if (hitabble.type == "powerup") this.app.audio.playSound("powerup");
-          else this.app.audio.playSound("obstacle");
+          if (hitabble.type == "powerup") {
+            this.app.contents.sceneParser.addNextObstacleToGroup();
+            this.app.audio.playSound("powerup");
+          }
+          else {
+            this.app.audio.playSound("obstacle");
+          }
         }
 
         return true;
