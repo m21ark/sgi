@@ -47,7 +47,7 @@ export class MyMenu {
   }
 
   addText(text, color = "0xffffff") {
-    this.addButton(text, () => {}, null, false, color);
+    this.addButton(text, () => { }, null, false, color);
   }
 
   setTitle(title) {
@@ -122,9 +122,9 @@ export class MyMenu {
         button.useBg
           ? material
           : new THREE.MeshBasicMaterial({
-              transparent: true,
-              opacity: 0,
-            })
+            transparent: true,
+            opacity: 0,
+          })
       );
       let fsize = 24;
       let midWidth = this.textWriter.getWidth(button.text, fsize);
@@ -188,14 +188,12 @@ export class MyMenu {
   handleObstacleAdd(pos, name) {
     // Che if pos is clone to any of the trackPoints
     const trackPoints = this.app.contents.sceneParser.trackPoints;
-    console.log("TrackPoints: " + trackPoints.length);
-    console.log(pos);
     pos.y = 0.1;
     for (let i = 0; i < trackPoints.length; i++) {
-
       if (trackPoints[i].distanceTo(pos) < (this.app.contents.sceneParser.TRACK_SIZE + 3) / 2) {
-        console.log("Added obstacle at: " + trackPoints[i]);
-        this.app.contents.menuController.gotoMenu("carSelect");
+        if (this.app.contents.sceneParser.addObstacle(pos, name)) {
+          this.app.contents.menuController.gotoMenu("carSelect");
+        }
         return;
       }
     }

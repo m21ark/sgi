@@ -25,7 +25,7 @@ export class MyPicker {
     document.addEventListener("pointerup", this.pointerUP.bind(this));
 
     const geometry = new THREE.CircleGeometry(5, 10);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
     this.circle = new THREE.Mesh(geometry, material);
     this.circle.rotation.x += Math.PI / 2; // Rotate the circle
     this.circle.visible = false;
@@ -84,7 +84,7 @@ export class MyPicker {
     if (this.app.activeCameraName === "TopCamera") {
       this.app.audio.playSound("menuSelect");
 
-      if (this.selectedObs === "" && this.selectedObs == undefined) return;
+      if (this.selectedObs === "" || this.selectedObs == undefined) return;
       this.circle.visible = false;
 
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -94,6 +94,7 @@ export class MyPicker {
       this.raycaster.setFromCamera(this.pointer, this.app.cameras["TopCamera"]);
       // the next function should be called on the up event
       this.menu.handleObstacleAdd(this.raycaster.ray.origin, this.selectedObs);
+      this.selectedObs = "";
       return;
     }
 

@@ -189,6 +189,8 @@ export class SceneParser {
       group.add(powerupMesh);
     });
 
+    this.powerupSize = json.powerups.length;
+
     // ================ TREES =================
 
     json.trees.forEach((tree) => {
@@ -198,8 +200,26 @@ export class SceneParser {
     });
 
     this.addTreesCircle(group);
+    this.gg = [];
+    this.hitObs = [];
 
     return group;
+  }
+
+  addObstacle(pos, name) {
+    const obstacleMesh = this.createObstacle(pos.x, pos.z);
+    obstacleMesh.name = name;
+    let hitBB = new THREE.Box3().setFromObject(obstacleMesh);
+    hitBB.position = obstacleMesh.position;
+    // create the obstacle object
+    let obstacleObj = name == "Direction"? new MyObstacle(0,0,0,true) :new MyObstacle();
+    obstacleObj.type = SceneParser.ObjectType.OBSTACLE;
+    obstacleObj.setBBox(hitBB);
+    
+    this.gg.push(obstacleMesh);
+    this.hitObs.push(obstacleObj);
+
+    return this.gg.length === this.powerupSize * 3;
   }
 
   addGarage(group) {
