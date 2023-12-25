@@ -183,9 +183,11 @@ export class MyContents {
         if (this.hasGameStarted) {
           if (hitabble.type == "powerup") {
             this.app.contents.sceneParser.addNextObstacleToGroup();
+            this.gameImpact("Powerup!", hitabble.timeEffect);
             this.app.audio.playSound("powerup");
           }
           else {
+            this.gameImpact("Obstacle!", hitabble.timeEffect);
             this.app.audio.playSound("obstacle");
           }
         }
@@ -278,6 +280,25 @@ export class MyContents {
     document.body.appendChild(endSMS);
     await new Promise((resolve) => setTimeout(resolve, 3000));
     document.body.removeChild(endSMS);
+  }
+
+  async gameImpact(message, duration = 3) {
+
+    const impactElement = document.createElement("div");
+    impactElement.id = "CountDown";
+    impactElement.innerText = message;
+    document.body.appendChild(impactElement);
+    new Promise((resolve) => setTimeout(resolve, 3000));
+    
+    const impactInterval = setInterval(() => {
+      duration -= 0.5;
+      if (duration > 0) impactElement.innerText = duration.toFixed(1);
+      else if (duration == 0) {
+        clearInterval(impactInterval);
+        document.body.removeChild(impactElement);
+      }
+    }, 500);
+
   }
 
   async startCountdown() {

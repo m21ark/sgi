@@ -231,7 +231,7 @@ export class SceneParser {
     this.gg.push(obstacleMesh);
     this.hitObs.push(obstacleObj);
 
-    return this.gg.length === this.powerupSize * 3;
+    return this.gg.length === this.powerupSize * difficulty;
   }
 
   addGarage(group) {

@@ -191,7 +191,8 @@ export class MyMenu {
     pos.y = 0.1;
     for (let i = 0; i < trackPoints.length; i++) {
       if (trackPoints[i].distanceTo(pos) < (this.app.contents.sceneParser.TRACK_SIZE + 3) / 2) {
-        if (this.app.contents.sceneParser.addObstacle(pos, name)) {
+        let difficulty = this.app.contents.menuController.getDifficulty();
+        if (this.app.contents.sceneParser.addObstacle(pos, name, difficulty)) {
           this.app.contents.menuController.gotoMenu("carSelect");
         }
         return;
