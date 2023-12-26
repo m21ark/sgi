@@ -240,6 +240,9 @@ export class MyContents {
     const difficulty = this.menuController.getDifficulty();
     this.menuController.updateEndMenu(won, myTime, aiTime, difficulty);
 
+    this.app.MyHUD.resetTime();
+    this.app.MyHUD.setLaps(1, this.numLaps);
+
     // wait 2s before showing the end menu
     setTimeout(() => {
       this.menuController.gotoMenu("end");

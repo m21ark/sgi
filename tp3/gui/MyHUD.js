@@ -77,6 +77,11 @@ export class MyHUD {
     this.speedBarElement.style.color = "#000"; // Adjust the color of the speed number
   }
 
+  resetTime() {
+    this.clock = new THREE.Clock();
+    this.timeElement.innerHTML = "Time: 0.00 s";
+  }
+
   getTime() {
     return parseFloat(this.timeElement.innerHTML.split(" ")[1]);
   }
