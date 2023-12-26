@@ -73,7 +73,7 @@ class MyGuiInterface {
 
     const debugCameraFolder = utisFolder.addFolder("Debug Camera");
     const debugTarget = this.contents.debugCam.player.position;
-    debugCameraFolder.add(debugTarget, "x", -1000, 1000);
+    debugCameraFolder.add(debugTarget, "x", -2000, 400);
     debugCameraFolder.add(debugTarget, "y", -400, 400);
     debugCameraFolder.add(debugTarget, "z", -400, 400);
   }
