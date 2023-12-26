@@ -251,6 +251,7 @@ export class MyMenu {
         if (this.app.contents.myReader.addObstacle(pos, name, difficulty)) {
           this.app.contents.menuController.gotoMenu("carSelect");
         }
+        this.app.contents.menuController.decrementNumber();
         return true;
       }
     }

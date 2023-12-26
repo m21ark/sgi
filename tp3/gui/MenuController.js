@@ -103,8 +103,8 @@ export class MenuController {
         this.currentMenu = null;
         console.log(
           "Camera '" +
-            menu +
-            "' option not found. Using default perspective camera"
+          menu +
+          "' option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
     }
@@ -276,7 +276,36 @@ export class MenuController {
     group.add(direction);
     group.add(spritey);
 
+    this.toDropNumber = this.app.contents.myReader.difficultyObjs(this.difficulty);
+    this.updateNumber();
+
     this.app.scene.add(group);
+  }
+
+  decrementNumber() {
+    console.log("decrementing");
+    if (this.toDropNumber > 0) {
+      this.toDropNumber--;
+      this.updateNumber();
+    }
+  }
+
+  updateNumber() {
+    if (this.numberTexture) this.app.scene.remove(this.numberTexture);
+    this.numberTexture = TextSpriteDraw.makeTextSprite(this.toDropNumber,
+      {
+        fontsize: 145,
+        fontface: "Arial",
+        backgroundColor: { r: 0, g: 0, b: 0, a: 0.0 },
+        textColor: { r: 0, g: 0, b: 0, a: 1.0 },
+      }
+    );
+
+    this.numberTexture.position.set(420, 100, 125);
+
+    this.numberTexture.name = "Number";
+
+    this.app.scene.add(this.numberTexture);
   }
 
   /**
