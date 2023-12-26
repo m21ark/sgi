@@ -8,6 +8,7 @@ export class Television {
     this.height = 20;
 
     this.render = render;
+    this.lastUpdate = Date.now();
 
     this.camera.position.z = 5;
     this.depthTexture = new THREE.DepthTexture(
@@ -25,8 +26,6 @@ export class Television {
     this.renderTarget.depthTexture.format = THREE.DepthFormat;
     this.renderTarget.depthTexture.type = THREE.UnsignedShortType;
 
-    // Create a plane geometry to represent the television screen
-    const geometry = new THREE.PlaneGeometry(this.width, this.height, 300, 300);
     // Create a shader material
     this.material = new THREE.ShaderMaterial({
       vertexShader: `
@@ -62,7 +61,7 @@ export class Television {
       
           // Conditionally add or subtract based on depth value in the direction of the normal
           
-          newPosition.xyz -= normal * depth * 4.0;
+          newPosition.xyz -= normal * depth * 3.0;
           
       
           // Set the transformed position
@@ -98,64 +97,67 @@ export class Television {
       side: THREE.DoubleSide, // Set material to double-sided
     });
 
+    // Create a plane geometry to represent the television screen
+    const geometry = new THREE.PlaneGeometry(
+      this.width - 8,
+      this.height - 2.5,
+      300,
+      300
+    );
 
     this.group = new THREE.Group();
 
-    this.screen1 = new THREE.Mesh(geometry, this.material);
-    this.screen1.position.x = 0;
-    this.screen1.position.y = 0;
-    this.screen1.position.z = this.width;
-    this.group.add(this.screen1);
-    
-    this.screen2 = new THREE.Mesh(geometry, this.material);
-    this.screen2.scale.set(-1, 1, -1);
-    this.group.add(this.screen2);
+    let tvMaterial = new THREE.MeshBasicMaterial({
+      color: 0x222222,
+      map: new THREE.TextureLoader().load("scene/textures/metal.jpg"),
+    });
 
-    this.screen3 = new THREE.Mesh(geometry, this.material);
-    this.screen3.position.x = -this.width / 2;
-    this.screen3.position.y = 0;
-    this.screen3.position.z = this.width / 2;
-    this.screen3.rotation.y = Math.PI / 2;
-    this.screen3.scale.set(-1, 1, -1);
-    this.group.add(this.screen3);
-
-    this.screen4 = new THREE.Mesh(geometry, this.material);
-    this.screen4.position.x = this.width / 2;
-    this.screen4.position.y = 0;
-    this.screen4.position.z = this.width / 2;
-    this.screen4.rotation.y = Math.PI / 2;
-    this.group.add(this.screen4);
+    this.screen = new THREE.Mesh(geometry, this.material);
+    this.screen.position.x = 0;
+    this.screen.position.y = 0;
+    this.screen.position.z = 12;
+    this.screen.rotation.y = Math.PI;
+    this.group.add(this.screen);
 
     // post
     this.post = new THREE.Mesh(
       new THREE.CylinderGeometry(0.5, 0.5, 30, 32),
-      new THREE.MeshBasicMaterial({ color: 0x000000 })
+      tvMaterial
     );
     this.post.position.x = 0;
     this.post.position.y = -16;
     this.post.position.z = 15;
 
-    let geo = new THREE.BoxGeometry(30, 0.5, 30);
-    // square
-    this.square = new THREE.Mesh(
-      geo,
-      new THREE.MeshBasicMaterial({ color: 0x000000 })
-    );
-    this.square.position.x = 0;
-    this.square.position.y = -this.height / 2 - 0.25;
-    this.square.position.z = 15;
+    let cube = new THREE.BoxGeometry(26, 20, 2);
+    let material = tvMaterial;
+    this.cube = new THREE.Mesh(cube, material);
+    this.cube.position.z = 15;
 
-    this.square2 = new THREE.Mesh(
-      geo,
-      new THREE.MeshBasicMaterial({ color: 0x000000 })
-    );
-    this.square2.position.x = 0;
-    this.square2.position.y = this.height / 2 + 0.25;
-    this.square2.position.z = 15;
+    // side cubes for the screen
+    let sideCube = new THREE.BoxGeometry(2, 20, 2);
+    let sideCube1 = new THREE.Mesh(sideCube, material);
+    let sideCube2 = new THREE.Mesh(sideCube, material);
+    sideCube1.position.x = 12;
+    sideCube1.position.z = 13;
+    sideCube2.position.x = -12;
+    sideCube2.position.z = 13;
 
-    this.group.add(this.square2);
-    this.group.add(this.square);
+    // top and bottom cubes for the screen
+    let topCube = new THREE.BoxGeometry(26, 2, 2);
+    let topCube1 = new THREE.Mesh(topCube, material);
+    let topCube2 = new THREE.Mesh(topCube, material);
+    topCube1.position.y = 10;
+    topCube1.position.z = 13;
+    topCube2.position.y = -10;
+    topCube2.position.z = 13;
+
+    this.group.add(sideCube1);
+    this.group.add(sideCube2);
+    this.group.add(topCube1);
+    this.group.add(topCube2);
+
     this.group.add(this.post);
+    this.group.add(this.cube);
 
     this.group.position.x = 120;
     this.group.position.y = 30;
@@ -166,8 +168,11 @@ export class Television {
     this.scene.add(this.group);
   }
 
-  updateRenderTarget(cam) {
-    // this.camera = cam;
+  updateRenderTarget() {
+    if (this.lastUpdate + 500 > Date.now()) return;
+
+    this.lastUpdate = Date.now();
+
     this.render.setRenderTarget(this.renderTarget);
     this.render.render(this.scene, this.camera);
 
@@ -175,7 +180,7 @@ export class Television {
     this.material.uniforms.renderBuffer.value = this.renderTarget.depthTexture;
     this.material.uniforms.cameraNear.value = this.camera.near;
     this.material.uniforms.cameraFar.value = this.camera.far;
-    
+
     this.render.setRenderTarget(null);
     this.material.needsUpdate = true;
   }
