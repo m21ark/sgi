@@ -62,13 +62,11 @@ export class MyPowerUp {
     this.invulnerable = Math.random() < 0.3;
 
     if (this.invulnerable) {
-      
       player.invulnerable = true;
 
       setTimeout(() => {
         player.invulnerable = false;
       }, this.timeEffect * 1000);
-
 
       return;
     }
@@ -79,5 +77,4 @@ export class MyPowerUp {
       player.velMultiplyer = 1;
     }, this.timeEffect * 1000);
   }
-  
 }

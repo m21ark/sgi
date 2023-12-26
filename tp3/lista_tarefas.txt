@@ -1,5 +1,0 @@
-LATER:
-- Ver todos os TODO
-- fazer documentacao
-- fazer readme com prints
-- fazer video (?)

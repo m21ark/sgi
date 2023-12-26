@@ -61,7 +61,6 @@ export class MyContents {
       this.app.renderer
     );
 
-
     // ============== OUTDOOR =================
 
     this.outdoor = new MyOutdoor(this.app);
@@ -69,6 +68,8 @@ export class MyContents {
     this.outdoor.rotateY(Math.PI / 2);
     this.outdoor.scale.set(0.5, 0.5, 0.5);
     this.app.scene.add(this.outdoor);
+
+    this.loadTrack(1);
 
     this.animate();
   }
@@ -155,7 +156,7 @@ export class MyContents {
       let player = this.playerCam.getPlayer();
       player.carBB.position = player.position.clone();
       player.carBB
-        .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0])) // TODO: NOT 0 now
+        .copy(new THREE.Box3().setFromObject(MyCar.availableCars.children[0]))
         .applyMatrix4(player.matrixWorld);
       if (this.AICar.aiBB == undefined) return;
       this.AICar.aiBB
@@ -390,9 +391,7 @@ export class MyContents {
       SceneParser.BlockShaders2.uniforms.time.value += 0.05;
     }
 
-    // TODO: this gives a ton of warnings
-    if (this.showTv)
-      this.tv.updateRenderTarget(this.app.activeCamera);
+    if (this.showTv) this.tv.updateRenderTarget();
 
     // UPDATE GARAGE ANIMATION
     MyGarage.update();
