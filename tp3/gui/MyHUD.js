@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 /**
  * Represents a HUD (Heads-Up Display) for a game.
+ * @class
  */
 export class MyHUD {
   /**
@@ -220,6 +221,7 @@ export class MyHUD {
 
 /**
  * Represents a debug HUD for displaying coordinates.
+ * @class
  */
 export class MyDebugHUD {
   /**

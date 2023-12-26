@@ -1,16 +1,32 @@
 import * as THREE from "three";
 
+/**
+ * Represents a collection of fireworks.
+ * @class
+ */
 export class MyFireworks {
+  /**
+   * Creates an instance of MyFireworks.
+   * @param {object} app - The application object.
+   * @param {object} [pos=null] - The initial position of the fireworks.
+   */
   constructor(app, pos = null) {
     this.app = app;
     this.fireworks = [];
     this.pos = pos;
   }
 
+  /**
+   * Sets the position of the fireworks.
+   * @param {object} pos - The new position of the fireworks.
+   */
   setPos(pos) {
     this.pos = pos;
   }
 
+  /**
+   * Resets the fireworks collection.
+   */
   reset() {
     this.fireworks.forEach((firework) => {
       firework.remove();
@@ -18,7 +34,11 @@ export class MyFireworks {
     this.fireworks = [];
   }
 
-  update(prob = 0.4) {
+  /**
+   * Updates the fireworks collection.
+   * @param {number} [prob=0.3] - The probability of creating a new firework.
+   */
+  update(prob = 0.25) {
     if (this.pos === null) return;
     if (Math.random() < prob)
       this.fireworks.push(new MyFirework(this.app, this.pos));
@@ -31,7 +51,18 @@ export class MyFireworks {
 
 // ================================================================================
 
+/**
+ * Represents a firework object.
+ * @class
+ */
 class MyFirework {
+  /**
+   * Creates a new instance of MyFirework.
+   * @constructor
+   * @param {object} app - The application object.
+   * @param {object} startPos - The starting position of the firework.
+   * @param {boolean} [isFragment=false] - Indicates if the firework is a fragment.
+   */
   constructor(app, startPos, isFragment = false) {
     this.app = app;
 
@@ -75,6 +106,9 @@ class MyFirework {
     else this.radiate();
   }
 
+  /**
+   * Removes the firework and its fragments from the scene.
+   */
   remove() {
     // remove self
     this.app.scene.remove(this.point);
@@ -86,6 +120,11 @@ class MyFirework {
     });
   }
 
+  /**
+   * Calculates the highest point reached by the firework based on its initial velocity.
+   * @param {number} vel - The initial velocity of the firework.
+   * @returns {number} - The highest point reached by the firework.
+   */
   getHeighestPoint(vel) {
     // v^2 = v0^2 + 2*a*d
     // d = (v^2 - v0^2)/(2*a)
@@ -93,6 +132,10 @@ class MyFirework {
     return d;
   }
 
+  /**
+   * Updates the physics of the firework.
+   * @param {number} time - The elapsed time.
+   */
   updatePhysics(time) {
     // x = x0 + v0*t + 0.5*a*t^2
     // v = v0 + a*t
@@ -103,14 +146,30 @@ class MyFirework {
     this.position = [x, y, z];
   }
 
+  /**
+   * Sets the attribute of a geometry.
+   * @param {object} geom - The geometry object.
+   * @param {string} attr - The attribute name.
+   * @param {Array} value - The attribute value.
+   */
   geomSetAttribute(geom, attr, value) {
     geom.setAttribute(attr, new THREE.Float32BufferAttribute(value, 3));
   }
 
+  /**
+   * Gets the attribute of a geometry.
+   * @param {object} geom - The geometry object.
+   * @param {string} attr - The attribute name.
+   * @returns {Array} - The attribute value.
+   */
   geomGetAttribute(geom, attr) {
     return geom.getAttribute(attr).array;
   }
 
+  /**
+   * Creates the geometry for the firework.
+   * @returns {object} - The created geometry.
+   */
   createGeometry() {
     const vertices = [...this.position];
     const color = this.getRandomVibrantColor();
@@ -120,6 +179,9 @@ class MyFirework {
     return geometry;
   }
 
+  /**
+   * Launches the firework.
+   */
   launch() {
     // Calculate initial velocity for launch
     this.initVel = [
@@ -137,6 +199,10 @@ class MyFirework {
     this.app.scene.add(this.point);
   }
 
+  /**
+   * Explodes the firework into fragments.
+   * @param {Array} originPos - The position of the explosion.
+   */
   explode(originPos) {
     this.hasExploded = true;
     this.app.scene.remove(this.point);
@@ -148,6 +214,9 @@ class MyFirework {
     }
   }
 
+  /**
+   * Radiates the firework as a fragment.
+   */
   radiate() {
     // Calculate initial velocity for launch
     this.initVel = [
@@ -163,6 +232,9 @@ class MyFirework {
     this.app.scene.add(this.point);
   }
 
+  /**
+   * Updates the firework's position and behavior.
+   */
   fireworkUpdate() {
     if (!this.hasExploded) {
       const time = this.clock.getElapsedTime();
@@ -183,6 +255,9 @@ class MyFirework {
     }
   }
 
+  /**
+   * Updates the fragment's position and behavior.
+   */
   fragmentUpdate() {
     // update physics
     const time = this.clock.getElapsedTime();
@@ -203,11 +278,18 @@ class MyFirework {
     }
   }
 
+  /**
+   * Updates the firework or fragment.
+   */
   update() {
     if (this.isFragment) this.fragmentUpdate();
     else this.fireworkUpdate();
   }
 
+  /**
+   * Generates a random vibrant color.
+   * @returns {Array} - The RGB color values.
+   */
   getRandomVibrantColor() {
     const h = Math.random();
     const s = 1;

@@ -5,7 +5,7 @@ import { MyAICar } from "./objs/MyAICar.js";
 import { SceneParser } from "./utils/SceneParser.js";
 import { MenuController } from "./gui/MenuController.js";
 import { MyCar } from "./objs/MyCar.js";
-import { Television } from "./objs/Television.js";
+import { MyTV } from "./objs/MyTV.js";
 import { XMLLoader } from "./utils/XMLLoader.js";
 import { MyGarage } from "./objs/MyGarage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
@@ -55,7 +55,7 @@ export class MyContents {
 
     // ============== TV =================
 
-    this.tv = new Television(
+    this.tv = new MyTV(
       this.app.scene,
       this.app.cameras["FirstPerson"],
       this.app.renderer
@@ -68,8 +68,6 @@ export class MyContents {
     this.outdoor.rotateY(Math.PI / 2);
     this.outdoor.scale.set(0.5, 0.5, 0.5);
     this.app.scene.add(this.outdoor);
-
-    this.loadTrack(1);
 
     this.animate();
   }
@@ -188,7 +186,11 @@ export class MyContents {
       if (carBB.intersectsBox(hitabble.bbox)) {
         // if the player has already collided with this object in the last 2 seconds, ignore it
         if (!hitabble.hadNewCollision()) continue;
-        if (this.playerCam.getPlayer().invulnerable && hitabble.type != "powerup") continue;
+        if (
+          this.playerCam.getPlayer().invulnerable &&
+          hitabble.type != "powerup"
+        )
+          continue;
 
         // give the player the effect of the hitabble object
         hitabble.effectPlayer(this.playerCam.getPlayer());
@@ -202,7 +204,7 @@ export class MyContents {
           } else {
             if (hitabble.switchedControls) {
               this.gameImpact("Switched!", hitabble.timeEffect);
-            }else {
+            } else {
               this.gameImpact("Obstacle!", hitabble.timeEffect);
             }
             this.app.audio.playSound("obstacle");

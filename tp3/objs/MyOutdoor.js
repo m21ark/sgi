@@ -1,7 +1,17 @@
 import * as THREE from "three";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 
+/**
+ * Represents a custom outdoor object in a 3D scene.
+ * @class
+ * @extends THREE.Object3D
+ */
 export class MyOutdoor extends THREE.Object3D {
+  /**
+   * Creates an instance of MyOutdoor.
+   * @constructor
+   * @param {App} app - The application object.
+   */
   constructor(app) {
     super();
     this.app = app;
@@ -10,6 +20,9 @@ export class MyOutdoor extends THREE.Object3D {
     this.update(0, 0);
   }
 
+  /**
+   * Initializes the MyOutdoor object by creating the necessary meshes and adding them to the scene.
+   */
   init() {
     this.group = new THREE.Group();
     const loader = new THREE.TextureLoader();
@@ -62,6 +75,11 @@ export class MyOutdoor extends THREE.Object3D {
     this.add(this.group);
   }
 
+  /**
+   * Updates the MyOutdoor object with new time and laps information.
+   * @param {number} time - The time value.
+   * @param {number} laps - The laps value.
+   */
   update(time, laps) {
     // write new text using the existing TextSpriteDraw instance
     const txtG = new THREE.Group();

@@ -1,7 +1,15 @@
 import * as THREE from "three";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
+/**
+ * Represents a MyPicker object.
+ * @class
+ */
+
 export class MyPicker {
+  /**
+   * Creates an instance of MyPicker.
+   */
   constructor() {
     this.raycaster = new THREE.Raycaster();
     this.raycaster.near = 1;
@@ -22,10 +30,13 @@ export class MyPicker {
 
     document.addEventListener("pointermove", this.onPointerMove.bind(this));
     document.addEventListener("pointerdown", this.onPointerDown.bind(this));
-    document.addEventListener("pointerup", this.pointerUP.bind(this));
+    document.addEventListener("pointerup", this.pointerUp.bind(this));
 
     const geometry = new THREE.CircleGeometry(5, 10);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xff0000,
+      side: THREE.DoubleSide,
+    });
     this.circle = new THREE.Mesh(geometry, material);
     this.circle.rotation.x += Math.PI / 2; // Rotate the circle
     this.circle.visible = false;
@@ -33,29 +44,54 @@ export class MyPicker {
     this.updateSelectedLayer();
   }
 
+  /**
+   * Sets the active menu.
+   * @param {Object} menu - The menu object.
+   */
   setActiveMenu(menu) {
     this.menu = menu;
     this.app = menu.app;
     this.app.scene.add(this.circle);
   }
 
+  /**
+   * Clears the active menu.
+   */
   clearMenu() {
     this.menu = null;
     this.app = null;
   }
 
+  /**
+   * Sets the active layer.
+   * @param {number} layer - The layer to set.
+   * @throws {Error} If the layer is not available.
+   */
   setActiveLayer(layer) {
     if (!this.availableLayers.includes(layer))
       throw new Error("Layer not available");
     this.selectedLayer = layer;
   }
 
+  /**
+   * Adds an object to the ignore list.
+   * @param {Object} obj - The object to add.
+   * @returns {Object} The added object.
+   */
   addToIgnoreList(obj) {
     obj.name = "ignore_" + this.notPickableObjIds.length;
     this.notPickableObjIds.push(obj.name);
     return obj;
   }
 
+  /**
+   * Sets the layers of an object.
+   * @param {Object} obj - The object to set the layers for.
+   * @param {string} name - The name of the object.
+   * @param {number} [layer=1] - The layer to set.
+   * @throws {Error} If the layer is not available.
+   * @returns {Object} The object with the updated layers.
+   */
   setObjLayers(obj, name, layer = 1) {
     if (!this.availableLayers.includes(layer))
       throw new Error("Layer not available");
@@ -64,6 +100,11 @@ export class MyPicker {
     return obj;
   }
 
+  /**
+   * Changes the color of an object.
+   * @param {Object} obj - The object to change the color of.
+   * @param {string} color - The color to change to.
+   */
   changeTargetColor(obj, color) {
     if (this.lastPickedObj && this.lastPickedObj.name === obj.name) return;
     else this.app.audio.playSound("menuHover");
@@ -75,12 +116,20 @@ export class MyPicker {
     this.lastPickedObj.material.color.setHex(color);
   }
 
+  /**
+   * Restores the color of the last picked object.
+   */
   restoreTargetColor() {
     if (this.lastPickedObj)
       this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
     this.lastPickedObj = null;
   }
-  pointerUP(event) {
+
+  /**
+   * Handles the pointer up event.
+   * @param {Event} event - The pointer up event.
+   */
+  pointerUp(event) {
     if (this.app.activeCameraName === "TopCamera") {
       this.app.audio.playSound("menuSelect");
 
@@ -93,9 +142,15 @@ export class MyPicker {
       //2. set the picking ray from the camera position and mouse coordinates
       this.raycaster.setFromCamera(this.pointer, this.app.cameras["TopCamera"]);
       // the next function should be called on the up event
-      if (this.menu.handleObstacleAdd(this.raycaster.ray.origin, this.selectedObs)) {
+      if (
+        this.menu.handleObstacleAdd(this.raycaster.ray.origin, this.selectedObs)
+      ) {
         let copyCircle = this.circle.clone();
-        copyCircle.position.set(this.raycaster.ray.origin.x, 100, this.raycaster.ray.origin.z);
+        copyCircle.position.set(
+          this.raycaster.ray.origin.x,
+          100,
+          this.raycaster.ray.origin.z
+        );
         copyCircle.visible = true;
         this.app.contents.sceneParser.groupp.add(copyCircle);
       }
@@ -106,6 +161,11 @@ export class MyPicker {
     this.restoreTargetColor();
   }
 
+  /**
+   * Changes the sprite color of an object.
+   * @param {Object} obj - The object to change the color of.
+   * @param {string} color - The color to change to.
+   */
   changeSpriteColor(obj, color) {
     if (this.lastPickedObj && this.lastPickedObj.material !== undefined)
       this.lastPickedObj.material.color.setHex(this.lastPickedObj.currentHex);
@@ -114,6 +174,12 @@ export class MyPicker {
     this.lastPickedObj.material.color.setHex(color);
   }
 
+  /**
+   * Sets the car sprite color.
+   * @param {Object} obj - The car object.
+   * @param {string} color - The color to set.
+   * @param {Object} parent - The parent object.
+   */
   setCarSpriteColor(obj, color, parent) {
     //remove obj from parent and add a new object
     obj.CAR = parent;
@@ -132,6 +198,9 @@ export class MyPicker {
     parent.add(obj);
   }
 
+  /**
+   * Resets the last car sprite color.
+   */
   resetLastCarSpriteColor() {
     if (this.lastPickedCar) {
       let parent = this.lastPickedCar.parent;
@@ -150,6 +219,11 @@ export class MyPicker {
     }
   }
 
+  /**
+   * Helper function for picking objects.
+   * @param {Array} intersects - The intersected objects.
+   * @param {string} colorChange - The color to change to.
+   */
   pickingHelper(intersects, colorChange) {
     if (intersects.length > 0) {
       let obj = intersects[0].object;
@@ -179,6 +253,9 @@ export class MyPicker {
     }
   }
 
+  /**
+   * Updates the selected layer.
+   */
   updateSelectedLayer() {
     this.raycaster.layers.enableAll();
     if (this.selectedLayer !== "none") {
@@ -187,11 +264,19 @@ export class MyPicker {
     }
   }
 
+  /**
+   * Sets the selected layer.
+   * @param {number} layer - The layer to set.
+   */
   setSelectedLayer(layer) {
     this.selectedLayer = layer;
     this.updateSelectedLayer();
   }
 
+  /**
+   * Handles the pointer move event.
+   * @param {Event} event - The pointer move event.
+   */
   onPointerMove(event) {
     if (!this.menu) return;
     if (
@@ -219,23 +304,28 @@ export class MyPicker {
     //3. compute intersections
     let intersects = this.raycaster.intersectObjects(this.app.scene.children);
 
-    if (this.app.activeCameraName == "TopCamera" && this.selectedObs != "" && this.selectedObs != undefined) {
+    if (
+      this.app.activeCameraName == "TopCamera" &&
+      this.selectedObs != "" &&
+      this.selectedObs != undefined
+    ) {
       // Put a circle around the mouse
       const mouse = new THREE.Vector2();
       mouse.x = this.raycaster.ray.origin.x;
       mouse.y = this.raycaster.ray.origin.y - 30;
       mouse.z = this.raycaster.ray.origin.z;
 
-
       this.circle.position.set(mouse.x, mouse.y, mouse.z);
-
-
     }
 
     // 4. picking helper (change color of first intersected object)
     this.pickingHelper(intersects, this.pickingHoverColor);
   }
 
+  /**
+   * Handles the pointer down event.
+   * @param {Event} event - The pointer down event.
+   */
   onPointerDown(event) {
     if (!this.menu) return;
     if (
@@ -281,7 +371,9 @@ export class MyPicker {
         if (this.app.activeCameraName === "TopCamera") {
           console.log(intersects);
           obj = intersects.find(
-            (intersect) => intersect.object.name === "Direction" || intersect.object.name === "Vel.Drop"
+            (intersect) =>
+              intersect.object.name === "Direction" ||
+              intersect.object.name === "Vel.Drop"
           );
           // is top camera mode for obstacles pick & drop
           if (obj == undefined || obj.object == undefined)
@@ -289,7 +381,7 @@ export class MyPicker {
           else {
             this.selectedObs = obj.object.name;
             this.circle.visible = true;
-          };
+          }
           return;
         }
 

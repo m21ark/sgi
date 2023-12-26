@@ -1,16 +1,31 @@
 import * as THREE from "three";
 
+/**
+ * Represents a smoke effect in a 3D scene.
+ */
 export class MySmoke {
+  /**
+   * Creates a new instance of MySmoke.
+   * @param {App} app - The application object.
+   * @param {THREE.Vector3} pos - The initial position of the smoke.
+   */
   constructor(app, pos = new THREE.Vector3(0, 0, 0)) {
     this.app = app;
     this.smokes = [];
     this.pos = pos;
   }
 
+  /**
+   * Sets the position of the smoke.
+   * @param {THREE.Vector3} pos - The new position of the smoke.
+   */
   setPos(pos) {
     this.pos = pos;
   }
 
+  /**
+   * Resets the smoke effect by removing all smoke particles.
+   */
   reset() {
     this.smokes.forEach((smoke) => {
       smoke.remove();
@@ -18,6 +33,10 @@ export class MySmoke {
     this.smokes = [];
   }
 
+  /**
+   * Updates the smoke effect by adding new smoke particles and updating existing ones.
+   * @param {number} prob - The probability of adding a new smoke particle.
+   */
   update(prob = 0.4) {
     if (this.pos === null) return;
     if (Math.random() < prob)
@@ -31,7 +50,17 @@ export class MySmoke {
 
 // ================================================================================
 
-export class MySmokeParticle {
+/**
+ * Represents a smoke particle in a 3D scene.
+ * @class
+ */
+class MySmokeParticle {
+  /**
+   * Creates a new instance of MySmokeParticle.
+   * @constructor
+   * @param {Object} app - The application object.
+   * @param {Object} startPos - The initial position of the smoke particle.
+   */
   constructor(app, startPos) {
     this.app = app;
 
@@ -49,6 +78,23 @@ export class MySmokeParticle {
     ];
     this.accel = [0, this.gravity, 0];
 
+    this.setMaterial();
+
+    // Utils
+    this.done = false;
+    this.clock = new THREE.Clock();
+
+    // Create geometry
+    const geometry = this.createGeometry();
+    this.point = new THREE.Points(geometry, this.material);
+    this.point.name = "smokeParticle";
+    this.app.scene.add(this.point);
+  }
+
+  /**
+   * Sets the material of the smoke particle.
+   */
+  setMaterial() {
     // random grey color shade
     const shade = THREE.MathUtils.randFloat(0.2, 0.5);
     let color = [shade, shade, shade];
@@ -73,24 +119,21 @@ export class MySmokeParticle {
     });
 
     this.material.size = 0.2;
-
-    // Utils
-    this.done = false;
-    this.clock = new THREE.Clock();
-
-    // Create geometry
-    const geometry = this.createGeometry();
-    this.point = new THREE.Points(geometry, this.material);
-    this.point.name = "smokeParticle";
-    this.app.scene.add(this.point);
   }
 
+  /**
+   * Removes the smoke particle from the scene.
+   */
   remove() {
     // remove self
     this.app.scene.remove(this.point);
     this.done = true;
   }
 
+  /**
+   * Updates the physics of the smoke particle.
+   * @param {number} time - The elapsed time.
+   */
   updatePhysics(time) {
     // x = x0 + v0*t + 0.5*a*t^2
     // v = v0 + a*t
@@ -101,10 +144,20 @@ export class MySmokeParticle {
     this.position = [x, y, z];
   }
 
+  /**
+   * Sets the attribute of the geometry.
+   * @param {Object} geom - The geometry object.
+   * @param {string} attr - The attribute name.
+   * @param {Array} value - The attribute value.
+   */
   geomSetAttribute(geom, attr, value) {
     geom.setAttribute(attr, new THREE.Float32BufferAttribute(value, 3));
   }
 
+  /**
+   * Creates the geometry for the smoke particle.
+   * @returns {Object} The created geometry.
+   */
   createGeometry() {
     const vertices = [...this.position];
     const color = [1, 1, 1]; // White color for smoke
@@ -114,7 +167,10 @@ export class MySmokeParticle {
     return geometry;
   }
 
-  smokeParticleUpdate() {
+  /**
+   * Updates the smoke particle.
+   */
+  update() {
     const time = this.clock.getElapsedTime();
     this.updatePhysics(time);
 
@@ -130,9 +186,5 @@ export class MySmokeParticle {
     if (this.material.opacity <= 0) {
       this.remove();
     }
-  }
-
-  update() {
-    this.smokeParticleUpdate();
   }
 }

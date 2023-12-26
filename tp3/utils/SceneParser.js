@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { ObjectBuilder } from "../builders/ObjectBuilder.js";
-import { MyBillboard } from "../objs/MyBillboard.js";
+import { MyTree } from "../objs/MyTree.js";
 import { CatmullTrack } from "./CatmullTrack.js";
 import { MyGarage } from "../objs/MyGarage.js";
 import { MyCar } from "../objs/MyCar.js";
@@ -403,7 +403,7 @@ export class SceneParser {
   }
 
   createTree(x, y) {
-    let tree = new MyBillboard("assets/trees/", 7);
+    let tree = new MyTree("assets/trees/", 7);
     tree.position.set(x, 6.8, y);
     return tree;
   }

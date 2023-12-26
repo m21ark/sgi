@@ -3,6 +3,7 @@ import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
 /**
  * Represents a custom menu.
+ * @class
  */
 export class MyMenu {
   /**
