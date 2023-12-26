@@ -187,6 +187,7 @@ export class MyContents {
       if (carBB.intersectsBox(hitabble.bbox)) {
         // if the player has already collided with this object in the last 2 seconds, ignore it
         if (!hitabble.hadNewCollision()) continue;
+        if (this.playerCam.getPlayer().invulnerable && hitabble.type != "powerup") continue;
 
         // give the player the effect of the hitabble object
         hitabble.effectPlayer(this.playerCam.getPlayer());
@@ -198,7 +199,11 @@ export class MyContents {
             this.gameImpact("Powerup!", hitabble.timeEffect);
             this.app.audio.playSound("powerup");
           } else {
-            this.gameImpact("Obstacle!", hitabble.timeEffect);
+            if (hitabble.switchedControls) {
+              this.gameImpact("Switched!", hitabble.timeEffect);
+            }else {
+              this.gameImpact("Obstacle!", hitabble.timeEffect);
+            }
             this.app.audio.playSound("obstacle");
           }
         }
