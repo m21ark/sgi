@@ -33,6 +33,14 @@ export class MyCar extends THREE.Object3D {
     return this.currVel == this.getMaxVel();
   }
 
+  rotateFrontWheels(angle) { 
+    const maxRotation = 40 * Math.PI / 180; // Convert 5 degrees to radians
+
+    let frontWheel = this.children[0].children.filter(child => child.name.includes("front"))[0];
+
+    frontWheel.rotation.y = Math.max(-maxRotation, Math.min(maxRotation, angle * 5));
+  }
+
   incRotation() {
     if (this.currVel == 0) return;
     this.rotationSpeed += this.rotationSpeedInc;

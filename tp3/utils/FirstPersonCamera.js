@@ -141,6 +141,8 @@ export class FirstPersonCamera {
     const moveVector = new THREE.Vector3();
     const allowedToMove = this.app.contents.hasGameStarted;
 
+    const angleBefore = this.player.rotation.y
+
     if (allowedToMove) {
       if (!this.keyboard["w"] && !this.keyboard["s"]) this.player.friction();
       if (this.keyboard["w"]) {
@@ -158,7 +160,10 @@ export class FirstPersonCamera {
       new THREE.Vector3(0, 1, 0),
       this.player.rotation.y
     );
+    
+    this.player.rotateFrontWheels(this.player.rotation.y - angleBefore);
 
+  
     // Apply movement to the player position
     moveVector.sub(playerDirection);
     moveVector.normalize().multiplyScalar(this.player.getSpeed());
