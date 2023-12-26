@@ -203,12 +203,22 @@ export class MenuController {
     spritey.position.set(-225, 100, 10);
 
     spritey.name = "Vel.Drop";
+    obstacle.name = "Vel.Drop";
+    group.name = "Vel.Drop";
+    // every child should have a name
+    // change the children polygon0 to Vel.Drop
+    let polygon0 = obstacle.getObjectByName("polygon0");
+    if (polygon0) {
+      polygon0.name = "Vel.Drop";
+    }
+
 
     group.add(obstacle);
     group.add(spritey);
 
     this.app.scene.add(group);
 
+    group = new THREE.Group();
     // create a new obstacle that its call direction and is right after the vel drop
     const direction = obstacleItem.clone();
     direction.scale.set(4, 4, 4);
@@ -223,6 +233,12 @@ export class MenuController {
     });
 
     spritey.name = "Direction";
+    direction.name = "Direction";
+    group.name = "Direction";
+    polygon0 = direction.getObjectByName("polygon0");
+    if (polygon0) {
+      polygon0.name = "Direction";
+    }
 
     spritey.position.set(-225, 100, 150);
 
