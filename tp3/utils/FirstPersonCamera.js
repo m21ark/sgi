@@ -1,7 +1,15 @@
 import * as THREE from "three";
 import { ObjectBuilder } from "../builders/ObjectBuilder.js";
 
+/**
+ * Represents a first-person camera.
+ * @class
+ */
 export class FirstPersonCamera {
+  /**
+   * Creates an instance of FirstPersonCamera.
+   * @param {object} app - The application object.
+   */
   constructor(app) {
     this.app = app;
     this.keyboard = {};
@@ -9,10 +17,19 @@ export class FirstPersonCamera {
     this.addListeners();
   }
 
+  /**
+   * Get the player object.
+   * @returns {object} - The player object.
+   */
   getPlayer() {
     return this.player;
   }
 
+  /**
+   * Defines the player object.
+   * @param {object} [obj=null] - The player object.
+   * @param {number[]} pos - The position of the player object.
+   */
   defineSelfObj(obj = null, pos) {
     // If no object is passed, create a default one
     const geo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
@@ -27,8 +44,10 @@ export class FirstPersonCamera {
     this.app.scene.add(this.player);
   }
 
+  /**
+   * Add event listeners for keyboard events.
+   */
   addListeners() {
-    // Add event listeners for keyboard events
     window.addEventListener("keydown", (event) => {
       this.keyboard[event.key.toLowerCase()] = true;
     });
@@ -37,10 +56,18 @@ export class FirstPersonCamera {
     });
   }
 
+  /**
+   * Normalize an angle in radians.
+   * @param {number} angle - The angle in radians.
+   * @returns {number} - The normalized angle in radians.
+   */
   normalizeRadian(angle) {
     return ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
   }
 
+  /**
+   * Update the camera for flight mode.
+   */
   flightUpdate() {
     const flightSpeed = 0.5;
     const rotationSpeed = 0.05;
@@ -89,12 +116,18 @@ export class FirstPersonCamera {
     this.updateCamera();
   }
 
+  /**
+   * Update the camera.
+   */
   update() {
     if (this.app.activeCameraName === "Debug")
       this.flightUpdate(); // Debug flight camera
     else this.carUpdate(); // Car camera
   }
 
+  /**
+   * Update the camera for car mode.
+   */
   carUpdate() {
     const playerDirection = new THREE.Vector3(0, 0, -1); // Initial forward direction
 
@@ -153,6 +186,12 @@ export class FirstPersonCamera {
     } else this.app.contents.smokes.reset();
   }
 
+  /**
+   * Update the field of view (FOV) of the camera.
+   * @param {object} player - The player object.
+   * @param {object} camera - The camera object.
+   * @param {number} lerpFactor - The lerp factor for interpolation.
+   */
   updateFOV(player, camera, lerpFactor) {
     const lerp = (start, end, alpha) => {
       return (1 - alpha) * start + alpha * end;
@@ -162,6 +201,9 @@ export class FirstPersonCamera {
     camera.updateProjectionMatrix();
   }
 
+  /**
+   * Update the camera position and rotation.
+   */
   updateCamera() {
     const playerPosition = this.player.position.clone();
     const cameraPosition = this.app.activeCamera.position;
