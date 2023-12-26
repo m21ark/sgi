@@ -180,6 +180,8 @@ export class MenuController {
       "Easy",
       () => {
         this.difficulty = 1;
+        this.toDropNumber = this.app.contents.myReader.difficultyObjs(this.difficulty);
+        this.updateNumber();
         this.gotoMenu("carSelect");
       },
       0x00cc00
@@ -188,6 +190,8 @@ export class MenuController {
       "Medium",
       () => {
         this.difficulty = 2;
+        this.toDropNumber = this.app.contents.myReader.difficultyObjs(this.difficulty);
+        this.updateNumber();
         this.gotoMenu("dropObstacles");
       },
       0xcccc00
@@ -196,6 +200,8 @@ export class MenuController {
       "Hard",
       () => {
         this.difficulty = 3;
+        this.toDropNumber = this.app.contents.myReader.difficultyObjs(this.difficulty);
+        this.updateNumber();
         this.gotoMenu("dropObstacles");
       },
       0xff9900
