@@ -10,6 +10,7 @@ import { XMLLoader } from "./utils/XMLLoader.js";
 import { MyGarage } from "./objs/MyGarage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 import { MySmoke } from "./objs/MySmoke.js";
+import { MyOutdoor } from "./objs/MyOutdoor.js";
 
 export class MyContents {
   constructor(app) {
@@ -60,6 +61,14 @@ export class MyContents {
       this.app.renderer
     );
 
+
+    // ============== OUTDOOR =================
+
+    this.outdoor = new MyOutdoor(this.app);
+    this.outdoor.position.set(5, 3, 25);
+    this.outdoor.rotateY(Math.PI / 2);
+    this.outdoor.scale.set(0.5, 0.5, 0.5);
+    this.app.scene.add(this.outdoor);
 
     this.animate();
   }
@@ -364,6 +373,10 @@ export class MyContents {
       this.AICar.update();
       this.checkIfLost();
     }
+
+    // UPDATE OUTDOOR
+    if (this.hasGameStarted)
+      this.outdoor.update(this.app.MyHUD.getTime(), this.lap);
 
     // UPDATE SHADERS FOR POWERUPS AND OBSTACLES PULSATION
     if (this.sceneParser != undefined) {
