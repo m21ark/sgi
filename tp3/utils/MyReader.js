@@ -44,7 +44,7 @@ let myShader = new THREE.ShaderMaterial({
   transparent: true,
 });
 
-export class SceneParser {
+export class MyReader {
   static ObjectType = {
     OBSTACLE: "obstacle",
     POWERUP: "powerup",
@@ -169,7 +169,7 @@ export class SceneParser {
       hitBB.position = obstacleMesh.position;
       // create the obstacle object
       let obstacleObj = new MyObstacle();
-      obstacleObj.type = SceneParser.ObjectType.OBSTACLE;
+      obstacleObj.type = MyReader.ObjectType.OBSTACLE;
       obstacleObj.setBBox(hitBB);
       this.hitabbleObjs.push(obstacleObj);
 
@@ -184,7 +184,7 @@ export class SceneParser {
       hitBB.position = powerupMesh.position;
       let powerupObj = new MyPowerUp();
       powerupObj.setBBox(hitBB);
-      powerupObj.type = SceneParser.ObjectType.POWERUP;
+      powerupObj.type = MyReader.ObjectType.POWERUP;
 
       this.hitabbleObjs.push(powerupObj);
       group.add(powerupMesh);
@@ -217,15 +217,15 @@ export class SceneParser {
     this.indexLastObj++;
   }
 
-
   addObstacle(pos, name, difficulty) {
     const obstacleMesh = this.createObstacle(pos.x, pos.z);
     obstacleMesh.name = name;
     let hitBB = new THREE.Box3().setFromObject(obstacleMesh);
     hitBB.position = obstacleMesh.position;
     // create the obstacle object
-    let obstacleObj = name == "Direction" ? new MyObstacle(2, 0, 0, true) : new MyObstacle();
-    obstacleObj.type = SceneParser.ObjectType.OBSTACLE;
+    let obstacleObj =
+      name == "Direction" ? new MyObstacle(2, 0, 0, true) : new MyObstacle();
+    obstacleObj.type = MyReader.ObjectType.OBSTACLE;
     obstacleObj.setBBox(hitBB);
 
     this.gg.push(obstacleMesh);
@@ -586,9 +586,9 @@ export class SceneParser {
   createPowerup(x, y) {
     const item = this.powerupItem.clone();
     for (let child of item.children) {
-      child.material = SceneParser.BoxesShaders;
+      child.material = MyReader.BoxesShaders;
     }
-    item.material = SceneParser.BoxesShaders;
+    item.material = MyReader.BoxesShaders;
     item.position.set(x, 0.15, y);
     item.rotateX(Math.PI / 2);
     item.scale.set(0.015, 0.015, 0.015);
@@ -598,9 +598,9 @@ export class SceneParser {
   createObstacle(x, y) {
     const item = this.obstacleItem.clone();
     for (let child of item.children) {
-      child.material = SceneParser.BoxesShaders;
+      child.material = MyReader.BoxesShaders;
     }
-    item.material = SceneParser.BoxesShaders;
+    item.material = MyReader.BoxesShaders;
     item.position.set(x, 0.8, y);
     item.scale.set(0.1, 0.1, 0.1);
     return item;

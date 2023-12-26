@@ -240,15 +240,15 @@ export class MyMenu {
    */
   handleObstacleAdd(pos, name) {
     // Che if pos is clone to any of the trackPoints
-    const trackPoints = this.app.contents.sceneParser.trackPoints;
+    const trackPoints = this.app.contents.myReader.trackPoints;
     pos.y = 0.1;
     for (let i = 0; i < trackPoints.length; i++) {
       if (
         trackPoints[i].distanceTo(pos) <
-        (this.app.contents.sceneParser.TRACK_SIZE + 3) / 2
+        (this.app.contents.myReader.TRACK_SIZE + 3) / 2
       ) {
         let difficulty = this.app.contents.menuController.getDifficulty();
-        if (this.app.contents.sceneParser.addObstacle(pos, name, difficulty)) {
+        if (this.app.contents.myReader.addObstacle(pos, name, difficulty)) {
           this.app.contents.menuController.gotoMenu("carSelect");
         }
         return true;

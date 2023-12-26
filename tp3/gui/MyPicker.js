@@ -152,7 +152,7 @@ export class MyPicker {
           this.raycaster.ray.origin.z
         );
         copyCircle.visible = true;
-        this.app.contents.sceneParser.groupp.add(copyCircle);
+        this.app.contents.myReader.groupp.add(copyCircle);
       }
       this.selectedObs = "";
       return;

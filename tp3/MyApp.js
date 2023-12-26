@@ -5,7 +5,11 @@ import Stats from "three/addons/libs/stats.module.js";
 import { MyHUD, MyDebugHUD } from "./gui/MyHUD.js";
 import { MyAudioController } from "./audio/MyAudioController.js";
 
-class MyApp {
+/**
+ * Represents the application.
+ * @class
+ */
+export class MyApp {
   /**
    * the constructor
    */
@@ -196,6 +200,7 @@ class MyApp {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
   }
+
   /**
    *
    * @param {MyContents} contents the contents object
@@ -211,6 +216,9 @@ class MyApp {
     this.gui = gui;
   }
 
+  /**
+   * @param {MyHUD} contents the hud object
+   */
   setHUD(hud) {
     this.MyHUD = hud;
   }
@@ -241,6 +249,11 @@ class MyApp {
     this.stats.end();
   }
 
+  /**
+   * initializes the audio
+   * requires the FirstPerson camera to be initialized
+   * and the audio files to be loaded
+   */
   initAudio() {
     this.audio = new MyAudioController(this.cameras["FirstPerson"]);
     this.audio.addSound("countdown");
@@ -263,5 +276,3 @@ class MyApp {
     // this.audio.addSound("menuMusic", true, 0.8);
   }
 }
-
-export { MyApp };

@@ -6,7 +6,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { ColladaLoader } from "three/addons/loaders/ColladaLoader.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
-import { SceneParser } from "../utils/SceneParser.js";
+import { MyReader } from "../utils/MyReader.js";
 
 // defines how objects should be created
 export class ObjectBuilder {
@@ -257,8 +257,8 @@ export class ObjectBuilder {
 
                     let mat =
                       i == 0
-                        ? SceneParser.BlockShaders
-                        : SceneParser.BlockShaders2;
+                        ? MyReader.BlockShaders
+                        : MyReader.BlockShaders2;
 
                     mat.uniforms.map.value = oldMat;
                     child.material = mat;
@@ -267,7 +267,7 @@ export class ObjectBuilder {
                 if (rep.filepath.includes("box")) {
                   for (let child of model.children) {
                     let oldMat = child.material.map;
-                    let mat = SceneParser.BoxesShaders;
+                    let mat = MyReader.BoxesShaders;
 
                     mat.uniforms.map.value = oldMat;
                     child.material = mat;

@@ -219,7 +219,7 @@ export class MenuController {
     // put a obstacleItem in the scene at 125, 110, 125
     if (!this.app.contents) return;
     let group = new THREE.Group();
-    const obstacleItem = this.app.contents.sceneParser.obstacleItem;
+    const obstacleItem = this.app.contents.myReader.obstacleItem;
     const obstacle = obstacleItem.clone();
     obstacle.scale.set(4, 4, 4);
     obstacle.rotation.x = Math.PI / 4;
@@ -426,14 +426,14 @@ export class MenuController {
       (c) => c.name === car.name
     );
 
-    let position = this.app.contents.sceneParser.getKeyPath()[0];
-    let nextPosition = this.app.contents.sceneParser.getKeyPath()[1];
+    let position = this.app.contents.myReader.getKeyPath()[0];
+    let nextPosition = this.app.contents.myReader.getKeyPath()[1];
 
     if (this.carIndex === 0) this.app.audio.playSound("yoshi");
     else if (this.carIndex === 1) this.app.audio.playSound("mario");
     else if (this.carIndex === 2) this.app.audio.playSound("peach");
 
-    let carPos = this.app.contents.sceneParser.flagRotate
+    let carPos = this.app.contents.myReader.flagRotate
       ? [position.x + 3, 0.1, position.z]
       : [position.x, 0.1, position.z + 3];
 
