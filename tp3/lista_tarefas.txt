@@ -1,13 +1,3 @@
-RICARDO:
-
-facil:  
-
-    
-    - rodas estão mto estranhas. rodam bue pouco e apenas qnd se acelera. se estivermos com vel constate estao paradas. tmb não estao a virar para os lados as da frente e acho q era suposto
-    
-
-    - adicionar toggle para a TV (e para a agua se achares necessario. no meu pc (do marco) não é preciso)
-
 LATER:
 - Ver todos os TODO
 - fazer documentacao
