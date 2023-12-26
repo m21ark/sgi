@@ -13,6 +13,7 @@ export class MyCar extends THREE.Object3D {
 
     this.rotationSpeedInc = 0.02;
     this.rotationSpeed = 0;
+    this.invulnerable = false;
 
     // POSITION
     this.x = 0;

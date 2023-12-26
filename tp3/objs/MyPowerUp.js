@@ -59,7 +59,18 @@ export class MyPowerUp {
   }
 
   effectPlayer(player) {
-    // TODO: time boost should be applied to the player and then the effect on the podium
+    this.invulnerable = Math.random() < 0.3;
+
+    if (this.invulnerable) {
+      player.invulnerable = true;
+
+      setTimeout(() => {
+        player.invulnerable = false;
+      }, this.timeEffect * 1000);
+
+      return;
+    }
+
     player.velMultiplyer = 2;
 
     setTimeout(() => {
