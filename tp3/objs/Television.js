@@ -61,11 +61,9 @@ export class Television {
           vec3 normal = normalize(mat3(normalMatrix) * normal);
       
           // Conditionally add or subtract based on depth value in the direction of the normal
-          if (depth > 0.5) {
-              newPosition.xyz += normal * depth * 4.0;
-          } else {
-              newPosition.xyz -= normal * depth * 4.0;
-          }
+          
+          newPosition.xyz -= normal * depth * 4.0;
+          
       
           // Set the transformed position
           gl_Position = projectionMatrix * newPosition;
@@ -106,13 +104,11 @@ export class Television {
     this.screen1 = new THREE.Mesh(geometry, this.material);
     this.screen1.position.x = 0;
     this.screen1.position.y = 0;
-    this.screen1.position.z = 0;
-    this.group.add(this.screen1);
-
-    this.screen2 = new THREE.Mesh(geometry, this.material);
-    this.screen1.position.x = 0;
-    this.screen1.position.y = 0;
     this.screen1.position.z = this.width;
+    this.group.add(this.screen1);
+    
+    this.screen2 = new THREE.Mesh(geometry, this.material);
+    this.screen2.scale.set(-1, 1, -1);
     this.group.add(this.screen2);
 
     this.screen3 = new THREE.Mesh(geometry, this.material);
@@ -120,6 +116,7 @@ export class Television {
     this.screen3.position.y = 0;
     this.screen3.position.z = this.width / 2;
     this.screen3.rotation.y = Math.PI / 2;
+    this.screen3.scale.set(-1, 1, -1);
     this.group.add(this.screen3);
 
     this.screen4 = new THREE.Mesh(geometry, this.material);
@@ -164,11 +161,13 @@ export class Television {
     this.group.position.y = 30;
     this.group.position.z = 130;
 
+    this.group.visible = false;
+
     this.scene.add(this.group);
   }
 
   updateRenderTarget(cam) {
-    this.camera = cam;
+    // this.camera = cam;
     this.render.setRenderTarget(this.renderTarget);
     this.render.render(this.scene, this.camera);
 

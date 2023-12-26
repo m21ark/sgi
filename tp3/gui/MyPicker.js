@@ -279,12 +279,6 @@ export class MyPicker {
         );
 
         if (this.app.activeCameraName === "TopCamera") {
-         // for (let i = 0; i < intersects.length; i++) {
-         //   if (intersects[i].object.name === "polygon0") {
-         //     intersects[i].object.name = "Direction";
-         //     break;
-         //   }
-         // }
           console.log(intersects);
           obj = intersects.find(
             (intersect) => intersect.object.name === "Direction" || intersect.object.name === "Vel.Drop"

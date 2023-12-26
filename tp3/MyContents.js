@@ -20,6 +20,7 @@ export class MyContents {
     this.lake = null;
     this.showControlPoints = false;
     this.showCheckPoints = false;
+    this.showTv = false;
     this.controlPoints = [];
     this.moveCar = false;
     this.showHitboxes = false;
@@ -53,11 +54,12 @@ export class MyContents {
 
     // ============== TV =================
 
-    // this.tv = new Television(
-    //   this.app.scene,
-    //   this.app.cameras["FirstPerson"],
-    //   this.app.renderer
-    // );
+    this.tv = new Television(
+      this.app.scene,
+      this.app.cameras["FirstPerson"],
+      this.app.renderer
+    );
+
 
     this.animate();
   }
@@ -371,7 +373,8 @@ export class MyContents {
     }
 
     // TODO: this gives a ton of warnings
-    // this.tv.updateRenderTarget(this.app.activeCamera);
+    if (this.showTv)
+      this.tv.updateRenderTarget(this.app.activeCamera);
 
     // UPDATE GARAGE ANIMATION
     MyGarage.update();
@@ -454,6 +457,10 @@ export class MyContents {
         checkpoint.material.visible = this.showCheckPoints;
       });
     }
+  }
+
+  toogleShowTV() {
+    this.tv.group.visible = this.showTv;
   }
 
   toogleSHowHitboxes() {

@@ -66,6 +66,13 @@ class MyGuiInterface {
         this.contents.toogleSHowHitboxes();
       });
 
+    utisFolder
+      .add(this.contents, "showTv", false)
+      .name("showTv")
+      .onChange(() => {
+        this.contents.toogleShowTV();
+      });
+
     utisFolder.add(this.contents, "triggerCountDown").name("triggerCountDown");
     utisFolder.add(this.contents, "triggerPodium").name("triggerPodium");
 
