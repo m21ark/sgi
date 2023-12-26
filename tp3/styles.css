@@ -98,6 +98,19 @@ iframe {
   }
 }
 
+#powerContainer {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  background-color: transparent;
+  padding: 0.4em;
+  border-radius: 10px;
+  font-family: "CountDownFont", Arial, sans-serif;
+  text-shadow: 2px 2px 2px white;
+}
+
 #speedContainer {
   position: relative;
   width: 100px;

@@ -84,7 +84,8 @@ export class MyContents {
 
   removePreviousInstances() {
     if (this.sceneGroup) this.app.scene.remove(this.sceneGroup);
-    if (this.AICar && this.AICar.aiCar) this.AICar.aiCar.parent.remove(this.AICar.aiCar);
+    if (this.AICar && this.AICar.aiCar)
+      this.AICar.aiCar.parent.remove(this.AICar.aiCar);
     if (this.playerCam)
       this.playerCam.getPlayer().parent.remove(this.playerCam.getPlayer());
     if (this.endLine) this.app.scene.remove(this.endLine);
@@ -185,8 +186,7 @@ export class MyContents {
             this.app.contents.sceneParser.addNextObstacleToGroup();
             this.gameImpact("Powerup!", hitabble.timeEffect);
             this.app.audio.playSound("powerup");
-          }
-          else {
+          } else {
             this.gameImpact("Obstacle!", hitabble.timeEffect);
             this.app.audio.playSound("obstacle");
           }
@@ -286,22 +286,20 @@ export class MyContents {
   }
 
   async gameImpact(message, duration = 3) {
-
     const impactElement = document.createElement("div");
-    impactElement.id = "CountDown";
+    impactElement.id = "powerContainer";
     impactElement.innerText = message;
     document.body.appendChild(impactElement);
     new Promise((resolve) => setTimeout(resolve, 3000));
-    
+
     const impactInterval = setInterval(() => {
-      duration -= 0.5;
+      duration -= 0.2;
       if (duration > 0) impactElement.innerText = duration.toFixed(1);
-      else if (duration == 0) {
+      else if (duration <= 0) {
         clearInterval(impactInterval);
         document.body.removeChild(impactElement);
       }
-    }, 500);
-
+    }, 200);
   }
 
   async startCountdown() {

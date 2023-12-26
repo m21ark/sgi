@@ -99,7 +99,7 @@ export class MenuController {
   }
 
   loadMenuPause() {
-    this.pauseMenu = new MyMenu(this.app, "Pause Menu", -200);
+    this.pauseMenu = new MyMenu(this.app, "Pause Menu", -1200);
     this.pauseMenu.addButton("Resume", () => {
       this.gotoMenu("game");
     });
@@ -116,7 +116,7 @@ export class MenuController {
     this.MapSelectingMenu = new MyMenu(
       this.app,
       "Select Map",
-      -400,
+      -1400,
       "left",
       0.8
     );
@@ -145,7 +145,7 @@ export class MenuController {
     this.dificultySelectingMenu = new MyMenu(
       this.app,
       "Select Dificulty",
-      -500
+      -1500
     );
     this.dificultySelectingMenu.addButton(
       "Easy",
@@ -254,7 +254,7 @@ export class MenuController {
   }
 
   loadMenuMain() {
-    this.mainMenu = new MyMenu(this.app, "Kart Mania", -700, "center", 0.8);
+    this.mainMenu = new MyMenu(this.app, "Kart Mania", -1700, "center", 0.8);
     this.mainMenu.addButton("Play", () => {
       this.gotoMenu("name");
     });
@@ -293,7 +293,7 @@ export class MenuController {
   }
 
   loadNameMenu() {
-    this.nameMenu = new MyMenu(this.app, "Enter your name", -800);
+    this.nameMenu = new MyMenu(this.app, "Enter your name", -1600);
 
     this.nameMenu.addText(this.playerName);
 
@@ -327,7 +327,7 @@ export class MenuController {
   }
 
   loadRulesMenu() {
-    this.rulesMenu = new MyMenu(this.app, "Instructions", -300, "center", 0.5);
+    this.rulesMenu = new MyMenu(this.app, "Instructions", -1300, "center", 0.5);
     this.rulesMenu.addText("Use WASD to move and ESC to pause");
     this.rulesMenu.addText("The first to complete all laps wins");
     this.rulesMenu.addText("Avoid obstacles and collect powerups");
