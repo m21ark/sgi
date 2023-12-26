@@ -125,7 +125,7 @@ export class MyAICar {
     for (let i = 0; i < laps; i++) {
       this.keyPoints.forEach((_, j) => {
         let distanceSum = 0;
-        const numPoints = 1; // TODO: Ver um numero apropriado
+        const numPoints = 1;
 
         for (let k = 1; k <= numPoints; k++) {
           const nextIndex = (j + k) % this.keyPoints.length;

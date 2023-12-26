@@ -199,6 +199,15 @@ export class MyReader {
     this.indexLastObj++;
   }
 
+  difficultyObjs(difficulty) {
+    switch (difficulty) {
+      case 1: return 0;
+      case 2: return 5;
+      case 3: return 9;
+    }
+    return 1;
+  }
+
   addObstacle(pos, name, difficulty) {
     const obstacleMesh = this.createObstacle(pos.x, pos.z);
     obstacleMesh.name = name;
@@ -213,7 +222,7 @@ export class MyReader {
     this.gg.push(obstacleMesh);
     this.hitObs.push(obstacleObj);
 
-    return this.gg.length === this.powerupSize * difficulty;
+    return this.gg.length === this.difficultyObjs(difficulty);
   }
 
   addGarage(group) {
