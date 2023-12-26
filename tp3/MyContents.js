@@ -84,7 +84,7 @@ export class MyContents {
 
   removePreviousInstances() {
     if (this.sceneGroup) this.app.scene.remove(this.sceneGroup);
-    if (this.AICar) this.AICar.aiCar.parent.remove(this.AICar.aiCar);
+    if (this.AICar && this.AICar.aiCar) this.AICar.aiCar.parent.remove(this.AICar.aiCar);
     if (this.playerCam)
       this.playerCam.getPlayer().parent.remove(this.playerCam.getPlayer());
     if (this.endLine) this.app.scene.remove(this.endLine);

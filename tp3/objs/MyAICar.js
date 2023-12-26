@@ -8,7 +8,6 @@ export class MyAICar {
 
     // Key points for the AI to follow
     this.keyPoints = keyPoints;
-    this.keyPoints.push(this.keyPoints[0]);
     this.currentKeyPointIndex = 0;
 
     this.clock = new THREE.Clock();
@@ -48,7 +47,7 @@ export class MyAICar {
   addAICar(scene, rivalCarIndex = 0) {
     this.aiCar = new THREE.Group();
     this.carIndex = rivalCarIndex;
-    console.log("rival car index: " + rivalCarIndex);
+    
     let car = MyCar.availableCars.children[rivalCarIndex].clone();
 
     // rotate the car in respect to the next key point
@@ -125,15 +124,23 @@ export class MyAICar {
 
     for (let i = 0; i < laps; i++) {
       this.keyPoints.forEach((_, j) => {
-        const nextIndex = (j + 1) % this.keyPoints.length;
-        const distance = Math.sqrt(
-          Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
-            Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
-            Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
-        );
+        let distanceSum = 0;
+        const numPoints = 1; // TODO: Ver um numero apropriado
+
+        for (let k = 1; k <= numPoints; k++) {
+          const nextIndex = (j + k) % this.keyPoints.length;
+          const distance = Math.sqrt(
+            Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
+              Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
+              Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
+          );
+          distanceSum += distance;
+        }
+
+        const averageDistance = distanceSum / numPoints;
 
         const decayFactor = 0.04; // Adjust the decay factor as needed
-        let adjustedSpeed = (speed - 0.3) * Math.exp(decayFactor * distance);
+        let adjustedSpeed = (speed - 0.3) * Math.exp(decayFactor * averageDistance);
         adjustedSpeed = Math.min(2, adjustedSpeed);
         let adjustedDistance = acumDis + adjustedSpeed;
 
@@ -201,19 +208,26 @@ export class MyAICar {
 
         for (let i = 0; i < laps; i++) {
           this.keyPoints.forEach((_, j) => {
-            const nextIndex = (j + 1) % this.keyPoints.length;
-            const distance = Math.sqrt(
-              Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
-                Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
-                Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
-            );
-
+            let distanceSum = 0;
+            const numPoints = 1; // TODO: Ver um numero apropriado
+    
+            for (let k = 1; k <= numPoints; k++) {
+              const nextIndex = (j + k) % this.keyPoints.length;
+              const distance = Math.sqrt(
+                Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
+                  Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
+                  Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
+              );
+              distanceSum += distance;
+            }
+    
+            const averageDistance = distanceSum / numPoints;
+    
             const decayFactor = 0.04; // Adjust the decay factor as needed
-            let adjustedSpeed =
-              (speed - 0.3) * Math.exp(decayFactor * distance);
+            let adjustedSpeed = (speed - 0.3) * Math.exp(decayFactor * averageDistance);
             adjustedSpeed = Math.min(2, adjustedSpeed);
             let adjustedDistance = acumDis + adjustedSpeed;
-
+    
             indices.push(acumDis);
             acumDis = adjustedDistance;
           });
