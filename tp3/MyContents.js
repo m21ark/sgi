@@ -12,6 +12,10 @@ import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
 import { MySmoke } from "./objs/MySmoke.js";
 import { MyOutdoor } from "./objs/MyOutdoor.js";
 
+/**
+ * Represents the contents of the application.
+ * @class
+ */
 export class MyContents {
   constructor(app) {
     this.app = app;
@@ -72,6 +76,10 @@ export class MyContents {
     this.animate();
   }
 
+  
+  /**
+   * Pauses the game if the player is in game and not already paused.
+   */
   pauseGame() {
     // Only pause if the player is in game and not already paused
     if (this.app.activeCameraName !== "FirstPerson") return;
@@ -83,6 +91,9 @@ export class MyContents {
     this.menuController.gotoMenu("pause");
   }
 
+  /**
+   * Resumes the game if it is paused.
+   */
   unpauseGame() {
     if (this.app.activeCameraName !== "FirstPerson") return;
     if (!this.app.MyHUD.isPaused()) return;
@@ -92,6 +103,9 @@ export class MyContents {
     this.AICar.resumeAnimation();
   }
 
+  /**
+   * Removes previous instances from the scene.
+   */
   removePreviousInstances() {
     if (this.sceneGroup) this.app.scene.remove(this.sceneGroup);
     if (this.AICar && this.AICar.aiCar)
@@ -102,11 +116,20 @@ export class MyContents {
     MyGarage.objectModel = new THREE.Group();
   }
 
+  /**
+   * Resets the game by setting the 'hasGameStarted' and 'gameHasEnded' properties to false.
+   */
   resetGame() {
     this.hasGameStarted = false;
     this.gameHasEnded = false;
   }
 
+  /**
+   * Loads a track based on the given map number.
+   * Removes previous instances from the scene and sets up the track, obstacles, lake, AI car, and player car.
+   * @param {number} mapNum - The map number to load.
+   * @returns {Promise<void>} - A promise that resolves once the track is loaded.
+   */
   async loadTrack(mapNum) {
     // Remove previous instances from the scene
     this.removePreviousInstances();
@@ -139,11 +162,18 @@ export class MyContents {
     ]);
   }
 
+  /**
+   * Loads an XML scene.
+   * @param {string} data - The XML data representing the scene.
+   */
   loadXMLScene(data) {
     this.XMLLoader = new XMLLoader(this);
     this.app = this.XMLLoader.loadXMLScene(data);
   }
 
+  /**
+   * Looks for collisions between the player's car and the hitabble objects.
+   */
   lookForCollisions() {
     if (
       this.playerCam &&
@@ -164,6 +194,12 @@ export class MyContents {
     }
   }
 
+  /**
+   * Checks for collision between the car and other objects.
+   * @param {Object3D} carBB - The bounding box of the car.
+   * @param {Array<Object3D>} hitabbleObjs - An array of hitabble objects.
+   * @returns {boolean} - True if there is a collision, false otherwise.
+   */
   checkCollision(carBB, hitabbleObjs) {
     // check collision with checkpoints
     if (this.myReader.checkpoints != undefined) {
@@ -238,11 +274,19 @@ export class MyContents {
     return true; // collision with grass
   }
 
+  /**
+   * Checks if the AI car has lost the race based on its final time compared to the current time on the HUD.
+   * If the AI car has lost, it triggers the podium function with a false parameter.
+   */
   checkIfLost() {
     if (this.AICar.getFinalTime() < this.app.MyHUD.getTime())
       this.podium(false);
   }
 
+  /**
+   * Handles the podium logic after the game ends.
+   * @param {boolean} won - Indicates whether the player won the game or not.
+   */
   podium(won) {
     this.endGame(won);
 
@@ -268,6 +312,11 @@ export class MyContents {
     }, 2000);
   }
 
+  /**
+   * Sets the active camera for the application.
+   * 
+   * @param {string} cameraId - The ID of the camera to set as active.
+   */
   setActiveCamera(cameraId) {
     this.app.activeCamera = this.cameras[cameraId];
     this.app.controls.object = this.cameras[cameraId];
@@ -281,6 +330,11 @@ export class MyContents {
     this.app.activeCameraName = cameraId;
   }
 
+  /**
+   * Maps the difficulty level to a corresponding speed value.
+   * @param {number} difficulty - The difficulty level.
+   * @returns {number} The speed value mapped to the given difficulty level.
+   */
   mapDificultyToSpeed(difficulty) {
     switch (difficulty) {
       case 1:
@@ -294,6 +348,11 @@ export class MyContents {
     }
   }
 
+  /**
+   * Ends the game and displays a message indicating whether the player won or lost.
+   * @param {boolean} won - Indicates whether the player won the game.
+   * @returns {Promise<void>} - A promise that resolves after a delay of 3 seconds.
+   */
   async endGame(won) {
     const endSMS = document.createElement("div");
     endSMS.id = "CountDown";
@@ -304,6 +363,12 @@ export class MyContents {
     document.body.removeChild(endSMS);
   }
 
+  /**
+   * Displays a game impact message on the screen for a specified duration.
+   * @param {string} message - The message to be displayed.
+   * @param {number} [duration=3] - The duration in seconds for which the message should be displayed.
+   * @returns {void}
+   */
   async gameImpact(message, duration = 3) {
     const impactElement = document.createElement("div");
     impactElement.id = "powerContainer";
@@ -321,6 +386,10 @@ export class MyContents {
     }, 200);
   }
 
+  /**
+   * Starts the countdown for the game.
+   * @returns {Promise<void>} A promise that resolves when the countdown is finished.
+   */
   async startCountdown() {
     this.app.MyHUD.setVisible(false);
     let duration = 6;
@@ -346,6 +415,9 @@ export class MyContents {
     }, 1000);
   }
 
+  /**
+   * Starts the game.
+   */
   startGame() {
     this.gameHasEnded = false;
     this.hasGameStarted = true;
@@ -357,6 +429,9 @@ export class MyContents {
 
   // =============== UPDATES =====================
 
+  /**
+   * Updates the game state.
+   */
   update() {
     // UPDATE CAMERAS
     if (this.app.activeCameraName === "FirstPerson") this.playerCam.update();
@@ -402,6 +477,9 @@ export class MyContents {
     this.lookForCollisions();
   }
 
+  /**
+   * Animates the game by updating various objects if the game is not paused.
+   */
   animate() {
     // if the game has started and is not paused update the following objects
     if (!this.app.MyHUD.isPaused()) {
@@ -444,6 +522,9 @@ export class MyContents {
 
   // =============== GUI TOGGLES =====================
 
+  /**
+   * Toggles the visibility of AI keypoints.
+   */
   toogleShowAIKeyPoints() {
     let keypoints = this.AICar.getAICarKeyPointsGroup().children;
 
@@ -453,6 +534,9 @@ export class MyContents {
     });
   }
 
+  /**
+   * Toggles the visibility of control points.
+   */
   toogleShowControlPoints() {
     let controlPoints = this.myReader.getControlPoints().children;
 
@@ -462,14 +546,23 @@ export class MyContents {
     });
   }
 
+  /**
+   * Triggers the countdown by calling the startCountdown method.
+   */
   triggerCountDown() {
     this.startCountdown();
   }
 
+  /**
+   * Triggers the podium.
+   */
   triggerPodium() {
     this.podium(true);
   }
 
+  /**
+   * Toggles the visibility of checkpoints.
+   */
   toogleCheckpointVisibility() {
     if (this.myReader.checkpoints != undefined) {
       this.myReader.checkpoints.forEach((checkpoint) => {
@@ -478,10 +571,16 @@ export class MyContents {
     }
   }
 
+  /**
+   * Toggles the visibility of the TV group.
+   */
   toogleShowTV() {
     this.tv.group.visible = this.showTv;
   }
 
+  /**
+   * Toggles the visibility of hitboxes for obstacles, powerups, AI car, and player car.
+   */
   toogleSHowHitboxes() {
     // Hitboxes for obstacles and powerups
     this.hitabbleObjs.forEach((obj) => {
