@@ -2,6 +2,9 @@ import { MyCar } from "./MyCar.js";
 import * as THREE from "three";
 import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 
+/**
+ * Represents an AI-controlled car.
+ */
 export class MyAICar {
   constructor(keyPoints = [[0, 0, 0]]) {
     this.aiCar = undefined;
@@ -13,23 +16,42 @@ export class MyAICar {
     this.clock = new THREE.Clock();
   }
 
+  /**
+   * Gets the final time of the AI car.
+   * @returns {number} The rounded final time.
+   */
   getFinalTime() {
     return Math.round(this.finalTime);
   }
 
+  /**
+   * Locates the start position of the flag.
+   * @returns {number[]} The start position of the flag as an array [x, y, z].
+   */
   locateFlagStart() {
     let pos = this.keyPoints[this.currentKeyPointIndex];
     return [pos.x, 0.1, pos.z];
   }
 
+  /**
+   * Retrieves the AI car.
+   * @returns {Object} The AI car object.
+   */
   getAIcar() {
     return this.aiCar;
   }
 
+  /**
+   * Sets the AI car for this instance.
+   * @param {Car} car - The AI car to set.
+   */
   setAIcar(car) {
     this.aiCar = car;
   }
 
+  /**
+   * Resumes the animation of the AI car.
+   */
   resumeAnimation() {
     if (this.mixer) {
       this.mixer.timeScale = 1;
@@ -37,6 +59,9 @@ export class MyAICar {
     }
   }
 
+  /**
+   * Stops the animation of the AI car.
+   */
   stopAnimation() {
     if (this.mixer) {
       this.mixer.timeScale = 0;
@@ -44,6 +69,12 @@ export class MyAICar {
     }
   }
 
+  /**
+   * Adds an AI car to the scene.
+   * 
+   * @param {THREE.Scene} scene - The scene to add the AI car to.
+   * @param {number} [rivalCarIndex=0] - The index of the rival car to use.
+   */
   addAICar(scene, rivalCarIndex = 0) {
     this.aiCar = new THREE.Group();
     this.carIndex = rivalCarIndex;
@@ -95,20 +126,36 @@ export class MyAICar {
     scene.add(this.KeyPointsgroup);
   }
 
+  /**
+   * Retrieves the key points group of the AI car.
+   * @returns {Array} The key points group of the AI car.
+   */
   getAICarKeyPointsGroup() {
     return this.KeyPointsgroup;
   }
 
+  /**
+   * Retrieves the key points of the AI car.
+   * @returns {Array} The key points of the AI car.
+   */
   getAICarKeyPoints() {
     return this.keyPoints;
   }
 
+  /**
+   * Updates the state of the AI car.
+   */
   update() {
     const delta = this.clock.getDelta();
     if (this.mixer !== undefined) this.mixer.update(delta);
     if (this.mixer2 !== undefined) this.mixer2.update(delta);
   }
 
+  /**
+   * Performs a tyre animation based on the number of laps and speed.
+   * @param {number} laps - The number of laps to perform the animation.
+   * @param {number} speed - The speed of the animation.
+   */
   tyreAnimation(laps, speed) {
     const tyres = this.aiCar.children[0].children[2]; // Assuming the tires are at index 2, adjust if needed
 
@@ -189,13 +236,17 @@ export class MyAICar {
     action.play();
   }
 
+  /**
+   * Moves the AI car along a predefined path using keyframes.
+   * The car rotates based on the angle between the current position and the next position.
+   * @param {number} [speed=0.6] - The speed of the car.
+   * @param {number} [laps=2] - The number of laps the car should complete.
+   */
   moveAICar(speed = 0.6, laps = 2) {
     if (this.currentKeyPointIndex === this.keyPoints.length) return;
 
     if (this.aiCar !== undefined)
       if (this.aiCar.position !== undefined) {
-        // using keyframes ... use the path points to make a animation for the car ... you should make a rotation of the car, that rotates the car based on the angle of the last position and the angle of the next position
-
         let flat_keypoints = [];
         for (let i = 0; i < laps; i++) {
           this.keyPoints.forEach((keyPoint) => {
