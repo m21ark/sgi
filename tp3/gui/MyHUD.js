@@ -1,6 +1,12 @@
 import * as THREE from "three";
 
+/**
+ * Represents a HUD (Heads-Up Display) for a game.
+ */
 export class MyHUD {
+  /**
+   * Creates an instance of MyHUD.
+   */
   constructor() {
     // Create a clock to measure time
     this.clock = new THREE.Clock();
@@ -20,7 +26,7 @@ export class MyHUD {
 
     // Set initial values
     this.timeElement.innerHTML = "Time: 0.00 s";
-    this.separatorElement.innerHTML = "--------------------";
+    this.separatorElement.innerHTML = "______________";
     this.statusElement.innerHTML = "N/A";
 
     // Set initial values with bold style
@@ -51,10 +57,19 @@ export class MyHUD {
     this.statusElement.style.right = "8";
   }
 
+  /**
+   * Gets the DOM element of the HUD.
+   * @returns {HTMLDivElement} The DOM element of the HUD.
+   */
   getDom() {
     return this.domElement;
   }
 
+  /**
+   * Sets the speed of the game.
+   * @param {number} speed - The speed value.
+   * @param {number} [max_speed=200] - The maximum speed value.
+   */
   setSpeed(speed, max_speed = 200) {
     if (speed < 0) speed = 0;
     if (speed > max_speed) speed = max_speed;
@@ -77,15 +92,25 @@ export class MyHUD {
     this.speedBarElement.style.color = "#000"; // Adjust the color of the speed number
   }
 
+  /**
+   * Resets the time to zero.
+   */
   resetTime() {
     this.clock = new THREE.Clock();
     this.timeElement.innerHTML = "Time: 0.00 s";
   }
 
+  /**
+   * Gets the current time.
+   * @returns {number} The current time in seconds.
+   */
   getTime() {
     return parseFloat(this.timeElement.innerHTML.split(" ")[1]);
   }
 
+  /**
+   * Updates the time element to reflect the elapsed time.
+   */
   tickTime() {
     if (this.isGamePaused) return;
     const elapsedTime = this.clock.getElapsedTime();
@@ -93,11 +118,20 @@ export class MyHUD {
     this.timeElement.innerHTML = `Time: ${time} s`;
   }
 
+  /**
+   * Sets the number of laps completed.
+   * @param {number} laps - The number of laps completed.
+   * @param {number} total - The total number of laps.
+   */
   setLaps(laps, total) {
     this.lapsElement.children[0].innerHTML = `Laps: ${laps}/${total}`;
   }
 
-
+  /**
+   * Sets the status of the game.
+   * @param {string} status - The status of the game. Possible values are "PLAY" or "PAUSE".
+   * @private
+   */
   _setStatus(status) {
     // Create the play and pause icons
     const playIcon = document.createElement("i");
@@ -131,11 +165,18 @@ export class MyHUD {
     this.statusElement.appendChild(statusContainer);
   }
 
+  /**
+   * Sets the pause status of the game.
+   * @param {boolean} status - The pause status. True if the game is paused, false otherwise.
+   */
   setPauseStatus(status) {
     if (status) this.pauseGame();
     else this.unpauseGame();
   }
 
+  /**
+   * Pauses the game.
+   */
   pauseGame() {
     this._setStatus("PAUSE");
     if (!this.isGamePaused) {
@@ -144,6 +185,9 @@ export class MyHUD {
     }
   }
 
+  /**
+   * Unpauses the game.
+   */
   unpauseGame() {
     this._setStatus("PLAY");
     if (this.isGamePaused) {
@@ -157,29 +201,57 @@ export class MyHUD {
     }
   }
 
+  /**
+   * Checks if the game is paused.
+   * @returns {boolean} True if the game is paused, false otherwise.
+   */
   isPaused() {
     return this.isGamePaused;
   }
 
+  /**
+   * Sets the visibility of the HUD.
+   * @param {boolean} visible - True to make the HUD visible, false to hide it.
+   */
   setVisible(visible) {
     this.domElement.style.display = visible ? "block" : "none";
   }
 }
 
+/**
+ * Represents a debug HUD for displaying coordinates.
+ */
 export class MyDebugHUD {
+  /**
+   * Creates a new instance of MyDebugHUD.
+   */
   constructor() {
     this.domElement = document.createElement("div");
     this.domElement.id = "debugHUD";
   }
 
+  /**
+   * Gets the DOM element of the debug HUD.
+   * @returns {HTMLElement} The DOM element.
+   */
   getDom() {
     return this.domElement;
   }
 
+  /**
+   * Sets the visibility of the debug HUD.
+   * @param {boolean} visible - Whether the debug HUD should be visible or not.
+   */
   setVisible(visible) {
     this.domElement.style.display = visible ? "block" : "none";
   }
 
+  /**
+   * Sets the coordinates to be displayed in the debug HUD.
+   * @param {number} x - The X coordinate.
+   * @param {number} y - The Y coordinate.
+   * @param {number} z - The Z coordinate.
+   */
   setCords(x, y, z) {
     this.domElement.innerHTML = `X: ${x.toFixed(2)} Y: ${y.toFixed(
       2
