@@ -180,7 +180,7 @@ export class MenuController {
       "Easy",
       () => {
         this.difficulty = 1;
-        this.gotoMenu("dropObstacles");
+        this.gotoMenu("carSelect");
       },
       0x00cc00
     );

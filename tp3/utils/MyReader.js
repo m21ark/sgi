@@ -8,41 +8,7 @@ import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 import { MyObstacle } from "../objs/MyObstacle.js";
 import { MyPowerUp } from "../objs/MyPowerUp.js";
 import { MyWater } from "../objs/MyWater.js";
-
-let MyVertexShader = `
-varying vec3 vNormal;
-varying vec2 vUv;
-varying vec3 vViewPosition;
-uniform float time;
-
-void main() {
-    vUv = uv;
-    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-    vec3 newPosition = position;
-    newPosition *= 1.0 + 0.1 * sin(time);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-}
-`;
-
-let MyFragmentShader = ` 
-varying vec2 vUv;
-uniform sampler2D map;
-void main() {
-    vec4 color = texture2D(map, vUv);
-    color.a = 0.75;
-    gl_FragColor = color;
-}
-`;
-
-let myShader = new THREE.ShaderMaterial({
-  uniforms: {
-    time: { value: 1.0 },
-    map: { value: null },
-  },
-  vertexShader: MyVertexShader,
-  fragmentShader: MyFragmentShader,
-  transparent: true,
-});
+import { ShaderLoader } from "../shaders/ShaderLoader.js";
 
 export class MyReader {
   static ObjectType = {
@@ -52,6 +18,12 @@ export class MyReader {
 
   constructor() {
     this.hitabbleObjs = [];
+
+    // Setting the shaders for the boxes
+    this.loadShader();
+    this.constructor.BoxesShaders = this.shader.clone();
+    this.constructor.BlockShaders = this.shader.clone();
+    this.constructor.BlockShaders2 = this.shader.clone();
 
     const loader = new THREE.TextureLoader();
     this.grassTex = loader.load("scene/textures/grass.png");
@@ -87,6 +59,20 @@ export class MyReader {
     this.indexLastObj = 0;
   }
 
+  loadShader() {
+    const [vert, frag] = ShaderLoader.get("shaders/boxPulse");
+
+    this.shader = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 1.0 },
+        map: { value: null },
+      },
+      vertexShader: vert,
+      fragmentShader: frag,
+      transparent: true,
+    });
+  }
+
   async readJSON(filePath) {
     const response = await fetch(filePath);
     const data = await response.json();
@@ -96,10 +82,6 @@ export class MyReader {
   getControlPoints() {
     return this.controPointGroup;
   }
-
-  static BoxesShaders = myShader.clone();
-  static BlockShaders = myShader.clone();
-  static BlockShaders2 = myShader.clone();
 
   async loadObjs() {
     // define the meshes for powerups and obstacles

@@ -7,6 +7,7 @@ import { ColladaLoader } from "three/addons/loaders/ColladaLoader.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
 import { MyReader } from "../utils/MyReader.js";
+import { ShaderLoader } from "../shaders/ShaderLoader.js";
 
 // defines how objects should be created
 export class ObjectBuilder {
@@ -256,9 +257,7 @@ export class ObjectBuilder {
                     let oldMat = child.material.map;
 
                     let mat =
-                      i == 0
-                        ? MyReader.BlockShaders
-                        : MyReader.BlockShaders2;
+                      i == 0 ? MyReader.BlockShaders : MyReader.BlockShaders2;
 
                     mat.uniforms.map.value = oldMat;
                     child.material = mat;
@@ -314,52 +313,17 @@ export class ObjectBuilder {
             // create a shader texture that rotates the texture of the tires
             let oldMat = model.children[2].material;
             let velocity = 0.1; // Define the velocity of rotation
+
+            const [vert, frag] = ShaderLoader.get("shaders/wheel");
+
             let tire_shader = new THREE.ShaderMaterial({
               uniforms: {
                 time: { value: 2 },
                 map: { value: oldMat.map },
                 velocity: { value: velocity },
               },
-              vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                  vUv = uv;
-                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-                }
-              `,
-              fragmentShader: `
-                uniform float time;
-                uniform sampler2D map;
-                uniform float velocity;
-                varying vec2 vUv;
-                void main() {
-                  vec2 uv = vUv;
-                  if (uv.y < 0.5) {
-                    uv.x = mod(time * velocity - uv.x, 1.0); // Apply the velocity to the rotation and wrap within [0, 1]
-                  }
-                  if (uv.y > 0.5) {
-                    // this is a square texture where the texture of the tire is in the top half 
-                    // and the texture of the rim is in the bottom half
-                    // we need to rotate the texture of the rim around the (0.5, 0,765625) coordinate
-
-                    // Calculate the offset from the center
-                    vec2 offset = vec2(uv.x - 0.484375, uv.y - 0.765625);
-
-                    // Calculate the polar coordinates
-                    float angle = atan(offset.y, offset.x);
-
-                    // Rotate the texture
-                    angle += time * -velocity;
-
-                    // Convert back to Cartesian coordinatesa
-                    uv = vec2(0.484375, 0.765625) + vec2(cos(angle), sin(angle)) * length(offset);
-
-                    // Wrap within [0, 1]
-                    uv = mod(uv, 1.0);
-                  }
-                  gl_FragColor = texture2D(map, uv);
-                }
-              `,
+              vertexShader: vert,
+              fragmentShader: frag,
               transparent: true,
             });
             ObjectBuilder.ShaderMaterials.push(tire_shader);
