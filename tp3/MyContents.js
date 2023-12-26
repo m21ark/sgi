@@ -2,10 +2,10 @@ import * as THREE from "three";
 import { MyFileReader } from "./parser/MyFileReader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MyAICar } from "./objs/MyAICar.js";
-import { SceneParser } from "./utils/SceneParser.js";
+import { MyReader } from "./utils/MyReader.js";
 import { MenuController } from "./gui/MenuController.js";
 import { MyCar } from "./objs/MyCar.js";
-import { Television } from "./objs/Television.js";
+import { MyTV } from "./objs/MyTV.js";
 import { XMLLoader } from "./utils/XMLLoader.js";
 import { MyGarage } from "./objs/MyGarage.js";
 import { FirstPersonCamera } from "./utils/FirstPersonCamera.js";
@@ -55,7 +55,7 @@ export class MyContents {
 
     // ============== TV =================
 
-    this.tv = new Television(
+    this.tv = new MyTV(
       this.app.scene,
       this.app.cameras["FirstPerson"],
       this.app.renderer
@@ -68,8 +68,6 @@ export class MyContents {
     this.outdoor.rotateY(Math.PI / 2);
     this.outdoor.scale.set(0.5, 0.5, 0.5);
     this.app.scene.add(this.outdoor);
-
-    this.loadTrack(1);
 
     this.animate();
   }
@@ -116,19 +114,19 @@ export class MyContents {
     this.toAddObstacles = [];
 
     // Track set
-    this.sceneParser = new SceneParser();
-    this.sceneGroup = await this.sceneParser.buildGridGroup(mapNum);
+    this.myReader = new MyReader();
+    this.sceneGroup = await this.myReader.buildGridGroup(mapNum);
     this.app.scene.add(this.sceneGroup);
-    this.trees = this.sceneParser.getTrees();
-    this.hitabbleObjs = this.sceneParser.getHitabbleObjs();
+    this.trees = this.myReader.getTrees();
+    this.hitabbleObjs = this.myReader.getHitabbleObjs();
 
     // Lake set
-    this.lake = this.sceneParser.getLake();
+    this.lake = this.myReader.getLake();
 
     // AI car set
-    this.AICar = new MyAICar(this.sceneParser.getKeyPath());
+    this.AICar = new MyAICar(this.myReader.getKeyPath());
 
-    const startPoint = this.sceneParser.getKeyPath()[0];
+    const startPoint = this.myReader.getKeyPath()[0];
 
     this.lap = 1;
 
@@ -168,9 +166,9 @@ export class MyContents {
 
   checkCollision(carBB, hitabbleObjs) {
     // check collision with checkpoints
-    if (this.sceneParser.checkpoints != undefined) {
-      if (carBB.intersectsBox(this.sceneParser.checkpoints[0].bbox)) {
-        if (this.sceneParser.checkpoints[0].name == "sector1") {
+    if (this.myReader.checkpoints != undefined) {
+      if (carBB.intersectsBox(this.myReader.checkpoints[0].bbox)) {
+        if (this.myReader.checkpoints[0].name == "sector1") {
           this.lap++;
           if (this.lap <= this.numLaps) {
             this.app.MyHUD.setLaps(this.lap, this.numLaps);
@@ -178,9 +176,9 @@ export class MyContents {
           } else this.podium(true);
         }
         // swap checkpoints 0 and 1
-        let temp = this.sceneParser.checkpoints[0];
-        this.sceneParser.checkpoints[0] = this.sceneParser.checkpoints[1];
-        this.sceneParser.checkpoints[1] = temp;
+        let temp = this.myReader.checkpoints[0];
+        this.myReader.checkpoints[0] = this.myReader.checkpoints[1];
+        this.myReader.checkpoints[1] = temp;
       }
     }
 
@@ -188,7 +186,11 @@ export class MyContents {
       if (carBB.intersectsBox(hitabble.bbox)) {
         // if the player has already collided with this object in the last 2 seconds, ignore it
         if (!hitabble.hadNewCollision()) continue;
-        if (this.playerCam.getPlayer().invulnerable && hitabble.type != "powerup") continue;
+        if (
+          this.playerCam.getPlayer().invulnerable &&
+          hitabble.type != "powerup"
+        )
+          continue;
 
         // give the player the effect of the hitabble object
         hitabble.effectPlayer(this.playerCam.getPlayer());
@@ -196,13 +198,13 @@ export class MyContents {
         // Play sounds
         if (this.hasGameStarted) {
           if (hitabble.type == "powerup") {
-            this.app.contents.sceneParser.addNextObstacleToGroup();
+            this.app.contents.myReader.addNextObstacleToGroup();
             this.gameImpact("Powerup!", hitabble.timeEffect);
             this.app.audio.playSound("powerup");
           } else {
             if (hitabble.switchedControls) {
               this.gameImpact("Switched!", hitabble.timeEffect);
-            }else {
+            } else {
               this.gameImpact("Obstacle!", hitabble.timeEffect);
             }
             this.app.audio.playSound("obstacle");
@@ -220,14 +222,14 @@ export class MyContents {
       return true;
     }
 
-    if (this.sceneParser.trackPoints == undefined) return false;
-    for (var i = 0; i < this.sceneParser.trackPoints.length; i++) {
-      let curvePoint = this.sceneParser.trackPoints[i];
+    if (this.myReader.trackPoints == undefined) return false;
+    for (var i = 0; i < this.myReader.trackPoints.length; i++) {
+      let curvePoint = this.myReader.trackPoints[i];
       let objectPoint = carBB.position; // Use the center of the bounding box instead of the bounding box itself
 
       // Calculate the distance between the two points
       var distance = curvePoint.distanceTo(objectPoint);
-      if (distance < (this.sceneParser.TRACK_SIZE + 3) / 2) {
+      if (distance < (this.myReader.TRACK_SIZE + 3) / 2) {
         return false;
       }
     }
@@ -385,10 +387,10 @@ export class MyContents {
       this.outdoor.update(this.app.MyHUD.getTime(), this.lap);
 
     // UPDATE SHADERS FOR POWERUPS AND OBSTACLES PULSATION
-    if (this.sceneParser != undefined) {
-      SceneParser.BoxesShaders.uniforms.time.value += 0.05;
-      SceneParser.BlockShaders.uniforms.time.value += 0.05;
-      SceneParser.BlockShaders2.uniforms.time.value += 0.05;
+    if (this.myReader != undefined) {
+      MyReader.BoxesShaders.uniforms.time.value += 0.05;
+      MyReader.BlockShaders.uniforms.time.value += 0.05;
+      MyReader.BlockShaders2.uniforms.time.value += 0.05;
     }
 
     if (this.showTv) this.tv.updateRenderTarget();
@@ -452,7 +454,7 @@ export class MyContents {
   }
 
   toogleShowControlPoints() {
-    let controlPoints = this.sceneParser.getControlPoints().children;
+    let controlPoints = this.myReader.getControlPoints().children;
 
     // display or hide keypoints
     controlPoints.forEach((point) => {
@@ -469,8 +471,8 @@ export class MyContents {
   }
 
   toogleCheckpointVisibility() {
-    if (this.sceneParser.checkpoints != undefined) {
-      this.sceneParser.checkpoints.forEach((checkpoint) => {
+    if (this.myReader.checkpoints != undefined) {
+      this.myReader.checkpoints.forEach((checkpoint) => {
         checkpoint.material.visible = this.showCheckPoints;
       });
     }

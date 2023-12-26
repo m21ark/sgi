@@ -1,7 +1,20 @@
 import * as THREE from "three";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 
+/**
+ * Represents a custom menu.
+ * @class
+ */
 export class MyMenu {
+  /**
+   * Creates a new instance of MyMenu.
+   * @param {Object} app - The application object.
+   * @param {string} title - The title of the menu.
+   * @param {number} [x=-100] - The x-coordinate position of the menu.
+   * @param {string} [btnPos="center"] - The position of the buttons on the menu.
+   * @param {number} [btnSpacing=0.8] - The spacing between buttons on the menu.
+   * @param {string} [bgImage=null] - The background image of the menu.
+   */
   constructor(
     app,
     title,
@@ -28,6 +41,14 @@ export class MyMenu {
     this.app = app;
   }
 
+  /**
+   * Adds a button to the menu.
+   * @param {string} text - The text of the button.
+   * @param {Function} onClick - The function to be called when the button is clicked.
+   * @param {string} [bgcolor=null] - The background color of the button.
+   * @param {boolean} [useBg=true] - Indicates whether to use the background image for the button.
+   * @param {string} [txtColor=null] - The text color of the button.
+   */
   addButton(text, onClick, bgcolor = null, useBg = true, txtColor = null) {
     const cnt = this.btnCount;
     this.buttons.push({
@@ -41,19 +62,37 @@ export class MyMenu {
     this.btnCount++;
   }
 
+  /**
+   * Updates the text of a button on the menu.
+   * @param {string} text - The new text for the button.
+   * @param {number} buttonIndex - The index of the button to update.
+   */
   updateText(text, buttonIndex) {
     const button = this.buttons.find((btn) => btn.cnt === buttonIndex);
     if (button) button.text = text;
   }
 
+  /**
+   * Adds a text element to the menu.
+   * @param {string} text - The text to add.
+   * @param {string} [color="0xffffff"] - The color of the text.
+   */
   addText(text, color = "0xffffff") {
-    this.addButton(text, () => { }, null, false, color);
+    this.addButton(text, () => {}, null, false, color);
   }
 
+  /**
+   * Sets the title of the menu.
+   * @param {string} title - The new title for the menu.
+   */
   setTitle(title) {
     this.title = title;
   }
 
+  /**
+   * Gets the menu as a THREE.Group object.
+   * @returns {THREE.Group} The menu as a THREE.Group object.
+   */
   getMenu() {
     let group = new THREE.Group();
 
@@ -62,7 +101,7 @@ export class MyMenu {
 
     // create a material
     let backgroundMat = new THREE.MeshBasicMaterial({
-      color: 0xBBBBBB,
+      color: 0xbbbbbb,
       map: new THREE.TextureLoader().load(
         this.bgImage ? this.bgImage : "assets/menu.jpg"
       ),
@@ -101,6 +140,10 @@ export class MyMenu {
     return group;
   }
 
+  /**
+   * Gets the buttons on the menu as a THREE.Group object.
+   * @returns {THREE.Group} The buttons on the menu as a THREE.Group object.
+   */
   getButtonOnMenu() {
     let group = new THREE.Group();
 
@@ -122,9 +165,9 @@ export class MyMenu {
         button.useBg
           ? material
           : new THREE.MeshBasicMaterial({
-            transparent: true,
-            opacity: 0,
-          })
+              transparent: true,
+              opacity: 0,
+            })
       );
       let fsize = 24;
       let midWidth = this.textWriter.getWidth(button.text, fsize);
@@ -170,6 +213,10 @@ export class MyMenu {
     return group;
   }
 
+  /**
+   * Sets the camera for the menu.
+   * @param {Object} app - The application object.
+   */
   setCamera(app) {
     let cam = app.cameras["MenuCamera"];
 
@@ -185,14 +232,23 @@ export class MyMenu {
     this.picker.setActiveMenu(this);
   }
 
+  /**
+   * Handles the addition of an obstacle to the menu.
+   * @param {THREE.Vector3} pos - The position of the obstacle.
+   * @param {string} name - The name of the obstacle.
+   * @returns {boolean} True if the obstacle was successfully added, false otherwise.
+   */
   handleObstacleAdd(pos, name) {
     // Che if pos is clone to any of the trackPoints
-    const trackPoints = this.app.contents.sceneParser.trackPoints;
+    const trackPoints = this.app.contents.myReader.trackPoints;
     pos.y = 0.1;
     for (let i = 0; i < trackPoints.length; i++) {
-      if (trackPoints[i].distanceTo(pos) < (this.app.contents.sceneParser.TRACK_SIZE + 3) / 2) {
+      if (
+        trackPoints[i].distanceTo(pos) <
+        (this.app.contents.myReader.TRACK_SIZE + 3) / 2
+      ) {
         let difficulty = this.app.contents.menuController.getDifficulty();
-        if (this.app.contents.sceneParser.addObstacle(pos, name, difficulty)) {
+        if (this.app.contents.myReader.addObstacle(pos, name, difficulty)) {
           this.app.contents.menuController.gotoMenu("carSelect");
         }
         return true;
@@ -201,6 +257,10 @@ export class MyMenu {
     return false;
   }
 
+  /**
+   * Handles the click event of a button on the menu.
+   * @param {number} buttonIndex - The index of the clicked button.
+   */
   handleButtonClick(buttonIndex) {
     const button = this.buttons.find((btn) => btn.cnt === buttonIndex);
     if (button && button.onClick) {

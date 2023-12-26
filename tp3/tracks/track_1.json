@@ -33,8 +33,7 @@
       "z": 20
     }
   ],
-  "obstacles": [
-  ],
+  "obstacles": [],
   "powerups": [
     {
       "x": 150,

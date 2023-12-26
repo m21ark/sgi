@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { ObjectBuilder } from "../builders/ObjectBuilder.js";
-import { MyBillboard } from "../objs/MyBillboard.js";
+import { MyTree } from "../objs/MyTree.js";
 import { CatmullTrack } from "./CatmullTrack.js";
 import { MyGarage } from "../objs/MyGarage.js";
 import { MyCar } from "../objs/MyCar.js";
@@ -8,43 +8,9 @@ import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
 import { MyObstacle } from "../objs/MyObstacle.js";
 import { MyPowerUp } from "../objs/MyPowerUp.js";
 import { MyWater } from "../objs/MyWater.js";
+import { ShaderLoader } from "../shaders/ShaderLoader.js";
 
-let MyVertexShader = `
-varying vec3 vNormal;
-varying vec2 vUv;
-varying vec3 vViewPosition;
-uniform float time;
-
-void main() {
-    vUv = uv;
-    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-    vec3 newPosition = position;
-    newPosition *= 1.0 + 0.1 * sin(time);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-}
-`;
-
-let MyFragmentShader = ` 
-varying vec2 vUv;
-uniform sampler2D map;
-void main() {
-    vec4 color = texture2D(map, vUv);
-    color.a = 0.75;
-    gl_FragColor = color;
-}
-`;
-
-let myShader = new THREE.ShaderMaterial({
-  uniforms: {
-    time: { value: 1.0 },
-    map: { value: null },
-  },
-  vertexShader: MyVertexShader,
-  fragmentShader: MyFragmentShader,
-  transparent: true,
-});
-
-export class SceneParser {
+export class MyReader {
   static ObjectType = {
     OBSTACLE: "obstacle",
     POWERUP: "powerup",
@@ -52,6 +18,12 @@ export class SceneParser {
 
   constructor() {
     this.hitabbleObjs = [];
+
+    // Setting the shaders for the boxes
+    this.loadShader();
+    this.constructor.BoxesShaders = this.shader.clone();
+    this.constructor.BlockShaders = this.shader.clone();
+    this.constructor.BlockShaders2 = this.shader.clone();
 
     const loader = new THREE.TextureLoader();
     this.grassTex = loader.load("scene/textures/grass.png");
@@ -87,6 +59,20 @@ export class SceneParser {
     this.indexLastObj = 0;
   }
 
+  loadShader() {
+    const [vert, frag] = ShaderLoader.get("shaders/boxPulse");
+
+    this.shader = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 1.0 },
+        map: { value: null },
+      },
+      vertexShader: vert,
+      fragmentShader: frag,
+      transparent: true,
+    });
+  }
+
   async readJSON(filePath) {
     const response = await fetch(filePath);
     const data = await response.json();
@@ -96,10 +82,6 @@ export class SceneParser {
   getControlPoints() {
     return this.controPointGroup;
   }
-
-  static BoxesShaders = myShader.clone();
-  static BlockShaders = myShader.clone();
-  static BlockShaders2 = myShader.clone();
 
   async loadObjs() {
     // define the meshes for powerups and obstacles
@@ -169,7 +151,7 @@ export class SceneParser {
       hitBB.position = obstacleMesh.position;
       // create the obstacle object
       let obstacleObj = new MyObstacle();
-      obstacleObj.type = SceneParser.ObjectType.OBSTACLE;
+      obstacleObj.type = MyReader.ObjectType.OBSTACLE;
       obstacleObj.setBBox(hitBB);
       this.hitabbleObjs.push(obstacleObj);
 
@@ -184,7 +166,7 @@ export class SceneParser {
       hitBB.position = powerupMesh.position;
       let powerupObj = new MyPowerUp();
       powerupObj.setBBox(hitBB);
-      powerupObj.type = SceneParser.ObjectType.POWERUP;
+      powerupObj.type = MyReader.ObjectType.POWERUP;
 
       this.hitabbleObjs.push(powerupObj);
       group.add(powerupMesh);
@@ -217,15 +199,15 @@ export class SceneParser {
     this.indexLastObj++;
   }
 
-
   addObstacle(pos, name, difficulty) {
     const obstacleMesh = this.createObstacle(pos.x, pos.z);
     obstacleMesh.name = name;
     let hitBB = new THREE.Box3().setFromObject(obstacleMesh);
     hitBB.position = obstacleMesh.position;
     // create the obstacle object
-    let obstacleObj = name == "Direction" ? new MyObstacle(2, 0, 0, true) : new MyObstacle();
-    obstacleObj.type = SceneParser.ObjectType.OBSTACLE;
+    let obstacleObj =
+      name == "Direction" ? new MyObstacle(2, 0, 0, true) : new MyObstacle();
+    obstacleObj.type = MyReader.ObjectType.OBSTACLE;
     obstacleObj.setBBox(hitBB);
 
     this.gg.push(obstacleMesh);
@@ -403,7 +385,7 @@ export class SceneParser {
   }
 
   createTree(x, y) {
-    let tree = new MyBillboard("assets/trees/", 7);
+    let tree = new MyTree("assets/trees/", 7);
     tree.position.set(x, 6.8, y);
     return tree;
   }
@@ -586,9 +568,9 @@ export class SceneParser {
   createPowerup(x, y) {
     const item = this.powerupItem.clone();
     for (let child of item.children) {
-      child.material = SceneParser.BoxesShaders;
+      child.material = MyReader.BoxesShaders;
     }
-    item.material = SceneParser.BoxesShaders;
+    item.material = MyReader.BoxesShaders;
     item.position.set(x, 0.15, y);
     item.rotateX(Math.PI / 2);
     item.scale.set(0.015, 0.015, 0.015);
@@ -598,9 +580,9 @@ export class SceneParser {
   createObstacle(x, y) {
     const item = this.obstacleItem.clone();
     for (let child of item.children) {
-      child.material = SceneParser.BoxesShaders;
+      child.material = MyReader.BoxesShaders;
     }
-    item.material = SceneParser.BoxesShaders;
+    item.material = MyReader.BoxesShaders;
     item.position.set(x, 0.8, y);
     item.scale.set(0.1, 0.1, 0.1);
     return item;

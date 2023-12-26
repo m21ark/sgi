@@ -6,6 +6,10 @@ import { MyCar } from "../objs/MyCar.js";
 import { TextSpriteDraw } from "./TextSpriteDraw.js";
 import { MyPodium } from "./MyPodium.js";
 
+/**
+ * Represents a menu controller for the game.
+ * @class
+ */
 export class MenuController {
   constructor(app) {
     app.picker = new MyPicker(app);
@@ -30,18 +34,34 @@ export class MenuController {
     this.loadRulesMenu();
   }
 
+  /**
+   * Gets the difficulty level.
+   * @returns {number} The difficulty level.
+   */
   getDifficulty() {
     return this.difficulty;
   }
 
+  /**
+   * Gets the selected map.
+   * @returns {number} The selected map.
+   */
   getMap() {
     return this.map;
   }
 
+  /**
+   * Gets the player's name.
+   * @returns {string} The player's name.
+   */
   getPlayerName() {
     return this.playerName;
   }
 
+  /**
+   * Navigates to the specified menu.
+   * @param {string} menu - The menu to navigate to.
+   */
   gotoMenu(menu) {
     switch (menu) {
       case "main":
@@ -83,8 +103,8 @@ export class MenuController {
         this.currentMenu = null;
         console.log(
           "Camera '" +
-          menu +
-          "' option not found. Using default perspective camera"
+            menu +
+            "' option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
     }
@@ -98,6 +118,9 @@ export class MenuController {
     }
   }
 
+  /**
+   * Loads the menu for pausing the game.
+   */
   loadMenuPause() {
     this.pauseMenu = new MyMenu(this.app, "Pause Menu", -1200);
     this.pauseMenu.addButton("Resume", () => {
@@ -112,6 +135,9 @@ export class MenuController {
     this.app.scene.add(this.pauseMenu.getMenu());
   }
 
+  /**
+   * Loads the menu for selecting a map.
+   */
   loadMenuMapSelect() {
     this.MapSelectingMenu = new MyMenu(
       this.app,
@@ -141,6 +167,9 @@ export class MenuController {
     this.app.scene.add(group);
   }
 
+  /**
+   * Loads the menu for selecting a difficulty.
+   */
   loadMenuDificultySelect() {
     this.dificultySelectingMenu = new MyMenu(
       this.app,
@@ -151,7 +180,7 @@ export class MenuController {
       "Easy",
       () => {
         this.difficulty = 1;
-        this.gotoMenu("dropObstacles");
+        this.gotoMenu("carSelect");
       },
       0x00cc00
     );
@@ -180,6 +209,9 @@ export class MenuController {
     this.app.scene.add(this.dificultySelectingMenu.getMenu());
   }
 
+  /**
+   * Loads the menu for dropping obstacles.
+   */
   loadDropObstaclesMenu() {
     if (this.dropContentsLoaded) return;
     this.dropContentsLoaded = true;
@@ -187,7 +219,7 @@ export class MenuController {
     // put a obstacleItem in the scene at 125, 110, 125
     if (!this.app.contents) return;
     let group = new THREE.Group();
-    const obstacleItem = this.app.contents.sceneParser.obstacleItem;
+    const obstacleItem = this.app.contents.myReader.obstacleItem;
     const obstacle = obstacleItem.clone();
     obstacle.scale.set(4, 4, 4);
     obstacle.rotation.x = Math.PI / 4;
@@ -211,7 +243,6 @@ export class MenuController {
     if (polygon0) {
       polygon0.name = "Vel.Drop";
     }
-
 
     group.add(obstacle);
     group.add(spritey);
@@ -248,11 +279,17 @@ export class MenuController {
     this.app.scene.add(group);
   }
 
+  /**
+   * Set the camera to the top camera to drop the obstacles.
+   */
   dropObstaclesMenu() {
     this.app.MyHUD.setVisible(false);
     this.app.setActiveCamera("TopCamera");
   }
 
+  /**
+   * Loads the main menu.
+   */
   loadMenuMain() {
     this.mainMenu = new MyMenu(this.app, "Kart Mania", -1700, "center", 0.8);
     this.mainMenu.addButton("Play", () => {
@@ -292,6 +329,9 @@ export class MenuController {
     this.app.scene.add(group);
   }
 
+  /**
+   * Loads the menu for entering the player's name.
+   */
   loadNameMenu() {
     this.nameMenu = new MyMenu(this.app, "Enter your name", -1600);
 
@@ -326,6 +366,9 @@ export class MenuController {
     this.app.scene.add(group);
   }
 
+  /**
+   * Loads the menu for the game's rules.
+   */
   loadRulesMenu() {
     this.rulesMenu = new MyMenu(this.app, "Instructions", -1300, "center", 0.5);
     this.rulesMenu.addText("Use WASD to move and ESC to pause");
@@ -339,6 +382,9 @@ export class MenuController {
     this.app.scene.add(this.rulesMenu.getMenu());
   }
 
+  /**
+   * Loads the menu for the end of the game.
+   */
   loadMenuEnd() {
     this.podium = new MyPodium(this.app);
     let menu = null;
@@ -346,8 +392,16 @@ export class MenuController {
     this.app.scene.add(menu);
   }
 
-  // ========================================================
+  // ========================= UTILS ===============================
 
+  /**
+   * Updates the end menu with the given parameters.
+   *
+   * @param {boolean} won - Indicates whether the player won or lost.
+   * @param {number} time - The player's time.
+   * @param {number} timeRival - The rival's time.
+   * @param {string} difficulty - The difficulty level.
+   */
   updateEndMenu(won, time, timeRival, difficulty) {
     let menu = null;
     [this.endMenu, menu] = this.podium.updateEndMenu(
@@ -360,6 +414,10 @@ export class MenuController {
     this.app.scene.add(menu);
   }
 
+  /**
+   * Selects a car and performs various actions related to car selection.
+   * @param {Object} car - The car object to be selected.
+   */
   selectCar(car) {
     this.app.audio.playSound("garage");
     MyGarage.closeGarage();
@@ -368,14 +426,14 @@ export class MenuController {
       (c) => c.name === car.name
     );
 
-    let position = this.app.contents.sceneParser.getKeyPath()[0];
-    let nextPosition = this.app.contents.sceneParser.getKeyPath()[1];
+    let position = this.app.contents.myReader.getKeyPath()[0];
+    let nextPosition = this.app.contents.myReader.getKeyPath()[1];
 
     if (this.carIndex === 0) this.app.audio.playSound("yoshi");
     else if (this.carIndex === 1) this.app.audio.playSound("mario");
     else if (this.carIndex === 2) this.app.audio.playSound("peach");
 
-    let carPos = this.app.contents.sceneParser.flagRotate
+    let carPos = this.app.contents.myReader.flagRotate
       ? [position.x + 3, 0.1, position.z]
       : [position.x, 0.1, position.z + 3];
 
@@ -408,6 +466,10 @@ export class MenuController {
     }, MyGarage.animationTime * 1000 + 0.1);
   }
 
+  /**
+   * Loads the garage scene and sets the active camera to "Garage".
+   * Plays the "garage" sound and opens the garage once it is loaded.
+   */
   garageLoad() {
     this.app.MyHUD.setVisible(false);
     this.app.setActiveCamera("Garage");
@@ -425,7 +487,11 @@ export class MenuController {
     this.app.cameras["Garage"] = garage;
   }
 
-  // read map on tracks folder and display it in the screen ... only using x and y coordinates and using catmull to print it
+  /**
+   * Displays a map in the specified group.
+   *
+   * @param {THREE.Group} group - The group in which the map will be displayed.
+   */
   async displayMap(group) {
     if (this.currentMAP) group.remove(this.currentMAP);
 
@@ -446,6 +512,11 @@ export class MenuController {
     group.add(tubeMesh);
   }
 
+  /**
+   * Reads the track data from a JSON file.
+   * @param {number} trackNumber - The number of the track.
+   * @returns {JSON} - Track data JSON object.
+   */
   async readTrackJson(trackNumber) {
     const response = await fetch(`tracks/track_${trackNumber}.json`);
     const trackData = await response.json();

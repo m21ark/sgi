@@ -1,6 +1,19 @@
 import * as THREE from "three";
 
+/**
+ * Represents a CatmullTrack.
+ * @class
+ */
 export class CatmullTrack {
+  /**
+   * Creates a new CatmullTrack instance.
+   * @constructor
+   * @param {CatmullCurve} catmullCurve - The CatmullCurve object.
+   * @param {number} [width=1] - The width of the track.
+   * @param {number} [height=1] - The height of the track.
+   * @param {number} [depth=1] - The depth of the track.
+   * @param {number} [segments=50] - The number of segments in the track.
+   */
   constructor(catmullCurve, width = 1, height = 1, depth = 1, segments = 50) {
     this.catmullCurve = catmullCurve;
     this.width = width;
@@ -12,6 +25,10 @@ export class CatmullTrack {
     this.geometry = this.createGeometry();
   }
 
+  /**
+   * Generates the points along the CatmullTrack.
+   * @returns {Array} - The array of points.
+   */
   generatePoints() {
     const points = [];
     const totalPoints = this.segments * this.catmullCurve.arcLengthDivisions;
@@ -25,6 +42,10 @@ export class CatmullTrack {
     return points;
   }
 
+  /**
+   * Creates the geometry for the CatmullTrack.
+   * @returns {THREE.BufferGeometry} - The geometry object.
+   */
   createGeometry() {
     const geometry = new THREE.BufferGeometry();
     const vertices = [];
@@ -89,26 +110,10 @@ export class CatmullTrack {
       if (!isNaN(averageDistance)) newRepeatInc = averageDistance / 30;
 
       repeatInc = newRepeatInc;
-
       lastV += repeatInc;
 
       let uvArray = [0.0, lastV, 1.0, lastV];
-
       uv.push(...uvArray);
-
-      // if (i == this.points.length - 1) {
-      //   verticesArray = [vertices[0], vertices[1], vertices[2],
-      //   vertices[3], vertices[4], vertices[5]];
-
-      //   vertices.push(...verticesArray);
-      //   uvArray = [
-      //     0.0, lastV ,
-      //     1.0, lastV ,
-      //   ];
-
-      //   uv.push(...uvArray);
-      // }
-
       for (let i = 0; i < 2; i++) colors.push(0.8, 0.8, 0.8);
     }
 

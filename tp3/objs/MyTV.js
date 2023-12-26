@@ -1,6 +1,18 @@
 import * as THREE from "three";
+import { ShaderLoader } from "../shaders/ShaderLoader.js";
 
-export class Television {
+/**
+ * Represents a TV object in a 3D scene.
+ * @class
+ */
+export class MyTV {
+  /**
+   * Creates a new instance of MyTV.
+   * @constructor
+   * @param {THREE.Scene} scene - The scene to which the TV object belongs.
+   * @param {THREE.Camera} camera - The camera used to render the scene.
+   * @param {THREE.WebGLRenderer} render - The renderer used to render the scene.
+   */
   constructor(scene, camera, render) {
     this.scene = scene;
     this.camera = camera;
@@ -27,66 +39,11 @@ export class Television {
     this.renderTarget.depthTexture.type = THREE.UnsignedShortType;
 
     // Create a shader material
+    const [vert, frag] = ShaderLoader.get("shaders/tv");
+
     this.material = new THREE.ShaderMaterial({
-      vertexShader: `
-      #include <packing>
-
-      uniform sampler2D renderBuffer;
-      varying vec2 vUv;
-      uniform float cameraNear;
-      uniform float cameraFar;
-      
-      // float perspectiveDepthToViewZ(float depth, float near, float far) {
-      //     return (2.0 * near) / (far + near - depth * (far - near));
-      // }
-      
-      // float viewZToOrthographicDepth(float viewZ, float near, float far) {
-      //     return (viewZ + near) / (near - far);
-      // }
-      
-      float readDepth(sampler2D depthSampler, vec2 coord) {
-          float fragCoordZ = texture2D(depthSampler, coord).x;
-          float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
-          return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
-      }
-      
-      void main() {
-          vUv = uv;
-          float depth = readDepth(renderBuffer, vUv);
-      
-          vec4 newPosition = modelViewMatrix * vec4(position, 1.0);
-          
-          // Get the normal vector
-          vec3 normal = normalize(mat3(normalMatrix) * normal);
-      
-          // Conditionally add or subtract based on depth value in the direction of the normal
-          
-          newPosition.xyz -= normal * depth * 3.0;
-          
-      
-          // Set the transformed position
-          gl_Position = projectionMatrix * newPosition;
-      }
-      
-                      `,
-      fragmentShader: `
-                    #include <packing>
-                    uniform sampler2D renderTexture;
-                    uniform sampler2D renderBuffer;
-                    varying vec2 vUv;
-
-                    
-
-                    void main() {
-                        // float depth = readDepth( renderBuffer, vUv );
-
-                        // gl_FragColor.rgb = 1.0 - vec3( depth );
-				                // gl_FragColor.a = 1.0;
-                        
-
-                        gl_FragColor = texture2D(renderTexture, vUv);
-                    }
-                `,
+      vertexShader: vert,
+      fragmentShader: frag,
       uniforms: {
         renderTexture: { value: this.renderTarget.texture },
         renderBuffer: { value: this.renderTarget.depthTexture },
@@ -97,6 +54,13 @@ export class Television {
       side: THREE.DoubleSide, // Set material to double-sided
     });
 
+    this.setGeom();
+  }
+
+  /**
+   * Sets the geometry of the TV object.
+   */
+  setGeom() {
     // Create a plane geometry to represent the television screen
     const geometry = new THREE.PlaneGeometry(
       this.width - 8,
@@ -168,6 +132,9 @@ export class Television {
     this.scene.add(this.group);
   }
 
+  /**
+   * Updates the television screen at a fixed rate.
+   */
   updateRenderTarget() {
     if (this.lastUpdate + 500 > Date.now()) return;
 

@@ -1,8 +1,18 @@
 import * as THREE from "three";
 
+/**
+ * Represents a garage with animation functionality.
+ */
 export class MyGarage {
+  /**
+   * The duration of the animation in seconds.
+   * @type {number}
+   */
   static animationTime = 3;
 
+  /**
+   * Opens the garage door with animation.
+   */
   static openGarage() {
     // search for the object named "door" in the objectModel
     const door = MyGarage.objectModel.getObjectByName("Door");
@@ -33,6 +43,9 @@ export class MyGarage {
     action.play();
   }
 
+  /**
+   * Closes the garage door with animation.
+   */
   static closeGarage() {
     const door = MyGarage.objectModel.getObjectByName("Door");
 
@@ -59,6 +72,9 @@ export class MyGarage {
     action.play();
   }
 
+  /**
+   * Updates the animation mixer if it exists and the clock is defined.
+   */
   static update() {
     if (MyGarage.mixer !== undefined && MyGarage.clock != undefined) {
       const delta = MyGarage.clock.getDelta();
@@ -67,5 +83,6 @@ export class MyGarage {
   }
 }
 
+// Static variables
 MyGarage.clock = new THREE.Clock();
 MyGarage.objectModel = new THREE.Group();

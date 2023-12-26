@@ -1,6 +1,17 @@
 import * as THREE from "three";
 
-export class MyBillboard extends THREE.Object3D {
+/**
+ * Represents a tree object in a 3D scene.
+ * @class
+ * @extends THREE.Object3D
+ */
+export class MyTree extends THREE.Object3D {
+  /**
+   * Creates a new instance of MyTree.
+   * @constructor
+   * @param {string} texturePathList - The path to the directory containing the tree textures.
+   * @param {number} count - The number of available tree textures.
+   */
   constructor(texturePathList, count) {
     super();
     const randomIndex = Math.floor(Math.random() * count) + 1;
@@ -24,8 +35,11 @@ export class MyBillboard extends THREE.Object3D {
     this.add(billboardMesh);
   }
 
+  /**
+   * Updates the tree's orientation to face the camera.
+   * @param {THREE.Vector3} camPos - The position of the camera.
+   */
   update(camPos) {
-
     // only rotate on y axis towards camera
     const target = new THREE.Vector3(camPos.x, this.position.y, camPos.z);
     this.lookAt(target);
