@@ -48,11 +48,6 @@ export class MyPodium extends MyMenu {
     // set ai car on the left side and player car on the right side
 
     // use blocks as placehodlers
-    let geometry = new THREE.BoxGeometry(5, 5, 5);
-    let material = new THREE.MeshBasicMaterial({
-      color: 0x00ffff,
-      wireframe: true,
-    });
     let aiCar = MyCar.availableCars.children[this.app.contents.menuController.rivalCarIndex].clone();
     aiCar.scale.set(6, 6, 6);
     aiCar.position.set(-15, -20, 25);
@@ -94,6 +89,7 @@ export class MyPodium extends MyMenu {
       if (this.app.activeCameraName !== "EndCamera") return;
       if (e.key === " ") {
         this.app.setActiveCamera("MenuCamera");
+        this.app.contents.gameHasEnded = false;
         this.app.contents.menuController.gotoMenu("main");
         window.removeEventListener("keydown", this);
 

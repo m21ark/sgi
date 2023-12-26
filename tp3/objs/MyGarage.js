@@ -7,6 +7,8 @@ export class MyGarage {
     // search for the object named "door" in the objectModel
     const door = MyGarage.objectModel.getObjectByName("Door");
 
+    if (MyGarage.clock == undefined) MyGarage.clock = new THREE.Clock();
+
     // open the door using animation rotation
     const angle = Math.PI / 2; // example angle value
     const quaternion = new THREE.Quaternion().setFromAxisAngle(
@@ -58,7 +60,7 @@ export class MyGarage {
   }
 
   static update() {
-    if (this.mixer !== undefined && MyGarage.clock != undefined) {
+    if (MyGarage.mixer !== undefined && MyGarage.clock != undefined) {
       const delta = MyGarage.clock.getDelta();
       MyGarage.mixer.update(delta);
     }

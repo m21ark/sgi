@@ -113,7 +113,7 @@ export class FirstPersonCamera {
       if (this.keyboard["w"]) {
         this.player.speedUp();
         // The sound is not very good
-        // if (!this.player.isAtMaxVel()) this.app.audio.playSound("engine");
+        if (!this.player.isAtMaxVel()) this.app.audio.playSound("engine");
       }
       if (this.keyboard["s"]) this.player.speedDown();
       if (this.keyboard["a"]) this.player.incRotation();
