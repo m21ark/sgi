@@ -312,60 +312,66 @@ export class ObjectBuilder {
             const model = collada.scene.children[0];
             group.add(model); // Add the model to the group
             // create a shader texture that rotates the texture of the tires
-            let oldMat = model.children[2].material;
-            let velocity = 0.1; // Define the velocity of rotation
-            let tire_shader = new THREE.ShaderMaterial({
-              uniforms: {
-                time: { value: 2 },
-                map: { value: oldMat.map },
-                velocity: { value: velocity },
-              },
-              vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                  vUv = uv;
-                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-                }
-              `,
-              fragmentShader: `
-                uniform float time;
-                uniform sampler2D map;
-                uniform float velocity;
-                varying vec2 vUv;
-                void main() {
-                  vec2 uv = vUv;
-                  if (uv.y < 0.5) {
-                    uv.x = mod(time * velocity - uv.x, 1.0); // Apply the velocity to the rotation and wrap within [0, 1]
+            let frontObject = model.children.filter(child => child.name.includes("front"))[0];
+            let backObject = model.children.filter(child => child.name.includes("back"))[0];
+            let arra = [frontObject, backObject];
+
+            for (let i = 0; i < 2; i++) {
+              let oldMat = arra[i].material;
+              let velocity = 0.1; // Define the velocity of rotation
+              let tire_shader = new THREE.ShaderMaterial({
+                uniforms: {
+                  time: { value: 2 },
+                  map: { value: oldMat.map },
+                  velocity: { value: velocity },
+                },
+                vertexShader: `
+                  varying vec2 vUv;
+                  void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
                   }
-                  if (uv.y > 0.5) {
-                    // this is a square texture where the texture of the tire is in the top half 
-                    // and the texture of the rim is in the bottom half
-                    // we need to rotate the texture of the rim around the (0.5, 0,765625) coordinate
-
-                    // Calculate the offset from the center
-                    vec2 offset = vec2(uv.x - 0.484375, uv.y - 0.765625);
-
-                    // Calculate the polar coordinates
-                    float angle = atan(offset.y, offset.x);
-
-                    // Rotate the texture
-                    angle += time * -velocity;
-
-                    // Convert back to Cartesian coordinatesa
-                    uv = vec2(0.484375, 0.765625) + vec2(cos(angle), sin(angle)) * length(offset);
-
-                    // Wrap within [0, 1]
-                    uv = mod(uv, 1.0);
+                `,
+                fragmentShader: `
+                  uniform float time;
+                  uniform sampler2D map;
+                  uniform float velocity;
+                  varying vec2 vUv;
+                  void main() {
+                    vec2 uv = vUv;
+                    if (uv.y < 0.5) {
+                      uv.x = mod(time * velocity - uv.x, 1.0); // Apply the velocity to the rotation and wrap within [0, 1]
+                    }
+                    if (uv.y > 0.5) {
+                      // this is a square texture where the texture of the tire is in the top half 
+                      // and the texture of the rim is in the bottom half
+                      // we need to rotate the texture of the rim around the (0.5, 0,765625) coordinate
+  
+                      // Calculate the offset from the center
+                      vec2 offset = vec2(uv.x - 0.484375, uv.y - 0.765625);
+  
+                      // Calculate the polar coordinates
+                      float angle = atan(offset.y, offset.x);
+  
+                      // Rotate the texture
+                      angle += time * -velocity;
+  
+                      // Convert back to Cartesian coordinatesa
+                      uv = vec2(0.484375, 0.765625) + vec2(cos(angle), sin(angle)) * length(offset);
+  
+                      // Wrap within [0, 1]
+                      uv = mod(uv, 1.0);
+                    }
+                    gl_FragColor = texture2D(map, uv);
                   }
-                  gl_FragColor = texture2D(map, uv);
-                }
-              `,
-              transparent: true,
-            });
-            ObjectBuilder.ShaderMaterials.push(tire_shader);
-
-            // apply the shader to every third children of the model
-            model.children[2].material = tire_shader;
+                `,
+                transparent: true,
+              });
+              ObjectBuilder.ShaderMaterials.push(tire_shader);
+  
+              // apply the shader to every third children of the model
+              arra[i].material = tire_shader;
+            }
 
             resolve(model.geometry);
           },
