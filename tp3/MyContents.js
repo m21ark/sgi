@@ -242,14 +242,15 @@ export class MyContents {
         if (this.hasGameStarted) {
           if (hitabble.type == "powerup") {
             this.app.contents.myReader.addNextObstacleToGroup();
-            this.gameImpact("Powerup!", hitabble.timeEffect);
+            if (hitabble.invulnerable)
+              this.gameImpact("Invulnerable!", hitabble.timeEffect);
+            else this.gameImpact("Speed Boost!", hitabble.timeEffect);
+
             this.app.audio.playSound("powerup");
           } else {
-            if (hitabble.switchedControls) {
+            if (hitabble.switchedControls)
               this.gameImpact("Switched!", hitabble.timeEffect);
-            } else {
-              this.gameImpact("Obstacle!", hitabble.timeEffect);
-            }
+            else this.gameImpact("Obstacle!", hitabble.timeEffect);
             this.app.audio.playSound("obstacle");
           }
         }
