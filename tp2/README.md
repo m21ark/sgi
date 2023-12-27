@@ -12,6 +12,7 @@
 ## Project information
 
 ### Implemented Features
+
 - Scene graph hierarchy organization
 - Scene graph material, texture, transformation, shadows inheritance
 - Node duplication to resolve scene tree issues in ThreeJS
@@ -32,7 +33,6 @@
 ![view](screenshots/living_room.png)
 ![view](screenshots/lod.png)
 ![view](screenshots/statue.png)
-
 
 ## Special features
 
