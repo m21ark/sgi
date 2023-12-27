@@ -102,6 +102,13 @@ export class MyHUD {
   }
 
   /**
+   * Resets the speed to zero.
+   */
+  resetSpeed() {
+    this.setSpeed(0);
+  }
+
+  /**
    * Gets the current time.
    * @returns {number} The current time in seconds.
    */

@@ -1,6 +1,15 @@
 import * as THREE from "three";
 
+/**
+ * Class for building lights.
+ * @class
+ */
 export class LightBuilder {
+  /**
+   * Creates a new instance of LightBuilder.
+   * @param {App} app - The application object.
+   * @param {Array} contents - The contents array.
+   */
   constructor(app, contents) {
     this.app = app;
     this.contents = contents;
@@ -87,6 +96,11 @@ export class LightBuilder {
     return [directionalLight, directionalLightHelper];
   }
 
+  /**
+   * Converts an angle from degrees to radians.
+   * @param {number} angle - The angle in degrees.
+   * @returns {number} The angle in radians.
+   */
   toRadians(angle) {
     return angle * (Math.PI / 180);
   }

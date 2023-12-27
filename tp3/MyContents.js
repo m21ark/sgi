@@ -17,6 +17,10 @@ import { MyOutdoor } from "./objs/MyOutdoor.js";
  * @class
  */
 export class MyContents {
+  /**
+   * Represents a constructor for the MyContents class.
+   * @param {App} app - The application object.
+   */
   constructor(app) {
     this.app = app;
     this.cameras = [];
@@ -46,6 +50,10 @@ export class MyContents {
     this.reader.open(this.sceneDir + "myScene.xml");
   }
 
+  /**
+   * Initializes the application.
+   * @returns {Promise<void>}
+   */
   async init() {
     this.app.MyHUD.setPauseStatus(true);
     this.app.MyHUD.setLaps(1, this.numLaps);
@@ -76,7 +84,6 @@ export class MyContents {
     this.animate();
   }
 
-  
   /**
    * Pauses the game if the player is in game and not already paused.
    */
@@ -297,6 +304,7 @@ export class MyContents {
     this.app.audio.playSound(won ? "won" : "lost");
     this.app.MyHUD.setPauseStatus(true);
     this.AICar.stopAnimation();
+    this.playerCam.getPlayer().currVel = 0.1;
 
     const myTime = this.app.MyHUD.getTime();
     const aiTime = this.AICar.getFinalTime();
@@ -304,17 +312,18 @@ export class MyContents {
     this.menuController.updateEndMenu(won, myTime, aiTime, difficulty);
 
     this.app.MyHUD.resetTime();
+    this.app.MyHUD.resetSpeed();
     this.app.MyHUD.setLaps(1, this.numLaps);
 
-    // wait 2s before showing the end menu
+    // wait 3s before showing the end menu
     setTimeout(() => {
       this.menuController.gotoMenu("end");
-    }, 2000);
+    }, 3000);
   }
 
   /**
    * Sets the active camera for the application.
-   * 
+   *
    * @param {string} cameraId - The ID of the camera to set as active.
    */
   setActiveCamera(cameraId) {

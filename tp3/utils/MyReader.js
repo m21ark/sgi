@@ -10,12 +10,23 @@ import { MyPowerUp } from "../objs/MyPowerUp.js";
 import { MyWater } from "../objs/MyWater.js";
 import { ShaderLoader } from "../shaders/ShaderLoader.js";
 
+/**
+ * A class representing a MyReader.
+ * @class
+ */
 export class MyReader {
+  /**
+   * The object type constants.
+   * @type {Object}
+   */
   static ObjectType = {
     OBSTACLE: "obstacle",
     POWERUP: "powerup",
   };
 
+  /**
+   * Constructs a new MyReader object.
+   */
   constructor() {
     this.hitabbleObjs = [];
 
@@ -59,6 +70,9 @@ export class MyReader {
     this.indexLastObj = 0;
   }
 
+  /**
+   * Loads the shader for the boxes.
+   */
   loadShader() {
     const [vert, frag] = ShaderLoader.get("shaders/boxPulse");
 
@@ -73,16 +87,29 @@ export class MyReader {
     });
   }
 
+  /**
+   * Reads a JSON file from the given file path.
+   * @param {string} filePath - The file path of the JSON file.
+   * @returns {Promise<Object>} A promise that resolves to the parsed JSON data.
+   */
   async readJSON(filePath) {
     const response = await fetch(filePath);
     const data = await response.json();
     return data;
   }
 
+  /**
+   * Gets the control points.
+   * @returns {THREE.Group} The control points group.
+   */
   getControlPoints() {
     return this.controPointGroup;
   }
 
+  /**
+   * Loads the 3D models for powerups and obstacles.
+   * @returns {Promise<void>} A promise that resolves when the models are loaded.
+   */
   async loadObjs() {
     // define the meshes for powerups and obstacles
     await this.objBuilder.create3dModel(
@@ -110,6 +137,11 @@ export class MyReader {
     );
   }
 
+  /**
+   * Builds the grid group for the given track number.
+   * @param {number} track_number - The track number.
+   * @returns {THREE.Group} The grid group.
+   */
   async buildGridGroup(track_number) {
     const csvPath = "tracks/track_" + track_number + ".json";
     const json = await this.readJSON(csvPath);
@@ -190,6 +222,9 @@ export class MyReader {
     return group;
   }
 
+  /**
+   * Adds the next obstacle to the group.
+   */
   addNextObstacleToGroup() {
     if (this.indexLastObj >= this.gg.length) return;
     const obstacleMesh = this.gg[this.indexLastObj];
@@ -199,15 +234,30 @@ export class MyReader {
     this.indexLastObj++;
   }
 
+  /**
+   * Gets the number of obstacles to drop based on the given difficulty.
+   * @param {number} difficulty - The difficulty level.
+   * @returns {number} The number of obstacles based on the difficulty level.
+   */
   difficultyObjs(difficulty) {
     switch (difficulty) {
-      case 1: return 0;
-      case 2: return 5;
-      case 3: return 9;
+      case 1:
+        return 0;
+      case 2:
+        return 5;
+      case 3:
+        return 9;
     }
     return 1;
   }
 
+  /**
+   * Adds an obstacle to the group.
+   * @param {Object} pos - The position of the obstacle.
+   * @param {string} name - The name of the obstacle.
+   * @param {number} difficulty - The difficulty level of the obstacle.
+   * @returns {boolean} True if all obstacles have been added, false otherwise.
+   */
   addObstacle(pos, name, difficulty) {
     const obstacleMesh = this.createObstacle(pos.x, pos.z);
     obstacleMesh.name = name;
@@ -225,6 +275,10 @@ export class MyReader {
     return this.gg.length === this.difficultyObjs(difficulty);
   }
 
+  /**
+   * Adds the garage to the group.
+   * @param {THREE.Group} group - The group to add the garage to.
+   */
   addGarage(group) {
     MyGarage.objectModel.scale.set(0.05, 0.05, 0.05);
 
@@ -256,6 +310,11 @@ export class MyReader {
     group.add(garageGroup);
   }
 
+  /**
+   * Adds the track curve to the group.
+   * @param {THREE.Group} group - The group to add the track curve to.
+   * @param {Object} json - The JSON data for the track curve.
+   */
   addTrackCurve(group, json) {
     // catmull curve from the json
     const points = [];
@@ -289,6 +348,11 @@ export class MyReader {
     group.add(this.controPointGroup);
   }
 
+  /**
+   * Adds the checkpoints to the group.
+   * @param {THREE.Group} group - The group to add the checkpoints to.
+   * @param {boolean} rotateFlag - Whether to rotate the flag or not.
+   */
   addCheckpoints(group, rotateFlag) {
     // Create a box geometry
     let boxGeometry = new THREE.BoxGeometry(10, 1, 2);
@@ -323,6 +387,11 @@ export class MyReader {
     this.checkpoints = [box2, box1];
   }
 
+  /**
+   * Adds the flag to the group.
+   * @param {THREE.Group} group - The group to add the flag to.
+   * @param {boolean} rotate - Whether to rotate the flag or not.
+   */
   addFlag(group, rotate) {
     const pos = this.getKeyPath()[0];
     this.flagRotate = rotate;
@@ -381,24 +450,49 @@ export class MyReader {
     group.add(endLine);
   }
 
+  /**
+   * Gets the hittable objects.
+   * @returns {Array} The hittable objects.
+   */
   getHitabbleObjs() {
     return this.hitabbleObjs;
   }
 
+  /**
+   * Gets the trees.
+   * @returns {Array} The trees.
+   */
   getTrees() {
     return this.trees;
   }
 
+  /**
+   * Gets the lake.
+   * @returns {THREE.Group} The lake.
+   */
   getLake() {
     return this.lake;
   }
 
+  /**
+   * Creates a tree mesh at the specified position.
+   * @param {number} x - The x-coordinate of the tree.
+   * @param {number} y - The y-coordinate of the tree.
+   * @returns {THREE.Mesh} The tree mesh.
+   */
   createTree(x, y) {
     let tree = new MyTree("assets/trees/", 7);
     tree.position.set(x, 6.8, y);
     return tree;
   }
 
+  /**
+   * Creates a mountain mesh at the specified position.
+   * @param {number} x - The x-coordinate of the mountain.
+   * @param {number} y - The y-coordinate of the mountain.
+   * @param {number} z - The z-coordinate of the mountain.
+   * @returns {THREE.Mesh} The mountain mesh.
+   */
   createMountainMesh(x, y, z) {
     const minHeight = 25;
     const maxHeight = 50;
@@ -464,6 +558,11 @@ export class MyReader {
     return mountainGroup;
   }
 
+  /**
+   * Adds trees in a circular pattern to the given group.
+   *
+   * @param {THREE.Group} group - The group to add the trees to.
+   */
   addTreesCircle(group) {
     const numCones = 70;
     const radius = 170;
@@ -484,6 +583,10 @@ export class MyReader {
     group.add(forest);
   }
 
+  /**
+   * Adds mountains to the given group.
+   * @param {THREE.Group} group - The group to which the mountains will be added.
+   */
   addMountains(group) {
     const mountains = new THREE.Group();
     const numCones = 120;
@@ -501,6 +604,13 @@ export class MyReader {
     group.add(mountains);
   }
 
+  /**
+   * Adds a lake to the specified group at the given coordinates.
+   * @param {THREE.Group} group - The group to add the lake to.
+   * @param {number} x - The x-coordinate of the lake's position.
+   * @param {number} z - The z-coordinate of the lake's position.
+   * @param {boolean} rotate - Whether to rotate the lake or not.
+   */
   addLake(group, x, z, rotate) {
     const lake = new MyWater(10, 10, true);
     lake.position.set(x, 0.05, z);
@@ -539,6 +649,11 @@ export class MyReader {
     this.lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
   }
 
+  /**
+   * Creates a Catmull-Rom curve and adds it to the specified group.
+   * @param {THREE.Group} group - The group to add the curve mesh to.
+   * @param {THREE.Vector3[]} points - The points defining the curve.
+   */
   makeCatmullCurve(group, points) {
     // points.push(points[0]);
     const curve = new THREE.CatmullRomCurve3(points);
@@ -566,6 +681,10 @@ export class MyReader {
     group.add(mesh);
   }
 
+  /**
+   * Returns the key path with modified y-coordinates.
+   * @returns {Array} The modified key path.
+   */
   getKeyPath() {
     let path = [...this.pathPoints];
     for (let i = 0; i < path.length; i++) {
@@ -574,6 +693,13 @@ export class MyReader {
     return this.pathPoints;
   }
 
+  /**
+   * Creates a powerup item at the specified coordinates.
+   *
+   * @param {number} x - The x-coordinate of the powerup item.
+   * @param {number} y - The y-coordinate of the powerup item.
+   * @returns {Object} The created powerup item.
+   */
   createPowerup(x, y) {
     const item = this.powerupItem.clone();
     for (let child of item.children) {
@@ -586,6 +712,12 @@ export class MyReader {
     return item;
   }
 
+  /**
+   * Creates an obstacle item at the specified coordinates.
+   * @param {number} x - The x-coordinate of the obstacle.
+   * @param {number} y - The y-coordinate of the obstacle.
+   * @returns {Object3D} - The created obstacle item.
+   */
   createObstacle(x, y) {
     const item = this.obstacleItem.clone();
     for (let child of item.children) {

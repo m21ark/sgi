@@ -11,6 +11,10 @@ import { MyPodium } from "./MyPodium.js";
  * @class
  */
 export class MenuController {
+  /**
+   * Constructs a new MenuController object.
+   * @param {Object} app - The application object.
+   */
   constructor(app) {
     app.picker = new MyPicker(app);
     this.app = app;
@@ -103,8 +107,8 @@ export class MenuController {
         this.currentMenu = null;
         console.log(
           "Camera '" +
-          menu +
-          "' option not found. Using default perspective camera"
+            menu +
+            "' option not found. Using default perspective camera"
         );
         this.app.setActiveCamera("Perspective");
     }
@@ -180,7 +184,9 @@ export class MenuController {
       "Easy",
       () => {
         this.difficulty = 1;
-        this.toDropNumber = this.app.contents.myReader.difficultyObjs(this.difficulty);
+        this.toDropNumber = this.app.contents.myReader.difficultyObjs(
+          this.difficulty
+        );
         this.updateNumber();
         this.gotoMenu("carSelect");
       },
@@ -190,7 +196,9 @@ export class MenuController {
       "Medium",
       () => {
         this.difficulty = 2;
-        this.toDropNumber = this.app.contents.myReader.difficultyObjs(this.difficulty);
+        this.toDropNumber = this.app.contents.myReader.difficultyObjs(
+          this.difficulty
+        );
         this.updateNumber();
         this.gotoMenu("dropObstacles");
       },
@@ -200,7 +208,9 @@ export class MenuController {
       "Hard",
       () => {
         this.difficulty = 3;
-        this.toDropNumber = this.app.contents.myReader.difficultyObjs(this.difficulty);
+        this.toDropNumber = this.app.contents.myReader.difficultyObjs(
+          this.difficulty
+        );
         this.updateNumber();
         this.gotoMenu("dropObstacles");
       },
@@ -282,35 +292,39 @@ export class MenuController {
     group.add(direction);
     group.add(spritey);
 
-    this.toDropNumber = this.app.contents.myReader.difficultyObjs(this.difficulty);
+    this.toDropNumber = this.app.contents.myReader.difficultyObjs(
+      this.difficulty
+    );
     this.updateNumber();
 
     this.app.scene.add(group);
   }
 
+  /**
+   * Decrements the number of obstacles needed
+   * to be dropped and updates the display.
+   */
   decrementNumber() {
-    console.log("decrementing");
     if (this.toDropNumber > 0) {
       this.toDropNumber--;
       this.updateNumber();
     }
   }
 
+  /**
+   * Updates the counter of dropped obstacles in the menu.
+   */
   updateNumber() {
     if (this.numberTexture) this.app.scene.remove(this.numberTexture);
-    this.numberTexture = TextSpriteDraw.makeTextSprite(this.toDropNumber,
-      {
-        fontsize: 145,
-        fontface: "Arial",
-        backgroundColor: { r: 0, g: 0, b: 0, a: 0.0 },
-        textColor: { r: 0, g: 0, b: 0, a: 1.0 },
-      }
-    );
+    this.numberTexture = TextSpriteDraw.makeTextSprite(this.toDropNumber, {
+      fontsize: 145,
+      fontface: "Arial",
+      backgroundColor: { r: 0, g: 0, b: 0, a: 0.0 },
+      textColor: { r: 0, g: 0, b: 0, a: 1.0 },
+    });
 
     this.numberTexture.position.set(420, 100, 125);
-
     this.numberTexture.name = "Number";
-
     this.app.scene.add(this.numberTexture);
   }
 

@@ -9,7 +9,10 @@ import { MTLLoader } from "three/addons/loaders/MTLLoader.js";
 import { MyReader } from "../utils/MyReader.js";
 import { ShaderLoader } from "../shaders/ShaderLoader.js";
 
-// defines how objects should be created
+/**
+ * Class that defines how objects should be created
+ * @class
+ */
 export class ObjectBuilder {
   constructor() { }
 

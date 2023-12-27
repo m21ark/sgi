@@ -6,6 +6,11 @@ import { TextSpriteDraw } from "../gui/TextSpriteDraw.js";
  * Represents an AI-controlled car.
  */
 export class MyAICar {
+  /**
+   * Represents an AI Car.
+   * @constructor
+   * @param {Array<Array<number>>} keyPoints - The key points for the AI to follow.
+   */
   constructor(keyPoints = [[0, 0, 0]]) {
     this.aiCar = undefined;
 
@@ -71,14 +76,14 @@ export class MyAICar {
 
   /**
    * Adds an AI car to the scene.
-   * 
+   *
    * @param {THREE.Scene} scene - The scene to add the AI car to.
    * @param {number} [rivalCarIndex=0] - The index of the rival car to use.
    */
   addAICar(scene, rivalCarIndex = 0) {
     this.aiCar = new THREE.Group();
     this.carIndex = rivalCarIndex;
-    
+
     let car = MyCar.availableCars.children[rivalCarIndex].clone();
 
     // rotate the car in respect to the next key point
@@ -187,7 +192,8 @@ export class MyAICar {
         const averageDistance = distanceSum / numPoints;
 
         const decayFactor = 0.04; // Adjust the decay factor as needed
-        let adjustedSpeed = (speed - 0.3) * Math.exp(decayFactor * averageDistance);
+        let adjustedSpeed =
+          (speed - 0.3) * Math.exp(decayFactor * averageDistance);
         adjustedSpeed = Math.min(2, adjustedSpeed);
         let adjustedDistance = acumDis + adjustedSpeed;
 
@@ -261,24 +267,28 @@ export class MyAICar {
           this.keyPoints.forEach((_, j) => {
             let distanceSum = 0;
             const numPoints = 1; // TODO: Ver um numero apropriado
-    
+
             for (let k = 1; k <= numPoints; k++) {
               const nextIndex = (j + k) % this.keyPoints.length;
               const distance = Math.sqrt(
                 Math.pow(this.keyPoints[nextIndex].x - this.keyPoints[j].x, 2) +
-                  Math.pow(this.keyPoints[nextIndex].y - this.keyPoints[j].y, 2) +
+                  Math.pow(
+                    this.keyPoints[nextIndex].y - this.keyPoints[j].y,
+                    2
+                  ) +
                   Math.pow(this.keyPoints[nextIndex].z - this.keyPoints[j].z, 2)
               );
               distanceSum += distance;
             }
-    
+
             const averageDistance = distanceSum / numPoints;
-    
+
             const decayFactor = 0.04; // Adjust the decay factor as needed
-            let adjustedSpeed = (speed - 0.3) * Math.exp(decayFactor * averageDistance);
+            let adjustedSpeed =
+              (speed - 0.3) * Math.exp(decayFactor * averageDistance);
             adjustedSpeed = Math.min(2, adjustedSpeed);
             let adjustedDistance = acumDis + adjustedSpeed;
-    
+
             indices.push(acumDis);
             acumDis = adjustedDistance;
           });
