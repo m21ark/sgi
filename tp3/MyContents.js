@@ -356,7 +356,7 @@ export class MyContents {
       case 2:
         return 0.5;
       case 3:
-        return 0.48;
+        return 0.495;
       default:
         return 1;
     }
