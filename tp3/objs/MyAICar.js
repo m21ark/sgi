@@ -162,10 +162,10 @@ export class MyAICar {
    * @param {number} speed - The speed of the animation.
    */
   tyreAnimation(laps, speed) {
-    // const tyres = this.aiCar.children[0].children[2]; 
-    const tyres = this.aiCar.children[0].children.filter(child => child.name.includes("front"))[0];;
-
-    console.log(tyres);
+    // const tyres = this.aiCar.children[0].children[2];
+    const tyres = this.aiCar.children[0].children.filter((child) =>
+      child.name.includes("front")
+    )[0];
 
     let flat_keypoints = [];
     for (let i = 0; i < laps; i++) {
@@ -269,7 +269,7 @@ export class MyAICar {
         for (let i = 0; i < laps; i++) {
           this.keyPoints.forEach((_, j) => {
             let distanceSum = 0;
-            const numPoints = 1; // TODO: Ver um numero apropriado
+            const numPoints = 1;
 
             for (let k = 1; k <= numPoints; k++) {
               const nextIndex = (j + k) % this.keyPoints.length;
