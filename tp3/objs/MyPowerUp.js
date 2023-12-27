@@ -89,7 +89,7 @@ export class MyPowerUp {
    * @param {Object} player - The player object.
    */
   effectPlayer(player) {
-    this.invulnerable = Math.random() < 0.3;
+    this.invulnerable = Math.random() < 0.4;
 
     if (this.invulnerable) {
       player.invulnerable = true;

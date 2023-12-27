@@ -278,8 +278,12 @@ export class MyContents {
       }
     }
 
-    this.playerCam.getPlayer().frictionGrass();
-    return true; // collision with grass
+    // collision with grass
+    if (!this.playerCam.getPlayer().invulnerable) {
+      this.playerCam.getPlayer().frictionGrass();
+      return true;
+    }
+    return false;
   }
 
   /**

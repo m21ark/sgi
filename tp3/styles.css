@@ -31,11 +31,11 @@ iframe {
   width: 80%;
   height: 100%;
   border: 0;
-  overflow: hidden; /* Hide any content that exceeds the iframe size */
+  overflow: hidden;
 }
 
 .lil-gui.autoPlace {
-  top: 78%;
+  top: 85%;
   bottom: 0;
 }
 
