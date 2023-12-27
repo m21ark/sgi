@@ -162,7 +162,10 @@ export class MyAICar {
    * @param {number} speed - The speed of the animation.
    */
   tyreAnimation(laps, speed) {
-    const tyres = this.aiCar.children[0].children[2]; // Assuming the tires are at index 2, adjust if needed
+    // const tyres = this.aiCar.children[0].children[2]; 
+    const tyres = this.aiCar.children[0].children.filter(child => child.name.includes("front"))[0];;
+
+    console.log(tyres);
 
     let flat_keypoints = [];
     for (let i = 0; i < laps; i++) {
