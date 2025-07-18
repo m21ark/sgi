@@ -1,6 +1,6 @@
 # SGI 2023/2024
 
-## Final Project [(Read more)](tp3/README.md)
+## Final Project
 
 See a demo of the game:
 
